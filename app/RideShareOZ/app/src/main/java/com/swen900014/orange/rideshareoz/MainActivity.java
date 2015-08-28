@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
+        findViewById(R.id.sign_out_button).setOnClickListener(this);
     }
 
 
@@ -125,7 +126,25 @@ public class MainActivity extends AppCompatActivity implements
         if (v.getId() == R.id.sign_in_button) {
             onSignInClicked();
         }
+        if (v.getId() == R.id.sign_out_button) {
+            onSignOutClicked();
+        }
 
+    }
+    private void onSignOutClicked(){
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+        }
+
+        TextView mStatusTextView = (TextView)findViewById(R.id.sign_in_text);
+        mStatusTextView.setText("Signed Out...");
+
+        mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
+        mStatusTextView.setText("");
+
+        mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
+        mStatusTextView.setText("");
     }
 
     private void onSignInClicked() {
