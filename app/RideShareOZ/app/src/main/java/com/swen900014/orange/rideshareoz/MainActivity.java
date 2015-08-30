@@ -1,7 +1,10 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.accounts.Account;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -27,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
+
+    private final String TAG = "MAIN_Authentication";
+    private final String SERVER_CLIENT_ID = "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements
     /* Should we automatically resolve ConnectionResults when possible? */
     private boolean mShouldResolve = false;
 
-    private final String TAG = "Authentication";
+
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -199,6 +209,46 @@ public class MainActivity extends AppCompatActivity implements
 
         mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
         mStatusTextView.setText(person.getLanguage());
+
+        new GetUserIDTask().execute();
     }
+
+    /**
+     * Created by uidu9665 on 29/08/2015.
+     */
+    public class GetUserIDTask extends AsyncTask<Void, Void, String> {
+
+        private final String TAG = "SendID";
+
+        @Override
+        protected String doInBackground(Void... params) {
+            //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
+            String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+            Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+            String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
+            try {
+                return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
+            } catch (IOException e) {
+                Log.e(TAG, "Error retrieving ID token.", e);
+                return null;
+            } catch (GoogleAuthException e) {
+                Log.e(TAG, "Error retrieving ID token.", e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "ID token: " + result);
+            if (result != null) {
+                // Successfully retrieved ID Token
+                // ...
+            } else {
+                // There was some error getting the ID Token
+                // ...
+            }
+        }
+    }
+
 
 }
