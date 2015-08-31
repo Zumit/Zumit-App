@@ -30,8 +30,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
-    req.db = db;
-    next();
+  req.db = db;
+  next();
+});
+
+app.use(function(req,res,next){
+  console.log("=======dfs=======");
+  next();
 });
 
 app.use('/', routes);

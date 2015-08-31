@@ -1,7 +1,10 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.accounts.Account;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +13,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -27,6 +45,15 @@ public class MainActivity extends AppCompatActivity implements
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
+
+    private final String TAG = "MAIN_Authentication";
+    private final String SERVER_CLIENT_ID = "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
+
+    /* Is there a ConnectionResult resolution in progress? */
+    private boolean mIsResolving = false;
+
+    /* Should we automatically resolve ConnectionResults when possible? */
+    private boolean mShouldResolve = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +94,6 @@ public class MainActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
-
-    /* Is there a ConnectionResult resolution in progress? */
-    private boolean mIsResolving = false;
-
-    /* Should we automatically resolve ConnectionResults when possible? */
-    private boolean mShouldResolve = false;
-
-    private final String TAG = "Authentication";
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -195,10 +214,127 @@ public class MainActivity extends AppCompatActivity implements
         mStatusTextView.setText("Signed in...");
 
         mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
-        mStatusTextView.setText(person.getDisplayName());
+        //mStatusTextView.setText(person.getDisplayName());
 
         mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
-        mStatusTextView.setText(person.getLanguage());
+        //mStatusTextView.setText(person.getLanguage());
+
+        new GetUserIDTask().execute();
     }
+
+    /**
+     * Created by uidu9665 on 29/08/2015.
+     */
+    public class GetUserIDTask extends AsyncTask<Void, Void, String> {
+
+        private final String TAG = "SendID";
+
+        @Override
+        protected String doInBackground(Void... params) {
+            //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
+            String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+            Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+            String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
+            try {
+                return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
+            } catch (IOException e) {
+                Log.e(TAG, "Error retrieving ID token.", e);
+                return null;
+            } catch (GoogleAuthException e) {
+                Log.e(TAG, "Error retrieving ID token.", e);
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "ID token: " + result);
+            if (result != null) {
+                // Successfully retrieved ID Token
+                new SendUserID().execute(result);
+
+
+            } else {
+                // There was some error getting the ID Token
+                // ...
+            }
+        }
+    }
+
+
+    public class SendUserID extends AsyncTask<String, Void, String> {
+
+        private final String TAG = "SendID";
+
+        @Override
+        protected String doInBackground(String... params) {
+            String token = params[0];
+            URL url = null;
+            try {
+                url = new URL("http://144.6.226.237/posttest");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            HttpURLConnection urlConnection = null;
+            String response = "";
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(true);
+                //urlConnection.connect();
+
+                OutputStream os = urlConnection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
+
+                writer.write("token=" + token);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                //urlConnection.connect();
+
+
+                int responseCode=urlConnection.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br=new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    while ((line=br.readLine()) != null) {
+                        response+=line;
+                    }
+                }
+                else {
+                    response="";
+
+                   //throw new HttpException(responseCode+"");
+                }
+                return response;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "fail";
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                return "fail";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "ID token: " + result);
+            if (result != null) {
+                // Successfully retrieved ID Token
+
+
+
+            } else {
+                // There was some error getting the ID Token
+                // ...
+            }
+        }
+    }
+
 
 }

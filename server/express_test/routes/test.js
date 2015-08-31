@@ -8,11 +8,12 @@ router.get('/', function(req, res, next) {
 
   collection.find({},{},function(e,docs){
 
-    console.log(docs);
+  res.end(JSON.stringify(docs));
 
-    res.render('test', {
-        "userlist" : docs
-    });
+    // res.render('test', {
+      // "info": JSON.stringify(docs)
+        // // "userlist" : docs
+    // });
 
   });
 
