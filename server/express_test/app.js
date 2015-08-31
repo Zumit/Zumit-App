@@ -38,6 +38,13 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/test', test);
 
+app.post('/posttest', function(request, response){
+
+      console.log(request.body.token);
+      response.end("post request received\n --Max\n token = " + request.body.token);
+      // console.log(request.body.user.email);
+
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
