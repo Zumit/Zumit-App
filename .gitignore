@@ -4,5 +4,6 @@
 # vim temp files
 *.swp
 
-# node_modules
+# nodeJS files
 node_modules/
+npm-debug.log
