@@ -41,6 +41,17 @@ app.use('/ride', ride);
 app.use('/group', group);
 app.use('/msg', group);
 
+app.get('/testjson', function(req, res){
+  console.log(req.query);
+  res.end(JSON.stringify(req.query));
+  // res.end(req.query);
+});
+
+app.post('/testjson', function(req, res){
+  console.log(req.body);
+  res.end(JSON.stringify(req.body));
+});
+
 app.get('/test', function(req, res){
   // console.log(req.query);
   var str = "";
