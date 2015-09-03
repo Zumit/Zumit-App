@@ -22,6 +22,7 @@ var user = require('./routes/user');
 var ride = require('./routes/ride');
 var group = require('./routes/group');
 var msg = require('./routes/msg');
+var test = require('./routes/test');
 
 var app = express();
 
@@ -37,9 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Make our db accessible to our router
 app.use(function(req,res,next){
-  // req.db = mongoose;
   next();
 });
 
@@ -48,40 +47,7 @@ app.use('/user', user);
 app.use('/ride', ride);
 app.use('/group', group);
 app.use('/msg', msg);
-
-app.get('/testjson', function(req, res){
-  console.log(req.query);
-  res.end(JSON.stringify(req.query));
-  // res.end(req.query);
-});
-
-app.post('/testjson', function(req, res){
-  console.log(req.body);
-  res.end(JSON.stringify(req.body));
-});
-
-app.get('/test', function(req, res){
-  // console.log(req.query);
-  var str = "";
-  for(var attr in req.query){
-    str += attr + ": " + req.query[attr] + '\n';
-  }
-  console.log(str);
-
-  res.end("GET request received\n --RideShare-OZ-Server\n" + str);
-  // console.log(request.body.user.email);
-});
-
-app.post('/test', function(req, res){
-  var str = "";
-  for(var attr in req.body){
-    str += attr + ": " + req.body[attr] + '\n';
-  }
-  console.log(str);
-
-  res.end("POST request received\n --RideShare-OZ-Server\n" + str);
-      // console.log(request.body.user.email);
-});
+app.use('/test', test);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

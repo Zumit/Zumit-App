@@ -25,6 +25,7 @@ import com.google.android.gms.plus.model.people.Person;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements
 
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
+        findViewById(R.id.test_query_button).setOnClickListener(this);
     }
 
 
@@ -148,7 +150,15 @@ public class MainActivity extends AppCompatActivity implements
         if (v.getId() == R.id.sign_out_button) {
             onSignOutClicked();
         }
+        if (v.getId() == R.id.test_query_button){
+            onTestQueryClicked();
+        }
 
+    }
+
+    private void onTestQueryClicked(){
+        //new SearchRides().execute("http://144.6.226.237/testjson?day=29&month=9&year=2015&start=3752&end=unimelb");
+        new SearchRides().execute("http://144.6.226.237/ride/getall");
     }
     private void onSignOutClicked(){
         if (mGoogleApiClient.isConnected()) {
@@ -208,16 +218,19 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showSignedInUI(){
 
-        Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+        //Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
+
+        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+        Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
 
         TextView mStatusTextView = (TextView)findViewById(R.id.sign_in_text);
         mStatusTextView.setText("Signed in...");
 
         mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
-        //mStatusTextView.setText(person.getDisplayName());
+        mStatusTextView.setText(accountName);
 
         mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
-        //mStatusTextView.setText(person.getLanguage());
+        mStatusTextView.setText(account.toString());
 
         new GetUserIDTask().execute();
     }
@@ -261,6 +274,90 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    public class SearchRides extends AsyncTask<String,Void, String>{
+
+        final String LogTag = "RideSearch";
+        @Override
+        protected String doInBackground(String... params) {
+
+            // These two need to be declared outside the try/catch
+            // so that they can be closed in the finally block
+            HttpURLConnection urlConnection = null;
+            BufferedReader reader = null;
+
+            // Will contain the raw JSON response as a string.
+            String ridesJason = null;
+
+            try {
+                // Construct the URL for the OpenWeatherMap query
+                // Possible parameters are avaiable at OWM's forecast API page, at
+                // http://openweathermap.org/API#forecast
+                URL url = new URL(params[0]);
+
+                // Create the request to OpenWeatherMap, and open the connection
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                // Read the input stream into a String
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    // Nothing to do.
+                    Log.e(LogTag,"input Stream empty");
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                    // But it does make debugging a *lot* easier if you print out the completed
+                    // buffer for debugging.
+                    buffer.append(line + "\n");
+                }
+
+                if (buffer.length() == 0) {
+                    // Stream was empty.  No point in parsing.
+                    Log.e(LogTag,"Buffer empty");
+                    return null;
+                }
+                ridesJason = buffer.toString();
+                Log.e(LogTag, ridesJason );
+            } catch (IOException e) {
+                Log.e(LogTag, "Error ", e);
+                // If the code didn't successfully get the weather data, there's no point in attemping
+                // to parse it.
+                return null;
+            } finally{
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e(LogTag , "Error closing stream", e);
+                    }
+                }
+            }
+
+            return ridesJason;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if (result != null) {
+                // Successfully retrieved rides
+                Log.e(LogTag, result);
+            } else {
+                // No Rides :(
+                Log.e(LogTag, "no rides");
+            }
+        }
+    }
 
     public class SendUserID extends AsyncTask<String, Void, String> {
 
