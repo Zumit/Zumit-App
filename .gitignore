@@ -1,1 +1,9 @@
+# OS X files
 .DS_Store
+
+# vim temp files
+*.swp
+
+# nodeJS files
+node_modules/
+npm-debug.log

@@ -5,8 +5,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+// database
+/* var mongo = require('mongodb'); */
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/RideShare', function(err) {
+  if(err) {
+    console.log('database connection error', err);
+  } else {
+    console.log('database connection successful');
+  }
+});
+
+var index = require('./routes/index');
+var user = require('./routes/user');
+var ride = require('./routes/ride');
+var group = require('./routes/group');
+var msg = require('./routes/msg');
+var test = require('./routes/test');
 
 var app = express();
 
@@ -22,8 +38,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+app.use(function(req,res,next){
+  next();
+});
+
+app.use('/', index);
+app.use('/user', user);
+app.use('/ride', ride);
+app.use('/group', group);
+app.use('/msg', msg);
+app.use('/test', test);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
