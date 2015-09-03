@@ -6,14 +6,22 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 // database
-var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/RideShare');
+/* var mongo = require('mongodb'); */
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/RideShare', function(err) {
+  if(err) {
+    console.log('database connection error', err);
+  } else {
+    console.log('database connection successful');
+  }
+});
 
 var index = require('./routes/index');
 var user = require('./routes/user');
 var ride = require('./routes/ride');
 var group = require('./routes/group');
+var msg = require('./routes/msg');
 
 var app = express();
 
@@ -31,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Make our db accessible to our router
 app.use(function(req,res,next){
-  req.db = db;
+  // req.db = mongoose;
   next();
 });
 
@@ -39,7 +47,7 @@ app.use('/', index);
 app.use('/user', user);
 app.use('/ride', ride);
 app.use('/group', group);
-app.use('/msg', group);
+app.use('/msg', msg);
 
 app.get('/testjson', function(req, res){
   console.log(req.query);

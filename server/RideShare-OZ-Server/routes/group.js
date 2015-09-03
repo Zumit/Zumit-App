@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
 
   var db = req.db;
-  var collection = db.get('group');
+  var collection = db.get('groups');
 
   res.send('respond with a resource');
 
