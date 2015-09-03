@@ -7,6 +7,8 @@ router.get('/login', function(req, res, next) {
   // User
   var user = new User();
   user.username = 'test7';
+  user.address= 'Chadstone';
+  user.phone='112233';
   user.save(function(err, doc){
     User.find({}, function (err, users) {
       res.json(users);

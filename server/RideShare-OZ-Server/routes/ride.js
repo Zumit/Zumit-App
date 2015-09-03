@@ -11,7 +11,7 @@ router.get('/create', function(req, res, next) {
   ride.seat = 5;
   ride.start_point=[2,3];
   ride.end_point=[10,34];
-  User.findById('55e7da3090d4dff586bc0028', function(err, user){
+  User.findById('55e822ad281137b018d95333', function(err, user){
     ride.driver=user;
     ride.save(function(err, doc){
       if (err) {
