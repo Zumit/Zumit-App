@@ -41,7 +41,7 @@ app.use('/ride', ride);
 app.use('/group', group);
 app.use('/msg', group);
 
-app.get('/gettest', function(req, res){
+app.get('/test', function(req, res){
   // console.log(req.query);
   var str = "";
   for(var attr in req.query){
@@ -53,7 +53,7 @@ app.get('/gettest', function(req, res){
   // console.log(request.body.user.email);
 });
 
-app.post('/posttest', function(req, res){
+app.post('/test', function(req, res){
   var str = "";
   for(var attr in req.body){
     str += attr + ": " + req.body[attr] + '\n';
