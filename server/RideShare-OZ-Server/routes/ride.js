@@ -23,7 +23,7 @@ router.get('/create', function(req, res, next) {
 });
 
 router.get('/getall', function(req, res, next) {
-  Ride.find({}, function(err, rides){
+  Ride.find().populate('driver', 'username').exec({}, function(err, rides){
     res.json(rides);
   });
 });
