@@ -1,7 +1,6 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.accounts.Account;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.AsyncTask;
@@ -20,7 +19,6 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,9 +30,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -72,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.test_query_button).setOnClickListener(this);
+        findViewById(R.id.all_rides).setOnClickListener(this);
+        findViewById(R.id.all_users).setOnClickListener(this);
+        findViewById(R.id.create_ride).setOnClickListener(this);
     }
 
 
@@ -151,14 +149,22 @@ public class MainActivity extends AppCompatActivity implements
             onSignOutClicked();
         }
         if (v.getId() == R.id.test_query_button){
-            onTestQueryClicked();
+            onTestQueryClicked("http://144.6.226.237/test/json?day=29&month=9&year=2015&start=3752&end=unimelb");
+        }
+        if (v.getId() == R.id.all_rides){
+            onTestQueryClicked("http://144.6.226.237/ride/getall");
+        }
+        if (v.getId() == R.id.all_users){
+            onTestQueryClicked("http://144.6.226.237/user/getall");
+        }
+        if (v.getId() == R.id.create_ride){
+            onTestQueryClicked("http://144.6.226.237/ride/create?driverid=");
         }
 
     }
 
-    private void onTestQueryClicked(){
-        //new SearchRides().execute("http://144.6.226.237/testjson?day=29&month=9&year=2015&start=3752&end=unimelb");
-        new SearchRides().execute("http://144.6.226.237/ride/getall");
+    private void onTestQueryClicked(String url){
+        new SendURL().execute(url);
     }
     private void onSignOutClicked(){
         if (mGoogleApiClient.isConnected()) {
@@ -235,6 +241,21 @@ public class MainActivity extends AppCompatActivity implements
         new GetUserIDTask().execute();
     }
 
+    String getAuthToken(){
+        //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
+        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+        Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+        String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
+        try {
+            return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
+        } catch (IOException e) {
+            Log.e(TAG, "Error retrieving ID token.", e);
+            return null;
+        } catch (GoogleAuthException e) {
+            Log.e(TAG, "Error retrieving ID token.", e);
+            return null;
+        }
+    }
     /**
      * Created by uidu9665 on 29/08/2015.
      */
@@ -242,21 +263,15 @@ public class MainActivity extends AppCompatActivity implements
 
         private final String TAG = "SendID";
 
+        public String getToken() {
+            return token;
+        }
+
+        private String token = null;
+
         @Override
         protected String doInBackground(Void... params) {
-            //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
-            String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
-            Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-            String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
-            try {
-                return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
-            } catch (IOException e) {
-                Log.e(TAG, "Error retrieving ID token.", e);
-                return null;
-            } catch (GoogleAuthException e) {
-                Log.e(TAG, "Error retrieving ID token.", e);
-                return null;
-            }
+            return getAuthToken();
         }
 
         @Override
@@ -264,6 +279,7 @@ public class MainActivity extends AppCompatActivity implements
             Log.i(TAG, "ID token: " + result);
             if (result != null) {
                 // Successfully retrieved ID Token
+                token = result;
                 new SendUserID().execute(result);
 
 
@@ -274,9 +290,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    public class SearchRides extends AsyncTask<String,Void, String>{
+    public class SendURL extends AsyncTask<String,Void, String>{
 
-        final String LogTag = "RideSearch";
+        final String LogTag = "SendURL";
         @Override
         protected String doInBackground(String... params) {
 
@@ -292,7 +308,13 @@ public class MainActivity extends AppCompatActivity implements
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are avaiable at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL(params[0]);
+                String urlAddress = null;
+                if (params[0].endsWith("http://144.6.226.237/ride/create?driverid=")){
+                    urlAddress = params[0] +  getAuthToken();
+                }else{
+                    urlAddress = params[0];
+                }
+                URL url = new URL(urlAddress);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -323,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements
                     return null;
                 }
                 ridesJason = buffer.toString();
-                Log.e(LogTag, ridesJason );
+                //Log.e(LogTag, ridesJason );
             } catch (IOException e) {
                 Log.e(LogTag, "Error ", e);
                 // If the code didn't successfully get the weather data, there's no point in attemping
@@ -351,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements
 
             if (result != null) {
                 // Successfully retrieved rides
-                Log.e(LogTag, result);
+                Log.d(LogTag, result);
             } else {
                 // No Rides :(
                 Log.e(LogTag, "no rides");
