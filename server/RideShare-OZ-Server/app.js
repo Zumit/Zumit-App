@@ -42,16 +42,28 @@ app.use('/group', group);
 app.use('/msg', group);
 
 app.get('/gettest', function(req, res){
-      console.log(req.query.msg);
-      res.end("GET request received\n --RideShare-OZ-Server\n msg = " + req.query.msg);
-      // console.log(request.body.user.email);
+  // console.log(req.query);
+  var str = "";
+  for(var attr in req.query){
+    str += attr + ": " + req.query[attr] + '\n';
+  }
+  console.log(str);
+
+  res.end("GET request received\n --RideShare-OZ-Server\n" + str);
+  // console.log(request.body.user.email);
 });
 
 app.post('/posttest', function(req, res){
-      console.log(req.body.token);
-      res.end("POST request received\n --RideShare-OZ-Server\n token = " + req.body.token);
+  var str = "";
+  for(var attr in req.body){
+    str += attr + ": " + req.body[attr] + '\n';
+  }
+  console.log(str);
+
+  res.end("POST request received\n --RideShare-OZ-Server\n" + str);
       // console.log(request.body.user.email);
 });
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
