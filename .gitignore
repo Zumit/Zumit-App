@@ -3,3 +3,6 @@
 
 # vim temp files
 *.swp
+
+# node_modules
+node_modules/
