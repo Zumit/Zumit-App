@@ -10,7 +10,7 @@ var RideSchema = new Schema({
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
   passengers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{type: Schema.Types.ObjectId, ref: 'Request' }],
+  requests: [{user:{type: Schema.Types.ObjectId, ref: 'Request' },requestDate:{ type: Date, default: Date.now }}],
   updated_at: { type: Date, default: Date.now },
 });
 

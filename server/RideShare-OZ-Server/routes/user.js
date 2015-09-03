@@ -9,7 +9,13 @@ router.get('/login', function(req, res, next) {
 
 router.get('/create', function(req, res, next) {
   var user = new User();
+<<<<<<< HEAD
+  user.username = 'test7';
+  user.address= 'Chadstone';
+  user.phone='112233';
+=======
   user.username = req.query.username;
+>>>>>>> 783bd9bb0e4497b7c0d8336dd7b2ba3c6eeb50c0
   user.save(function(err, doc){
     res.json(doc);
   });
