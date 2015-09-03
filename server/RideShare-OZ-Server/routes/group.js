@@ -4,9 +4,6 @@ var router = express.Router();
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 
-  var db = req.db;
-  var collection = db.get('groups');
-
   res.send('respond with a resource');
 
 });
