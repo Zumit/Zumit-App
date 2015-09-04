@@ -5,7 +5,7 @@ var RideSchema = new Schema({
   start_time: Date,
   driver_license: String,
   seats: Number,
-  start_point: {type:String,coordinates:[Number]}, // Lat, Lng 
+  start_point:{type:[Number],index:'2d'}, // Lat, Lng 
   end_point: [Number],
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
