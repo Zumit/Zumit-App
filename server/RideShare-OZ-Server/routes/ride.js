@@ -8,7 +8,7 @@ router.get('/create', function(req, res, next) {
   var ride = new Ride();
   ride.start_time = Date.now();
   ride.seat = 5;
-  ride.start_point=[2,3];
+  ride.start_point=[20,30];
   ride.end_point=[10,34];
   User.findById(req.query.driverid, function(err, user){
     ride.driver=user;
@@ -26,5 +26,15 @@ router.get('/getall', function(req, res, next) {
     res.json(rides);
   });
 });
+
+
+router.get('/search',function(req,res){
+lon=req.query.lon;
+lat=req.query.lat;
+groupID=req.query.groupId;
+
+
+
+})
 
 module.exports = router;
