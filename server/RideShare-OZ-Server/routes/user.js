@@ -4,7 +4,18 @@ var User = require('../models/User.js');
 
 /* Login. */
 router.post('/login', function(req, res, next) {
-  res.end(req.userinfo.name + req.userinfo.email);
+  /* res.send('hehe'); */
+  User.findOne({'username': req.userinfo.email}, function(err, user){
+    if (!user) {
+      console.log('User not found');
+      var new_user = new User();
+      new_user.username = req.userinfo.email;
+      new_user.save();
+      res.end('Hello, new user: ' + req.userinfo.email);
+    } else{
+      res.end('Welcome back,' + req.userinfo.email);
+    }
+  });
   /* res.status(500).send('Something broke!'); */
 });
 

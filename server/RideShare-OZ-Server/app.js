@@ -31,7 +31,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -43,10 +42,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
   if (req.method === 'POST') {
     auth.auth_token(req.body.token, function(doc){
-      req.userinfo = doc;
-      next();
+      /* doc = {'email': 'maxzhx1@gmail.com'}; */
+      if (!doc.email) {
+        res.end('Invalid token');
+      } else {
+        req.userinfo = doc;
+        next();
+      }
     });
+  } else{
+    next();
   }
+  /* console.log("========="); */
 });
 
 app.use('/', index);
