@@ -17,8 +17,8 @@ router.get('/create', function(req, res, next) {
   groups.groupName = 'Melbourne uni';
   groups.grouplocation = 'Parkville';
   User.findById('55e822ad281137b018d95333', function(err, user){
-  groups.adminID=user;
-  groups.save(function(err, doc){
+    groups.adminID=user;
+    groups.save(function(err, doc){
       if (err) {
         console.log(err);
       }
