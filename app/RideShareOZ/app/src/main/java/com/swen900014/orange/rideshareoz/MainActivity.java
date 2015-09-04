@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements
             onSignOutClicked();
         }
         if (v.getId() == R.id.test_query_button){
-            onTestQueryClicked("http://144.6.226.237/test/json?day=29&month=9&year=2015&start=3752&end=unimelb");
+            onTestQueryClicked("http://144.6.226.237/test/json?day=29&month=9&year=2015&start=3752&end=unimelb&includeSurrounding=True,");
         }
         if (v.getId() == R.id.all_rides){
             onTestQueryClicked("http://144.6.226.237/ride/getall");
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements
             String token = params[0];
             URL url = null;
             try {
-                url = new URL("http://144.6.226.237/posttest");
+                url = new URL("http://144.6.226.237/test");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
