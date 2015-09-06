@@ -14,4 +14,18 @@ var UserSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
+UserSchema.statics.getAllUser = function(callback){
+  this.find({}, function(err, users){
+    callback(users);
+  });
+};
+
+UserSchema.methods.getRides = function(callback){
+  var conditions = {$or:[{'driver':'55ebc26a519891745c72ccb3'}, {'passengers':'55ebc26a519891745c72ccb3'}]};
+  /* var conditions = {}; */
+  this.model('Ride').find(conditions, function(err, rides){
+    callback(rides);
+  });
+};
+
 module.exports = mongoose.model('User', UserSchema);

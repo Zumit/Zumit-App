@@ -10,6 +10,7 @@ router.get('/create', function(req, res, next) {
   ride.seat = 5;
   ride.start_point=[20,33];
   ride.end_point=[10.01,34.001];
+  ride.passengers = ['55ebc3b9b9ccece95d5d1d85', '55ebbd95cbe7567855196aff'];
   User.findById(req.query.driverid, function(err, user){
     ride.driver=user;
     ride.save(function(err, doc){
@@ -22,7 +23,7 @@ router.get('/create', function(req, res, next) {
 });
 
 router.get('/getall', function(req, res, next) {
-  Ride.find().populate('driver', 'username').exec({}, function(err, rides){
+  Ride.find().populate('driver', 'username').populate('passengers', 'username').exec({}, function(err, rides){
     res.json(rides);
   });
 });
