@@ -4,7 +4,6 @@ var User = require('../models/User.js');
 var Group = require('../models/Group.js');
 var RideSchema = new Schema({
   start_time: Date,
-  driver_license: String,
   seats: Number,
   start_point:{type:[Number],index:'2d'}, // Lat, Lng 
   end_point: [Number],
@@ -12,7 +11,7 @@ var RideSchema = new Schema({
   group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
   events:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
   passengers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'Request' },requestDate:{ type: Date, default: Date.now }}],
+  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },requestDate:{ type: Date, default: Date.now },state:String}],
   updated_at: { type: Date, default: Date.now },
 });
 
@@ -64,15 +63,22 @@ RideSchema.statics.searchRide =function(req,callback){
       $maxDistance: maxDistance
     }
   }).limit(limit).exec(function(err, locations) {
-    if (err) {
-      return res.json(500, err);
-    }
+
     callback(locations);
-  });;
+  });
+};
 
 
 
+RideSchema.methods.addRequest= function(user_id, callback){
 
+    console.log(this);
+    this.requests.push({'user':user_id,'state':"unaccept"});
+    this.save(function(err, doc){
+      callback(doc);
+    });
+  
+};
 
 
 module.exports = mongoose.model('Ride', RideSchema);
