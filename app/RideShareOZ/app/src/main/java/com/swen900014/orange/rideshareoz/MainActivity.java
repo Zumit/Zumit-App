@@ -54,7 +54,14 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
+
+        /*setContentView(R.layout.activity_myrides);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, (new MyRidesFragment()) )
+                    .commit();
+        }*/
 
         // Build GoogleApiClient with access to basic profile
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -70,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.all_rides).setOnClickListener(this);
         findViewById(R.id.all_users).setOnClickListener(this);
         findViewById(R.id.create_ride).setOnClickListener(this);
+        findViewById(R.id.my_rides_button).setOnClickListener(this);
     }
 
 
@@ -159,6 +167,10 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (v.getId() == R.id.create_ride){
             onTestQueryClicked("http://144.6.226.237/ride/create?driverid=");
+        }
+        if (v.getId() == R.id.my_rides_button){
+            Intent myRides = new Intent(this, MyRidesActivity.class);
+            startActivity(myRides);
         }
 
     }
@@ -390,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements
             String token = params[0];
             URL url = null;
             try {
-                url = new URL("http://144.6.226.237/test");
+                url = new URL("http://144.6.226.237/user/login");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -442,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i(TAG, "ID token: " + result);
+            Log.d(TAG, "ID token: " + result);
             if (result != null) {
                 // Successfully retrieved ID Token
 
