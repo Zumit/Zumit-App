@@ -21,7 +21,7 @@ UserSchema.statics.getAllUser = function(callback){
 };
 
 UserSchema.methods.getRides = function(callback){
-  var conditions = {$or:[{'driver':'55ebc26a519891745c72ccb3'}, {'passengers':'55ebc26a519891745c72ccb3'}]};
+  var conditions = {$or:[{'driver':this}, {'passengers':this}]};
   /* var conditions = {}; */
   this.model('Ride').find(conditions, function(err, rides){
     callback(rides);
