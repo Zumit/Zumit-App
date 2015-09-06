@@ -2,13 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.swen900014.orange.rideshareoz" >
 
-    <!--To access Google APIs: -->
+    <!-- To access Google APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--To retrieve the account name (email) as part of sign-in:-->
+    <!-- To retrieve the account name (email) as part of sign-in: -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
-    <!--To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user's Google account from an app.-->
+    <!-- To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user's Google account from an app. -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
@@ -24,6 +24,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".PassViewRide"
+            android:label="@string/title_activity_pass_view_ride" >
         </activity>
     </application>
 
