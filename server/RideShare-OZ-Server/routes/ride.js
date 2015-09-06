@@ -5,28 +5,19 @@ var User = require('../models/User.js');
 
 router.get('/create', function(req, res, next) {
 
-  var ride = new Ride();
-  ride.start_time = Date.now();
-  ride.seat = 5;
-  ride.start_point=[20,33];
-  ride.end_point=[10.01,34.001];
-  User.findById(req.query.driverid, function(err, user){
-    ride.driver=user;
-    ride.save(function(err, doc){
-      if (err) {
-        console.log(err);
-      }
-      res.json(doc);
-    });
+  Ride.createRide(req, function(doc){
+
+    res.json(doc);
   });
+
 });
 
 router.get('/getall', function(req, res, next) {
-  Ride.find().populate('driver', 'username').exec({}, function(err, rides){
-    res.json(rides);
-  });
-});
 
+   Ride.getallRide(function(rides){
+    res.json(rides);
+   });
+});
 
 router.get('/search',function(req,res){
   var coords=[];
