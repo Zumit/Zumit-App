@@ -76,6 +76,9 @@ this.find({group:groupID
       callback(locations);
     });;
 
-}
+
+
+
+
 
 module.exports = mongoose.model('Ride', RideSchema);
