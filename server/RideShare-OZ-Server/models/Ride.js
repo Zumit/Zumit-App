@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var User = require('../models/User.js');
+var Group = require('../models/Group.js');
 var RideSchema = new Schema({
   start_time: Date,
   driver_license: String,
@@ -15,4 +16,44 @@ var RideSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
+
+RideSchema.statics.getallRide = function(callback){
+  this.find().populate('driver', 'username').exec({}, function(err, rides){
+    callback(rides);
+});
+};
+
+
+
+RideSchema.statics.createRide = function(req,callback){
+  var Ride = mongoose.model('Ride');
+  var ride =new Ride();
+  ride.start_time = Date.now();
+  ride.seats = req.query.seat;
+  var start_lon=req.query.s_lon;
+  var start_lat=req.query.s_lat;
+  
+ 
+
+  ride.start_point=[Number(start_lon),Number(start_lat)];
+  var end_lon=req.query.e_lon;
+  var end_lat=req.query.e_lat;
+  ride.end_point=[Number(end_lon),Number(end_lat)];
+  User.findById(req.query.driverid, function(err, user){
+    ride.driver=user;
+      Group.findById(req.query.groupid,function(err,group){
+    ride.group=group;
+      ride.save(function(err, doc){
+      if (err) {
+        console.log(err);
+      }
+      callback(doc);
+    
+  });
+
+  });
+    });
+  
+
+}
 module.exports = mongoose.model('Ride', RideSchema);
