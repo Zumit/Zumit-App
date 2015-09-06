@@ -42,18 +42,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
   if (req.method === 'POST') {
     auth.auth_token(req.body.token, function(doc){
-      /* doc = {'email': 'maxzhx1@gmail.com'}; */
+      // doc = {'email': 'maxzhx1@gmail.com'};
       if (!doc.email) {
-        res.end('Invalid token');
+        res.end('Invalid Token');
       } else {
+        // console.log("=====email===");
+        // console.log(doc.email);
         req.userinfo = doc;
         next();
       }
     });
-  } else{
+  } else {
     next();
   }
-  /* console.log("========="); */
+  // console.log("========="); 
+  // next();
 });
 
 app.use('/', index);
