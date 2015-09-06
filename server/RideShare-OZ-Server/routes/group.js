@@ -7,7 +7,9 @@ var Group = require('../models/Group.js');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
 
-  res.send('respond with a resource');
+  Group.find({}, function(err, groups){
+    res.json(groups);
+  });
 
 });
 

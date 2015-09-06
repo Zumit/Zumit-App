@@ -6,32 +6,29 @@ var User = require('../models/User.js');
 router.post('/login', function(req, res, next) {
   User.findOne({'username': req.userinfo.email}, function(err, user){
     if (!user) {
-      console.log('User not found');
-      var new_user = new User();
-      new_user.username = req.userinfo.email;
-      new_user.save();
-      res.end('Hello, new user: ' + req.userinfo.email);
+      User.createUser(req.userinfo.email, function(new_user){
+        new_user.getRides(function(rides){
+          res.json(rides);
+        });
+      });
     } else {
-      console.log('User found');
-      res.end('Welcome back, ' + req.userinfo.email);
+      user.getRides(function(rides){
+        res.json(rides);
+      });
     }
   });
   /* res.status(500).send('Something broke!'); */
 });
 
-router.get('/create', function(req, res, next) {
-  var user = new User();
-  user.username = req.query.username;
-  user.address= 'Chadstone';
-  user.phone='112233';
-  user.save(function(err, doc){
-    res.json(doc);
+router.post('/info', function(req, res, next) {
+  User.findOne({'username': req.userinfo.email}, function(err, user){
+    res.json(docs);
   });
 });
 
 router.get('/getall', function(req, res, next) {
-  User.find({}, function(err, users){
-    res.json(users);
+  User.getAllUsers(function(rides){
+    res.json(rides);
   });
 });
 
