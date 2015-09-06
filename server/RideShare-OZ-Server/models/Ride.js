@@ -20,7 +20,7 @@ var RideSchema = new Schema({
 RideSchema.statics.getallRide = function(callback){
   this.find().populate('driver', 'username').exec({}, function(err, rides){
     callback(rides);
-});
+  });
 };
 
 
@@ -33,8 +33,6 @@ RideSchema.statics.createRide = function(req,callback){
   var start_lon=req.query.s_lon;
   var start_lat=req.query.s_lat;
   
- 
-
   ride.start_point=[Number(start_lon),Number(start_lat)];
   var end_lon=req.query.e_lon;
   var end_lat=req.query.e_lat;
@@ -42,18 +40,42 @@ RideSchema.statics.createRide = function(req,callback){
   User.findById(req.query.driverid, function(err, user){
     ride.driver=user;
       Group.findById(req.query.groupid,function(err,group){
-    ride.group=group;
-      ride.save(function(err, doc){
-      if (err) {
-        console.log(err);
-      }
-      callback(doc);
+        ride.group=group;
+        ride.save(function(err, doc){
+        if (err) {
+          console.log(err);
+        }
+         callback(doc);
     
-  });
+       });
 
   });
-    });
-  
+});
+};
+
+
+RideSchema.statics.searchRide =function(req,callback){
+
+var coords=[];
+coords[0]=req.query.lon;
+coords[1]=req.query.lat;
+var maxDistance=1;
+var limit=10;
+var groupID=req.query.groupId;
+
+this.find({group:groupID
+      ,start_point: {
+        $near:coords,
+        $maxDistance: maxDistance
+      }
+    }).limit(limit).exec(function(err, locations) {
+      if (err) {
+        return res.json(500, err);
+      }
+
+      callback(locations);
+    });;
 
 }
+
 module.exports = mongoose.model('Ride', RideSchema);
