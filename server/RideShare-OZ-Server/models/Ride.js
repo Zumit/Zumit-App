@@ -4,15 +4,14 @@ var User = require('../models/User.js');
 var Group = require('../models/Group.js');
 var RideSchema = new Schema({
   start_time: Date,
-  driver_license: String,
   seats: Number,
-  start_point:{type:[Number],index:'2d'}, // Lat, Lng 
+  start_point: {type:[Number],index:'2d'}, // Lat, Lng
   end_point: [Number],
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
   events:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
   passengers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'Request' },requestDate:{ type: Date, default: Date.now }}],
+  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User'},requestDate:{ type: Date, default: Date.now }}],
   updated_at: { type: Date, default: Date.now },
 });
 
@@ -30,7 +29,7 @@ RideSchema.statics.createRide = function(req,callback){
   ride.seats = req.query.seat;
   var start_lon=req.query.s_lon;
   var start_lat=req.query.s_lat;
-  
+
   ride.start_point=[Number(start_lon),Number(start_lat)];
   var end_lon=req.query.e_lon;
   var end_lat=req.query.e_lat;
@@ -43,12 +42,11 @@ RideSchema.statics.createRide = function(req,callback){
       if (err) {
         console.log(err);
       }
-       callback(doc);
+        callback(doc);
       });
     });
   });
 };
-
 
 RideSchema.statics.searchRide =function(req,callback){
 
@@ -68,11 +66,8 @@ RideSchema.statics.searchRide =function(req,callback){
       return res.json(500, err);
     }
     callback(locations);
-  });;
-
-
-
-
-
+  });
+};
 
 module.exports = mongoose.model('Ride', RideSchema);
+

@@ -22,13 +22,39 @@ router.post('/login', function(req, res, next) {
 
 router.post('/info', function(req, res, next) {
   User.findOne({'username': req.userinfo.email}, function(err, user){
-    res.json(docs);
+    res.json(user);
+  });
+});
+
+router.post('/getRides', function(req, res, next) {
+  User.findOne({'username': req.userinfo.email}, function(err, user){
+    /* res.json(user); */
+    user.getRides(function(rides){
+      res.json(rides);
+    });
+  });
+});
+
+router.post('/update', function(req, res, next){
+  User.findOne({'username': req.userinfo.email}, function(err, user){
+    user.email = (req.body.email)? req.body.email : user.email;
+    user.address = (req.body.address)? req.body.address : user.address;
+    user.note = (req.body.note)? req.body.note : user.note;
+    user.phone = (req.body.phone)? req.body.phone : user.phone;
+    user.DoB = (req.body.DoB)? req.body.DoB : user.DoB;
+    user.driver_license = (req.body.driver_license)? req.body.driver_license : user.driver_license;
+
+});
+
+router.post('/getall', function(req, res, next) {
+  User.getAllUsers(function(users){
+    res.json(users);
   });
 });
 
 router.get('/getall', function(req, res, next) {
-  User.getAllUsers(function(rides){
-    res.json(rides);
+  User.getAllUsers(function(users){
+    res.json(users);
   });
 });
 
