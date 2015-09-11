@@ -31,19 +31,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
+        View.OnClickListener
+{
+    private final String TAG = "MAIN_Authentication";
+    private final String SERVER_CLIENT_ID =
+            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
-
-    private final String TAG = "MAIN_Authentication";
-    private final String SERVER_CLIENT_ID = "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     /* Is there a ConnectionResult resolution in progress? */
     private boolean mIsResolving = false;
@@ -146,6 +148,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    // Button event for the view ride button
+    // by Yu
+    public void viewRide(View v)
+    {
+        Intent passViewRide = new Intent(this, PassViewRide.class);
+        startActivity(passViewRide);
+
+        //Intent driverViewRide = new Intent(this, DriverViewRide.class);
+        //startActivity(driverViewRide);
     }
 
     @Override
