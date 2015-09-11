@@ -3,16 +3,17 @@ var Schema = mongoose.Schema;
 var User = require('../models/User.js');
 var Group = require('../models/Group.js');
 var RideSchema = new Schema({
-  start_time: Date,
+  arrival_time: Date,
   seats: Number,
   start_point: {type:[Number],index:'2d'}, // Lat, Lng
-  end_point: [Number],
+  end_point: {type:[Number],index:'2d'},
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: Schema.Types.ObjectId, ref: 'Group'},
   events:{type: Schema.Types.ObjectId, ref: 'Event'},
   passengers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },requestDate:{ type: Date, default: Date.now },state:String}],
+  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },state:String,note:"String"}],
   updated_at: { type: Date, default: Date.now },
+  note: String,
 });
 
 
@@ -50,15 +51,34 @@ RideSchema.statics.createRide = function(req,callback){
 
 RideSchema.statics.searchRide =function(req,callback){
 
-  var coords=[];
-  coords[0]=req.query.lon;
-  coords[1]=req.query.lat;
+  var start=[];
+  start[0]=req.query.s_lon;
+  start[1]=req.query.s_lat; 
+  /*var end=[];
+  end[0]=req.query.e_lon;
+  end[1]=req.query.e_lat; */
+  //need have arrival time
   var maxDistance=1;
   var limit=10;
   var groupID=req.query.groupId;
-
+  
+  /*this.aggregate([
+    {
+      $match:{
+        'group': groupID
+      }
+    },
+    {
+      $project:{
+        _id:1
+      }
+    }
+  ], function(err, locations){}
+    callback(locations);
+  });
+*/
   this.find({group:groupID, start_point: {
-      $near:coords,
+      $near:start,
       $maxDistance: maxDistance
     }
   }).limit(limit).exec(function(err, locations) {
@@ -67,12 +87,30 @@ RideSchema.statics.searchRide =function(req,callback){
   });
 };
 
-RideSchema.methods.addRequest= function(user_id, callback){
+RideSchema.methods.addRequest= function(user_id,req,callback){
   /* console.log(this); */
-  this.requests.push({'user':user_id,'state':"unaccept"});
+  var pickup_point=[];
+  pickup_point[0]=req.query.p_lon;
+  pickup_point[1]=req.query.p_lat;
+  var note=req.query.note;
+  this.requests.push({'user':user_id,'state':"unaccept",'pickup_point':pickup_point,'note':note});
   this.save(function(err, doc){
     callback(doc);
   });
 };
+
+
+RideSchema.statics.cancelRide = function(req,callback){
+  var ride_id=req.query.ride_id;
+  this.find({_id:ride_id}).remove(function(err){
+    callback("deleted");
+
+
+  });
+  
+
+};
+
+
 
 module.exports = mongoose.model('Ride', RideSchema);
