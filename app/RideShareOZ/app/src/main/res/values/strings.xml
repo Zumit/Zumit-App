@@ -6,4 +6,19 @@
     <string name="TimeInViewRide">Time:</string>
     <string name="StartInViewRide">Start:</string>
     <string name="EndInViewRide">End:</string>
+=======
+    <string name="action_refresh" translatable="false">Refresh</string>
+    <string name="title_my_rides" translatable="false">My Rides</string>
+    <string name="PassViewPass">Passengers</string>
+    <string name="JoinRide">Join</string>
+    <string name="ViewRide">VIEW RIDE</string>
+    <string name="startLabel">Start: </string>
+    <string name="endLabel">End:</string>
+    <string name="timeLabel">Time: </string>
+    <string name="passLabel">Passengers: </string>
+    <string name="title_activity_driver_view_ride">DriverViewRide</string>
+    <string name="cancelButton">cancelButton</string>
+    <string name="joinButton">Join</string>
+    <string name="titleLabel">Where do you want to be picked up:</string>
+    >>>>>>> refs/remotes/origin/master
 </resources>

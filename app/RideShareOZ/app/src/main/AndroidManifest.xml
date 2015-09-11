@@ -11,11 +11,22 @@
     <!-- To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user's Google account from an app. -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" > <!--  -->
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBZRhf-NZr0qcZbdttRMEE2dlUgRtuRo_Y"/>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -28,6 +39,18 @@
         <activity
             android:name=".PassViewRide"
             android:label="@string/title_activity_pass_view_ride" >
+=======
+            android:name=".MyRidesActivity"
+            android:label="@string/title_my_rides"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.swen900014.orange.rideshareoz.MainActivity" />
+>>>>>>> refs/remotes/origin/master
+        </activity>
+        <activity
+            android:name=".DriverViewRide"
+            android:label="@string/title_activity_driver_view_ride" >
         </activity>
     </application>
 

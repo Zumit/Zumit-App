@@ -31,19 +31,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
+        View.OnClickListener
+{
+    private final String TAG = "MAIN_Authentication";
+    private final String SERVER_CLIENT_ID =
+            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
-
-    private final String TAG = "MAIN_Authentication";
-    private final String SERVER_CLIENT_ID = "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     /* Is there a ConnectionResult resolution in progress? */
     private boolean mIsResolving = false;
@@ -54,7 +56,14 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
+
+        /*setContentView(R.layout.activity_myrides);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, (new MyRidesFragment()) )
+                    .commit();
+        }*/
 
         // Build GoogleApiClient with access to basic profile
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -70,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements
         findViewById(R.id.all_rides).setOnClickListener(this);
         findViewById(R.id.all_users).setOnClickListener(this);
         findViewById(R.id.create_ride).setOnClickListener(this);
+        findViewById(R.id.my_rides_button).setOnClickListener(this);
     }
 
 
@@ -140,6 +150,17 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    // Button event for the view ride button
+    // by Yu
+    public void viewRide(View v)
+    {
+        Intent passViewRide = new Intent(this, PassViewRide.class);
+        startActivity(passViewRide);
+
+        //Intent driverViewRide = new Intent(this, DriverViewRide.class);
+        //startActivity(driverViewRide);
+    }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.sign_in_button) {
@@ -159,6 +180,10 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (v.getId() == R.id.create_ride){
             onTestQueryClicked("http://144.6.226.237/ride/create?driverid=");
+        }
+        if (v.getId() == R.id.my_rides_button){
+            Intent myRides = new Intent(this, MyRidesActivity.class);
+            startActivity(myRides);
         }
 
     }
@@ -390,7 +415,7 @@ public class MainActivity extends AppCompatActivity implements
             String token = params[0];
             URL url = null;
             try {
-                url = new URL("http://144.6.226.237/test");
+                url = new URL("http://144.6.226.237/user/login");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -442,7 +467,7 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         protected void onPostExecute(String result) {
-            Log.i(TAG, "ID token: " + result);
+            Log.d(TAG, "ID token: " + result);
             if (result != null) {
                 // Successfully retrieved ID Token
 

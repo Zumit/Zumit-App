@@ -14,7 +14,17 @@ var UserSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
-UserSchema.statics.getAllUser = function(callback){
+UserSchema.statics.createUser = function(username, callback){
+  var User = mongoose.model('User');
+  var new_user = new User({'username': username});
+  new_user.save(function(err){
+    /* console.log("========"); */
+    /* console.log(new_user); */
+    callback(new_user);
+  });
+};
+
+UserSchema.statics.getAllUsers = function(callback){
   this.find({}, function(err, users){
     callback(users);
   });
