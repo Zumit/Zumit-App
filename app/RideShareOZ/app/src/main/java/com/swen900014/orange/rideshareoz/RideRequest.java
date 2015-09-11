@@ -2,6 +2,7 @@ package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.util.Pools;
 import android.support.v7.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,22 +16,22 @@ import org.json.JSONObject;
 /**
  * Created by yuszy on 9/9/15.
  */
-public class Location
+public class RideRequest
 {
-    private String lat;
-    private String lon;
+    private final static String RIDE_URL = "http://144.6.226.237/ride/request";
+    private Ride ride;
 
-    public Location()
+    public RideRequest(Ride ride)
     {
-        lat = "";lat = new String("");
-        lon = "";
+        this.ride = ride;
     }
 
-    public void getLocation(Activity activity)//FragmentActivity
+    public void sendRequest(final Activity activity, String address)
     {
         RequestQueue queue = Volley.newRequestQueue(activity);
+
         String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&" +
+                "address=" + address + ",+Mountain+View,+CA&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -38,6 +39,9 @@ public class Location
                 {
                     public void onResponse(String response)
                     {
+                        String lat = "";
+                        String lon = "";
+
                         try
                         {
                             JSONObject jsonResponse = new JSONObject(response);
@@ -49,16 +53,19 @@ public class Location
                             lon = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lng");
-
-                            lat = "sssssss111111111111";
-                            lon = "zzzzzzzzz22222222";
                         }
                         catch (Exception e)
                         {
                             e.printStackTrace();
                         }
 
-                        //System.out.println("Test output lat: " + lat);
+                        String message = "ride_id=" + ride.getRideId() +
+                                "&username=" + "user1" + //passenger.getName
+                                "&s_lat=" + lat + "&s_lon=" + lon;
+
+                        PostThread post = new PostThread(RIDE_URL, message);
+                        post.start();
+                        // check response, whether it received
                     }
                 },
                 new Response.ErrorListener()
@@ -66,21 +73,9 @@ public class Location
                     public void onErrorResponse(VolleyError volleyError)
                     {
                         System.out.println("it doesn't work");
-
-                        return;
                     }
                 });
-        System.out.println("Test output lat: " + lat);
+
         queue.add(stringRequest);
-    }
-
-    public String getLat()
-    {
-        return lat;
-    }
-
-    public String getLon()
-    {
-        return lon;
     }
 }

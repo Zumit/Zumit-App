@@ -23,18 +23,19 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import org.json.JSONObject;
 
-public class PassViewRide extends FragmentActivity//AppCompatActivity
+
+public class PassViewRide extends FragmentActivity
         implements GoogleApiClient.OnConnectionFailedListener
 {
     private final static String TAG = "Passenger View Ride";
-    private static final String RIDE_URL = "http://144.6.226.237/ride";
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
             new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
 
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutoCompleteAdapter adapter;
-    private Location loc;
+    private RideRequest rideRequest;
 
     private TextView startLabel;
     private TextView endLabel;
@@ -44,8 +45,10 @@ public class PassViewRide extends FragmentActivity//AppCompatActivity
     private TextView pickUpLocText;
     private TextView timeInputText;
 
-
-    private String query;
+    // Dummy data
+    Driver dummyDriver = new Driver("Driver", "email", 123, 0);
+    Passenger dummyPassenger = new Passenger("Pass", "email", 123, 0);
+    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyDriver, 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,14 +62,7 @@ public class PassViewRide extends FragmentActivity//AppCompatActivity
                 .build();
         //mGoogleApiClient.connect();
 
-        loc = new Location();
-
-        // Dummy data
-        Driver dummyDriver = new Driver("Driver", "email", 123, 0);
-        Passenger dummyPassenger = new Passenger("Pass", "email", 123, 0);
-        Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyDriver, 1);
-        dummyRide.accept_request(dummyPassenger);
-        String[] dummyChoices = {"qaaa", "qaab"};
+        rideRequest = new RideRequest(dummyRide);
 
         startLabel = (TextView) findViewById(R.id.startText);
         endLabel = (TextView) findViewById(R.id.endText);
@@ -79,8 +75,6 @@ public class PassViewRide extends FragmentActivity//AppCompatActivity
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
                 BOUNDS_GREATER_SYDNEY, null);
 
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-        //        android.R.layout.simple_dropdown_item_1line, dummyChoices);
         AutoCompleteTextView pickUpLocText = (AutoCompleteTextView)
                 findViewById(R.id.pickUpLocText);
         pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
@@ -171,25 +165,8 @@ public class PassViewRide extends FragmentActivity//AppCompatActivity
     // Button events of sending a request for joining a ride
     public void joinRide(View view)
     {
-        // Dummy data
-        Driver dummyDriver = new Driver("Driver", "email", 123, 0);
-        Passenger dummyPassenger = new Passenger("user1", "email", 123, 0);
-        Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyDriver, 1);
-        dummyRide.accept_request(dummyPassenger);
+        rideRequest.sendRequest(this, "1600+Amphitheatre+Parkway");
 
-        loc.getLocation(this);
-        String message = "ride_id=" + dummyRide.getRideId() +
-                "&" + "username=" + dummyPassenger.getName() +
-                "&" + "s_lat=" + loc.getLat() +
-                "&" + "s_lon=" + loc.getLon();
-
-        System.out.println(loc.getLat() + " longtitude: " + loc.getLon());
-                //"&" + "s_lat=" + pickUpLocText.getText() +
-                //"&" + "s_lon=" + pickUpLocText.getText();
-                //"&" + "time=" + timeInputText.getText();
-
-        PostThread post = new PostThread(RIDE_URL, message);
-        post.start();
-        //receive user_id from server.
+        // May receive user_id from server.
     }
 }
