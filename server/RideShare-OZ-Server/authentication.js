@@ -8,8 +8,8 @@ auth.auth_token = function (token, callback) {
   console.log(url);
   request(url, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log("===body=====");
-      console.log(JSON.parse(body));
+      /* console.log("===body====="); */
+      /* console.log(JSON.parse(body)); */
       callback(JSON.parse(body));
     } else {
       callback({"error_description": "Sorry, there is a problem on the server."});
