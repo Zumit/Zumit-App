@@ -1,5 +1,4 @@
-var express = require('express');
-var path = require('path');
+var express = require('express'); var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -42,7 +41,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
   if (req.method === 'POST') {
     auth.auth_token(req.body.token, function(doc){
-      doc = {'email': 'maxzhx6@gmail.com'};
+      if (req.body.username) {
+        doc = {'email': req.body.username};
+      }
       if (!doc.email) {
         res.end('Invalid Token');
       } else {
