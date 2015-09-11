@@ -10,8 +10,8 @@ var RideSchema = new Schema({
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: Schema.Types.ObjectId, ref: 'Group'},
   events:{type: Schema.Types.ObjectId, ref: 'Event'},
-  passengers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },state:String,note:"String"}],
+  passengers: [{user:{ type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] }}],
+  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },state:String,note:String}],
   updated_at: { type: Date, default: Date.now },
   note: String,
 });
@@ -88,7 +88,7 @@ RideSchema.statics.searchRide =function(req,callback){
 };
 
 RideSchema.methods.addRequest= function(user_id,req,callback){
-  /* console.log(this); */
+  /* console.log(this); */ 
   var pickup_point=[];
   pickup_point[0]=req.query.p_lon;
   pickup_point[1]=req.query.p_lat;
@@ -104,13 +104,40 @@ RideSchema.statics.cancelRide = function(req,callback){
   var ride_id=req.query.ride_id;
   this.find({_id:ride_id}).remove(function(err){
     callback("deleted");
-
-
   });
-  
+};
+
+RideSchema.statics.rejectRequest= function(req,callback){
+var ride_id=req.query.ride_id;
+var user_id=req.query.user_id;
+  this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){callback(doc);});
 
 };
 
+
+RideSchema.statics.acceptRequest= function(req,callback){
+var ride_id=req.query.ride_id;
+var user_id=req.query.user_id;
+
+  this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){
+    console.log("has pulled");
+  });
+  
+  this.findByIdAndUpdate(ride_id,{$push:{'passengers':{'user':user_id}}},function(err,doc){callback(doc)});
+};
+
+
+RideSchema.statics.kickPassenger= function(req,callback){
+var ride_id=req.query.ride_id;
+var user_id=req.query.user_id;
+  this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
+};
+
+RideSchema.statics.passengerLeave= function(req,callback){
+var ride_id=req.query.ride_id;
+var user_id=req.query.user_id;
+  this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
+};
 
 
 module.exports = mongoose.model('Ride', RideSchema);
