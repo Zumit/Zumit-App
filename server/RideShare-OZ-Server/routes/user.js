@@ -43,6 +43,9 @@ router.post('/update', function(req, res, next){
     user.phone = (req.body.phone)? req.body.phone : user.phone;
     user.DoB = (req.body.DoB)? req.body.DoB : user.DoB;
     user.driver_license = (req.body.driver_license)? req.body.driver_license : user.driver_license;
+    user.save(function(err){
+      res.json(user);
+    });
   });
 });
 

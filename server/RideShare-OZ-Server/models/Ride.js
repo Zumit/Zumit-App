@@ -8,8 +8,8 @@ var RideSchema = new Schema({
   start_point: {type:[Number],index:'2d'}, // Lat, Lng
   end_point: [Number],
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
-  group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'},
-  events:{type: mongoose.Schema.Types.ObjectId, ref: 'Event'},
+  group: {type: Schema.Types.ObjectId, ref: 'Group'},
+  events:{type: Schema.Types.ObjectId, ref: 'Event'},
   passengers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },requestDate:{ type: Date, default: Date.now },state:String}],
   updated_at: { type: Date, default: Date.now },
