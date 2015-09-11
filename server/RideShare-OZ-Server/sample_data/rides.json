@@ -7,7 +7,7 @@
   "passengers":[{"$oid":"55ebd431a7398c5184f39b6e"}, {"$oid":"55ebd3ced6902fb183321374"}],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-11T13:00:00.000Z"},
+  "arrival_time":{"$date":"2015-10-11T13:00:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -20,7 +20,7 @@
   "passengers":[{"$oid":"55ebd381e685d1378386a759"}],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-09T12:00:00.000Z"},
+  "arrival_time":{"$date":"2015-10-09T12:00:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -33,7 +33,7 @@
   "passengers":[{"$oid":"55ebd381e685d1378386a759"}],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-20T09:30:00.000Z"},
+  "arrival_time":{"$date":"2015-10-20T09:30:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -46,7 +46,7 @@
   "passengers":[],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-04T10:15:00.000Z"},
+  "arrival_time":{"$date":"2015-10-04T10:15:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -59,7 +59,7 @@
   "passengers":[{"$oid":"55ebd45c8a0d27bb8476be53"}],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-15T13:45:00.000Z"},
+  "arrival_time":{"$date":"2015-10-15T13:45:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -72,7 +72,7 @@
   "passengers":[{"$oid":"55ebd465edd10def84417a43"}, {"$oid":"55ebd3ced6902fb183321374"}],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-30T20:15:00.000Z"},
+  "arrival_time":{"$date":"2015-10-30T20:15:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
