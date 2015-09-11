@@ -20,4 +20,13 @@ router.get('/search',function(req,res){
   });
 });
 
+router.get('/request',function(req,res){
+  Ride.findById(req.query.ride_id, function(err, ride){
+    ride.addRequest(req.query.user_id, function(updated_ride){
+      res.json(updated_ride);
+    });
+  });
+  
+});
+
 module.exports = router;

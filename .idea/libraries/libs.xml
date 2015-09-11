@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="libs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/SendJsonPost/app/libs/volley.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/SendJsonPost/app/libs/java-json.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

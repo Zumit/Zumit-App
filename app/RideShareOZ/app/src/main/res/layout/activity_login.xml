@@ -87,4 +87,13 @@
         android:layout_toLeftOf="@+id/sign_out_button"
         android:layout_toStartOf="@+id/sign_out_button" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ViewRide"
+        android:id="@+id/view_ride_button"
+        android:onClick="viewRide"
+        android:layout_alignTop="@+id/sign_in_id"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
