@@ -1,26 +1,28 @@
 package com.swen900014.orange.rideshareoz;
 
 /**
- * Created by yuszy on 9/6/15.
+ * Created by yuszy on 9/11/15.
  */
-public class Passenger
+public class User
 {
     private String name;
     private String email;
     private int phone;
     private int credit;
+    private UserType userType;
 
-    public Passenger(String name, String email, int phone, int credit)
+    public static enum UserType
+    {
+        PASSENGER, DRIVER
+    }
+
+    public User(String name, String email, int phone, int credit, UserType userType)
     {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.credit = credit;
-    }
-
-    public void sendRequest()
-    {
-
+        this.userType = userType;
     }
 
     public void rate()
@@ -28,7 +30,7 @@ public class Passenger
 
     }
 
-    public String getName()
+    public String getUsername()
     {
         return name;
     }

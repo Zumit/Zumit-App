@@ -31,7 +31,7 @@ public class RideRequest
         RequestQueue queue = Volley.newRequestQueue(activity);
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + address + ",+Mountain+View,+CA&" +
+                "address=" + address + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -45,7 +45,7 @@ public class RideRequest
                         try
                         {
                             JSONObject jsonResponse = new JSONObject(response);
-                            //output = jsonResponse.toString();
+                            System.out.println(jsonResponse.toString());
 
                             lat = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
@@ -53,6 +53,9 @@ public class RideRequest
                             lon = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lng");
+
+                            // Check response whether it's accurate, if not remind user
+
                         }
                         catch (Exception e)
                         {

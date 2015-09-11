@@ -1,14 +1,12 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +21,7 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import org.json.JSONObject;
+import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
 public class PassViewRide extends FragmentActivity
@@ -31,7 +29,8 @@ public class PassViewRide extends FragmentActivity
 {
     private final static String TAG = "Passenger View Ride";
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+            new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
+    //new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362)
 
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutoCompleteAdapter adapter;
@@ -46,9 +45,8 @@ public class PassViewRide extends FragmentActivity
     private TextView timeInputText;
 
     // Dummy data
-    Driver dummyDriver = new Driver("Driver", "email", 123, 0);
-    Passenger dummyPassenger = new Passenger("Pass", "email", 123, 0);
-    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyDriver, 1);
+    User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
+    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyUser, 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,27 +82,30 @@ public class PassViewRide extends FragmentActivity
         startLabel.setText(dummyRide.getStart());
         endLabel.setText(dummyRide.getEnd());
         timeLabel.setText(dummyRide.getTime());
-        passText.setText(dummyPassenger.getName() + ", phone: " + dummyPassenger.getPhone() + "\n");
+        passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
 
         getIntent();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_pass_view_ride, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 
@@ -152,20 +153,20 @@ public class PassViewRide extends FragmentActivity
         }
     };
 
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult)
+    {
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + connectionResult.getErrorCode());
 
         // TODO(Developer): Check error code and notify the user of error state and resolution.
-        Toast.makeText(this,
-                "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Could not connect to Google API Client: Error " +
+                        connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
     // Button events of sending a request for joining a ride
     public void joinRide(View view)
     {
-        rideRequest.sendRequest(this, "1600+Amphitheatre+Parkway");
+        rideRequest.sendRequest(this, "Carlton");//1600+Amphitheatre+Parkway
 
         // May receive user_id from server.
     }

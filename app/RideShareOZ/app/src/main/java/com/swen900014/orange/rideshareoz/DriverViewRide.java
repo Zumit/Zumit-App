@@ -1,6 +1,5 @@
 package com.swen900014.orange.rideshareoz;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,26 +7,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import static com.swen900014.orange.rideshareoz.User.UserType;
+
+
 public class DriverViewRide extends AppCompatActivity
 {
     private TextView startLabel;
     private TextView endLabel;
     private TextView timeLabel;
-
     private TextView passText;
 
+    // Dummy data
+    User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
+    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyUser, 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_view_ride);
-
-        // Dummy data
-        Driver dummyDriver = new Driver("Driver", "email", 123, 0);
-        Passenger dummyPassenger = new Passenger("Pass", "email", 123, 0);
-        Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyDriver, 1);
-        dummyRide.accept_request(dummyPassenger);
 
         startLabel = (TextView) findViewById(R.id.startText);
         endLabel = (TextView) findViewById(R.id.endText);
@@ -37,7 +35,7 @@ public class DriverViewRide extends AppCompatActivity
         startLabel.setText(dummyRide.getStart());
         endLabel.setText(dummyRide.getEnd());
         timeLabel.setText(dummyRide.getTime());
-        passText.setText(dummyPassenger.getName() + ", phone: " + dummyPassenger.getPhone() + "\n");
+        passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
 
         getIntent();
     }
@@ -67,12 +65,6 @@ public class DriverViewRide extends AppCompatActivity
     // Butten events of sending a request for joining a ride
     public void accept(View view)
     {
-        // Dummy data
-        Driver dummyDriver = new Driver("Driver", "email", 123, 0);
-        Passenger dummyPassenger = new Passenger("Pass", "email", 123, 0);
-        Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyDriver, 1);
-        dummyRide.accept_request(dummyPassenger);
-
 
     }
 
