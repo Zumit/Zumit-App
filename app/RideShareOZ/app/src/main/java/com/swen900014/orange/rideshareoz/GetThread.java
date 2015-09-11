@@ -16,11 +16,18 @@ import java.net.URL;
 public class GetThread extends AsyncTask<String,Void, String> {
     final String LogTag = "GetThread";
 
+    String result = null;
+    boolean running = true;
+
     public String getResult() {
         return result;
     }
 
-    String result = null;
+    public void waitFor() {
+        while (running) {
+        }
+    }
+
 
     @Override
     protected String doInBackground(String... params) {
@@ -110,5 +117,7 @@ public class GetThread extends AsyncTask<String,Void, String> {
             // No Rides :(
             Log.e(LogTag, "error");
         }
+
+        running = false;
     }
 }
