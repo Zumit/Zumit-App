@@ -17,15 +17,16 @@ import java.util.Map;
 public class RideRequest
 {
     private final static String JOIN_REQUEST_URL = "http://144.6.226.237/ride/request";
-    private Ride ride;
+    //private Ride ride;
 
     private String lat = "";
     private String lon = "";
 
-    public RideRequest(Ride ride)
+    public RideRequest() {}
+    /*public RideRequest(Ride ride)
     {
         this.ride = ride;
-    }
+    }*/
 
     public void sendRequest(final Activity activity, String address)
     {
