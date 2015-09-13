@@ -7,7 +7,7 @@
   "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
   "events":[],
   "rides":[],
-  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "updated_at":{"$date":"2015-09-06T05:51:33Z"},
   "__v":0
 }
 {
@@ -19,7 +19,7 @@
   "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
   "events":[],
   "rides":[],
-  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "updated_at":{"$date":"2015-09-06T05:51:33Z"},
   "__v":0
 }
 {
@@ -31,7 +31,7 @@
   "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
   "events":[],
   "rides":[],
-  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "updated_at":{"$date":"2015-09-06T05:51:33Z"},
   "__v":0
 }
 {
@@ -43,7 +43,7 @@
   "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
   "events":[],
   "rides":[],
-  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "updated_at":{"$date":"2015-09-06T05:51:33Z"},
   "__v":0
 }
 {
@@ -55,6 +55,6 @@
   "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
   "events":[],
   "rides":[],
-  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "updated_at":{"$date":"2015-09-06T05:51:33Z"},
   "__v":0
 }
