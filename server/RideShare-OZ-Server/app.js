@@ -61,8 +61,7 @@ app.use(function(req,res,next){
       }
     });
   } else {
-    next();
-  }
+    next(); }
   // console.log("=========");
   // next();
 });
