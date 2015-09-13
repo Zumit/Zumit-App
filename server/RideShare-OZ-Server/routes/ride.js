@@ -8,8 +8,8 @@ router.post('/create', function(req, res, next) {
   });
 });
 
-router.post('/getall', function(req, res, next) {
-  Ride.postAllRides(function(rides){
+router.get('/getall', function(req, res, next) {
+  Ride.getAllRides(function(rides){
     res.json(rides);
   });
 });
