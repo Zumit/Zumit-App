@@ -11,6 +11,7 @@
     <string name="title_my_rides" translatable="false">My Rides</string>
     <string name="PassViewPass">Passengers</string>
     <string name="JoinRide">Join</string>
+    <string name="LeaveRide">Leave</string>
     <string name="ViewRide">VIEW RIDE</string>
     <string name="startLabel">Start: </string>
     <string name="endLabel">End:</string>

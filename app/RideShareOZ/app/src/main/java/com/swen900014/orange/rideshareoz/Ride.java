@@ -16,7 +16,14 @@ public class Ride
     private User driver;
     private int rideId;
     private int limit;      //Max number of passengers who can join
-    private ArrayList<User> passengers;
+    private ArrayList<User> joined;   //joined passengers
+    private ArrayList<User> waiting;  //passengers who is waiting
+    private RideState rideState = RideState.VIEWING;
+
+    public enum RideState
+    {
+        OFFERING, JOINED, VIEWING
+    }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit)
     {
@@ -26,14 +33,38 @@ public class Ride
         this.driver = driver;
         this.limit = limit;
         rideId = 0;
-        passengers = new ArrayList<User>(limit);
+        joined = new ArrayList<User>(limit);
+        waiting = new ArrayList<User>(limit);
     }
 
-    public boolean accept_request(User new_pass)
+    public Ride(String start, String end, String arriving_time, User driver, int limit,
+                ArrayList<User> joined, ArrayList<User> waiting)
     {
-        if (passengers.size() <= limit)
+        start_point = start;
+        end_point = end;
+        this.arriving_time = arriving_time;
+        this.driver = driver;
+        this.limit = limit;
+        rideId = 0;
+        this.joined = (ArrayList<User>) joined.clone();
+        this.waiting = (ArrayList<User>) waiting.clone();
+    }
+
+    public boolean isDriver()
+    {
+        return true;
+    }
+
+    public boolean joined()
+    {
+        return true;
+    }
+
+    public boolean accept_request()
+    {
+        if (joined.size() <= limit)
         {
-            passengers.add(new_pass);
+            // accept / reject requests
 
             return true;
         }
@@ -50,7 +81,7 @@ public class Ride
 
     public void ratePassenger(int index)
     {
-        passengers.get(index).rate();
+        joined.get(index).rate();
     }
 
     public void setTime(String arriving_time)
@@ -91,5 +122,10 @@ public class Ride
     public int getRideId()
     {
         return rideId;
+    }
+
+    public RideState getRideState()
+    {
+        return rideState;
     }
 }

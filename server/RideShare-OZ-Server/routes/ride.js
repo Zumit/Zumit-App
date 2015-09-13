@@ -22,7 +22,7 @@ router.get('/search',function(req,res){
 
 router.post('/request',function(req,res){
   Ride.findById(req.body.ride_id, function(err, ride){
-    ride.addRequest(req.body.user_id,req, function(updated_ride){
+    ride.addRequest(req.userinfo._id,req, function(updated_ride){
       res.json(updated_ride);
     });
   });
