@@ -7,11 +7,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
-
+/**
+ * Created by Sangzhuoyang Yu on 9/12/15.
+ * It initialize a new activity for the ride
+ * from the drivers' view. The driver is able
+ * to cancel the ride, accept or reject requests
+ * from passengers.
+ */
 public class DriverViewRideActivity extends AppCompatActivity
 {
+    private final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
     private TextView startLabel;
     private TextView endLabel;
     private TextView timeLabel;
@@ -60,6 +75,40 @@ public class DriverViewRideActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void cancelRide(View view)
+    {
+        StringRequest cancelRequest = new StringRequest(Request.Method.POST,
+                CANCEL_RIDE_URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+                System.out.println("Sending post failed!");
+            }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+
+                //add your parameters here
+                params.put("username", "sangzhouyang@student.unimelb.edu.au");
+                params.put("ride_id", "55e7ed577ea19c92ac2d0911");
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(this).addToRequestQueue(cancelRequest);
     }
 
     // Butten events of sending a request for joining a ride

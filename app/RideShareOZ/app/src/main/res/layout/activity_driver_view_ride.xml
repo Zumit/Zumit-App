@@ -98,6 +98,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cancelButton"
             android:id="@+id/cancelButton"
+            android:onClick="cancelRide"
             android:layout_row="4"
             android:layout_column="2"
             android:layout_gravity="center"

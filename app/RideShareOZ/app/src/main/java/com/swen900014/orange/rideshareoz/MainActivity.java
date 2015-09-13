@@ -159,11 +159,11 @@ public class MainActivity extends AppCompatActivity implements
     // by Yu
     public void viewRide(View v)
     {
-        Intent passViewRide = new Intent(this, PassViewRideActivity.class);
-        startActivity(passViewRide);
+        //Intent passViewRide = new Intent(this, PassViewRideActivity.class);
+        //startActivity(passViewRide);
 
-        //Intent driverViewRide = new Intent(this, DriverViewRide.class);
-        //startActivity(driverViewRide);
+        Intent driverViewRide = new Intent(this, DriverViewRideActivity.class);
+        startActivity(driverViewRide);
     }
     // Button event for the Offer ride button
     // by Fallie
@@ -403,7 +403,6 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             return ridesJason;
-
         }
 
         @Override

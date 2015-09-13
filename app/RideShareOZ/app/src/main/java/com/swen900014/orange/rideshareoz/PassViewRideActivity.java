@@ -11,6 +11,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -21,13 +25,24 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
+/**
+ * Created by Sangzhuoyang Yu on 9/12/15.
+ * It initialize a new activity for the ride
+ * from the normal users' view. Users are able
+ * to send join request and leave request of the ride,
+ * to the server.
+ */
 public class PassViewRideActivity extends FragmentActivity
         implements GoogleApiClient.OnConnectionFailedListener
 {
     private final static String TAG = "Passenger View Ride";
+    private final static String LEAVE_RIDE_URL = "";
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
             new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
     //new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362)
@@ -60,7 +75,7 @@ public class PassViewRideActivity extends FragmentActivity
                 .build();
         //mGoogleApiClient.connect();
 
-        rideRequest = new RideRequest(dummyRide);
+        rideRequest = new RideRequest();//dummyRide
 
         startLabel = (TextView) findViewById(R.id.startText);
         endLabel = (TextView) findViewById(R.id.endText);
@@ -164,6 +179,18 @@ public class PassViewRideActivity extends FragmentActivity
                         connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
+    public void join_or_leave(View view)
+    {
+        if (dummyRide.getRideState() == Ride.RideState.VIEWING)
+        {
+            //joinRide();
+        }
+        else if (dummyRide.getRideState() == Ride.RideState.JOINED)
+        {
+            //leaveRide();
+        }
+    }
+
     // Button events of sending a request for joining a ride
     public void joinRide(View view)
     {
@@ -171,5 +198,39 @@ public class PassViewRideActivity extends FragmentActivity
         //"Carlton"
 
         // May receive user_id from server.
+    }
+
+    public void leaveRide(View view)
+    {
+        StringRequest leaveRequest = new StringRequest(Request.Method.POST,
+                LEAVE_RIDE_URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+                System.out.println("Sending post failed!");
+            }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<String, String>();
+
+                //add your parameters here
+                params.put("username", "sangzhouyang@student.unimelb.edu.au");
+                params.put("ride_id", "55e7ed577ea19c92ac2d0911");
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(this).addToRequestQueue(leaveRequest);
     }
 }
