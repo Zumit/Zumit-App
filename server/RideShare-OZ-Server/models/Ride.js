@@ -25,8 +25,8 @@ RideSchema.statics.getAllRides = function(callback){
 
 RideSchema.statics.createRide = function(req,callback){
   var Ride = mongoose.model('Ride');
-  var ride =new Ride();
-  ride.start_time = Date.now();
+  var ride = new Ride();
+  ride.arrival_time = req.body.arrival_time;
   ride.seats = req.body.seat;
   var start_lon=req.body.s_lon;
   var start_lat=req.body.s_lat;
@@ -36,13 +36,13 @@ RideSchema.statics.createRide = function(req,callback){
   var end_lat=req.body.e_lat;
   ride.end_point=[Number(end_lon),Number(end_lat)];
   User.findById(req.body.driverid, function(err, user){
-    ride.driver=user;
+    ride.driver = user;
     Group.findById(req.body.groupid,function(err,group){
-      ride.group=group;
+      ride.group = group;
       ride.save(function(err, doc){
-      if (err) {
-        console.log(err);
-      }
+        if (err) {
+          console.log(err);
+        }
         callback(doc);
       });
     });
