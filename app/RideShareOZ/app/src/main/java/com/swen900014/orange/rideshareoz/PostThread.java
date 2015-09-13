@@ -24,7 +24,7 @@ public class PostThread extends Thread
     public void run() {
         System.out.println("Hello from a thread!");
 
-        excutePost("http://144.6.226.237/test", message);
+        excutePost(url, message);//"http://144.6.226.237/test"
     }
 
     public static String excutePost(String targetURL, String urlParameters)

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
@@ -52,11 +53,15 @@ public class MainActivity extends AppCompatActivity implements
 
     /* Should we automatically resolve ConnectionResults when possible? */
     private boolean mShouldResolve = false;
-
+    //RequestQueue requestQueue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Initialize request queue
+        MyRequest.getInstance(this.getApplicationContext()).
+                getRequestQueue();
 
         /*setContentView(R.layout.activity_myrides);
         if (savedInstanceState == null) {
@@ -154,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements
     // by Yu
     public void viewRide(View v)
     {
-        Intent passViewRide = new Intent(this, PassViewRide.class);
+        Intent passViewRide = new Intent(this, PassViewRideActivity.class);
         startActivity(passViewRide);
 
         //Intent driverViewRide = new Intent(this, DriverViewRide.class);

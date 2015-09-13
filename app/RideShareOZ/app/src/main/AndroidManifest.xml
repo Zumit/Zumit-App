@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PassViewRide"
+            android:name=".PassViewRideActivity"
             android:label="@string/title_activity_pass_view_ride" >
 =======
             android:name=".MyRidesActivity"
@@ -49,7 +49,7 @@
 >>>>>>> refs/remotes/origin/master
         </activity>
         <activity
-            android:name=".DriverViewRide"
+            android:name=".DriverViewRideActivity"
             android:label="@string/title_activity_driver_view_ride" >
         </activity>
     </application>
