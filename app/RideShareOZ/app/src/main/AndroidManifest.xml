@@ -10,7 +10,8 @@
 
     <!-- To retrieve OAuth 2.0 tokens or invalidate tokens to disconnect a user's Google account from an app. -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
     <application
@@ -35,6 +36,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".OfferRide"
+            android:label="@string/_offerRide" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.swen900014.orange.rideshareoz.MainActivity" />
         </activity>
         <activity
             android:name=".PassViewRideActivity"

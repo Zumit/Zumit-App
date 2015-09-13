@@ -21,4 +21,14 @@
     <string name="joinButton">Join</string>
     <string name="titleLabel">Where do you want to be picked up:</string>
     >>>>>>> refs/remotes/origin/master
+    >>offerRide
+    <string name="_offerRide">OfferRide</string>
+    <string name="_Start">Start Point</string>
+    <string name="_Current">Current</string>
+    <string name="_End">Destination</string>
+    <string name="_Date">Date</string>
+    <string name="_EndTime">End Time</string>
+    <string name="_SeatNo">Total seats</string>
+    <string name="_Submit"><a href="#">Submit</a></string>
+    <string name="_Reset"><a href="#">Reset</a></string>
 </resources>

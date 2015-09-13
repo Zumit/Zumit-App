@@ -62,6 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CreateRide"
+        android:onClick="offerRide"
         android:id="@+id/create_ride"
         android:layout_below="@+id/test_query_button"
         android:layout_toRightOf="@+id/all_rides"

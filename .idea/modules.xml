@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/SendJsonPost/app/src/androidTest/androidTest.iml" filepath="$PROJECT_DIR$/app/SendJsonPost/app/src/androidTest/androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/RideShareOZ/app/src/androidTest/androidTest1.iml" filepath="$PROJECT_DIR$/app/RideShareOZ/app/src/androidTest/androidTest1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Sqlite/app/src/androidTest/androidTest2.iml" filepath="$PROJECT_DIR$/app/Sqlite/app/src/androidTest/androidTest2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/RideShareOZ/app/src/main/main.iml" filepath="$PROJECT_DIR$/app/RideShareOZ/app/src/main/main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/SendJsonPost/app/src/main/main1.iml" filepath="$PROJECT_DIR$/app/SendJsonPost/app/src/main/main1.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Sqlite/app/src/main/main2.iml" filepath="$PROJECT_DIR$/app/Sqlite/app/src/main/main2.iml" />
     </modules>
   </component>
 </project>

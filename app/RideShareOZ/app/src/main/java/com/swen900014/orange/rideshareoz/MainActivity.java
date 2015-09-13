@@ -165,6 +165,14 @@ public class MainActivity extends AppCompatActivity implements
         //Intent driverViewRide = new Intent(this, DriverViewRide.class);
         //startActivity(driverViewRide);
     }
+    // Button event for the Offer ride button
+    // by Fallie
+    public void offerRide(View v)
+    {
+        Intent offerRide = new Intent(this, OfferRide.class);
+        startActivity(offerRide);
+
+    }
 
     @Override
     public void onClick(View v) {
