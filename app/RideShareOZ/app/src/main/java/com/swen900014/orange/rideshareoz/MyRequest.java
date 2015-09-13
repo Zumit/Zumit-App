@@ -1,10 +1,10 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+
 
 /**
  * Created by yuszy on 9/12/15.
@@ -19,7 +19,6 @@ public class MyRequest
     {
         mCtx = context;
         mRequestQueue = getRequestQueue();
-
     }
 
     public static synchronized MyRequest getInstance(Context context)
