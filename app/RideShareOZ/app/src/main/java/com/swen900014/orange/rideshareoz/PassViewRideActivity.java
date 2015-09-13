@@ -24,7 +24,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
-public class PassViewRide extends FragmentActivity
+public class PassViewRideActivity extends FragmentActivity
         implements GoogleApiClient.OnConnectionFailedListener
 {
     private final static String TAG = "Passenger View Ride";

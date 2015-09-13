@@ -10,7 +10,7 @@ import android.widget.TextView;
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
-public class DriverViewRide extends AppCompatActivity
+public class DriverViewRideActivity extends AppCompatActivity
 {
     private TextView startLabel;
     private TextView endLabel;
