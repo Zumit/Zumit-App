@@ -27,17 +27,17 @@ RideSchema.statics.createRide = function(req,callback){
   var Ride = mongoose.model('Ride');
   var ride =new Ride();
   ride.start_time = Date.now();
-  ride.seats = req.query.seat;
-  var start_lon=req.query.s_lon;
-  var start_lat=req.query.s_lat;
+  ride.seats = req.body.seat;
+  var start_lon=req.body.s_lon;
+  var start_lat=req.body.s_lat;
 
   ride.start_point=[Number(start_lon),Number(start_lat)];
-  var end_lon=req.query.e_lon;
-  var end_lat=req.query.e_lat;
+  var end_lon=req.body.e_lon;
+  var end_lat=req.body.e_lat;
   ride.end_point=[Number(end_lon),Number(end_lat)];
-  User.findById(req.query.driverid, function(err, user){
+  User.findById(req.body.driverid, function(err, user){
     ride.driver=user;
-    Group.findById(req.query.groupid,function(err,group){
+    Group.findById(req.body.groupid,function(err,group){
       ride.group=group;
       ride.save(function(err, doc){
       if (err) {
@@ -49,6 +49,7 @@ RideSchema.statics.createRide = function(req,callback){
   });
 };
 
+//unfinish!!!
 RideSchema.statics.searchRide =function(req,callback){
 
   var start=[];
@@ -90,9 +91,9 @@ RideSchema.statics.searchRide =function(req,callback){
 RideSchema.methods.addRequest= function(user_id,req,callback){
   /* console.log(this); */ 
   var pickup_point=[];
-  pickup_point[0]=req.query.p_lon;
-  pickup_point[1]=req.query.p_lat;
-  var note=req.query.note;
+  pickup_point[0]=req.body.p_lon;
+  pickup_point[1]=req.body.p_lat;
+  var note=req.body.note;
   this.requests.push({'user':user_id,'state':"unaccept",'pickup_point':pickup_point,'note':note});
   this.save(function(err, doc){
     callback(doc);
@@ -101,41 +102,53 @@ RideSchema.methods.addRequest= function(user_id,req,callback){
 
 
 RideSchema.statics.cancelRide = function(req,callback){
-  var ride_id=req.query.ride_id;
+  var ride_id=req.body.ride_id;
   this.find({_id:ride_id}).remove(function(err){
     callback("deleted");
   });
 };
 
 RideSchema.statics.rejectRequest= function(req,callback){
-var ride_id=req.query.ride_id;
-var user_id=req.query.user_id;
+var ride_id=req.body.ride_id;
+var user_id=req.body.user_id;
   this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){callback(doc);});
 
 };
 
 
 RideSchema.statics.acceptRequest= function(req,callback){
-var ride_id=req.query.ride_id;
-var user_id=req.query.user_id;
+var ride_id=req.body.ride_id;
+var user_id=req.body.user_id;
+var pickup_point;
+ 
+ //add use to passenger
+  this.findById(ride_id,function(err,doc){
+    doc.requests.forEach(function(request){
+      if (request.user == user_id) {
+        pickup_point=request.pickup_point;
 
-  this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){
-    console.log("has pulled");
+      };
+    })
+    doc.passengers.push({'user':user_id,'pickup_point':pickup_point});
+    doc.save();
   });
-  
-  this.findByIdAndUpdate(ride_id,{$push:{'passengers':{'user':user_id}}},function(err,doc){callback(doc)});
+  //delete the user in requests
+   this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){
+    
+    callback(doc)
+  });
 };
 
 
 RideSchema.statics.kickPassenger= function(req,callback){
-var ride_id=req.query.ride_id;
-var user_id=req.query.user_id;
+var ride_id=req.body.ride_id;
+var user_id=req.body.user_id;
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
 };
 
 RideSchema.statics.passengerLeave= function(req,callback){
-var ride_id=req.query.ride_id;
-var user_id=req.query.user_id;
+var ride_id=req.body.ride_id;
+var user_id=req.body.user_id;
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
 };
 
