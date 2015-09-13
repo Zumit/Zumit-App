@@ -24,6 +24,9 @@ var group = require('./routes/group');
 var msg = require('./routes/msg');
 var test = require('./routes/test');
 
+// model
+var User = require('./models/User.js');
+
 var app = express();
 
 // view engine setup
@@ -47,10 +50,15 @@ app.use(function(req,res,next){
       if (!doc.email) {
         res.end('Invalid Token');
       } else {
-        // console.log("=====email===");
-        // console.log(doc.email);
         req.userinfo = doc;
-        next();
+        User.find({'username':doc.email},function(err, users){
+          console.log(users);
+          if (users.length !== 0) {
+            req.userinfo._id = users[0]._id;
+            // console.log(req.userinfo._id);
+          }
+          next();
+        });
       }
     });
   } else {

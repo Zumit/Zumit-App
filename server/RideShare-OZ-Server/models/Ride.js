@@ -123,7 +123,7 @@ var user_id=req.query.user_id;
     console.log("has pulled");
   });
   
-  this.findByIdAndUpdate(ride_id,{$push:{'passengers':{'user':user_id}}},function(err,doc){callback(doc)});
+  this.findByIdAndUpdate(ride_id,{$push:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
 };
 
 
