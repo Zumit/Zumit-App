@@ -55,7 +55,6 @@ app.use(function(req,res,next){
           console.log(users);
           if (users.length !== 0) {
             req.userinfo._id = users[0]._id;
-            // console.log(req.userinfo._id);
           }
           next();
         });
