@@ -17,7 +17,13 @@ import java.util.Map;
 
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
-
+/**
+ * Created by Sangzhuoyang Yu on 9/12/15.
+ * It initialize a new activity for the ride
+ * from the drivers' view. The driver is able
+ * to cancel the ride, accept or reject requests
+ * from passengers.
+ */
 public class DriverViewRideActivity extends AppCompatActivity
 {
     private final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
