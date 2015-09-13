@@ -11,11 +11,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -26,11 +21,6 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
@@ -38,7 +28,6 @@ public class PassViewRideActivity extends FragmentActivity
         implements GoogleApiClient.OnConnectionFailedListener
 {
     private final static String TAG = "Passenger View Ride";
-    //private final static String JOIN_URL = "http://144.6.226.237/test";
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
             new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
     //new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362)
@@ -46,7 +35,6 @@ public class PassViewRideActivity extends FragmentActivity
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutoCompleteAdapter adapter;
     private RideRequest rideRequest;
-    //private RequestQueue requestQueue;
 
     private TextView startLabel;
     private TextView endLabel;
@@ -55,9 +43,6 @@ public class PassViewRideActivity extends FragmentActivity
     private TextView passText;
     private TextView pickUpLocText;
     private TextView timeInputText;
-
-    private String lat;
-    private String lon;
 
     // Dummy data
     User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
@@ -68,12 +53,6 @@ public class PassViewRideActivity extends FragmentActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pass_view_ride);
-
-        lat = "";
-        lon = "";
-
-        //MyRequest.getInstance(this.getApplicationContext()).
-        //        getRequestQueue();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, 0 /* clientId */, this)
@@ -88,6 +67,7 @@ public class PassViewRideActivity extends FragmentActivity
         timeLabel = (TextView) findViewById(R.id.timeText);
         passText = (TextView) findViewById(R.id.passList);
 
+        pickUpLocText = (TextView) findViewById(R.id.pickUpLocText);
         timeInputText = (TextView) findViewById(R.id.timeInputText);
 
         adapter = new PlaceAutoCompleteAdapter(this,
@@ -187,78 +167,8 @@ public class PassViewRideActivity extends FragmentActivity
     // Button events of sending a request for joining a ride
     public void joinRide(View view)
     {
-        rideRequest.sendRequest(this, "Carlton");//1600+Amphitheatre+Parkway
-
-        /*String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + "Carlton" + ",+Australia&" +
-                "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
-        StringRequest locRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>()
-                {
-                    public void onResponse(String response)
-                    {
-                        try
-                        {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            System.out.println(jsonResponse.toString());
-
-                            lat = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                    getJSONObject("geometry").getJSONObject("location").
-                                    getString("lat");
-                            lon = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                    getJSONObject("geometry").getJSONObject("location").
-                                    getString("lng");
-
-                            // Check response whether it's accurate, if not remind user
-
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        // check response, whether it received
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    public void onErrorResponse(VolleyError volleyError)
-                    {
-                        System.out.println("it doesn't work");
-                    }
-                });
-        MyRequest.getInstance(this).addToRequestQueue(locRequest);
-
-
-        StringRequest joinRequest = new StringRequest(Request.Method.POST,
-                JOIN_URL, new Response.Listener<String>()//ride/request
-        {
-            @Override
-            public void onResponse(String s)
-            {
-                System.out.println("response: " + s);
-            }
-        }, new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError volleyError)
-            {
-                System.out.println("Sending post failed!");
-            }
-        }){
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("username", "user1");
-                params.put("ride_id", "1");
-                params.put("p_lat", lat);
-                params.put("p_lon", lon);
-
-                return params;
-            }
-        };
-
-        MyRequest.getInstance(this).addToRequestQueue(joinRequest);*/
+        rideRequest.sendRequest(this, pickUpLocText.getText().toString());//1600+Amphitheatre+Parkway
+        //"Carlton"
 
         // May receive user_id from server.
     }

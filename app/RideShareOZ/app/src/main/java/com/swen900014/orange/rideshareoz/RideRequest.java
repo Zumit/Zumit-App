@@ -1,15 +1,10 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.util.Pools;
-import android.support.v7.app.AppCompatActivity;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -34,13 +29,11 @@ public class RideRequest
 
     public void sendRequest(final Activity activity, String address)
     {
-        //RequestQueue queue = Volley.newRequestQueue(activity);
-
         String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
                 "address=" + address + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest getLocRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>()
                 {
                     public void onResponse(String response)
@@ -78,13 +71,16 @@ public class RideRequest
                             @Override
                             public void onErrorResponse(VolleyError volleyError)
                             {
+                                volleyError.printStackTrace();
+
                                 System.out.println("Sending post failed!");
                             }
                         }){
                             protected Map<String, String> getParams()
                             {
                                 Map<String, String> params = new HashMap<String, String>();
-                                params.put("username", "user1");
+                                params.put("username", "sangzhouyang@student.unimelb.edu.au");
+                                //params.put("user_id", "55ebd381e685d1378386a759");
                                 params.put("ride_id", "55e7ed577ea19c92ac2d0911");
                                 params.put("p_lat", lat);
                                 params.put("p_lon", lon);
@@ -95,13 +91,6 @@ public class RideRequest
 
                         MyRequest.getInstance(activity).addToRequestQueue(joinRequest);
 
-                        /*String message = "ride_id=" + ride.getRideId() +
-                                "&username=" + "user1" + //passenger.getName
-                                "&s_lat=" + lat + "&s_lon=" + lon;
-
-                        PostThread post = new PostThread(RIDE_URL, message);
-                        post.start();*/
-
                         // check response, whether it received
                     }
                 },
@@ -109,11 +98,11 @@ public class RideRequest
                 {
                     public void onErrorResponse(VolleyError volleyError)
                     {
+                        volleyError.printStackTrace();
                         System.out.println("it doesn't work");
                     }
                 });
 
-        //queue.add(stringRequest);
-        MyRequest.getInstance(activity).addToRequestQueue(stringRequest);
+        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
     }
 }
