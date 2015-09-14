@@ -46,18 +46,23 @@ public class MainActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 0;
 
     /* Client used to interact with Google APIs. */
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
 
     /* Is there a ConnectionResult resolution in progress? */
-    private boolean mIsResolving = false;
+    private static boolean mIsResolving = false;
 
     /* Should we automatically resolve ConnectionResults when possible? */
-    private boolean mShouldResolve = false;
+
     //RequestQueue requestQueue;
+
+    private boolean mShouldResolve = false;
+
+    Bundle savedInstanceState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        //setContentView(R.layout.activity_login);
 
         // Initialize request queue
         MyRequest.getInstance(this.getApplicationContext()).
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
                     .add(R.id.container, (new MyRidesFragment()) )
                     .commit();
         }*/
+        this.savedInstanceState = savedInstanceState;
 
         // Build GoogleApiClient with access to basic profile
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -78,13 +84,13 @@ public class MainActivity extends AppCompatActivity implements
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
 
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        /*findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.test_query_button).setOnClickListener(this);
         findViewById(R.id.all_rides).setOnClickListener(this);
         findViewById(R.id.all_users).setOnClickListener(this);
         findViewById(R.id.create_ride).setOnClickListener(this);
-        findViewById(R.id.my_rides_button).setOnClickListener(this);
+        findViewById(R.id.my_rides_button).setOnClickListener(this);*/
     }
 
 
@@ -104,6 +110,13 @@ public class MainActivity extends AppCompatActivity implements
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.action_signout) {
+            //Intent authentication = new Intent(this, AuthenticationActivity.class);
+            //startActivity(authentication);
+            onSignOutClicked();
             return true;
         }
 
@@ -134,8 +147,15 @@ public class MainActivity extends AppCompatActivity implements
             }
         } else {
             // Show the signed-out UI
-            //showSignedOutUI();
+            showSignedOutUI();
         }
+    }
+    private void showSignedOutUI(){
+        //Intent authentication = new Intent(this, AuthenticationActivity.class);
+        //startActivity(authentication);
+        setContentView(R.layout.activity_login);
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
+        findViewById(R.id.sign_out_button).setOnClickListener(this);
     }
 
     @Override
@@ -204,20 +224,28 @@ public class MainActivity extends AppCompatActivity implements
     private void onTestQueryClicked(String url){
         new SendURL().execute(url);
     }
+
+    public static void signOut(){
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+        }
+    }
     private void onSignOutClicked(){
         if (mGoogleApiClient.isConnected()) {
             Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
             mGoogleApiClient.disconnect();
         }
 
-        TextView mStatusTextView = (TextView)findViewById(R.id.sign_in_text);
-        mStatusTextView.setText("Signed Out...");
+        //TextView mStatusTextView = (TextView)findViewById(R.id.sign_in_text);
+        //mStatusTextView.setText("Signed Out...");
 
-        mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
-        mStatusTextView.setText("");
+        //mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
+        //mStatusTextView.setText("");
 
-        mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
-        mStatusTextView.setText("");
+        //mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
+        //mStatusTextView.setText("");
+        showSignedOutUI();
     }
 
     private void onSignInClicked() {
@@ -258,23 +286,21 @@ public class MainActivity extends AppCompatActivity implements
 
         // Show the signed-in UI
         showSignedInUI();
+
     }
 
     private void showSignedInUI(){
 
         //Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
 
-        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
-        Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+        //AuthenticationActivity.signInComplete(mGoogleApiClient);
 
-        TextView mStatusTextView = (TextView)findViewById(R.id.sign_in_text);
-        mStatusTextView.setText("Signed in...");
-
-        mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
-        mStatusTextView.setText(accountName);
-
-        mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
-        mStatusTextView.setText(account.toString());
+        setContentView(R.layout.activity_myrides);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, (new MyRidesFragment()) )
+                    .commit();
+        }
 
         new GetUserIDTask().execute();
     }

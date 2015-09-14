@@ -47,19 +47,20 @@
         <activity
             android:name=".PassViewRideActivity"
             android:label="@string/title_activity_pass_view_ride" >
-=======
+        </activity>
+        <activity
             android:name=".MyRidesActivity"
             android:label="@string/title_my_rides"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.swen900014.orange.rideshareoz.MainActivity" />
->>>>>>> refs/remotes/origin/master
         </activity>
         <activity
             android:name=".DriverViewRideActivity"
             android:label="@string/title_activity_driver_view_ride" >
         </activity>
+
     </application>
 
 </manifest>

@@ -2,13 +2,15 @@
     <string name="app_name">RideShareOZ</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_signout">Sign out</string>
+    <string name="action_account">Account</string>
     <string name="title_activity_pass_view_ride">PassViewRide</string>
     <string name="TimeInViewRide">Time:</string>
     <string name="StartInViewRide">Start:</string>
     <string name="EndInViewRide">End:</string>
-=======
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="title_my_rides" translatable="false">My Rides</string>
+    <string name="title_authentication" translatable="false">Log in</string>
     <string name="PassViewPass">Passengers</string>
     <string name="JoinRide">Join</string>
     <string name="LeaveRide">Leave</string>
@@ -21,8 +23,6 @@
     <string name="cancelButton">cancelButton</string>
     <string name="joinButton">Join</string>
     <string name="titleLabel">Where do you want to be picked up:</string>
-    >>>>>>> refs/remotes/origin/master
-    >>offerRide
     <string name="_offerRide">OfferRide</string>
     <string name="_Start">Start Point</string>
     <string name="_Current">Current</string>

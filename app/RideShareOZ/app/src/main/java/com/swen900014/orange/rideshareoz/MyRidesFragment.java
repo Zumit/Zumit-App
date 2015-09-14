@@ -39,6 +39,7 @@ public class MyRidesFragment extends Fragment {
 
     private ArrayAdapter<String> mRidesAdapter;
 
+    private Bundle savedInstanceState;
     public MyRidesFragment() {
     }
 
@@ -47,11 +48,15 @@ public class MyRidesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+        this.savedInstanceState = savedInstanceState;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.myridesfragment, menu);
+
+        //if (savedInstanceState == null) {
+            inflater.inflate(R.menu.myridesfragment, menu);
+        //}
     }
 
     @Override
