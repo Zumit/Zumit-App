@@ -7,11 +7,14 @@ import java.io.Serializable;
  */
 public class User implements Serializable
 {
+    private String id;
     private String name;
     private String email;
     private int phone;
     private int credit;
     private UserType userType;
+
+    private static String currentUserEmail;
 
     public static enum UserType
     {
@@ -25,6 +28,10 @@ public class User implements Serializable
         this.phone = phone;
         this.credit = credit;
         this.userType = userType;
+    }
+    public User(String id, String email ) {
+        this.id = id;
+        this.email = email;
     }
 
     public void rate()

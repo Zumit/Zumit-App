@@ -5,34 +5,53 @@ package com.swen900014.orange.rideshareoz;
  */
 public class Location
 {
-    private String lat;
-    private String lon;
+    private Double lat;
+    private Double lon;
     private String address;
 
-    public Location(String lat, String lon, String address)
+
+
+    private String suburb;
+
+    public Location(Double lat, Double lon, String address)
     {
         this.lat = lat;
         this.lon = lon;
         this.address = address;
     }
 
-    public void setLat(String lat)
+    public Location(Double lat, Double lon)
+    {
+        this.lat = lat;
+        this.lon = lon;
+    }
+
+    public void setLat(Double lat)
     {
         this.lat = lat;
     }
 
-    public void setLon(String lon)
+    public void setLon(Double lon)
     {
         this.lon = lon;
     }
 
-    public String getLat()
+    public Double getLat()
     {
         return lat;
     }
 
-    public String getLon()
+    public Double getLon()
     {
         return lon;
     }
+
+    public String getSuburb() {
+        return suburb;
+    }
+
+    public String getAddress() {
+        return address;
+    }
 }
+

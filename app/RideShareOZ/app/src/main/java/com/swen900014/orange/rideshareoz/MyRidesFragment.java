@@ -79,16 +79,16 @@ public class MyRidesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        Ride[] data = {new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride(),
-                new Ride()
+        Ride[] data = {new Ride(Ride.RideState.VIEWING),
+                new Ride(Ride.RideState.JOINED),
+                new Ride(Ride.RideState.OFFERING),
+                new Ride(Ride.RideState.VIEWING),
+                new Ride(Ride.RideState.OFFERING),
+                new Ride(Ride.RideState.JOINED),
+                new Ride(Ride.RideState.OFFERING),
+                new Ride(Ride.RideState.JOINED),
+                new Ride(Ride.RideState.VIEWING),
+                new Ride(Ride.RideState.OFFERING)
                 /*"Join 6/23 - UniMelb - 3:00 PM",
                 "Offer 6/24 - UniMelb - 21/8",
                 "Offer 6/25 - Melb. Cup - 22/17",

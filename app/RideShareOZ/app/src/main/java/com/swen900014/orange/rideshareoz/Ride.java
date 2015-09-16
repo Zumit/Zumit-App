@@ -1,5 +1,9 @@
 package com.swen900014.orange.rideshareoz;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.io.Serializable;
 
@@ -8,12 +12,15 @@ import java.io.Serializable;
  */
 public class Ride implements Serializable
 {
+    private String id;
     private String start_point;
     private String end_point;
+
 
     private Location start;
     private Location end;
     private String arriving_time;
+    private String start_time;
     private User driver;
     private int rideId;
     private int limit;      //Max number of passengers who can join
@@ -51,9 +58,27 @@ public class Ride implements Serializable
         this.joined = (ArrayList<User>) joined.clone();
         this.waiting = (ArrayList<User>) waiting.clone();
     }
+    public Ride(JSONObject jsonRide){
+        JSONObject tempObj;
+        JSONArray tempArray;
+        try {
+            id = jsonRide.getString("_id");
+            tempObj = jsonRide.getJSONObject("driver");
+            driver = new User(tempObj.getString("_id"),tempObj.getString("username"));
+            tempArray = jsonRide.getJSONArray("start_point");
+            start = new Location(tempArray.getDouble(0),tempArray.getDouble(1));
+            tempArray = jsonRide.getJSONArray("end_point");
+            end = new Location(tempArray.getDouble(0),tempArray.getDouble(1));
+            limit = jsonRide.getInt("seats");
+            start_time = jsonRide.getString("start_time");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     /* Testing */
-    public Ride(){
+    public Ride(RideState s){
         start_point = "Epping";
         end_point = "UniMelb";
         this.arriving_time = "13:30:00";
@@ -62,6 +87,7 @@ public class Ride implements Serializable
         rideId = 0;
         this.joined = new ArrayList<User>();
         this.waiting = new ArrayList<User>();
+        this.rideState = s;
 
     }
 
