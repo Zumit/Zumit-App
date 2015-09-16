@@ -18,7 +18,7 @@ public class Ride
     private int limit;      //Max number of passengers who can join
     private ArrayList<User> joined;   //joined passengers
     private ArrayList<User> waiting;  //passengers who is waiting
-    private RideState rideState = RideState.VIEWING;
+    private RideState rideState = RideState.JOINED;
 
     public enum RideState
     {
@@ -34,7 +34,7 @@ public class Ride
         this.limit = limit;
         rideId = 0;
         joined = new ArrayList<User>(limit);
-        waiting = new ArrayList<User>(limit);
+        waiting = new ArrayList<User>();
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit,
@@ -60,11 +60,11 @@ public class Ride
         return true;
     }
 
-    public boolean accept_request()
+    public boolean acceptJoin(User pass)
     {
         if (joined.size() <= limit)
         {
-            // accept / reject requests
+            joined.add(pass);
 
             return true;
         }
@@ -104,6 +104,19 @@ public class Ride
         rideId = id;
     }
 
+    public void addJoined(User pass)
+    {
+        if (joined.size() <= limit)
+        {
+            joined.add(pass);
+        }
+    }
+
+    public void addWaiting(User pass)
+    {
+        waiting.add(pass);
+    }
+
     public String getTime()
     {
         return arriving_time;
@@ -122,6 +135,16 @@ public class Ride
     public int getRideId()
     {
         return rideId;
+    }
+
+    public ArrayList<User> getJoined()
+    {
+        return (ArrayList<User>) joined.clone();
+    }
+
+    public ArrayList<User> getWaiting()
+    {
+        return (ArrayList<User>) waiting.clone();
     }
 
     public RideState getRideState()

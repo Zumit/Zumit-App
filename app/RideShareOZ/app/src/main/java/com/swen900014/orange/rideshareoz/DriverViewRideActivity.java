@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -51,6 +54,21 @@ public class DriverViewRideActivity extends AppCompatActivity
         endLabel.setText(dummyRide.getEnd());
         timeLabel.setText(dummyRide.getTime());
         passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
+
+
+        ScrollView waitingList = (ScrollView) findViewById(R.id.scrollView);
+
+        //ArrayList<User> pass = new ArrayList<>();
+        for (int i = 0; i < 2; i++)
+        {
+            User u = new User("user1", "email", 123, 0, UserType.PASSENGER);
+            dummyRide.addWaiting(u);
+
+            CheckBox cb = new CheckBox(this);
+            cb.setText(u.getUsername());
+
+            waitingList.addView(cb);
+        }
 
         getIntent();
     }

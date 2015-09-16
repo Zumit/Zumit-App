@@ -3,11 +3,17 @@ package com.swen900014.orange.rideshareoz;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.GridLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +31,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.view.ViewGroup.*;
+import static android.view.ViewGroup.LayoutParams.*;
 import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
@@ -51,13 +60,18 @@ public class PassViewRideActivity extends FragmentActivity
     private PlaceAutoCompleteAdapter adapter;
     private RideRequest rideRequest;
 
+    private GridLayout gridLayout;
+
     private TextView startLabel;
     private TextView endLabel;
     private TextView timeLabel;
 
     private TextView passText;
     private TextView pickUpLocText;
-    private TextView timeInputText;
+    private TextView inputTabelName;
+    private TextView pickUpLabel;
+    //private TextView timeInputText;
+    private Button joinLeaveButton;
 
     // Dummy data
     User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
@@ -77,13 +91,18 @@ public class PassViewRideActivity extends FragmentActivity
 
         rideRequest = new RideRequest();//dummyRide
 
+
         startLabel = (TextView) findViewById(R.id.startText);
         endLabel = (TextView) findViewById(R.id.endText);
-        timeLabel = (TextView) findViewById(R.id.timeText);
+        //timeLabel = (TextView) findViewById(R.id.timeText);
         passText = (TextView) findViewById(R.id.passList);
+        inputTabelName = (TextView) findViewById(R.id.inputTableName);
 
         pickUpLocText = (TextView) findViewById(R.id.pickUpLocText);
-        timeInputText = (TextView) findViewById(R.id.timeInputText);
+        pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
+        //timeInputText = (TextView) findViewById(R.id.timeInputText);
+
+        joinLeaveButton = (Button) findViewById(R.id.joinButton);
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -94,10 +113,21 @@ public class PassViewRideActivity extends FragmentActivity
         pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
         pickUpLocText.setAdapter(adapter);
 
+        if (dummyRide.getRideState() == Ride.RideState.VIEWING)
+        {
+            joinLeaveButton.setText(getString(R.string.joinButton));
+        }
+        else if (dummyRide.getRideState() == Ride.RideState.JOINED)
+        {
+            joinLeaveButton.setText(getString(R.string.LeaveRide));
+            pickUpLocText.setVisibility(View.INVISIBLE);
+            inputTabelName.setVisibility(View.INVISIBLE);
+            pickUpLabel.setVisibility(View.INVISIBLE);
+        }
 
         startLabel.setText(dummyRide.getStart());
         endLabel.setText(dummyRide.getEnd());
-        timeLabel.setText(dummyRide.getTime());
+        //timeLabel.setText(dummyRide.getTime());
         passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
 
         getIntent();
@@ -179,28 +209,29 @@ public class PassViewRideActivity extends FragmentActivity
                         connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
-    public void join_or_leave(View view)
+    public void onClick(View view)
     {
         if (dummyRide.getRideState() == Ride.RideState.VIEWING)
         {
-            //joinRide();
+            joinRide();
         }
         else if (dummyRide.getRideState() == Ride.RideState.JOINED)
         {
-            //leaveRide();
+            leaveRide();
         }
     }
 
     // Button events of sending a request for joining a ride
-    public void joinRide(View view)
+    public void joinRide()
     {
-        rideRequest.sendRequest(this, pickUpLocText.getText().toString());//1600+Amphitheatre+Parkway
+        rideRequest.sendRequest(this, pickUpLocText.getText().toString());
+        //1600+Amphitheatre+Parkway
         //"Carlton"
 
         // May receive user_id from server.
     }
 
-    public void leaveRide(View view)
+    public void leaveRide()
     {
         StringRequest leaveRequest = new StringRequest(Request.Method.POST,
                 LEAVE_RIDE_URL, new Response.Listener<String>()
