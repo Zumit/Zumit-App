@@ -47,8 +47,8 @@ public class DriverViewRideActivity extends AppCompatActivity
         timeLabel = (TextView) findViewById(R.id.timeText);
         passText = (TextView) findViewById(R.id.passList);
 
-        startLabel.setText(dummyRide.getStart());
-        endLabel.setText(dummyRide.getEnd());
+        startLabel.setText(dummyRide.getStart().getAddress());
+        endLabel.setText(dummyRide.getEnd().getAddress());
         timeLabel.setText(dummyRide.getTime());
         passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
 

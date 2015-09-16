@@ -34,6 +34,10 @@ public class User implements Serializable
         this.email = email;
     }
 
+    public User(String id) {
+        this.id = id;
+    }
+
     public void rate()
     {
 

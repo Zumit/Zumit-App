@@ -1,13 +1,15 @@
 package com.swen900014.orange.rideshareoz;
 
+import java.io.Serializable;
+
 /**
  * Created by yuszy on 9/11/15.
  */
-public class Location
+public class Location implements Serializable
 {
     private Double lat;
     private Double lon;
-    private String address;
+    private String address = "dummy";
 
 
 
@@ -24,6 +26,11 @@ public class Location
     {
         this.lat = lat;
         this.lon = lon;
+    }
+
+    public Location( String address)
+    {
+        this.address = address;
     }
 
     public void setLat(Double lat)
@@ -52,6 +59,14 @@ public class Location
 
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setSuburb(String suburb) {
+        this.suburb = suburb;
     }
 }
 
