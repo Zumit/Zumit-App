@@ -1,11 +1,12 @@
 package com.swen900014.orange.rideshareoz;
 
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  * Created by yuszy on 9/6/15.
  */
-public class Ride
+public class Ride implements Serializable
 {
     private String start_point;
     private String end_point;
@@ -16,6 +17,7 @@ public class Ride
     private User driver;
     private int rideId;
     private int limit;      //Max number of passengers who can join
+
     private ArrayList<User> joined;   //joined passengers
     private ArrayList<User> waiting;  //passengers who is waiting
     private RideState rideState = RideState.VIEWING;
@@ -48,6 +50,19 @@ public class Ride
         rideId = 0;
         this.joined = (ArrayList<User>) joined.clone();
         this.waiting = (ArrayList<User>) waiting.clone();
+    }
+
+    /* Testing */
+    public Ride(){
+        start_point = "Epping";
+        end_point = "UniMelb";
+        this.arriving_time = "13:30:00";
+        this.driver = new User("George", "george.nader@gmail.com", 0,0,User.UserType.DRIVER );
+        this.limit = 4;
+        rideId = 0;
+        this.joined = new ArrayList<User>();
+        this.waiting = new ArrayList<User>();
+
     }
 
     public boolean isDriver()
@@ -127,5 +142,13 @@ public class Ride
     public RideState getRideState()
     {
         return rideState;
+    }
+
+    public ArrayList<User> getJoined() {
+        return joined;
+    }
+
+    public ArrayList<User> getWaiting() {
+        return waiting;
     }
 }

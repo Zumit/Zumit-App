@@ -1,9 +1,11 @@
 package com.swen900014.orange.rideshareoz;
 
+import java.io.Serializable;
+
 /**
  * Created by yuszy on 9/11/15.
  */
-public class User
+public class User implements Serializable
 {
     private String name;
     private String email;
