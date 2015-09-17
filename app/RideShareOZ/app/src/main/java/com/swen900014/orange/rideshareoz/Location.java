@@ -11,8 +11,6 @@ public class Location implements Serializable
     private Double lon;
     private String address = "dummy";
 
-
-
     private String suburb;
 
     public Location(Double lat, Double lon, String address)

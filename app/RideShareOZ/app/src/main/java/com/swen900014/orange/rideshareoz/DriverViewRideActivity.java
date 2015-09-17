@@ -41,6 +41,15 @@ public class DriverViewRideActivity extends AppCompatActivity
         setContentView(R.layout.activity_driver_view_ride);
 
         ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
+
+        //Testing accepting and rejecting
+        /*ride.acceptJoin(new Lift(new User("user1", "email", 123, 0, User.UserType.PASSENGER),
+                new Location(0.0, 0.0, "carlton")));
+
+        ride.addWaiting(new Lift(new User("user2", "email", 123, 0, User.UserType.PASSENGER),
+                new Location(0.0, 0.0, "carlton")));
+        */
+
         RequestAdapter requestAdapter = new RequestAdapter(this, ride.getWaiting(), ride);
         requestList = (ListView) findViewById(R.id.listView_request);
         requestList.setAdapter(requestAdapter);
@@ -51,9 +60,9 @@ public class DriverViewRideActivity extends AppCompatActivity
         TextView driverText = (TextView) findViewById(R.id.driverTextDriverView);
         passText = (TextView) findViewById(R.id.passList);
 
-        startLabel.setText(ride.getStart());
-        endLabel.setText(ride.getEnd());
-        timeLabel.setText(ride.getTime());
+        startLabel.setText(ride.getStart().getAddress());
+        endLabel.setText(ride.getEnd().getAddress());
+        timeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername() +
                 ", phone: " + ride.getDriver().getPhone() +
                 ", credit: " + ride.getDriver().getCredit());
@@ -65,10 +74,11 @@ public class DriverViewRideActivity extends AppCompatActivity
     {
         String joinedPass = "";
 
-        ArrayList<User> joinedList = ride.getJoined();
+        ArrayList<Lift> joinedList = ride.getJoined();
 
-        for (User user : joinedList) {
-            joinedPass += "name: " + user.getUsername() + ": phone: " + user.getPhone() + "\n";
+        for (Lift lift : joinedList) {
+            joinedPass += "name: " + lift.getUser().getUsername() +
+                    ": phone: " + lift.getUser().getPhone() + "\n";
         }
 
         passText.setText(joinedPass);
@@ -131,16 +141,5 @@ public class DriverViewRideActivity extends AppCompatActivity
         };
 
         MyRequest.getInstance(this).addToRequestQueue(cancelRequest);
-    }
-
-    // Butten events of sending a request for joining a ride
-    public void accept(View view)
-    {
-
-    }
-
-    public void reject(View view)
-    {
-
     }
 }

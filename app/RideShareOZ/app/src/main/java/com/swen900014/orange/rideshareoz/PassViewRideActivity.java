@@ -105,9 +105,9 @@ public class PassViewRideActivity extends FragmentActivity
             pickUpLabel.setVisibility(View.INVISIBLE);
         }
 
-        startLabel.setText(ride.getStart());
-        endLabel.setText(ride.getEnd());
-        timeLabel.setText(ride.getTime());
+        startLabel.setText(ride.getStart().getAddress());
+        endLabel.setText(ride.getEnd().getAddress());
+        timeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername() +
                 ", phone: " + ride.getDriver().getPhone() +
                 ", credit: " + ride.getDriver().getCredit());
@@ -125,11 +125,12 @@ public class PassViewRideActivity extends FragmentActivity
     {
         String joinedPass = "";
 
-        ArrayList<User> joinedList = ride.getJoined();
+        ArrayList<Lift> joinedList = ride.getJoined();
 
-        for (User user : joinedList)
+        for (Lift lift : joinedList)
         {
-            joinedPass += "name: " + user.getUsername() + ": phone: " + user.getPhone() + "\n";
+            joinedPass += "name: " + lift.getUser().getUsername() +
+                    ": phone: " + lift.getUser().getPhone() + "\n";
         }
 
         passText.setText(joinedPass);

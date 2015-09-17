@@ -1,15 +1,12 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -24,20 +21,19 @@ import java.util.Map;
 /**
  * Created by yuszy on 9/16/15.
  */
-public class RequestAdapter extends ArrayAdapter<User>
+public class RequestAdapter extends ArrayAdapter<Lift>
 {
     private final static String ACCEPT_REQUEST_URL = "http://144.6.226.237/ride/accept";
     private final static String REJECT_REQUEST_URL = "http://144.6.226.237/ride/reject";
 
     private final Activity activity;
-    private ArrayList<User> data;
+    private ArrayList<Lift> data;
     private Ride ride;
 
-    public RequestAdapter(Activity activity, ArrayList<User> data, Ride ride)
+    public RequestAdapter(Activity activity, ArrayList<Lift> lift, Ride ride)
     {
-        super(activity, -1, data);
+        super(activity, -1, lift);
         this.activity = activity;
-        //this.data = data;
         this.data = ride.getWaiting();
         this.ride = ride;
     }
@@ -48,8 +44,8 @@ public class RequestAdapter extends ArrayAdapter<User>
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View row = inflater.inflate(R.layout.list_user_request_row, parent, false);
-
-        final User user = data.get(position);
+        final Lift lift = data.get(position);
+        final User user = lift.getUser();
 
         TextView label = (TextView) row.findViewById(R.id.userInfo);
         Button acceptButton = (Button) row.findViewById(R.id.acceptButton);
@@ -62,9 +58,9 @@ public class RequestAdapter extends ArrayAdapter<User>
                 @Override
                 public void onClick(View v)
                 {
-                    sendAcceptRequest(user.getUsername(), "" + ride.getRideId());
-                    ride.acceptJoin(user);
-                    remove(user);
+                    sendAcceptRequest(user.getUsername(), ride.getRideId());
+                    ride.acceptJoin(lift);
+                    remove(lift);
                     ((DriverViewRideActivity) activity).updateView();
                 }
             });
