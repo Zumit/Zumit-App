@@ -1,21 +1,30 @@
 package com.swen900014.orange.rideshareoz;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  * Created by yuszy on 9/6/15.
  */
-public class Ride
+public class Ride implements Serializable
 {
+    private String id;
     private String start_point;
     private String end_point;
+
 
     private Location start;
     private Location end;
     private String arriving_time;
+    private String start_time;
     private User driver;
     private int rideId;
     private int limit;      //Max number of passengers who can join
+
     private ArrayList<User> joined;   //joined passengers
     private ArrayList<User> waiting;  //passengers who is waiting
     private RideState rideState = RideState.JOINED;
@@ -48,6 +57,38 @@ public class Ride
         rideId = 0;
         this.joined = (ArrayList<User>) joined.clone();
         this.waiting = (ArrayList<User>) waiting.clone();
+    }
+    public Ride(JSONObject jsonRide){
+        JSONObject tempObj;
+        JSONArray tempArray;
+        try {
+            id = jsonRide.getString("_id");
+            tempObj = jsonRide.getJSONObject("driver");
+            driver = new User(tempObj.getString("_id"),tempObj.getString("username"));
+            tempArray = jsonRide.getJSONArray("start_point");
+            start = new Location(tempArray.getDouble(0),tempArray.getDouble(1));
+            tempArray = jsonRide.getJSONArray("end_point");
+            end = new Location(tempArray.getDouble(0),tempArray.getDouble(1));
+            limit = jsonRide.getInt("seats");
+            start_time = jsonRide.getString("start_time");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /* Testing */
+    public Ride(RideState s){
+        start_point = "Epping";
+        end_point = "UniMelb";
+        this.arriving_time = "13:30:00";
+        this.driver = new User("George", "george.nader@gmail.com", 0,0,User.UserType.DRIVER );
+        this.limit = 4;
+        rideId = 0;
+        this.joined = new ArrayList<User>();
+        this.waiting = new ArrayList<User>();
+        this.rideState = s;
+
     }
 
     public boolean isDriver()
@@ -150,5 +191,13 @@ public class Ride
     public RideState getRideState()
     {
         return rideState;
+    }
+
+    public ArrayList<User> getJoined() {
+        return joined;
+    }
+
+    public ArrayList<User> getWaiting() {
+        return waiting;
     }
 }

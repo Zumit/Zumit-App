@@ -1,6 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +38,7 @@ import java.util.List;
 
 public class MyRidesFragment extends Fragment {
 
-    private ArrayAdapter<String> mRidesAdapter;
+    private RidesAdaptor mRidesAdapter;
 
     private Bundle savedInstanceState;
     public MyRidesFragment() {
@@ -78,40 +79,55 @@ public class MyRidesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        String[] data = {
-                "Join 6/23 - UniMelb - 3:00 PM",
+        Ride[] data = {new Ride(Ride.RideState.VIEWING),
+                new Ride(Ride.RideState.JOINED),
+                new Ride(Ride.RideState.OFFERING),
+                new Ride(Ride.RideState.VIEWING),
+                new Ride(Ride.RideState.OFFERING),
+                new Ride(Ride.RideState.JOINED),
+                new Ride(Ride.RideState.OFFERING),
+                new Ride(Ride.RideState.JOINED),
+                new Ride(Ride.RideState.VIEWING),
+                new Ride(Ride.RideState.OFFERING)
+                /*"Join 6/23 - UniMelb - 3:00 PM",
                 "Offer 6/24 - UniMelb - 21/8",
                 "Offer 6/25 - Melb. Cup - 22/17",
                 "Pending 6/26 - AFL Final - 18/11",
                 "Join 6/27 - Tennis - 21/10",
                 "Join 6/28 - City - 23/18",
-                "Join 6/29 - UniMelb - 20/7"
+                "Join 6/29 - UniMelb - 20/7"*/
         };
-        List<String> currentRides = new ArrayList<String>(Arrays.asList(data));
+        List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
 
         // Now that we have some dummy forecast data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy forecast) and
         // use it to populate the ListView it's attached to.
-        mRidesAdapter =
-                new ArrayAdapter<String>(
+        mRidesAdapter = new RidesAdaptor(getActivity(), (ArrayList<Ride>)currentRides);
+                /*new ArrayAdapter<String>(
                         getActivity(), // The current context (this activity)
                         R.layout.list_item_ride, // The name of the layout ID.
-                        R.id.list_item_forecast_textview, // The ID of the textview to populate.
-                        currentRides);
+                        R.id.list_item_ride_textview, // The ID of the textview to populate.
+                        currentRides);*/
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        ListView listView = (ListView) rootView.findViewById(R.id.listview_myrides);
         listView.setAdapter(mRidesAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //String forecast = mRidesAdapter.getItem(position);
-                //Intent intent = new Intent(getActivity(), DetailActivity.class)
-                //        .putExtra(Intent.EXTRA_TEXT, forecast);
-                //startActivity(intent);
+                Intent intent;
+                Ride selectedRide = mRidesAdapter.getItem(position);
+                if (selectedRide.getRideState().equals(Ride.RideState.OFFERING)){
+                    intent = new Intent(getActivity(), DriverViewRideActivity.class);
+                }else{
+                    intent = new Intent(getActivity(), PassViewRideActivity.class);
+                }
+
+                intent.putExtra("SelectedRide", selectedRide);
+                startActivity(intent);
             }
         });
 
@@ -130,18 +146,6 @@ public class MyRidesFragment extends Fragment {
             // it must be converted to milliseconds in order to be converted to valid date.
             SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
             return shortenedDateFormat.format(time);
-        }
-
-        /**
-         * Prepare the weather high/lows for presentation.
-         */
-        private String formatHighLows(double high, double low) {
-            // For presentation, assume the user doesn't care about tenths of a degree.
-            long roundedHigh = Math.round(high);
-            long roundedLow = Math.round(low);
-
-            String highLowStr = roundedHigh + "/" + roundedLow;
-            return highLowStr;
         }
 
         /**
@@ -312,7 +316,7 @@ public class MyRidesFragment extends Fragment {
             if (result != null) {
                 mRidesAdapter.clear();
                 for(String dayForecastStr : result) {
-                    mRidesAdapter.add(dayForecastStr);
+                    //mRidesAdapter.add(dayForecastStr);
                 }
                 // New data is back from the server.  Hooray!
             }
