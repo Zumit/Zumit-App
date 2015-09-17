@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.ConnectionResult;
@@ -185,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements
         Intent driverViewRide = new Intent(this, DriverViewRideActivity.class);
         startActivity(driverViewRide);
     }
+
     // Button event for the Offer ride button
     // by Fallie
     public void offerRide(View v)
@@ -307,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements
 
     String getAuthToken(){
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
-        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+        /*String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
         try {
@@ -318,7 +318,9 @@ public class MainActivity extends AppCompatActivity implements
         } catch (GoogleAuthException e) {
             Log.e(TAG, "Error retrieving ID token.", e);
             return null;
-        }
+        }*/
+
+        return "a";
     }
     /**
      * Created by uidu9665 on 29/08/2015.
@@ -345,6 +347,9 @@ public class MainActivity extends AppCompatActivity implements
                 // Successfully retrieved ID Token
                 token = result;
                 new SendUserID().execute(result);
+
+
+
 
 
             } else {

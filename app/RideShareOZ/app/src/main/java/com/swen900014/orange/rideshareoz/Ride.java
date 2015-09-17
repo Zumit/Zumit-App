@@ -12,15 +12,12 @@ import java.io.Serializable;
  */
 public class Ride implements Serializable
 {
-    private String id;
-
-
+    private String rideId;
     private Location start;
     private Location end;
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int rideId;
     private int limit;      //Max number of passengers who can join
 
     private ArrayList<Lift> joined;   //joined passengers
@@ -39,9 +36,9 @@ public class Ride implements Serializable
         this.arriving_time = arriving_time;
         this.driver = driver;
         this.limit = limit;
-        rideId = 0;
+        rideId = "0";
         joined = new ArrayList<Lift>(limit);
-        waiting = new ArrayList<Lift>(limit);
+        waiting = new ArrayList<Lift>();
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit,
@@ -52,7 +49,7 @@ public class Ride implements Serializable
         this.arriving_time = arriving_time;
         this.driver = driver;
         this.limit = limit;
-        rideId = 0;
+        rideId = "0";
         this.joined = (ArrayList<Lift>) joined.clone();
         this.waiting = (ArrayList<Lift>) waiting.clone();
     }
@@ -126,7 +123,7 @@ public class Ride implements Serializable
         this.arriving_time = "13:30:00";
         this.driver = new User("George", "george.nader@gmail.com", 0,0,User.UserType.DRIVER );
         this.limit = 4;
-        rideId = 0;
+        rideId = "0";
         this.joined = new ArrayList<Lift>();
         this.waiting = new ArrayList<Lift>();
         this.rideState = s;
@@ -143,11 +140,11 @@ public class Ride implements Serializable
         return true;
     }
 
-    public boolean accept_request()
+    public boolean acceptJoin(User pass)
     {
         if (joined.size() <= limit)
         {
-            // accept / reject requests
+            joined.add(pass);
 
             return true;
         }
@@ -202,7 +199,7 @@ public class Ride implements Serializable
         return end;
     }
 
-    public int getRideId()
+    public String getRideId()
     {
         return rideId;
     }
