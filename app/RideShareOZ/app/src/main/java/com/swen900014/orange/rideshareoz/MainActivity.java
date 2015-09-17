@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements
     private static boolean mIsResolving = false;
 
     /* Should we automatically resolve ConnectionResults when possible? */
-
-    //RequestQueue requestQueue;
+    
 
     private boolean mShouldResolve = false;
 

@@ -5,11 +5,11 @@ import java.security.PublicKey;
 /**
  * Created by uidu9665 on 16/09/2015.
  */
-public class Lift {
+public class Pickup {
     private User user;
     private Location location;
 
-    public Lift(User user, Location location){
+    public Pickup(User user, Location location){
         this.user = user;
         this.location = location;
     }
