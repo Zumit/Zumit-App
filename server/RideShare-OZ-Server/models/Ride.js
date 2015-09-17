@@ -18,7 +18,7 @@ var RideSchema = new Schema({
 
 
 RideSchema.statics.getAllRides = function(callback){
-  this.find().populate('driver', 'username').exec({}, function(err, rides){
+  this.find().populate('driver', 'username').populate('passengers.user', 'username').exec({}, function(err, rides){
     callback(rides);
   });
 };

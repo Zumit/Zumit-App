@@ -128,6 +128,9 @@ public class PassViewRideActivity extends FragmentActivity
         startLabel.setText(dummyRide.getStart());
         endLabel.setText(dummyRide.getEnd());
         //timeLabel.setText(dummyRide.getTime());
+        startLabel.setText(dummyRide.getStart().getAddress());
+        endLabel.setText(dummyRide.getEnd().getAddress());
+        timeLabel.setText(dummyRide.getTime());
         passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
 
         getIntent();

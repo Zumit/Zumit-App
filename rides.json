@@ -4,7 +4,10 @@
   "start_point":[-37.822913, 145.035238],
   "end_point":[-37.796670, 144.960222],
   "seats": 4,
-  "passengers":[{"$oid":"55ebd431a7398c5184f39b6e", "pickup_point":[-37.822913, 145.035238]}, {"$oid":"55ebd3ced6902fb183321374", "pickup_point":[-37.822913, 145.035238]}],
+  "passengers":[
+      {"user":{"$oid":"55ebd431a7398c5184f39b6e"}, "pickup_point":[-37.822913, 145.035238]},
+      {"user":{"$oid":"55ebd3ced6902fb183321374"}, "pickup_point":[-37.822913, 145.035238]}
+  ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
   "start_time":{"$date":"2015-10-11T13:00:00.000Z"},
@@ -17,7 +20,9 @@
   "start_point":[-37.870153, 144.980822],
   "end_point":[-37.796670, 144.960222],
   "seats": 3,
-  "passengers":[{"$oid":"55ebd381e685d1378386a759", "pickup_point":[-37.870153, 144.980822]}],
+  "passengers":[
+      {"user":{"$oid":"55ebd381e685d1378386a759"}, "pickup_point":[-37.870153, 144.980822]}
+  ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
   "start_time":{"$date":"2015-10-09T12:00:00.000Z"},
@@ -30,7 +35,9 @@
   "start_point":[-37.762547, 144.973698],
   "end_point":[-37.796670, 144.960222],
   "seats": 2,
-  "passengers":[{"$oid":"55ebd381e685d1378386a759", "pickup_point":[-37.762547, 144.973698]}],
+  "passengers":[
+      {"user":{"$oid":"55ebd381e685d1378386a759"}, "pickup_point":[-37.762547, 144.973698]}
+  ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
   "start_time":{"$date":"2015-10-20T09:30:00.000Z"},
@@ -43,7 +50,9 @@
   "start_point":[-37.797416, 144.874735],
   "end_point":[-37.796670, 144.960222],
   "seats": 3,
-  "passengers":[],
+  "passengers":[
+
+  ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
   "start_time":{"$date":"2015-10-04T10:15:00.000Z"},
@@ -56,7 +65,9 @@
   "start_point":[-37.989568, 145.213852],
   "end_point":[-37.796670, 144.960222],
   "seats": 1,
-  "passengers":[{"$oid":"55ebd45c8a0d27bb8476be53", "pickup_point":[-37.989568, 145.213852]}],
+  "passengers":[
+      {"user":{"$oid":"55ebd45c8a0d27bb8476be53"}, "pickup_point":[-37.989568, 145.213852]}
+  ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
   "start_time":{"$date":"2015-10-15T13:45:00.000Z"},
@@ -69,7 +80,10 @@
   "start_point":[-37.911497, 144.654922],
   "end_point":[-37.796670, 144.960222],
   "seats": 3,
-  "passengers":[{"$oid":"55ebd465edd10def84417a43", "pickup_point":[-37.911497, 144.654922]}, {"$oid":"55ebd3ced6902fb183321374", "pickup_point":[-37.911497, 144.654922]}],
+  "passengers":[
+      {"user":{"$oid":"55ebd465edd10def84417a43"}, "pickup_point":[-37.911497, 144.654922]},
+      {"user":{"$oid":"55ebd3ced6902fb183321374"}, "pickup_point":[-37.911497, 144.654922]}
+  ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
   "start_time":{"$date":"2015-10-30T20:15:00.000Z"},
