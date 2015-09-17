@@ -3,17 +3,12 @@ package com.swen900014.orange.rideshareoz;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.GridLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +29,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.view.ViewGroup.*;
-import static android.view.ViewGroup.LayoutParams.*;
-import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
 /**
@@ -60,22 +51,10 @@ public class PassViewRideActivity extends FragmentActivity
     private PlaceAutoCompleteAdapter adapter;
     private RideRequest rideRequest;
 
-    private GridLayout gridLayout;
-
-    private TextView startLabel;
-    private TextView endLabel;
-    private TextView timeLabel;
-
     private TextView passText;
     private TextView pickUpLocText;
-    private TextView inputTabelName;
-    private TextView pickUpLabel;
-    //private TextView timeInputText;
-    private Button joinLeaveButton;
 
-    // Dummy data
-    User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
-    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyUser, 1);
+    private Ride ride;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -89,20 +68,21 @@ public class PassViewRideActivity extends FragmentActivity
                 .build();
         //mGoogleApiClient.connect();
 
-        rideRequest = new RideRequest();//dummyRide
+        ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
+        rideRequest = new RideRequest(ride);
 
-
-        startLabel = (TextView) findViewById(R.id.startText);
-        endLabel = (TextView) findViewById(R.id.endText);
-        //timeLabel = (TextView) findViewById(R.id.timeText);
+        TextView startLabel = (TextView) findViewById(R.id.startText);
+        TextView endLabel = (TextView) findViewById(R.id.endText);
+        TextView timeLabel = (TextView) findViewById(R.id.timeText);
+        TextView driverText = (TextView) findViewById(R.id.driverTextPassView);
         passText = (TextView) findViewById(R.id.passList);
-        inputTabelName = (TextView) findViewById(R.id.inputTableName);
 
+        TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
+        TextView pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
         pickUpLocText = (TextView) findViewById(R.id.pickUpLocText);
-        pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
         //timeInputText = (TextView) findViewById(R.id.timeInputText);
 
-        joinLeaveButton = (Button) findViewById(R.id.joinButton);
+        Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -113,11 +93,11 @@ public class PassViewRideActivity extends FragmentActivity
         pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
         pickUpLocText.setAdapter(adapter);
 
-        if (dummyRide.getRideState() == Ride.RideState.VIEWING)
+        if (ride.getRideState() == Ride.RideState.VIEWING)
         {
             joinLeaveButton.setText(getString(R.string.joinButton));
         }
-        else if (dummyRide.getRideState() == Ride.RideState.JOINED)
+        else if (ride.getRideState() == Ride.RideState.JOINED)
         {
             joinLeaveButton.setText(getString(R.string.LeaveRide));
             pickUpLocText.setVisibility(View.INVISIBLE);
@@ -125,15 +105,34 @@ public class PassViewRideActivity extends FragmentActivity
             pickUpLabel.setVisibility(View.INVISIBLE);
         }
 
-        startLabel.setText(dummyRide.getStart());
-        endLabel.setText(dummyRide.getEnd());
-        //timeLabel.setText(dummyRide.getTime());
-        startLabel.setText(dummyRide.getStart().getAddress());
-        endLabel.setText(dummyRide.getEnd().getAddress());
-        timeLabel.setText(dummyRide.getTime());
-        passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
+        startLabel.setText(ride.getStart());
+        endLabel.setText(ride.getEnd());
+        timeLabel.setText(ride.getTime());
+        driverText.setText(ride.getDriver().getUsername() +
+                ", phone: " + ride.getDriver().getPhone() +
+                ", credit: " + ride.getDriver().getCredit());
 
-        getIntent();
+        // Currently there is no pick up time of passengers
+        TextView pickupTimeLabel = (TextView) findViewById(R.id.pickuptimeLabel);
+        pickupTimeLabel.setVisibility(View.INVISIBLE);
+        TextView pickupTimeText = (TextView) findViewById(R.id.pickupTimeText);
+        pickupTimeText.setVisibility(View.INVISIBLE);
+
+        updateView();
+    }
+
+    public void updateView()
+    {
+        String joinedPass = "";
+
+        ArrayList<User> joinedList = ride.getJoined();
+
+        for (User user : joinedList)
+        {
+            joinedPass += "name: " + user.getUsername() + ": phone: " + user.getPhone() + "\n";
+        }
+
+        passText.setText(joinedPass);
     }
 
     @Override
@@ -214,14 +213,16 @@ public class PassViewRideActivity extends FragmentActivity
 
     public void onClick(View view)
     {
-        if (dummyRide.getRideState() == Ride.RideState.VIEWING)
+        if (ride.getRideState() == Ride.RideState.VIEWING)
         {
             joinRide();
         }
-        else if (dummyRide.getRideState() == Ride.RideState.JOINED)
+        else if (ride.getRideState() == Ride.RideState.JOINED)
         {
             leaveRide();
         }
+
+        updateView();
     }
 
     // Button events of sending a request for joining a ride
@@ -255,7 +256,7 @@ public class PassViewRideActivity extends FragmentActivity
         }){
             protected Map<String, String> getParams()
             {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
 
                 //add your parameters here
                 params.put("username", "sangzhouyang@student.unimelb.edu.au");

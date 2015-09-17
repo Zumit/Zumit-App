@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ScrollView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -15,10 +13,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.User.UserType;
 
 /**
  * Created by Sangzhuoyang Yu on 9/12/15.
@@ -30,14 +28,11 @@ import static com.swen900014.orange.rideshareoz.User.UserType;
 public class DriverViewRideActivity extends AppCompatActivity
 {
     private final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
-    private TextView startLabel;
-    private TextView endLabel;
-    private TextView timeLabel;
+
+    private ListView requestList;
     private TextView passText;
 
-    // Dummy data
-    User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
-    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyUser, 1);
+    private Ride ride;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -45,50 +40,59 @@ public class DriverViewRideActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_view_ride);
 
-        startLabel = (TextView) findViewById(R.id.startText);
-        endLabel = (TextView) findViewById(R.id.endText);
-        timeLabel = (TextView) findViewById(R.id.timeText);
+        ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
+        RequestAdapter requestAdapter = new RequestAdapter(this, ride.getWaiting(), ride);
+        requestList = (ListView) findViewById(R.id.listView_request);
+        requestList.setAdapter(requestAdapter);
+
+        TextView startLabel = (TextView) findViewById(R.id.startText);
+        TextView endLabel = (TextView) findViewById(R.id.endText);
+        TextView timeLabel = (TextView) findViewById(R.id.timeText);
+        TextView driverText = (TextView) findViewById(R.id.driverTextDriverView);
         passText = (TextView) findViewById(R.id.passList);
 
-        startLabel.setText(dummyRide.getStart().getAddress());
-        endLabel.setText(dummyRide.getEnd().getAddress());
-        timeLabel.setText(dummyRide.getTime());
-        passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
+        startLabel.setText(ride.getStart());
+        endLabel.setText(ride.getEnd());
+        timeLabel.setText(ride.getTime());
+        driverText.setText(ride.getDriver().getUsername() +
+                ", phone: " + ride.getDriver().getPhone() +
+                ", credit: " + ride.getDriver().getCredit());
 
+        updateView();
+    }
 
-        ScrollView waitingList = (ScrollView) findViewById(R.id.scrollView);
+    public void updateView()
+    {
+        String joinedPass = "";
 
-        //ArrayList<User> pass = new ArrayList<>();
-        for (int i = 0; i < 2; i++)
-        {
-            User u = new User("user1", "email", 123, 0, UserType.PASSENGER);
-            dummyRide.addWaiting(u);
+        ArrayList<User> joinedList = ride.getJoined();
 
-            CheckBox cb = new CheckBox(this);
-            cb.setText(u.getUsername());
-
-            waitingList.addView(cb);
+        for (User user : joinedList) {
+            joinedPass += "name: " + user.getUsername() + ": phone: " + user.getPhone() + "\n";
         }
 
-        getIntent();
+        passText.setText(joinedPass);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_pass_view_ride, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+        {
             return true;
         }
 

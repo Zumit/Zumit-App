@@ -34,10 +34,6 @@ public class User implements Serializable
         this.email = email;
     }
 
-    public User(String id) {
-        this.id = id;
-    }
-
     public void rate()
     {
 
@@ -61,5 +57,10 @@ public class User implements Serializable
     public int getCredit()
     {
         return credit;
+    }
+
+    public UserType getUserType()
+    {
+        return userType;
     }
 }

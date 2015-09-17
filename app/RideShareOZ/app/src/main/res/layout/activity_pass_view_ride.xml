@@ -54,6 +54,16 @@
         android:layout_column="2"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/driverLabel"
+        android:id="@+id/driverLabelPassView"
+        android:layout_row="3"
+        android:layout_column="2"
+        android:layout_gravity="center_horizontal" />
+
     <EditText
         android:ems="10"
         android:id="@+id/timeText"
@@ -64,13 +74,23 @@
         android:layout_column="3"
         android:layout_gravity="center_horizontal" />
 
+    <EditText
+        android:ems="10"
+        android:id="@+id/driverTextPassView"
+        android:inputType="date|textImeMultiLine|time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="3"
+        android:layout_column="3"
+        android:layout_gravity="center_horizontal" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/passLabel"
         android:id="@+id/passLabel"
-        android:layout_row="3"
+        android:layout_row="4"
         android:layout_column="2"
         android:layout_gravity="top|center_horizontal"
         android:layout_marginTop="15dp" />
@@ -81,7 +101,7 @@
         android:inputType="textPostalAddress|textMultiLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="3"
+        android:layout_row="4"
         android:layout_column="3"
         android:layout_gravity="top|left|center_horizontal"
         android:minHeight="150dp"
@@ -93,7 +113,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/titleLabel"
         android:id="@+id/inputTableName"
-        android:layout_row="4"
+        android:layout_row="5"
         android:layout_column="2"
         android:layout_columnSpan="2" />
 
@@ -103,7 +123,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/startLabel"
         android:id="@+id/pickUpLabel"
-        android:layout_row="5"
+        android:layout_row="6"
         android:layout_column="2"
         android:layout_gravity="center_horizontal" />
 
@@ -111,7 +131,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/pickUpLocText"
-        android:layout_row="5"
+        android:layout_row="6"
         android:layout_column="3" />
 
     <TextView
@@ -119,16 +139,16 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/timeLabel"
-        android:id="@+id/textView4"
-        android:layout_row="6"
+        android:id="@+id/pickuptimeLabel"
+        android:layout_row="7"
         android:layout_column="2"
         android:layout_gravity="center_horizontal" />
 
     <EditText
         android:ems="10"
-        android:id="@+id/timeInputText"
+        android:id="@+id/pickupTimeText"
         android:inputType="textPostalAddress"
-        android:layout_row="6"
+        android:layout_row="7"
         android:layout_column="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -138,7 +158,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/joinButton"
         android:onClick="onClick"
-        android:layout_row="7"
+        android:layout_row="8"
         android:layout_column="2"
         android:layout_gravity="center_horizontal"
         android:layout_columnSpan="2" />
