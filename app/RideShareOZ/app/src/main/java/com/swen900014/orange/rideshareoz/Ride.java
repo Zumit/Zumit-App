@@ -71,7 +71,7 @@ public class Ride implements Serializable
             driver = new User(tempObj.getString("_id"),tempObj.getString("username"));
 
             limit = jsonRide.getInt("seats");
-            start_time = jsonRide.getString("start_time");
+            arriving_time = jsonRide.getString("arrival_time");
 
             /* get the list of requests */
 

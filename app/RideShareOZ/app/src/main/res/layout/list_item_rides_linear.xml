@@ -44,4 +44,14 @@
         android:foreground="#0bff81"
         android:textColor="#1affa8" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/textViewDate"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textViewType"
+        android:layout_toEndOf="@+id/textViewType" />
+
 </RelativeLayout>
