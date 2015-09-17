@@ -18,9 +18,9 @@
     <string name="startLabel">Start: </string>
     <string name="endLabel">End:</string>
     <string name="timeLabel">Time: </string>
-    <string name="passLabel">Passengers: </string>
+    <string name="passLabel">Joined: </string>
     <string name="title_activity_driver_view_ride">DriverViewRide</string>
-    <string name="cancelButton">cancelButton</string>
+    <string name="cancelButton">Cancel</string>
     <string name="joinButton">Join</string>
     <string name="titleLabel">Where do you want to be picked up:</string>
     <string name="_offerRide">OfferRide</string>
@@ -33,4 +33,7 @@
     <string name="_Submit"><a href="#">Submit</a></string>
     <string name="_Reset"><a href="#">Reset</a></string>
     <string name="RequestLabel">Requests:</string>
+    <string name="acceptButton">Accept</string>
+    <string name="rejectButton">Reject</string>
+    <string name="driverLabel">Driver</string>
 </resources>

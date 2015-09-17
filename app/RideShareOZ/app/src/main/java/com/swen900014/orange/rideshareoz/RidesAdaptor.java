@@ -33,7 +33,7 @@ public class RidesAdaptor extends ArrayAdapter<Ride> {
         TextView tvJoins = (TextView) convertView.findViewById(R.id.textViewJoins);
         // Populate the data into the template view using the data object
         tvType.setText(ride.getRideState().toString());
-        tvFromTo.setText(ride.getStart().getAddress() + " To " + ride.getEnd().getAddress());
+        tvFromTo.setText(ride.getStart() + " To " + ride.getEnd());
         tvRequests.setText(Integer.toString(ride.getWaiting().size()));
         tvJoins.setText(Integer.toString(ride.getJoined().size()));
         // Return the completed view to render on screen
