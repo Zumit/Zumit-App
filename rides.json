@@ -10,7 +10,7 @@
   ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-11T13:00:00.000Z"},
+  "arrival_time":{"$date":"2015-10-11T13:00:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -25,7 +25,7 @@
   ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-09T12:00:00.000Z"},
+  "arrival_time":{"$date":"2015-10-09T12:00:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -40,7 +40,7 @@
   ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-20T09:30:00.000Z"},
+  "arrival_time":{"$date":"2015-10-20T09:30:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -55,7 +55,7 @@
   ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-04T10:15:00.000Z"},
+  "arrival_time":{"$date":"2015-10-04T10:15:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -70,7 +70,7 @@
   ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-15T13:45:00.000Z"},
+  "arrival_time":{"$date":"2015-10-15T13:45:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
@@ -86,7 +86,7 @@
   ],
   "requests":[],
   "group":{"$oid":"55cab5dde81ab31606e4814c"},
-  "start_time":{"$date":"2015-10-30T20:15:00.000Z"},
+  "arrival_time":{"$date":"2015-10-30T20:15:00.000Z"},
   "updated_at":{"$date":"2015-09-03T06:48:55.185Z"},
   "__v":0
 }
