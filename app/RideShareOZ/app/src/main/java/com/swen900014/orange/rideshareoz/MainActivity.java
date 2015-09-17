@@ -279,7 +279,11 @@ public class MainActivity extends AppCompatActivity implements
         new GetUserIDTask().execute();
     }
 
-    String getAuthToken(){
+    public static GoogleApiClient getUserGoogleApiClient() {
+        return mGoogleApiClient;
+    }
+
+    public String getAuthToken(){
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
@@ -487,9 +491,6 @@ public class MainActivity extends AppCompatActivity implements
             Log.d(TAG, "ID token: " + result);
             if (result != null) {
                 // Successfully retrieved ID Token
-
-
-
             } else {
                 // There was some error getting the ID Token
                 // ...
