@@ -19,6 +19,7 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,18 +61,11 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_login);
 
         // Initialize request queue
         MyRequest.getInstance(this.getApplicationContext()).
                 getRequestQueue();
 
-        /*setContentView(R.layout.activity_myrides);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, (new MyRidesFragment()) )
-                    .commit();
-        }*/
         this.savedInstanceState = savedInstanceState;
 
         // Build GoogleApiClient with access to basic profile
@@ -81,14 +75,6 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Plus.API)
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
-
-        /*findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
-        findViewById(R.id.test_query_button).setOnClickListener(this);
-        findViewById(R.id.all_rides).setOnClickListener(this);
-        findViewById(R.id.all_users).setOnClickListener(this);
-        findViewById(R.id.create_ride).setOnClickListener(this);
-        findViewById(R.id.my_rides_button).setOnClickListener(this);*/
     }
 
 
@@ -112,8 +98,6 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         if (id == R.id.action_signout) {
-            //Intent authentication = new Intent(this, AuthenticationActivity.class);
-            //startActivity(authentication);
             onSignOutClicked();
             return true;
         }
@@ -236,14 +220,6 @@ public class MainActivity extends AppCompatActivity implements
             mGoogleApiClient.disconnect();
         }
 
-        //TextView mStatusTextView = (TextView)findViewById(R.id.sign_in_text);
-        //mStatusTextView.setText("Signed Out...");
-
-        //mStatusTextView = (TextView)findViewById(R.id.sign_in_id);
-        //mStatusTextView.setText("");
-
-        //mStatusTextView = (TextView)findViewById(R.id.sign_in_lang);
-        //mStatusTextView.setText("");
         showSignedOutUI();
     }
 
@@ -292,7 +268,6 @@ public class MainActivity extends AppCompatActivity implements
 
         //Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
 
-        //AuthenticationActivity.signInComplete(mGoogleApiClient);
 
         setContentView(R.layout.activity_myrides);
         if (savedInstanceState == null) {
@@ -306,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements
 
     String getAuthToken(){
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
-        /*String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
         try {
@@ -317,9 +292,9 @@ public class MainActivity extends AppCompatActivity implements
         } catch (GoogleAuthException e) {
             Log.e(TAG, "Error retrieving ID token.", e);
             return null;
-        }*/
+        }
 
-        return "a";
+        //return "a";
     }
     /**
      * Created by uidu9665 on 29/08/2015.

@@ -21,16 +21,16 @@ import java.util.Map;
 /**
  * Created by yuszy on 9/16/15.
  */
-public class RequestAdapter extends ArrayAdapter<Lift>
+public class RequestAdapter extends ArrayAdapter<Pickup>
 {
     private final static String ACCEPT_REQUEST_URL = "http://144.6.226.237/ride/accept";
     private final static String REJECT_REQUEST_URL = "http://144.6.226.237/ride/reject";
 
     private final Activity activity;
-    private ArrayList<Lift> data;
+    private ArrayList<Pickup> data;
     private Ride ride;
 
-    public RequestAdapter(Activity activity, ArrayList<Lift> lift, Ride ride)
+    public RequestAdapter(Activity activity, ArrayList<Pickup> lift, Ride ride)
     {
         super(activity, -1, lift);
         this.activity = activity;
@@ -44,7 +44,7 @@ public class RequestAdapter extends ArrayAdapter<Lift>
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View row = inflater.inflate(R.layout.list_user_request_row, parent, false);
-        final Lift lift = data.get(position);
+        final Pickup lift = data.get(position);
         final User user = lift.getUser();
 
         TextView label = (TextView) row.findViewById(R.id.userInfo);

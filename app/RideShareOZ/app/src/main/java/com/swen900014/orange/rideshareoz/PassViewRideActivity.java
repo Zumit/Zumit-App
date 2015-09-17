@@ -125,9 +125,9 @@ public class PassViewRideActivity extends FragmentActivity
     {
         String joinedPass = "";
 
-        ArrayList<Lift> joinedList = ride.getJoined();
+        ArrayList<Pickup> joinedList = ride.getJoined();
 
-        for (Lift lift : joinedList)
+        for (Pickup lift : joinedList)
         {
             joinedPass += "name: " + lift.getUser().getUsername() +
                     ": phone: " + lift.getUser().getPhone() + "\n";

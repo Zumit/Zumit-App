@@ -37,8 +37,8 @@ public class Ride implements Serializable
         this.driver = driver;
         this.limit = limit;
         rideId = "0";
-        joined = new ArrayList<Lift>(limit);
-        waiting = new ArrayList<Lift>();
+        joined = new ArrayList<Pickup>(limit);
+        waiting = new ArrayList<Pickup>();
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit,
@@ -137,7 +137,7 @@ public class Ride implements Serializable
         return true;
     }
 
-    public boolean acceptJoin(Lift lift)
+    public boolean acceptJoin(Pickup lift)
     {
         if (joined.size() <= limit)
         {
@@ -187,7 +187,7 @@ public class Ride implements Serializable
     }
 
     // For testing
-    public void addWaiting(Lift lift)
+    public void addWaiting(Pickup lift)
     {
         waiting.add(lift);
     }
