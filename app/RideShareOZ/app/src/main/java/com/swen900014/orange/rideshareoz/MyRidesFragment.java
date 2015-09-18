@@ -88,7 +88,8 @@ public class MyRidesFragment extends Fragment {
                 new Ride(Ride.RideState.VIEWING),
                 new Ride(Ride.RideState.OFFERING)
         };
-        List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
+        //List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
+        List<Ride> currentRides = new ArrayList<Ride>();
 
         // Now that we have some dummy  data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy data) and
