@@ -22,11 +22,11 @@ public class Ride implements Serializable
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
-    private RideState rideState = RideState.VIEWING;
+    private RideState rideState = RideState.NOTSET;
 
     public enum RideState
     {
-        OFFERING, JOINED, VIEWING
+        OFFERING, JOINED, VIEWING, NOTSET
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit)
@@ -79,6 +79,10 @@ public class Ride implements Serializable
             for(int i =0; i < tempArray.length(); i++){
                 tempObj = tempArray.getJSONObject(i);
                 User pass = new User(tempObj.getString("_id"),tempObj.getString("username"));
+                //TODO: optimize this using object comparison
+                if (User.getCurrentUser().getUsername().equals(tempObj.getString("username"))){
+                    this.rideState = RideState.VIEWING;
+                }
                 tempLocationArray =  tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0),tempLocationArray.getDouble(1));
                 waiting.add(new Pickup(pass,loc));
@@ -89,12 +93,22 @@ public class Ride implements Serializable
             for(int i =0; i < tempArray.length(); i++){
                 tempObj = tempArray.getJSONObject(i);
                 User pass = new User(tempObj.getString("_id"),tempObj.getString("username"));
+                //TODO: optimize this using object comparison
+                if (User.getCurrentUser().getUsername().equals(tempObj.getString("username"))){
+                    this.rideState = RideState.JOINED;
+                }
                 tempLocationArray =  tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0),tempLocationArray.getDouble(1));
                 joined.add(new Pickup(pass,loc));
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }finally {
+            //TODO: optimize this using object comparison
+            if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername())){
+                /* add to the offering list*/
+                this.rideState = RideState.OFFERING;
+            }
         }
     }
 
@@ -102,7 +116,10 @@ public class Ride implements Serializable
         ArrayList<Ride> rides = new ArrayList<Ride>();
         for(int i =0; i < ridesJsonArray.length(); i++) {
             try {
-                rides.add(new Ride(ridesJsonArray.getJSONObject(i)));
+                Ride nRide = new Ride(ridesJsonArray.getJSONObject(i));
+                if (nRide.rideState != RideState.NOTSET){
+                    rides.add(nRide);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

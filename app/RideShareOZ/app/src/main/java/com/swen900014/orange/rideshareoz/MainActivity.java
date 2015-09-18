@@ -272,6 +272,11 @@ public class MainActivity extends AppCompatActivity implements
 
         //Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
 
+        //set current user
+        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+        Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
+        User.setCurrentUser(new User(account.name));
+
 
         setContentView(R.layout.activity_myrides);
         if (savedInstanceState == null) {

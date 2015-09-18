@@ -14,6 +14,8 @@ public class User implements Serializable
     private int credit;
     private UserType userType;
 
+    private static User currentUser;
+
     private static String currentUserEmail;
 
     public static enum UserType
@@ -34,8 +36,12 @@ public class User implements Serializable
         this.name = username;
     }
 
-    public User(String id) {
-        this.id = id;
+    //public User(String id) {
+      //  this.id = id;
+    //}
+
+    public User( String username ) {
+        this.name = username;
     }
 
     public void rate()
@@ -61,5 +67,16 @@ public class User implements Serializable
     public int getCredit()
     {
         return credit;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        if (User.currentUser == null){
+            User.currentUser = currentUser;
+        }
+
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
     }
 }
