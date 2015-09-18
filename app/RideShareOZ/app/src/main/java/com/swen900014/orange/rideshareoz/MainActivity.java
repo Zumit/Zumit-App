@@ -101,7 +101,11 @@ public class MainActivity extends AppCompatActivity implements
             onSignOutClicked();
             return true;
         }
-
+        if (id == R.id.action_OfferRide) {
+            Intent offerRide = new Intent(this, OfferRide.class);
+            startActivity(offerRide);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
