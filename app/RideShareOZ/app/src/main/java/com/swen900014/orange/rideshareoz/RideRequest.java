@@ -80,7 +80,7 @@ public class RideRequest
                             {
                                 Map<String, String> params = new HashMap<>();
 
-                                System.out.println(ride.getRideId());
+                                System.out.println("Ride id: " + ride.getRideId());
 
                                 params.put("username", "sangzhouyang@student.unimelb.edu.au");
                                 //params.put("user_id", "55ebd381e685d1378386a759");
