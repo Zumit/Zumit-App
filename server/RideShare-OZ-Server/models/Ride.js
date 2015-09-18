@@ -13,7 +13,7 @@ var RideSchema = new Schema({
   group: {type: Schema.Types.ObjectId, ref: 'Group'},
   events:{type: Schema.Types.ObjectId, ref: 'Event'},
   passengers: [{user:{ type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] }}],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },state:String,note:String}],
+  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },state:String,note:String,pickup_time:Date}],
   updated_at: { type: Date, default: Date.now },
   note: String,
 });
@@ -97,7 +97,8 @@ RideSchema.methods.addRequest= function(user_id,req,callback){
   pickup_point[0]=req.body.p_lon;
   pickup_point[1]=req.body.p_lat;
   var note=req.body.note;
-  this.requests.push({'user':user_id,'state':"unaccept",'pickup_point':pickup_point,'note':note});
+  var pickup_time=req.body.pickup_time;
+  this.requests.push({'user':user_id,'state':"unaccept",'pickup_point':pickup_point,'note':note,'pickup_time':pickup_time});
   this.save(function(err, doc){
     callback(doc);
   });
@@ -124,15 +125,16 @@ RideSchema.statics.acceptRequest= function(req,callback){
 var ride_id=req.body.ride_id;
 var user_id=req.userinfo._id; 
 var pickup_point;
- 
+var pickup_time; 
  //add use to passenger
   this.findById(ride_id,function(err,doc){
     doc.requests.forEach(function(request){
       if (request.user == user_id) {
         pickup_point=request.pickup_point;
+        pickup_time=request.pickup_time;
       }
     });
-    doc.passengers.push({'user':user_id,'pickup_point':pickup_point});
+    doc.passengers.push({'user':user_id,'pickup_point':pickup_point,'pickup_time':pickup_time});
     doc.save();
   });
   //delete the user in requests
