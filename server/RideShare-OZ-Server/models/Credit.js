@@ -5,9 +5,9 @@ var CreditSchema = new Schema({
   type : String,
   receiver: {type: Schema.Types.ObjectId, ref: 'User' },
   sender : {type: Schema.Types.ObjectId, ref: 'User' },
-  rate : Double,
+  rate : Number,
   rideID: [{type: Schema.Types.ObjectId, ref: 'Ride' }],
-  updateDate:{ type: Date, default: Date.now }
+  updateDate:{ type: Date, default: Date.now },
   comment: String,
 });
 

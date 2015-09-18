@@ -23,7 +23,8 @@ var ride = require('./routes/ride');
 var group = require('./routes/group');
 var msg = require('./routes/msg');
 var test = require('./routes/test');
-
+var events = require('./routes/event');
+var credit= require('./routes/credit');
 // model
 var User = require('./models/User.js');
 
@@ -72,6 +73,8 @@ app.use('/ride', ride);
 app.use('/group', group);
 app.use('/msg', msg);
 app.use('/test', test);
+app.use('/event', events);
+app.use('/credit', credit);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
