@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +26,9 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.swen900014.orange.rideshareoz.User.UserType;
 
 
 /**
@@ -51,17 +51,10 @@ public class PassViewRideActivity extends FragmentActivity
     private PlaceAutoCompleteAdapter adapter;
     private RideRequest rideRequest;
 
-    private TextView startLabel;
-    private TextView endLabel;
-    private TextView timeLabel;
-
     private TextView passText;
     private TextView pickUpLocText;
-    private TextView timeInputText;
 
-    // Dummy data
-    User dummyUser = new User("user1", "email", 123, 0, UserType.DRIVER);
-    Ride dummyRide = new Ride("start", "end", "6/09/2015", dummyUser, 1);
+    private Ride ride;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -75,15 +68,21 @@ public class PassViewRideActivity extends FragmentActivity
                 .build();
         //mGoogleApiClient.connect();
 
-        rideRequest = new RideRequest();//dummyRide
+        ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
+        rideRequest = new RideRequest(ride);
 
-        startLabel = (TextView) findViewById(R.id.startText);
-        endLabel = (TextView) findViewById(R.id.endText);
-        timeLabel = (TextView) findViewById(R.id.timeText);
+        TextView startLabel = (TextView) findViewById(R.id.startText);
+        TextView endLabel = (TextView) findViewById(R.id.endText);
+        TextView timeLabel = (TextView) findViewById(R.id.timeText);
+        TextView driverText = (TextView) findViewById(R.id.driverTextPassView);
         passText = (TextView) findViewById(R.id.passList);
 
+        TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
+        TextView pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
         pickUpLocText = (TextView) findViewById(R.id.pickUpLocText);
-        timeInputText = (TextView) findViewById(R.id.timeInputText);
+        //timeInputText = (TextView) findViewById(R.id.timeInputText);
+
+        Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -94,13 +93,47 @@ public class PassViewRideActivity extends FragmentActivity
         pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
         pickUpLocText.setAdapter(adapter);
 
+        if (ride.getRideState() == Ride.RideState.VIEWING)
+        {
+            joinLeaveButton.setText(getString(R.string.joinButton));
+        }
+        else if (ride.getRideState() == Ride.RideState.JOINED)
+        {
+            joinLeaveButton.setText(getString(R.string.LeaveRide));
+            pickUpLocText.setVisibility(View.INVISIBLE);
+            inputTabelName.setVisibility(View.INVISIBLE);
+            pickUpLabel.setVisibility(View.INVISIBLE);
+        }
 
-        startLabel.setText(dummyRide.getStart());
-        endLabel.setText(dummyRide.getEnd());
-        timeLabel.setText(dummyRide.getTime());
-        passText.setText(dummyUser.getUsername() + ", phone: " + dummyUser.getPhone() + "\n");
+        startLabel.setText(ride.getStart().getAddress());
+        endLabel.setText(ride.getEnd().getAddress());
+        timeLabel.setText(ride.getArrivingTime());
+        driverText.setText(ride.getDriver().getUsername() +
+                ", phone: " + ride.getDriver().getPhone() +
+                ", credit: " + ride.getDriver().getCredit());
 
-        getIntent();
+        // Currently there is no pick up time of passengers
+        TextView pickupTimeLabel = (TextView) findViewById(R.id.pickuptimeLabel);
+        pickupTimeLabel.setVisibility(View.INVISIBLE);
+        TextView pickupTimeText = (TextView) findViewById(R.id.pickupTimeText);
+        pickupTimeText.setVisibility(View.INVISIBLE);
+
+        updateView();
+    }
+
+    public void updateView()
+    {
+        String joinedPass = "";
+
+        ArrayList<Pickup> joinedList = ride.getJoined();
+
+        for (Pickup lift : joinedList)
+        {
+            joinedPass += "name: " + lift.getUser().getUsername() +
+                    ": phone: " + lift.getUser().getPhone() + "\n";
+        }
+
+        passText.setText(joinedPass);
     }
 
     @Override
@@ -179,28 +212,31 @@ public class PassViewRideActivity extends FragmentActivity
                         connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
-    public void join_or_leave(View view)
+    public void onClick(View view)
     {
-        if (dummyRide.getRideState() == Ride.RideState.VIEWING)
+        if (ride.getRideState() == Ride.RideState.VIEWING)
         {
-            //joinRide();
+            joinRide();
         }
-        else if (dummyRide.getRideState() == Ride.RideState.JOINED)
+        else if (ride.getRideState() == Ride.RideState.JOINED)
         {
-            //leaveRide();
+            leaveRide();
         }
+
+        updateView();
     }
 
     // Button events of sending a request for joining a ride
-    public void joinRide(View view)
+    public void joinRide()
     {
-        rideRequest.sendRequest(this, pickUpLocText.getText().toString());//1600+Amphitheatre+Parkway
+        rideRequest.sendRequest(this, pickUpLocText.getText().toString());
+        //1600+Amphitheatre+Parkway
         //"Carlton"
 
         // May receive user_id from server.
     }
 
-    public void leaveRide(View view)
+    public void leaveRide()
     {
         StringRequest leaveRequest = new StringRequest(Request.Method.POST,
                 LEAVE_RIDE_URL, new Response.Listener<String>()
@@ -221,7 +257,7 @@ public class PassViewRideActivity extends FragmentActivity
         }){
             protected Map<String, String> getParams()
             {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
 
                 //add your parameters here
                 params.put("username", "sangzhouyang@student.unimelb.edu.au");

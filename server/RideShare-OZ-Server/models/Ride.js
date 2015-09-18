@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../models/User.js');
 var Group = require('../models/Group.js');
+
 var RideSchema = new Schema({
   arrival_time: Date,
   start_time: Date,
@@ -19,7 +20,7 @@ var RideSchema = new Schema({
 
 
 RideSchema.statics.getAllRides = function(callback){
-  this.find().populate('driver', 'username').exec({}, function(err, rides){
+  this.find().populate('driver', 'username').populate('passengers.user', 'username').populate('requests.user', 'username').exec({}, function(err, rides){
     callback(rides);
   });
 };

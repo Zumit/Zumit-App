@@ -1,15 +1,20 @@
 package com.swen900014.orange.rideshareoz;
 
+import java.io.Serializable;
+
 /**
  * Created by yuszy on 9/11/15.
  */
-public class User
+public class User implements Serializable
 {
+    private String id;
     private String name;
     private String email;
     private int phone;
     private int credit;
     private UserType userType;
+
+    private static String currentUserEmail;
 
     public static enum UserType
     {
@@ -23,6 +28,14 @@ public class User
         this.phone = phone;
         this.credit = credit;
         this.userType = userType;
+    }
+    public User(String id, String email ) {
+        this.id = id;
+        this.email = email;
+    }
+
+    public User(String id) {
+        this.id = id;
     }
 
     public void rate()

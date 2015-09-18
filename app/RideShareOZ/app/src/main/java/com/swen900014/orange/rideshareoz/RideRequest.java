@@ -17,16 +17,15 @@ import java.util.Map;
 public class RideRequest
 {
     private final static String JOIN_REQUEST_URL = "http://144.6.226.237/ride/request";
-    //private Ride ride;
+    private Ride ride;
 
     private String lat = "";
     private String lon = "";
 
-    public RideRequest() {}
-    /*public RideRequest(Ride ride)
+    public RideRequest(Ride ride)
     {
         this.ride = ride;
-    }*/
+    }
 
     public void sendRequest(final Activity activity, String address)
     {
@@ -79,10 +78,13 @@ public class RideRequest
                         }){
                             protected Map<String, String> getParams()
                             {
-                                Map<String, String> params = new HashMap<String, String>();
+                                Map<String, String> params = new HashMap<>();
+
+                                System.out.println(ride.getRideId());
+
                                 params.put("username", "sangzhouyang@student.unimelb.edu.au");
                                 //params.put("user_id", "55ebd381e685d1378386a759");
-                                params.put("ride_id", "55e7ed577ea19c92ac2d0911");
+                                params.put("ride_id", ride.getRideId());
                                 params.put("p_lat", lat);
                                 params.put("p_lon", lon);
 
