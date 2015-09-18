@@ -6,9 +6,9 @@ var EventSchema = new Schema({
   eventlocation: String,
   eventInfo: String,
   startTime:Date,
-  adminID: {type: Schema.Types.ObjectId, ref: 'User' },
-  joinedMembers: [{type: Schema.Types.ObjectId, ref: 'User' }],
-  rquest: [{user:{type: Schema.Types.ObjectId, ref: 'User' },requestDate:{ type: Date, default: Date.now }}],
+  group: {type: Schema.Types.ObjectId, ref: 'Group'},
+  organizer: {type: Schema.Types.ObjectId, ref: 'User' },
+  Members: [{type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
 module.exports = mongoose.model('Event', EventSchema);

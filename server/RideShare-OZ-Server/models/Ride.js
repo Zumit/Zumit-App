@@ -4,6 +4,7 @@ var User = require('../models/User.js');
 var Group = require('../models/Group.js');
 var RideSchema = new Schema({
   arrival_time: Date,
+  start_time: Date,
   seats: Number,
   start_point: {type:[Number],index:'2d'}, // Lat, Lng
   end_point: {type:[Number],index:'2d'},
