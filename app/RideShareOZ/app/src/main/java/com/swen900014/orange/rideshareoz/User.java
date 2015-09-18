@@ -29,9 +29,9 @@ public class User implements Serializable
         this.credit = credit;
         this.userType = userType;
     }
-    public User(String id, String email ) {
+    public User(String id, String username ) {
         this.id = id;
-        this.email = email;
+        this.name = username;
     }
 
     public User(String id) {
