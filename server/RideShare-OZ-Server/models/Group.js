@@ -64,6 +64,7 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 GroupsSchema.statics.rejectRequest= function(req,callback){
 
 this.findByIdAndUpdate(req.query.group_id,{$pull:{'requests':{'user':req.query.user_id}}},function(err,doc){
+  console.log(doc);
     callback(doc);
   });
 
@@ -75,9 +76,10 @@ GroupsSchema.statics.leaveGroup= function(req,callback){
 	User.findByIdAndUpdate(req.query.user_id, {$pull:{'groups':req.query.group_id}},function(err,groups){
 		console.log(groups);
 	});
-	this.findByIdAndUpdate(req.query.group_id,{$pull:{'members':req.query.user_id}},function(err,doc){
-		callback(doc);
- 	});
+	this.findByIdAndUpdate(req.query.group_id,{$pull:{'members':req.query.user_id}},function(err,groups){
+    console.log(groups);
+    callback(groups);
+  });
 
 }
 
