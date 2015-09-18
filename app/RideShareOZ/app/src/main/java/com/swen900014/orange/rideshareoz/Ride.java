@@ -78,7 +78,7 @@ public class Ride implements Serializable
             tempArray = jsonRide.getJSONArray("requests");
             for(int i =0; i < tempArray.length(); i++){
                 tempObj = tempArray.getJSONObject(i);
-                User pass = new User(tempObj.getString("$odi")/*,tempObj.getString("username")*/);
+                User pass = new User(tempObj.getString("_id"),tempObj.getString("username"));
                 tempLocationArray =  tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0),tempLocationArray.getDouble(1));
                 waiting.add(new Pickup(pass,loc));
@@ -88,7 +88,7 @@ public class Ride implements Serializable
             tempArray = jsonRide.getJSONArray("passengers");
             for(int i =0; i < tempArray.length(); i++){
                 tempObj = tempArray.getJSONObject(i);
-                User pass = new User(tempObj.getString("$odi")/*,tempObj.getString("username")*/);
+                User pass = new User(tempObj.getString("_id"),tempObj.getString("username"));
                 tempLocationArray =  tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0),tempLocationArray.getDouble(1));
                 joined.add(new Pickup(pass,loc));

@@ -55,9 +55,7 @@ public class MyRidesFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        //if (savedInstanceState == null) {
-            inflater.inflate(R.menu.myridesfragment, menu);
-        //}
+        //inflater.inflate(R.menu.myridesfragment, menu);
     }
 
     @Override
@@ -96,6 +94,10 @@ public class MyRidesFragment extends Fragment {
         // The ArrayAdapter will take data from a source (like our dummy data) and
         // use it to populate the ListView it's attached to.
         mRidesAdapter = new RidesAdaptor(getActivity(), (ArrayList<Ride>)currentRides);
+
+        /* ignore the test data and load the actual data from server */
+        FetchRidesTask ridesTask = new FetchRidesTask();
+        ridesTask.execute("http://144.6.226.237/ride/getall");
 
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
