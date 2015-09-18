@@ -13,22 +13,47 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.get('/create', function(req, res, next) {
+router.get('/create', function(req, res) {
 
-  var groups = new Group();
-  groups.groupName = 'Melbourne uni';
-  groups.grouplocation = 'Parkville';
-  User.findById('55e822ad281137b018d95333', function(err, user){
-    groups.adminID=user;
-    groups.save(function(err, doc){
-      if (err) {
-        console.log(err);
-      }
-      Group.find({}, function(err, rides){
-        res.json(rides);
-      });
+  Group.createGroup(req,function(req,groups){
+  res.json(groups);
+
+ })
+});
+
+router.get('/request',function(req,res){
+  Group.findById(req.query.group_id, function(err, group){
+    group.addRequest(req.query.user_id,function(updated_group){
+      res.json(updated_group);
     });
   });
+  
 });
+
+router.get('/accept', function(req, res) {
+
+  Group.acceptRequest(req,function(req,groups){
+  res.json(groups);
+
+ })
+});
+
+router.get('/reject', function(req, res) {
+
+  Group.rejectRequest(req,function(req,groups){
+  res.json(groups);
+
+ })
+});
+
+router.get('/leave', function(req, res) {
+
+  Group.leaveGroup(req,function(req,groups){
+  res.json(groups);
+
+ })
+});
+
+
 
 module.exports = router;

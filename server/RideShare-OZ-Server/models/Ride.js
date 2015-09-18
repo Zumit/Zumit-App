@@ -29,6 +29,7 @@ RideSchema.statics.createRide = function(req,callback){
   var Ride = mongoose.model('Ride');
   var ride = new Ride();
   ride.arrival_time = req.body.arrival_time;
+  ride.start_time=req.body.start_time;
   ride.seats = req.body.seat;
   var start_lon=req.body.s_lon;
   var start_lat=req.body.s_lat;
