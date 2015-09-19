@@ -69,7 +69,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         updateView();
     }
 
-    
+
     public void updateView()
     {
         String joinedPass = "";

@@ -356,11 +356,10 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     /**
-     * Created by uidu9665 on 29/08/2015.
+     * Created by George on 29/08/2015.
      */
     public class GetUserIDTask extends AsyncTask<Void, Void, String>
     {
-
         private final String TAG = "SendID";
 
         /*public String getToken() {

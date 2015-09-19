@@ -149,7 +149,8 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
         }
     };
 
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult)
+    {
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + connectionResult.getErrorCode());
 
@@ -161,11 +162,11 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
 
     public void sendRequest(final Activity activity, String startAddress, final String endAddress)
     {
-        final String url1 = "https://maps.googleapis.com/maps/api/geocode/json?" +
+        final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
                 "address=" + startAddress + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
-        final StringRequest getLocRequest1 = new StringRequest(Request.Method.GET, url1,
+        final StringRequest getStartLocRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>()
                 {
                     public void onResponse(String response)
@@ -202,16 +203,16 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest1);
+        MyRequest.getInstance(activity).addToRequestQueue(getStartLocRequest);
     }
 
     private void getEndpointLoc(final Activity activity, String endAddress)
     {
-        final String url2 = "https://maps.googleapis.com/maps/api/geocode/json?" +
+        final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
                 "address=" + endAddress + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
-        final StringRequest getLocRequest2 = new StringRequest(Request.Method.GET, url2,   // nested 1
+        final StringRequest getEndLocRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>()
                 {
                     public void onResponse(String response)
@@ -221,10 +222,10 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                         JSONObject jsonResponse = new JSONObject(response);
                         System.out.println(jsonResponse.toString());
 
-                        latS = jsonResponse.getJSONArray("results").getJSONObject(0).
+                        latE = jsonResponse.getJSONArray("results").getJSONObject(0).
                                 getJSONObject("geometry").getJSONObject("location").
                                 getString("lat");
-                        lonS = jsonResponse.getJSONArray("results").getJSONObject(0).
+                        lonE = jsonResponse.getJSONArray("results").getJSONObject(0).
                                 getJSONObject("geometry").getJSONObject("location").
                                 getString("lng");
 
@@ -250,7 +251,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 }
             });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest2);
+        MyRequest.getInstance(activity).addToRequestQueue(getEndLocRequest);
     }
 
     private void sendRideInfo(Activity activity)
