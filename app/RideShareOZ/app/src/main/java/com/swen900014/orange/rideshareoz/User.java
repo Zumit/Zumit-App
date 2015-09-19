@@ -31,16 +31,15 @@ public class User implements Serializable
         this.credit = credit;
         this.userType = userType;
     }
-    public User(String id, String username ) {
+
+    public User(String id, String username)
+    {
         this.id = id;
         this.name = username;
     }
 
-    //public User(String id) {
-      //  this.id = id;
-    //}
-
-    public User( String username ) {
+    public User(String username)
+    {
         this.name = username;
     }
 
@@ -69,14 +68,17 @@ public class User implements Serializable
         return credit;
     }
 
-    public static void setCurrentUser(User currentUser) {
-        if (User.currentUser == null){
+    public static void setCurrentUser(User currentUser)
+    {
+        if (User.currentUser == null)
+        {
             User.currentUser = currentUser;
         }
 
     }
 
-    public static User getCurrentUser() {
+    public static User getCurrentUser()
+    {
         return currentUser;
     }
 }

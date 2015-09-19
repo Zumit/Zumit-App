@@ -37,8 +37,8 @@ public class Ride implements Serializable
         this.driver = driver;
         this.limit = limit;
         rideId = "0";
-        joined = new ArrayList<Pickup>(limit);
-        waiting = new ArrayList<Pickup>();
+        joined = new ArrayList<>(limit);
+        waiting = new ArrayList<>();
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit,
@@ -53,22 +53,25 @@ public class Ride implements Serializable
         this.joined = (ArrayList<Pickup>) joined.clone();
         this.waiting = (ArrayList<Pickup>) waiting.clone();
     }
-    public Ride(JSONObject jsonRide){
+
+    public Ride(JSONObject jsonRide)
+    {
         JSONObject tempObj;
         JSONArray tempArray;
         JSONArray tempLocationArray;
         waiting = new ArrayList<Pickup>();
         joined = new ArrayList<Pickup>();
-        try {
+        try
+        {
             tempArray = jsonRide.getJSONArray("start_point");
-            start = new Location(tempArray.getDouble(0),tempArray.getDouble(1));
+            start = new Location(tempArray.getDouble(0), tempArray.getDouble(1));
 
             tempArray = jsonRide.getJSONArray("end_point");
-            end = new Location(tempArray.getDouble(0),tempArray.getDouble(1));
+            end = new Location(tempArray.getDouble(0), tempArray.getDouble(1));
 
             rideId = jsonRide.getString("_id");
             tempObj = jsonRide.getJSONObject("driver");
-            driver = new User(tempObj.getString("_id"),tempObj.getString("username"));
+            driver = new User(tempObj.getString("_id"), tempObj.getString("username"));
 
             limit = jsonRide.getInt("seats");
             arriving_time = jsonRide.getString("arrival_time");
@@ -76,51 +79,63 @@ public class Ride implements Serializable
             /* get the list of requests */
 
             tempArray = jsonRide.getJSONArray("requests");
-            for(int i =0; i < tempArray.length(); i++){
+            for (int i = 0; i < tempArray.length(); i++)
+            {
                 tempObj = tempArray.getJSONObject(i);
-                User pass = new User(tempObj.getString("_id"),tempObj.getString("username"));
+                User pass = new User(tempObj.getString("_id"), tempObj.getString("username"));
                 //TODO: optimize this using object comparison
-                if (User.getCurrentUser().getUsername().equals(tempObj.getString("username"))){
+                if (User.getCurrentUser().getUsername().equals(tempObj.getString("username")))
+                {
                     this.rideState = RideState.VIEWING;
                 }
-                tempLocationArray =  tempObj.getJSONArray("pickup_point");
-                Location loc = new Location(tempLocationArray.getDouble(0),tempLocationArray.getDouble(1));
-                waiting.add(new Pickup(pass,loc));
+                tempLocationArray = tempObj.getJSONArray("pickup_point");
+                Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                waiting.add(new Pickup(pass, loc));
             }
 
             /* get the list of joins */
             tempArray = jsonRide.getJSONArray("passengers");
-            for(int i =0; i < tempArray.length(); i++){
+            for (int i = 0; i < tempArray.length(); i++)
+            {
                 tempObj = tempArray.getJSONObject(i);
-                User pass = new User(tempObj.getString("_id"),tempObj.getString("username"));
+                User pass = new User(tempObj.getString("_id"), tempObj.getString("username"));
                 //TODO: optimize this using object comparison
-                if (User.getCurrentUser().getUsername().equals(tempObj.getString("username"))){
+                if (User.getCurrentUser().getUsername().equals(tempObj.getString("username")))
+                {
                     this.rideState = RideState.JOINED;
                 }
-                tempLocationArray =  tempObj.getJSONArray("pickup_point");
-                Location loc = new Location(tempLocationArray.getDouble(0),tempLocationArray.getDouble(1));
-                joined.add(new Pickup(pass,loc));
+                tempLocationArray = tempObj.getJSONArray("pickup_point");
+                Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                joined.add(new Pickup(pass, loc));
             }
-        } catch (JSONException e) {
+        } catch (JSONException e)
+        {
             e.printStackTrace();
-        }finally {
+        } finally
+        {
             //TODO: optimize this using object comparison
-            if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername())){
+            if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
+            {
                 /* add to the offering list*/
                 this.rideState = RideState.OFFERING;
             }
         }
     }
 
-    public static ArrayList<Ride> fromJson(JSONArray ridesJsonArray){
+    public static ArrayList<Ride> fromJson(JSONArray ridesJsonArray)
+    {
         ArrayList<Ride> rides = new ArrayList<Ride>();
-        for(int i =0; i < ridesJsonArray.length(); i++) {
-            try {
+        for (int i = 0; i < ridesJsonArray.length(); i++)
+        {
+            try
+            {
                 Ride nRide = new Ride(ridesJsonArray.getJSONObject(i));
-                if (nRide.rideState != RideState.NOTSET){
+                if (nRide.rideState != RideState.NOTSET)
+                {
                     rides.add(nRide);
                 }
-            } catch (JSONException e) {
+            } catch (JSONException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -128,14 +143,14 @@ public class Ride implements Serializable
     }
 
 
-
     /* Testing */
-    public Ride(RideState s){
+    public Ride(RideState s)
+    {
         this.start = new Location("Epping");
         this.end = new Location("UniMelb");
 
         this.arriving_time = "13:30:00";
-        this.driver = new User("George", "george.nader@gmail.com", 0,0,User.UserType.DRIVER );
+        this.driver = new User("George", "george.nader@gmail.com", 0, 0, User.UserType.DRIVER);
         this.limit = 4;
         rideId = "0";
         this.joined = new ArrayList<Pickup>();
@@ -244,11 +259,13 @@ public class Ride implements Serializable
         return rideState;
     }
 
-    public ArrayList<Pickup> getJoined() {
+    public ArrayList<Pickup> getJoined()
+    {
         return joined;
     }
 
-    public ArrayList<Pickup> getWaiting() {
+    public ArrayList<Pickup> getWaiting()
+    {
         return waiting;
     }
 }

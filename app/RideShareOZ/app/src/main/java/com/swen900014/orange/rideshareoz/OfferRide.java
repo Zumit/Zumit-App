@@ -32,9 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class OfferRide extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-
+public class OfferRide extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener
+{
     private final String TAG = "OfferRide";
     private final static String Offer_Ride_URL = "http://144.6.226.237/ride/create?";
     private Location loc;
