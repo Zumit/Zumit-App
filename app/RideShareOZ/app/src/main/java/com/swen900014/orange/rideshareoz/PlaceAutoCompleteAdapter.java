@@ -21,7 +21,10 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by yuszy on 9/9/15.
+ * Created by Sangzhuoyang Yu on 9/9/15.
+ * The adapter attached to the AutoCompleteView
+ * , which auto retrieves predicted location from
+ * google server with google place api.
  */
 public class PlaceAutoCompleteAdapter extends
         ArrayAdapter<PlaceAutoCompleteAdapter.PlaceAutoComplete> implements Filterable

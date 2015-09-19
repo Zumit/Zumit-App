@@ -2,7 +2,9 @@ package com.swen900014.orange.rideshareoz;
 
 
 /**
- * Created by uidu9665 on 16/09/2015.
+ * Created by George on 16/09/2015.
+ * It is used in the join request, where each
+ * passenger is bound with a pickup location
  */
 public class Pickup
 {

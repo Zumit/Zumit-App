@@ -32,6 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * Created by Qianwen Zhang on 9/12/15.
+ * The view activity where users are able to
+ * offer a ride as a driver
+ */
 public class OfferRide extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener
 {
     private final String TAG = "OfferRide";

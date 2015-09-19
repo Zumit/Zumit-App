@@ -198,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements
     {
         Intent offerRide = new Intent(this, OfferRide.class);
         startActivity(offerRide);
-
     }
 
     @Override

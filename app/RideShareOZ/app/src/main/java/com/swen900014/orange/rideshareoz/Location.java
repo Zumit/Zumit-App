@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by yuszy on 9/11/15.
+ * Created by Sangzhuoyang Yu & George on 9/11/15.
+ * Encapsulate location data.
  */
 public class Location implements Serializable
 {

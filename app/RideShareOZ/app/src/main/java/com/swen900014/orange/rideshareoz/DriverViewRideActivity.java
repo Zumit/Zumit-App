@@ -29,7 +29,6 @@ public class DriverViewRideActivity extends AppCompatActivity
 {
     private final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
 
-    private ListView requestList;
     private TextView passText;
 
     private Ride ride;
@@ -42,7 +41,7 @@ public class DriverViewRideActivity extends AppCompatActivity
 
         ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
 
-        //Testing accepting and rejecting
+        // Test accepting and rejecting requests
         /*ride.acceptJoin(new Lift(new User("user1", "email", 123, 0, User.UserType.PASSENGER),
                 new Location(0.0, 0.0, "carlton")));
 
@@ -51,7 +50,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         */
 
         RequestAdapter requestAdapter = new RequestAdapter(this, ride.getWaiting(), ride);
-        requestList = (ListView) findViewById(R.id.listView_request);
+        ListView requestList = (ListView) findViewById(R.id.listView_request);
         requestList.setAdapter(requestAdapter);
 
         TextView startLabel = (TextView) findViewById(R.id.startText);
@@ -70,6 +69,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         updateView();
     }
 
+    
     public void updateView()
     {
         String joinedPass = "";
@@ -130,7 +130,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         }){
             protected Map<String, String> getParams()
             {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
 
                 //add your parameters here
                 params.put("username", "sangzhouyang@student.unimelb.edu.au");

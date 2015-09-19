@@ -19,7 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by yuszy on 9/16/15.
+ * Created by Sangzhuoyang Yu on 9/16/15.
+ * Adapter attached to the list view displaying
+ * a list of join requests driver received, which can
+ * be accepted or rejected
  */
 public class RequestAdapter extends ArrayAdapter<Pickup>
 {

@@ -8,7 +8,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Created by Sangzhuoyang Yu on 9/12/15.
- * This class contains a static request queue
+ * It contains a static request queue
  * storing post and get requests. It is instantiated
  * once the program starts, and destroyed
  * at the end of the whole program lifetime.

@@ -35,7 +35,7 @@ import java.util.Map;
  * Created by Sangzhuoyang Yu on 9/12/15.
  * It initialize a new activity for the ride
  * from the normal users' view. Users are able
- * to send join request and leave request of the ride,
+ * to send join request and leave request of the ride
  * to the server.
  */
 public class PassViewRideActivity extends FragmentActivity

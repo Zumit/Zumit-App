@@ -3,7 +3,10 @@ package com.swen900014.orange.rideshareoz;
 import java.io.Serializable;
 
 /**
- * Created by yuszy on 9/11/15.
+ * Created by Sangzhuoyang Yu on 9/11/15.
+ * Encapsulate user data, user can be either a
+ * driver or passenger depending on whether the
+ * ride is offed by them
  */
 public class User implements Serializable
 {

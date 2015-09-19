@@ -10,7 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by uidu9665 on 15/09/2015.
+ * Created by George on 15/09/2015.
+ * Adapter attached to the list view in
+ * MyRides activity, displaying all rides
+ * info retrieved from the server
  */
 public class RidesAdaptor extends ArrayAdapter<Ride>
 {

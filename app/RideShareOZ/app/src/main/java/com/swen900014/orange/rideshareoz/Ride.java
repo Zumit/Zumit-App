@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
- * Created by yuszy on 9/6/15.
+ * Created by George & Sangzhuoyang Yu on 9/6/15.
+ * Encapsulate ride data, including all info needed
+ * for a ride, matching the ride data stored on server
  */
 public class Ride implements Serializable
 {
