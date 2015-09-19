@@ -144,6 +144,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
             places.release();
         }
     };
+
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
                 + connectionResult.getErrorCode());
@@ -154,15 +155,12 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 Toast.LENGTH_SHORT).show();
     }
 
-
-    public void sendRequest(final Activity activity, String address1, String address2)
+    public void sendRequest(final Activity activity, String startAddress, final String endAddress)
     {
         final String url1 = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + address1 + ",+Australia&" +
+                "address=" + startAddress + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
-        final String url2 = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + address2 + ",+Australia&" +
-                "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
+
         final StringRequest getLocRequest1 = new StringRequest(Request.Method.GET, url1,
                 new Response.Listener<String>()
                 {
@@ -187,91 +185,8 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                         {
                             e.printStackTrace();
                         }
-                        final StringRequest getLocRequest2 = new StringRequest(Request.Method.GET, url2,   // nested 1
-                                new Response.Listener<String>()
-                                {
-                                    public void onResponse(String response)
-                                    {
-                                        try
-                                        {
-                                            JSONObject jsonResponse = new JSONObject(response);
-                                            System.out.println(jsonResponse.toString());
 
-                                            latS = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                                    getJSONObject("geometry").getJSONObject("location").
-                                                    getString("lat");
-                                            lonS = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                                    getJSONObject("geometry").getJSONObject("location").
-                                                    getString("lng");
-
-                                            // Check response whether it's accurate, if not remind user
-
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            e.printStackTrace();
-                                        }
-
-                                        StringRequest OfferRequest = new StringRequest(Request.Method.POST,
-                                                Offer_Ride_URL, new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String s) {
-                                                System.out.println("response: " + s);
-                                            }
-                                        }, new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError volleyError) {
-                                                volleyError.printStackTrace();
-
-                                                System.out.println("Sending post failed!");
-                                            }
-                                        }) {
-                                            protected Map<String, String> getParams() {
-                                                Map<String, String> params = new HashMap<String, String>();
-
-                                                if (!Check1.isChecked()) {
-
-                                                    params.put("s_lat", "111");
-                                                    params.put("s_lon", "111");
-
-                                                } else {
-                                                    params.put("s_lat", latS);
-                                                    params.put("s_lon", lonS);
-                                                }
-
-
-                                                if (!Check2.isChecked()) {
-
-                                                    params.put("e_lat", "222");
-                                                    params.put("e_lon", "222");
-
-                                                } else {
-                                                    params.put("e_lat", latE);
-                                                    params.put("e_lon", lonE);
-                                                }
-                                                params.put("groupid", "55cab5dde81ab31606e4814c");
-                                                params.put("seat", "5");
-                                                params.put("arrival_time", "20150816");
-                                                params.put("eventid", "1");
-                                                params.put("username", "qianz7@student.unimelb.edu.au");
-                                                return params;
-                                            }
-                                        };
-
-                                        MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
-
-                                        // check response, whether it received
-                                    }
-                                },
-                                new Response.ErrorListener()
-                                {
-                                    public void onErrorResponse(VolleyError volleyError)
-                                    {
-                                        volleyError.printStackTrace();
-                                        System.out.println("it doesn't work");
-                                    }
-                                });
-                        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest2);
+                        getEndpointLoc(activity, endAddress);
                     }
                 },
                 new Response.ErrorListener()
@@ -284,16 +199,110 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 });
 
         MyRequest.getInstance(activity).addToRequestQueue(getLocRequest1);
-
     }
 
+    private void getEndpointLoc(final Activity activity, String endAddress)
+    {
+        final String url2 = "https://maps.googleapis.com/maps/api/geocode/json?" +
+                "address=" + endAddress + ",+Australia&" +
+                "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
+        final StringRequest getLocRequest2 = new StringRequest(Request.Method.GET, url2,   // nested 1
+                new Response.Listener<String>()
+                {
+                    public void onResponse(String response)
+                    {
+                    try
+                    {
+                        JSONObject jsonResponse = new JSONObject(response);
+                        System.out.println(jsonResponse.toString());
+
+                        latS = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                getJSONObject("geometry").getJSONObject("location").
+                                getString("lat");
+                        lonS = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                getJSONObject("geometry").getJSONObject("location").
+                                getString("lng");
+
+                        // Check response whether it's accurate, if not remind user
+
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    sendRideInfo(activity);
+
+                    // check response, whether it received
+                }
+            },
+            new Response.ErrorListener()
+            {
+                public void onErrorResponse(VolleyError volleyError)
+                {
+                    volleyError.printStackTrace();
+                    System.out.println("it doesn't work");
+                }
+            });
+
+        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest2);
+    }
+
+    private void sendRideInfo(Activity activity)
+    {
+        StringRequest OfferRequest = new StringRequest(Request.Method.POST,
+                Offer_Ride_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                System.out.println("response: " + s);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending post failed!");
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+
+                if (!Check1.isChecked()) {
+
+                    params.put("s_lat", "111");
+                    params.put("s_lon", "111");
+
+                } else {
+                    params.put("s_lat", latS);
+                    params.put("s_lon", lonS);
+                }
+
+
+                if (!Check2.isChecked()) {
+
+                    params.put("e_lat", "222");
+                    params.put("e_lon", "222");
+
+                } else {
+                    params.put("e_lat", latE);
+                    params.put("e_lon", lonE);
+                }
+                params.put("groupid", "55cab5dde81ab31606e4814c");
+                params.put("seat", "5");
+                params.put("arrival_time", "20150816");
+                params.put("eventid", "1");
+                params.put("username", "qianz7@student.unimelb.edu.au");
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
+    }
 
 
     public void offerRide(View view)
     {
         sendRequest(this, EditStart.getText().toString(), EditEnd.getText().toString());
     }
-
-
 }

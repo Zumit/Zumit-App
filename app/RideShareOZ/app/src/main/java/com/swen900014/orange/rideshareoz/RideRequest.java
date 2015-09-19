@@ -12,7 +12,10 @@ import java.util.Map;
 
 
 /**
- * Created by yuszy on 9/9/15.
+ * Created by Sangzhuoyang Yu on 9/9/15.
+ * Encapsulate Ride Join behavior, including retrieving
+ * location of the address where passenger is picked up,
+ * and sending join info to the server
  */
 public class RideRequest
 {
@@ -58,41 +61,7 @@ public class RideRequest
                             e.printStackTrace();
                         }
 
-                        StringRequest joinRequest = new StringRequest(Request.Method.POST,
-                                JOIN_REQUEST_URL, new Response.Listener<String>()
-                        {
-                            @Override
-                            public void onResponse(String s)
-                            {
-                                System.out.println("response: " + s);
-                            }
-                        }, new Response.ErrorListener()
-                        {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError)
-                            {
-                                volleyError.printStackTrace();
-
-                                System.out.println("Sending post failed!");
-                            }
-                        }){
-                            protected Map<String, String> getParams()
-                            {
-                                Map<String, String> params = new HashMap<>();
-
-                                System.out.println("Ride id: " + ride.getRideId());
-
-                                params.put("username", "sangzhouyang@student.unimelb.edu.au");
-                                //params.put("user_id", "55ebd381e685d1378386a759");
-                                params.put("ride_id", ride.getRideId());
-                                params.put("p_lat", lat);
-                                params.put("p_lon", lon);
-
-                                return params;
-                            }
-                        };
-
-                        MyRequest.getInstance(activity).addToRequestQueue(joinRequest);
+                        sendJoinRequest(activity);
 
                         // check response, whether it received
                     }
@@ -107,5 +76,43 @@ public class RideRequest
                 });
 
         MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
+    }
+
+    private void sendJoinRequest(Activity activity)
+    {
+        StringRequest joinRequest = new StringRequest(Request.Method.POST,
+                JOIN_REQUEST_URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending post failed!");
+            }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+
+                System.out.println("Ride id: " + ride.getRideId());
+
+                params.put("username", "sangzhouyang@student.unimelb.edu.au");
+                params.put("ride_id", ride.getRideId());
+                params.put("p_lat", lat);
+                params.put("p_lon", lon);
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(activity).addToRequestQueue(joinRequest);
     }
 }
