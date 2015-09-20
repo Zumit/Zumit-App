@@ -9,6 +9,7 @@ var RideSchema = new Schema({
   seats: Number,
   start_point: {type:[Number],index:'2d'}, // Lat, Lng
   end_point: {type:[Number],index:'2d'},
+  destination: String,
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: Schema.Types.ObjectId, ref: 'Group'},
   events:{type: Schema.Types.ObjectId, ref: 'Event'},
@@ -33,7 +34,7 @@ RideSchema.statics.createRide = function(req,callback){
   ride.seats = req.body.seat;
   var start_lon=req.body.s_lon;
   var start_lat=req.body.s_lat;
-
+  ride.destination=req.body.destination;
   ride.start_point=[Number(start_lon),Number(start_lat)];
   var end_lon=req.body.e_lon;
   var end_lat=req.body.e_lat;
