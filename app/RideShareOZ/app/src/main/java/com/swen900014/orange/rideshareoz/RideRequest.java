@@ -1,6 +1,8 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
+import android.content.Intent;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -78,7 +80,7 @@ public class RideRequest
         MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
     }
 
-    private void sendJoinRequest(Activity activity)
+    private void sendJoinRequest(final Activity activity)
     {
         StringRequest joinRequest = new StringRequest(Request.Method.POST,
                 JOIN_REQUEST_URL, new Response.Listener<String>()
@@ -87,6 +89,9 @@ public class RideRequest
             public void onResponse(String s)
             {
                 System.out.println("response: " + s);
+
+                Intent intent = new Intent(activity, MyRidesActivity.class);
+                activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {

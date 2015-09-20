@@ -1,5 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -111,6 +113,11 @@ public class DriverViewRideActivity extends AppCompatActivity
 
     public void cancelRide(View view)
     {
+        sendCancelRequest(this);
+    }
+
+    public void sendCancelRequest(final Activity activity)
+    {
         StringRequest cancelRequest = new StringRequest(Request.Method.POST,
                 CANCEL_RIDE_URL, new Response.Listener<String>()
         {
@@ -118,6 +125,10 @@ public class DriverViewRideActivity extends AppCompatActivity
             public void onResponse(String s)
             {
                 System.out.println("response: " + s);
+
+                // Get back to the my rides page
+                Intent intent = new Intent(activity, MyRidesActivity.class);
+                activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {
@@ -132,9 +143,10 @@ public class DriverViewRideActivity extends AppCompatActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                //add your parameters here
-                params.put("username", "sangzhouyang@student.unimelb.edu.au");
-                params.put("ride_id", "55e7ed577ea19c92ac2d0911");
+                // User name and ride id for the ride to be cancelled
+                String accountName = User.getCurrentUser().getUsername();
+                params.put("username", accountName);
+                params.put("ride_id", ride.getRideId());
 
                 return params;
             }

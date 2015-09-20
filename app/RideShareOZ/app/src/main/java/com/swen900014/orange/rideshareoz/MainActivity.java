@@ -38,12 +38,12 @@ public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
-    private final String TAG = "MAIN_Authentication";
-    private final String SERVER_CLIENT_ID =
+    private final static String TAG = "MAIN_Authentication";
+    private final static String SERVER_CLIENT_ID =
             "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     /* Request code used to invoke sign in user interactions. */
-    private static final int RC_SIGN_IN = 0;
+    private final static int RC_SIGN_IN = 0;
 
     /* Client used to interact with Google APIs. */
     private static GoogleApiClient mGoogleApiClient;
@@ -339,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
+
         try
         {
             return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
@@ -351,8 +352,6 @@ public class MainActivity extends AppCompatActivity implements
             Log.e(TAG, "Error retrieving ID token.", e);
             return null;
         }
-
-        //return "a";
     }
 
     /**
@@ -362,11 +361,12 @@ public class MainActivity extends AppCompatActivity implements
     {
         private final String TAG = "SendID";
 
-        /*public String getToken() {
+        public String getToken()
+        {
             return token;
-        }*/
+        }
 
-        //private String token = null;
+        private String token = null;
 
         @Override
         protected String doInBackground(Void... params)
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements
             if (result != null)
             {
                 // Successfully retrieved ID Token
-                //token = result;
+                token = result;
 
                 new SendUserID().execute(result);
 
