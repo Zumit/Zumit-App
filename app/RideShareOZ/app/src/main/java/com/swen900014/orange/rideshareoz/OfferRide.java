@@ -276,26 +276,26 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 {
                     params.put("s_lat", "111");
                     params.put("s_lon", "111");
-                    params.put("Destination", "des");
+                    params.put("destination", "des");
                 }
                 else
                 {
                     params.put("s_lat", latS);
                     params.put("s_lon", lonS);
-                    params.put("Destination", EditStart.getText().toString());
+                    params.put("destination", EditStart.getText().toString());
                 }
 
                 if (Check2.isChecked())
                 {
                     params.put("e_lat", "222");
                     params.put("e_lon", "222");
-                    params.put("Destination", "des");
+                    params.put("destination", "des");
                 }
                 else
                 {
                     params.put("e_lat", latE);
                     params.put("e_lon", lonE);
-                    params.put("Destination", EditEnd.getText().toString());
+                    params.put("destination", EditEnd.getText().toString());
                 }
 
                 params.put("groupid", "55cab5dde81ab31606e4814c");
