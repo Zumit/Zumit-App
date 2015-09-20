@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,19 +42,29 @@ public class DriverViewRideActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_view_ride);
 
-        ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
+        Intent received = getIntent();
+
+        ride = (Ride) received.getSerializableExtra("SelectedRide");
 
         // Test accepting and rejecting requests
-        /*ride.acceptJoin(new Lift(new User("user1", "email", 123, 0, User.UserType.PASSENGER),
+        ride.acceptJoin(new Pickup(new User("user1", "email", 123, 0, UserType.PASSENGER),
                 new Location(0.0, 0.0, "carlton")));
 
-        ride.addWaiting(new Lift(new User("user2", "email", 123, 0, User.UserType.PASSENGER),
+        ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
                 new Location(0.0, 0.0, "carlton")));
-        */
 
         RequestAdapter requestAdapter = new RequestAdapter(this, ride.getWaiting(), ride);
         ListView requestList = (ListView) findViewById(R.id.listView_request);
         requestList.setAdapter(requestAdapter);
+
+        if (received.hasExtra("ToRemove"))
+        {
+            Pickup userInfo = (Pickup) received.getSerializableExtra("ToRemove");
+            requestAdapter.remove(userInfo);
+        }
+
+
+
 
         TextView startLabel = (TextView) findViewById(R.id.startText);
         TextView endLabel = (TextView) findViewById(R.id.endText);

@@ -2,6 +2,7 @@ package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +26,7 @@ import java.util.Map;
  * a list of join requests driver received, which can
  * be accepted or rejected
  */
-public class RequestAdapter extends ArrayAdapter<Pickup>
+public class RequestAdapter extends ArrayAdapter<Pickup> implements Serializable
 {
     private final static String ACCEPT_REQUEST_URL = "http://144.6.226.237/ride/accept";
     private final static String REJECT_REQUEST_URL = "http://144.6.226.237/ride/reject";
@@ -49,9 +51,22 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
         final View row = inflater.inflate(R.layout.list_user_request_row, parent, false);
         final Pickup lift = data.get(position);
         final User user = lift.getUser();
+        //final RequestAdapter adapter = this;
 
-        TextView label = (TextView) row.findViewById(R.id.userInfo);
-        Button acceptButton = (Button) row.findViewById(R.id.acceptButton);
+        row.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(activity, UserInfoActivity.class);
+                intent.putExtra("UserInfo", lift);
+                //intent.putExtra("RequestAdapter", adapter);
+                intent.putExtra("Ride", ride);
+
+                activity.startActivity(intent);
+            }
+        });
+        /*Button acceptButton = (Button) row.findViewById(R.id.acceptButton);
         Button rejectButton = (Button) row.findViewById(R.id.rejectButton);
 
         if (acceptButton != null)
@@ -72,8 +87,8 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
                     sendRejectRequest(user.getUsername(), ride.getRideId(), lift);
                 }
             });
-        }
-
+        }*/
+        TextView label = (TextView) row.findViewById(R.id.userInfo);
         label.setText("name: " + user.getUsername());
 
         return row;

@@ -36,4 +36,11 @@
     <string name="acceptButton">Accept</string>
     <string name="rejectButton">Reject</string>
     <string name="driverLabel">Driver</string>
+    <string name="title_activity_user_info">UserInfoActivity</string>
+    <string name="nameText">Name:</string>
+    <string name="phoneText">Phone no. :</string>
+    <string name="emailText">Email:</string>
+    <string name="creditText">Credit:</string>
+    <string name="acceptText">Accept</string>
+    <string name="rejectText">Reject</string>
 </resources>

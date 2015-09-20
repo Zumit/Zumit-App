@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements
 {
     private final static String TAG = "MAIN_Authentication";
     private final static String SERVER_CLIENT_ID =
-            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
+            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com" +
+                    ":api_scope:https://www.googleapis.com/auth/plus.login";
 
     /* Request code used to invoke sign in user interactions. */
     private final static int RC_SIGN_IN = 0;
@@ -338,8 +339,8 @@ public class MainActivity extends AppCompatActivity implements
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
-
+        String scopes = "oauth2:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
+//audience:
         try
         {
             return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
@@ -403,7 +404,6 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected String doInBackground(String... params)
         {
-
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block
             HttpURLConnection urlConnection = null;
