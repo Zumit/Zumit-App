@@ -227,7 +227,6 @@ public class MyRidesFragment extends Fragment
         {
             if (result != null)
             {
-
                 try
                 {
                     ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(result));

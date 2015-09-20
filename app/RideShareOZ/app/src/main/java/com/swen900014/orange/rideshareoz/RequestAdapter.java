@@ -61,10 +61,7 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
                 @Override
                 public void onClick(View v)
                 {
-                    sendAcceptRequest(user.getUsername(), ride.getRideId());
-                    ride.acceptJoin(lift);
-                    remove(lift);
-                    ((DriverViewRideActivity) activity).updateView();
+                    sendAcceptRequest(user.getUsername(), ride.getRideId(), lift);
                 }
             });
             rejectButton.setOnClickListener(new View.OnClickListener()
@@ -72,7 +69,7 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
                 @Override
                 public void onClick(View v)
                 {
-                    sendRejectRequest(user.getUsername(), "" + ride.getRideId());
+                    sendRejectRequest(user.getUsername(), ride.getRideId(), lift);
                 }
             });
         }
@@ -82,7 +79,7 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
         return row;
     }
 
-    public void sendAcceptRequest(final String username, final String rideId)
+    public void sendAcceptRequest(final String username, final String rideId, final Pickup lift)
     {
         StringRequest acceptRequest = new StringRequest(Request.Method.POST,
                 ACCEPT_REQUEST_URL, new Response.Listener<String>()
@@ -91,6 +88,10 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
             public void onResponse(String s)
             {
                 System.out.println("response: " + s);
+
+                ride.acceptJoin(lift);
+                remove(lift);
+                ((DriverViewRideActivity) activity).updateView();
             }
         }, new Response.ErrorListener()
         {
@@ -99,7 +100,7 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
             {
                 volleyError.printStackTrace();
 
-                System.out.println("Sending post failed!");
+                System.out.println("Sending accept failed!");
             }
         }){
             protected Map<String, String> getParams()
@@ -116,35 +117,40 @@ public class RequestAdapter extends ArrayAdapter<Pickup>
         MyRequest.getInstance(activity).addToRequestQueue(acceptRequest);
     }
 
-    public void sendRejectRequest(final String username, final String rideId)
+    public void sendRejectRequest(final String username, final String rideId, final Pickup lift)
     {
-        StringRequest getLocRequest = new StringRequest(Request.Method.GET, REJECT_REQUEST_URL,
-                new Response.Listener<String>()
-                {
-                    public void onResponse(String response)
-                    {
-                        try
-                        {
-                            // Check response whether it's accurate, if not remind user
+        StringRequest rejectRequest = new StringRequest(Request.Method.POST,
+                REJECT_REQUEST_URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
 
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                remove(lift);
+                ((DriverViewRideActivity) activity).updateView();
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
 
-                        // check response, whether it received
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    public void onErrorResponse(VolleyError volleyError)
-                    {
-                        volleyError.printStackTrace();
-                        System.out.println("it doesn't work");
-                    }
-                });
+                System.out.println("Sending reject failed!");
+            }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
 
-        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
+                params.put("username", username);
+                params.put("ride_id", rideId);
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(activity).addToRequestQueue(rejectRequest);
     }
 }

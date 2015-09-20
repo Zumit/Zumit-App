@@ -19,13 +19,6 @@ public class User implements Serializable
 
     private static User currentUser;
 
-    private static String currentUserEmail;
-
-    public static enum UserType
-    {
-        PASSENGER, DRIVER
-    }
-
     public User(String name, String email, int phone, int credit, UserType userType)
     {
         this.name = name;
@@ -59,6 +52,11 @@ public class User implements Serializable
     public String getEmail()
     {
         return email;
+    }
+
+    public UserType getUserType()
+    {
+        return userType;
     }
 
     public int getPhone()

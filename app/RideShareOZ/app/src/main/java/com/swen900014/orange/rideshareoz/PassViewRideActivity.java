@@ -1,5 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,7 +51,7 @@ public class PassViewRideActivity extends FragmentActivity
 
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutoCompleteAdapter adapter;
-    private RideRequest rideRequest;
+    private RideRequest joinRequest;
 
     private TextView passText;
     private TextView pickUpLocText;
@@ -69,7 +71,7 @@ public class PassViewRideActivity extends FragmentActivity
         //mGoogleApiClient.connect();
 
         ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
-        rideRequest = new RideRequest(ride);
+        joinRequest = new RideRequest(ride);
 
         TextView startLabel = (TextView) findViewById(R.id.startText);
         TextView endLabel = (TextView) findViewById(R.id.endText);
@@ -216,27 +218,17 @@ public class PassViewRideActivity extends FragmentActivity
     {
         if (ride.getRideState() == Ride.RideState.VIEWING)
         {
-            joinRide();
+            joinRequest.sendRequest(this, pickUpLocText.getText().toString());
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
         {
-            leaveRide();
+            leaveRide(this);
         }
 
         updateView();
     }
 
-    // Button events of sending a request for joining a ride
-    public void joinRide()
-    {
-        rideRequest.sendRequest(this, pickUpLocText.getText().toString());
-        //1600+Amphitheatre+Parkway
-        //"Carlton"
-
-        // May receive user_id from server.
-    }
-
-    public void leaveRide()
+    public void leaveRide(final Activity activity)
     {
         StringRequest leaveRequest = new StringRequest(Request.Method.POST,
                 LEAVE_RIDE_URL, new Response.Listener<String>()
@@ -245,6 +237,10 @@ public class PassViewRideActivity extends FragmentActivity
             public void onResponse(String s)
             {
                 System.out.println("response: " + s);
+
+                // Get back to the my rides page
+                Intent intent = new Intent(activity, MyRidesActivity.class);
+                activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {
@@ -259,9 +255,10 @@ public class PassViewRideActivity extends FragmentActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                //add your parameters here
-                params.put("username", "sangzhouyang@student.unimelb.edu.au");
-                params.put("ride_id", "55e7ed577ea19c92ac2d0911");
+                // User name and ride id for the ride to join
+                String accountName = User.getCurrentUser().getUsername();
+                params.put("username", accountName);
+                params.put("ride_id", ride.getRideId());
 
                 return params;
             }

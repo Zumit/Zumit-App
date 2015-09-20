@@ -43,9 +43,9 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
     private final static String Offer_Ride_URL = "http://144.6.226.237/ride/create?";
     private Location loc;
     private StringBuffer suffix = new StringBuffer();
-    private EditText EditStart, EditEnd, EditDate, EditTime;
+    private EditText EditStart, EditEnd, EditStartTime, EditEndTime;
     private EditText SpinSN;
-    private  CheckBox Check1, Check2;
+    private CheckBox Check1, Check2;
     //private  Button btnSubmit,btnReset;
     private String latS = "";
     private String lonS = "";
@@ -60,7 +60,8 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
             new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offerride);
 
@@ -70,15 +71,15 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 .build();
 
 
-       // btnSubmit = (Button) findViewById(R.id.button1);
-       // btnReset = (Button) findViewById(R.id.button2);
+        // btnSubmit = (Button) findViewById(R.id.button1);
+        // btnReset = (Button) findViewById(R.id.button2);
         EditStart = (EditText) findViewById(R.id.Start);
         EditEnd = (EditText) findViewById(R.id.End);
-        EditDate = (EditText) findViewById(R.id.Date);
-        EditTime = (EditText) findViewById(R.id.StartTime);
+        EditStartTime = (EditText) findViewById(R.id.StartTime);
+        EditEndTime = (EditText) findViewById(R.id.Date);
         SpinSN = (EditText) findViewById(R.id.SeatNo);
         Check1 = (CheckBox) findViewById(R.id.current1);
-        Check2 = (CheckBox) findViewById(R.id.current2 );
+        Check2 = (CheckBox) findViewById(R.id.current2);
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -93,27 +94,24 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
         EditEnd.setAdapter(adapter);
 
 
-
-
-
         //btnReset.setOnClickListener(new resetOnClickListener());
         getIntent();
     }
 
 
-
     // void resetOnClickListener(new View.OnClickListener()
-   // {
+    // {
 
 
-   // });
+    // });
 
 
     private AdapterView.OnItemClickListener mAutoCompleteClickListener
             = new AdapterView.OnItemClickListener()
     {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+        {
             final PlaceAutoCompleteAdapter.PlaceAutoComplete place = adapter.getItem(position);
             final String placeId = place.placeId;
 
@@ -185,8 +183,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
 
                             // Check response whether it's accurate, if not remind user
 
-                        }
-                        catch (Exception e)
+                        } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
@@ -217,39 +214,38 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 {
                     public void onResponse(String response)
                     {
-                    try
-                    {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        System.out.println(jsonResponse.toString());
+                        try
+                        {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            System.out.println(jsonResponse.toString());
 
-                        latE = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                getJSONObject("geometry").getJSONObject("location").
-                                getString("lat");
-                        lonE = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                getJSONObject("geometry").getJSONObject("location").
-                                getString("lng");
+                            latE = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                    getJSONObject("geometry").getJSONObject("location").
+                                    getString("lat");
+                            lonE = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                    getJSONObject("geometry").getJSONObject("location").
+                                    getString("lng");
 
-                        // Check response whether it's accurate, if not remind user
+                            // Check response whether it's accurate, if not remind user
 
+                        } catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        sendRideInfo(activity);
+
+                        // check response, whether it received
                     }
-                    catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    sendRideInfo(activity);
-
-                    // check response, whether it received
-                }
-            },
-            new Response.ErrorListener()
-            {
-                public void onErrorResponse(VolleyError volleyError)
+                },
+                new Response.ErrorListener()
                 {
-                    volleyError.printStackTrace();
-                    System.out.println("it doesn't work");
-                }
-            });
+                    public void onErrorResponse(VolleyError volleyError)
+                    {
+                        volleyError.printStackTrace();
+                        System.out.println("it doesn't work");
+                    }
+                });
 
         MyRequest.getInstance(activity).addToRequestQueue(getEndLocRequest);
     }
@@ -257,47 +253,58 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
     private void sendRideInfo(Activity activity)
     {
         StringRequest OfferRequest = new StringRequest(Request.Method.POST,
-                Offer_Ride_URL, new Response.Listener<String>() {
+                Offer_Ride_URL, new Response.Listener<String>()
+        {
             @Override
-            public void onResponse(String s) {
+            public void onResponse(String s)
+            {
                 System.out.println("response: " + s);
             }
-        }, new Response.ErrorListener() {
+        }, new Response.ErrorListener()
+        {
             @Override
-            public void onErrorResponse(VolleyError volleyError) {
+            public void onErrorResponse(VolleyError volleyError)
+            {
                 volleyError.printStackTrace();
 
                 System.out.println("Sending post failed!");
             }
-        }) {
-            protected Map<String, String> getParams() {
+        })
+        {
+            protected Map<String, String> getParams()
+            {
                 Map<String, String> params = new HashMap<>();
 
-                if (!Check1.isChecked()) {
-
+                if (Check1.isChecked())
+                {
                     params.put("s_lat", "111");
                     params.put("s_lon", "111");
-
-                } else {
+                }
+                else
+                {
                     params.put("s_lat", latS);
                     params.put("s_lon", lonS);
                 }
 
-
-                if (!Check2.isChecked()) {
-
+                if (Check2.isChecked())
+                {
                     params.put("e_lat", "222");
                     params.put("e_lon", "222");
 
-                } else {
+                }
+                else
+                {
                     params.put("e_lat", latE);
                     params.put("e_lon", lonE);
                 }
+
                 params.put("groupid", "55cab5dde81ab31606e4814c");
-                params.put("seat", "5");
-                params.put("arrival_time", "20150816");
+                params.put("seat", SpinSN.getText().toString());
+                params.put("arrival_time", EditEndTime.getText().toString());
+                params.put("start_time", EditStartTime.getText().toString());
                 params.put("eventid", "1");
-                params.put("username", "qianz7@student.unimelb.edu.au");
+                params.put("username", User.getCurrentUser().getUsername());
+
                 return params;
             }
         };
