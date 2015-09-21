@@ -124,4 +124,3 @@ public class Location implements Serializable
         this.suburb = suburb;
     }
 }
-

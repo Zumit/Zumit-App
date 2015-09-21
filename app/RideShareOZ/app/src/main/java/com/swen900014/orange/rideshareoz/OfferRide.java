@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -41,8 +40,6 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
 {
     private final String TAG = "OfferRide";
     private final static String Offer_Ride_URL = "http://144.6.226.237/ride/create?";
-    private Location loc;
-    private StringBuffer suffix = new StringBuffer();
     private EditText EditStart, EditEnd, EditStartTime, EditEndTime;
     private EditText SpinSN;
     private CheckBox Check1, Check2;
@@ -279,23 +276,26 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 {
                     params.put("s_lat", "111");
                     params.put("s_lon", "111");
+                    params.put("destination", "des");
                 }
                 else
                 {
                     params.put("s_lat", latS);
                     params.put("s_lon", lonS);
+                    params.put("destination", EditStart.getText().toString());
                 }
 
                 if (Check2.isChecked())
                 {
                     params.put("e_lat", "222");
                     params.put("e_lon", "222");
-
+                    params.put("destination", "des");
                 }
                 else
                 {
                     params.put("e_lat", latE);
                     params.put("e_lon", lonE);
+                    params.put("destination", EditEnd.getText().toString());
                 }
 
                 params.put("groupid", "55cab5dde81ab31606e4814c");
@@ -312,9 +312,26 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
         MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
     }
 
-
     public void offerRide(View view)
     {
-        sendRequest(this, EditStart.getText().toString(), EditEnd.getText().toString());
+        if (inputValid())
+        {
+            sendRequest(this, EditStart.getText().toString(), EditEnd.getText().toString());
+        }
+        else
+        {
+            System.out.println("Invalid input in offerRide");
+        }
+    }
+
+    // Check whether all information needed for offering a ride
+    // has been typed in by user
+    public boolean inputValid()
+    {
+        return !(SpinSN.getText().toString().isEmpty() ||
+                EditEndTime.getText().toString().isEmpty() ||
+                EditStartTime.getText().toString().isEmpty() ||
+                EditStart.getText().toString().isEmpty() ||
+                EditEnd.getText().toString().isEmpty());
     }
 }

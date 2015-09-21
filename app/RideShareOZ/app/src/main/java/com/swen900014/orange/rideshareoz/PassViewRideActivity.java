@@ -218,7 +218,10 @@ public class PassViewRideActivity extends FragmentActivity
     {
         if (ride.getRideState() == Ride.RideState.VIEWING)
         {
-            joinRequest.sendRequest(this, pickUpLocText.getText().toString());
+            if (inputValid())
+            {
+                joinRequest.sendRequest(this, pickUpLocText.getText().toString());
+            }
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
         {
@@ -265,5 +268,11 @@ public class PassViewRideActivity extends FragmentActivity
         };
 
         MyRequest.getInstance(this).addToRequestQueue(leaveRequest);
+    }
+
+    // Check whether user has typed in the pickup location
+    public boolean inputValid()
+    {
+        return !pickUpLocText.getText().toString().isEmpty();
     }
 }

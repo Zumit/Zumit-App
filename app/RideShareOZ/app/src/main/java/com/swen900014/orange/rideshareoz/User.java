@@ -10,7 +10,6 @@ import java.io.Serializable;
  */
 public class User implements Serializable
 {
-    private String id;
     private String name;
     private String email;
     private int phone;
@@ -26,12 +25,6 @@ public class User implements Serializable
         this.phone = phone;
         this.credit = credit;
         this.userType = userType;
-    }
-
-    public User(String id, String username)
-    {
-        this.id = id;
-        this.name = username;
     }
 
     public User(String username)
