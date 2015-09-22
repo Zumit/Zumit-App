@@ -18,15 +18,18 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.swen900014.orange.rideshareoz.Resources.*;
+
+
+/**
+ * Created by Sangzhuoyang Yu on 9/12/15.
+ * The view activity where user information are
+ * displayed
+ */
 public class UserInfoActivity extends AppCompatActivity
 {
-    private final static String ACCEPT_REQUEST_URL = "http://144.6.226.237/ride/accept";
-    private final static String REJECT_REQUEST_URL = "http://144.6.226.237/ride/reject";
-
     private Ride ride;
-    private Ride.RideState rideState;
     private Pickup userInfo;
-    //private RequestAdapter adapter;
     private Activity thisActivity;
 
     @Override
@@ -36,10 +39,9 @@ public class UserInfoActivity extends AppCompatActivity
         setContentView(R.layout.activity_user_info);
 
         userInfo = (Pickup) getIntent().getSerializableExtra("UserInfo");
-        //adapter = (RequestAdapter) getIntent().getSerializableExtra("RequestAdapter");
         ride = (Ride) getIntent().getSerializableExtra("Ride");
-        rideState = ride.getRideState();
         thisActivity = this;
+        Ride.RideState rideState = ride.getRideState();
 
         TextView nameText = (TextView) findViewById(R.id.ShowName);
         TextView phoneText = (TextView) findViewById(R.id.ShowPhone);
@@ -96,11 +98,9 @@ public class UserInfoActivity extends AppCompatActivity
                 System.out.println("response: " + s);
 
                 ride.acceptJoin(lift);
-                //adapter.remove(lift);
 
                 Intent intent;
                 intent = new Intent(thisActivity, DriverViewRideActivity.class);
-                //intent.putExtra("ToRemove", userInfo);
                 intent.putExtra("SelectedRide", ride);
 
                 activity.startActivity(intent);

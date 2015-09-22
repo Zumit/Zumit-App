@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,12 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,20 +24,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import static com.swen900014.orange.rideshareoz.Resources.*;
+
+
 /**
- * Created by uidu9665 on 6/09/2015.
+ * Created by George on 6/09/2015.
  */
 
 public class MyRidesFragment extends Fragment
 {
-
     private RidesAdaptor mRidesAdapter;
-
     private Bundle savedInstanceState;
 
     public MyRidesFragment()
@@ -73,7 +69,7 @@ public class MyRidesFragment extends Fragment
         if (id == R.id.action_refresh)
         {
             FetchRidesTask ridesTask = new FetchRidesTask();
-            ridesTask.execute("http://144.6.226.237/user/getall");
+            ridesTask.execute(GETALL_USER_URL);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -98,7 +94,7 @@ public class MyRidesFragment extends Fragment
                 new Ride(Ride.RideState.OFFERING)
         };
         //List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
-        List<Ride> currentRides = new ArrayList<Ride>();
+        List<Ride> currentRides = new ArrayList<>();
 
         // Now that we have some dummy  data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy data) and
@@ -107,7 +103,7 @@ public class MyRidesFragment extends Fragment
 
         /* ignore the test data and load the actual data from server */
         FetchRidesTask ridesTask = new FetchRidesTask();
-        ridesTask.execute("http://144.6.226.237/ride/getall");
+        ridesTask.execute(GETALL_RIDE_URL);
 
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
@@ -160,10 +156,7 @@ public class MyRidesFragment extends Fragment
             try
             {
                 // Construct the URL for the Rides query
-                final String RIDES_BASE_URL = "http://144.6.226.237/ride/getall";//R.string.all_rides_url;
-
-
-                URL url = new URL(RIDES_BASE_URL);
+                URL url = new URL(GETALL_RIDE_URL);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();

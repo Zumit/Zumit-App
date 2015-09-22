@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import static com.swen900014.orange.rideshareoz.Resources.*;
 
 
 /**
@@ -41,7 +42,6 @@ import java.util.Map;
 public class OfferRide extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener
 {
     private final String TAG = "OfferRide";
-    private static String Offer_Ride_URL = "http://144.6.226.237/ride/create?";
     private EditText EditStart, EditEnd, EditStartTime, EditEndTime;
     private EditText SpinSN;
     private TextView textSN;
@@ -89,7 +89,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
             if(type.equals("find")){
                 SpinSN.setVisibility(View.INVISIBLE);
                 textSN.setVisibility(View.INVISIBLE);
-                Offer_Ride_URL = "http://144.6.226.237/ride/search?";
+                //OFFER_RIDE_URL = "http://144.6.226.237/ride/search?";
             }
         }
 
@@ -265,7 +265,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
     private void sendRideInfo(Activity activity)
     {
         StringRequest OfferRequest = new StringRequest(Request.Method.POST,
-                Offer_Ride_URL, new Response.Listener<String>()
+                OFFER_RIDE_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)

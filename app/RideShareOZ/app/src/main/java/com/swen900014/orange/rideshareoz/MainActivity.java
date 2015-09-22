@@ -32,6 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.swen900014.orange.rideshareoz.Resources.*;
+
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -39,9 +41,9 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener
 {
     private final static String TAG = "MAIN_Authentication";
-    private final static String SERVER_CLIENT_ID =
-            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com" +
-                    ":api_scope:https://www.googleapis.com/auth/plus.login";
+    //private final static String SERVER_CLIENT_ID =
+    //        "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com" +
+    //                ":api_scope:https://www.googleapis.com/auth/plus.login";
 
     /* Request code used to invoke sign in user interactions. */
     private final static int RC_SIGN_IN = 0;
@@ -526,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements
             URL url = null;
             try
             {
-                url = new URL("http://144.6.226.237/user/login");
+                url = new URL(LOGIN_URL);
             } catch (MalformedURLException e)
             {
                 e.printStackTrace();

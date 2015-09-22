@@ -1,17 +1,14 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /**
  * Created by Sangzhuoyang Yu & George on 9/11/15.

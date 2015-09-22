@@ -15,10 +15,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.swen900014.orange.rideshareoz.Resources.*;
 
 
 /**
@@ -30,10 +31,7 @@ import java.util.Map;
  */
 public class DriverViewRideActivity extends AppCompatActivity
 {
-    private final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
-
     private TextView passText;
-
     private Ride ride;
 
     @Override
@@ -47,11 +45,11 @@ public class DriverViewRideActivity extends AppCompatActivity
         ride = (Ride) received.getSerializableExtra("SelectedRide");
 
         // Test accepting and rejecting requests
-        ride.acceptJoin(new Pickup(new User("user1", "email", 123, 0, UserType.PASSENGER),
-                new Location(0.0, 0.0, "carlton")));
+        //ride.acceptJoin(new Pickup(new User("user1", "email", 123, 0, UserType.PASSENGER),
+        //        new Location(0.0, 0.0, "carlton")));
 
-        ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
-                new Location(0.0, 0.0, "carlton")));
+        //ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
+        //        new Location(0.0, 0.0, "carlton")));
 
         RequestAdapter requestAdapter = new RequestAdapter(this, ride.getWaiting(), ride);
         ListView requestList = (ListView) findViewById(R.id.listView_request);
@@ -62,9 +60,6 @@ public class DriverViewRideActivity extends AppCompatActivity
             Pickup userInfo = (Pickup) received.getSerializableExtra("ToRemove");
             requestAdapter.remove(userInfo);
         }
-
-
-
 
         TextView startLabel = (TextView) findViewById(R.id.startText);
         TextView endLabel = (TextView) findViewById(R.id.endText);

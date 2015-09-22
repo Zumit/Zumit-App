@@ -82,7 +82,6 @@ public class Ride implements Serializable
             limit = jsonRide.getInt("seats");
             arriving_time = jsonRide.getString("arrival_time");
 
-
             /* get the list of requests */
 
             tempArray = jsonRide.getJSONArray("requests");

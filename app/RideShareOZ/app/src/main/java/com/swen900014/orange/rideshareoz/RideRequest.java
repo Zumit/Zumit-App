@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.swen900014.orange.rideshareoz.Resources.*;
+
 
 /**
  * Created by Sangzhuoyang Yu on 9/9/15.
@@ -21,7 +23,6 @@ import java.util.Map;
  */
 public class RideRequest
 {
-    private final static String JOIN_REQUEST_URL = "http://144.6.226.237/ride/request";
     private Ride ride;
 
     private String lat = "";
@@ -109,7 +110,7 @@ public class RideRequest
 
                 System.out.println("Ride id: " + ride.getRideId());
 
-                params.put("username", "sangzhouyang@student.unimelb.edu.au");
+                params.put("username", User.getCurrentUser().getUsername());
                 params.put("ride_id", ride.getRideId());
                 params.put("p_lat", lat);
                 params.put("p_lon", lon);
