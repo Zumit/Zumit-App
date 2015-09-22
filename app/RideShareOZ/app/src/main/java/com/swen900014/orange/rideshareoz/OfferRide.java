@@ -1,6 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -39,9 +41,10 @@ import java.util.Map;
 public class OfferRide extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener
 {
     private final String TAG = "OfferRide";
-    private final static String Offer_Ride_URL = "http://144.6.226.237/ride/create?";
+    private static String Offer_Ride_URL = "http://144.6.226.237/ride/create?";
     private EditText EditStart, EditEnd, EditStartTime, EditEndTime;
     private EditText SpinSN;
+    private TextView textSN;
     private CheckBox Check1, Check2;
     //private  Button btnSubmit,btnReset;
     private String latS = "";
@@ -75,8 +78,20 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
         EditStartTime = (EditText) findViewById(R.id.StartTime);
         EditEndTime = (EditText) findViewById(R.id.Date);
         SpinSN = (EditText) findViewById(R.id.SeatNo);
+        textSN = (TextView) findViewById(R.id.txtSeatNo);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
+
+        /* check if it offer or find  */
+        Intent intent = this.getIntent();
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
+            String type = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if(type.equals("find")){
+                SpinSN.setVisibility(View.INVISIBLE);
+                textSN.setVisibility(View.INVISIBLE);
+                Offer_Ride_URL = "http://144.6.226.237/ride/search?";
+            }
+        }
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,

@@ -73,7 +73,7 @@ public class MyRidesFragment extends Fragment
         if (id == R.id.action_refresh)
         {
             FetchRidesTask ridesTask = new FetchRidesTask();
-            ridesTask.execute("http://144.6.226.237/ride/getall");
+            ridesTask.execute("http://144.6.226.237/user/getall");
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -23,7 +23,8 @@
     <string name="cancelButton">Cancel</string>
     <string name="joinButton">Join</string>
     <string name="titleLabel">Where do you want to be picked up:</string>
-    <string name="_offerRide">OfferRide</string>
+    <string name="_offerRide">Offer</string>
+    <string name="_findRide">Find</string>
     <string name="_Start">Start Point</string>
     <string name="_Current">Current</string>
     <string name="_End">Destination</string>

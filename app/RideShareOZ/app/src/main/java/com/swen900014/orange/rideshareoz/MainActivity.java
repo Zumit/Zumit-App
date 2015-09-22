@@ -110,7 +110,15 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_OfferRide)
         {
             Intent offerRide = new Intent(this, OfferRide.class);
+            offerRide.putExtra(Intent.EXTRA_TEXT,"offer");
             startActivity(offerRide);
+            return true;
+        }
+        if (id == R.id.action_FindRide)
+        {
+            Intent findRideIntent = new Intent(this, OfferRide.class);
+            findRideIntent.putExtra(Intent.EXTRA_TEXT,"find");
+            startActivity(findRideIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);

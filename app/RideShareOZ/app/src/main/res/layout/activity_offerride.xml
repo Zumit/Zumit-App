@@ -192,6 +192,7 @@
     android:layout_marginLeft="10dp"
 
     android:text="@string/_SeatNo"
+    android:id="@+id/txtSeatNo"/>
 
      />
 

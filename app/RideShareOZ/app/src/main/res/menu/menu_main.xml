@@ -7,4 +7,6 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_OfferRide" android:title="@string/_offerRide"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_FindRide" android:title="@string/_findRide"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
