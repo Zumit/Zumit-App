@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,14 +40,16 @@ import static com.swen900014.orange.rideshareoz.Resources.*;
  * The view activity where users are able to
  * offer a ride as a driver
  */
-public class OfferRide extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener
+public class OfferRide extends FragmentActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener
 {
     private final String TAG = "OfferRide";
     private EditText EditStart, EditEnd, EditStartTime, EditEndTime;
     private EditText SpinSN;
     private TextView textSN;
     private CheckBox Check1, Check2;
-    //private  Button btnSubmit,btnReset;
+    private  Button btnSubmit,btnReset;
     private String latS = "";
     private String lonS = "";
     private String latE = "";
@@ -72,7 +75,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 .build();
 
 
-        // btnSubmit = (Button) findViewById(R.id.button1);
+        btnSubmit = (Button) findViewById(R.id.button1);
         // btnReset = (Button) findViewById(R.id.button2);
         EditStart = (EditText) findViewById(R.id.Start);
         EditEnd = (EditText) findViewById(R.id.End);
@@ -85,8 +88,8 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
 
         /* check if it offer or find  */
         Intent intent = this.getIntent();
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
-            String type = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (intent != null && intent.hasExtra("type")){
+            String type = intent.getStringExtra("type");
             if(type.equals("find")){
                 SpinSN.setVisibility(View.INVISIBLE);
                 textSN.setVisibility(View.INVISIBLE);
@@ -109,9 +112,27 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
 
 
         //btnReset.setOnClickListener(new resetOnClickListener());
+        btnSubmit.setOnClickListener(this);
         getIntent();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.button1) {
+            if(isFind){
+                Intent searchResultsIntent = new Intent(this, MyRidesActivity.class);
+                searchResultsIntent.putExtra("type","find");
+                //TODO: Fill extras with the search parameters
+                searchResultsIntent.putExtra("startLon","xxx");
+                searchResultsIntent.putExtra("startLat","xxx");
+                searchResultsIntent.putExtra("endLon","xxx");
+                searchResultsIntent.putExtra("endLat","xxx");
+                searchResultsIntent.putExtra("date","xxx");
+                searchResultsIntent.putExtra("arrivalTime","xxx");
+                startActivity(searchResultsIntent);
+            }
+        }
+    }
 
     // void resetOnClickListener(new View.OnClickListener()
     // {

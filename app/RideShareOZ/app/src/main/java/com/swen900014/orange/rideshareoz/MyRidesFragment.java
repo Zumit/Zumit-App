@@ -38,6 +38,7 @@ public class MyRidesFragment extends Fragment
 {
     private RidesAdaptor mRidesAdapter;
     private Bundle savedInstanceState;
+    private boolean isSearchResults = false;
 
     public MyRidesFragment()
     {
@@ -69,7 +70,13 @@ public class MyRidesFragment extends Fragment
         if (id == R.id.action_refresh)
         {
             FetchRidesTask ridesTask = new FetchRidesTask();
-            ridesTask.execute(GETALL_USER_URL);
+            if(isSearchResults){
+                //TODO: start task to get serch results
+                //search parameters will be taken from the intent
+            }else{
+                ridesTask.execute(GETALL_USER_URL);
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -103,7 +110,12 @@ public class MyRidesFragment extends Fragment
 
         /* ignore the test data and load the actual data from server */
         FetchRidesTask ridesTask = new FetchRidesTask();
-        ridesTask.execute(GETALL_USER_URL);
+        if(isSearchResults){
+            //TODO: start task to get serch results
+            //search parameters will be taken from the intent
+        }else{
+            ridesTask.execute(GETALL_USER_URL);
+        }
 
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
