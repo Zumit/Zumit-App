@@ -6,8 +6,7 @@ package com.swen900014.orange.rideshareoz;
 public class Resources
 {
     public final static String SERVER_CLIENT_ID =
-            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com" +
-                    ":api_scope:https://www.googleapis.com/auth/plus.login";
+            "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com";
 
     public final static String GETALL_RIDE_URL = "http://144.6.226.237/ride/getall";
     public final static String GETALL_USER_URL = "http://144.6.226.237/user/getall";

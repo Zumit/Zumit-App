@@ -232,7 +232,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_columnSpan="6"
             android:text="@string/joinButton"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="20dp"/>
 
     </GridLayout>
 </ScrollView>
