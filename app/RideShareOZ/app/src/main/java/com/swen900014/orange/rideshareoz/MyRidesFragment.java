@@ -103,7 +103,7 @@ public class MyRidesFragment extends Fragment
 
         /* ignore the test data and load the actual data from server */
         FetchRidesTask ridesTask = new FetchRidesTask();
-        ridesTask.execute(GETALL_RIDE_URL);
+        ridesTask.execute(GETALL_USER_URL);
 
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
