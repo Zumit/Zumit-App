@@ -52,6 +52,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
     private String latE = "";
     private String lonE = "";
     private PlaceAutoCompleteAdapter adapter;
+    private boolean isFind = false;
 
     protected GoogleApiClient mGoogleApiClient;
 
@@ -90,6 +91,7 @@ public class OfferRide extends FragmentActivity implements GoogleApiClient.OnCon
                 SpinSN.setVisibility(View.INVISIBLE);
                 textSN.setVisibility(View.INVISIBLE);
                 //OFFER_RIDE_URL = "http://144.6.226.237/ride/search?";
+                isFind = true;
             }
         }
 
