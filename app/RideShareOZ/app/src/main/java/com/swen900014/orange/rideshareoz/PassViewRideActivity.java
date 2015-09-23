@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,10 +54,12 @@ public class PassViewRideActivity extends FragmentActivity
     private PlaceAutoCompleteAdapter adapter;
     private RideRequest joinRequest;
 
-    private TextView passText;
     private TextView pickUpLocText;
 
+    private TableLayout passengerList;
     private Ride ride;
+
+    private Activity thisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -70,19 +73,24 @@ public class PassViewRideActivity extends FragmentActivity
                 .build();
         //mGoogleApiClient.connect();
 
+        thisActivity = this;
+
         ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
         joinRequest = new RideRequest(ride);
 
-        TextView startLabel = (TextView) findViewById(R.id.startText);
-        TextView endLabel = (TextView) findViewById(R.id.endText);
-        TextView timeLabel = (TextView) findViewById(R.id.timeText);
+        TextView startLabel = (TextView) findViewById(R.id.startEditPass);
+        TextView endLabel = (TextView) findViewById(R.id.endEditPass);
+        //TextView startTimeLabel = (TextView) findViewById(R.id.startTimeEditPass);
+        TextView arrivalTimeLabel = (TextView) findViewById(R.id.arrivalTimeEditPass);
         TextView driverText = (TextView) findViewById(R.id.driverTextPassView);
-        passText = (TextView) findViewById(R.id.passList);
+        //passText = (TextView) findViewById(R.id.passList);
 
         TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
         TextView pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
+        TextView seatsText = (TextView) findViewById(R.id.seatsEditPass);
         pickUpLocText = (TextView) findViewById(R.id.pickUpLocText);
         //timeInputText = (TextView) findViewById(R.id.timeInputText);
+        passengerList = (TableLayout) findViewById(R.id.passengerListPass);
 
         Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
 
@@ -109,10 +117,9 @@ public class PassViewRideActivity extends FragmentActivity
 
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
-        timeLabel.setText(ride.getArrivingTime());
-        driverText.setText(ride.getDriver().getUsername() +
-                ", phone: " + ride.getDriver().getPhone() +
-                ", credit: " + ride.getDriver().getCredit());
+        arrivalTimeLabel.setText(ride.getArrivingTime());
+        driverText.setText(ride.getDriver().getUsername());
+        seatsText.setText("" + ride.getSeats());
 
         // Currently there is no pick up time of passengers
         TextView pickupTimeLabel = (TextView) findViewById(R.id.pickuptimeLabel);
@@ -120,22 +127,49 @@ public class PassViewRideActivity extends FragmentActivity
         TextView pickupTimeText = (TextView) findViewById(R.id.pickupTimeText);
         pickupTimeText.setVisibility(View.INVISIBLE);
 
+        driverText.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                intent.putExtra("Ride", ride);
+
+                thisActivity.startActivity(intent);
+            }
+        });
+
         updateView();
     }
 
     public void updateView()
     {
-        String joinedPass = "";
-
         ArrayList<Pickup> joinedList = ride.getJoined();
 
-        for (Pickup lift : joinedList)
-        {
-            joinedPass += "name: " + lift.getUser().getUsername() +
-                    ": phone: " + lift.getUser().getPhone() + "\n";
-        }
+        passengerList.removeAllViews();
 
-        passText.setText(joinedPass);
+        for (final Pickup lift : joinedList)
+        {
+            TextView pass = new TextView(this);
+            pass.setText("name: " + lift.getUser().getUsername());
+
+            if (ride.getRideState() == Ride.RideState.JOINED)
+            {
+                pass.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                        intent.putExtra("Ride", ride);
+                        intent.putExtra("UserInfo", lift);
+                        thisActivity.startActivity(intent);
+                    }
+                });
+            }
+
+            passengerList.addView(pass);
+        }
     }
 
     @Override

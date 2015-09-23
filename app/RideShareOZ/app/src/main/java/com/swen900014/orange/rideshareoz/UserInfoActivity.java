@@ -38,10 +38,20 @@ public class UserInfoActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
 
-        userInfo = (Pickup) getIntent().getSerializableExtra("UserInfo");
-        ride = (Ride) getIntent().getSerializableExtra("Ride");
-        thisActivity = this;
+        Intent intent = getIntent();
+        ride = (Ride) intent.getSerializableExtra("Ride");
         Ride.RideState rideState = ride.getRideState();
+
+        if (intent.hasExtra("UserInfo"))
+        {
+            userInfo = (Pickup) intent.getSerializableExtra("UserInfo");
+        }
+        else
+        {
+            userInfo = new Pickup(ride.getDriver(), ride.getEnd());
+        }
+
+        thisActivity = this;
 
         TextView nameText = (TextView) findViewById(R.id.ShowName);
         TextView phoneText = (TextView) findViewById(R.id.ShowPhone);
@@ -60,7 +70,8 @@ public class UserInfoActivity extends AppCompatActivity
 
         // Hide accept and reject options if current user is
         // not driver offering the ride
-        if (rideState == Ride.RideState.OFFERING)
+        if (rideState == Ride.RideState.OFFERING &&
+                userInfo.getUser().getUsername() != ride.getDriver().getUsername())
         {
             acceptButton.setOnClickListener(new View.OnClickListener()
             {
@@ -99,8 +110,7 @@ public class UserInfoActivity extends AppCompatActivity
 
                 ride.acceptJoin(lift);
 
-                Intent intent;
-                intent = new Intent(thisActivity, DriverViewRideActivity.class);
+                Intent intent = new Intent(thisActivity, DriverViewRideActivity.class);
                 intent.putExtra("SelectedRide", ride);
 
                 activity.startActivity(intent);
@@ -140,11 +150,10 @@ public class UserInfoActivity extends AppCompatActivity
             {
                 System.out.println("response: " + s);
 
-                //adapter.remove(lift);
-
-                Intent intent;
-                intent = new Intent(activity, DriverViewRideActivity.class);
-                intent.putExtra("ToRemove", userInfo);
+                ride.rejectJoin(userInfo);
+                Intent intent = new Intent(activity, DriverViewRideActivity.class);
+                //intent.putExtra("ToRemove", userInfo);
+                intent.putExtra("SelectedRide", ride);
 
                 activity.startActivity(intent);
             }

@@ -1,254 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/Lay01"
-    tools:context="com.swen900014.orange.rideshareoz.OfferRide">
-    >
-
-<TableLayout
-
-    android:layout_width="fill_parent"
-
-    android:layout_height="match_parent"
-
-    android:layout_marginTop="20dp"
-
-
-    >
-
-    <!-- Start -->
-
-<TableRow>
-
-<TextView
-
-    android:layout_width="fill_parent"
-
-    android:layout_height="wrap_content"
-
-    android:text="@string/_Start"
-
-    android:textSize="20dp"
-
-    android:textStyle="bold"
-    android:layout_marginLeft="10dp" />
-
-
-
-<AutoCompleteTextView
-
-    android:layout_width="150dp"
-
-    android:layout_height="wrap_content"
-
-    android:id="@+id/Start"
-    android:layout_marginRight="30dp" />
-
-
-    <CheckBox
-
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-
-        android:text="@string/_Current"
-
-        android:gravity="center"
-
-        android:id="@+id/current1"
-
-        android:layout_marginTop="5dp"
-        android:checked="false"
-        android:layout_marginLeft="-20dp"
-        android:layout_marginRight="20dp" />
-
-</TableRow>
-
-
-
-
-
-
-<TableRow android:layout_marginLeft="10dp">
-
-<TextView
-
-    android:layout_width="fill_parent"
-
-    android:layout_height="wrap_content"
-
-    android:text="@string/_End"
-
-    android:textSize="20dp"
-
-    android:textStyle="bold" />
-
-
-
-<AutoCompleteTextView
-
-    android:layout_width="150dp"
-
-    android:layout_height="wrap_content"
-
-    android:id="@+id/End"
-    android:layout_marginRight="40dp"
-    android:layout_marginLeft="-5dp" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-
-        android:text="@string/_Current"
-
-        android:gravity="center"
-
-        android:id="@+id/current2"
-        android:layout_marginTop="5dp"
-        android:checked="false"
-        android:layout_marginLeft="-30dp"
-        android:layout_marginRight="20dp"
-        android:layout_column="2" />
-
-
-</TableRow>
-
-<TableRow>
-
-<TextView
-
-    android:layout_width="fill_parent"
-
-    android:layout_height="wrap_content"
-
-    android:text="@string/_Date"
-
-    android:textSize="20dp"
-
-    android:textStyle="bold"
-    android:layout_marginLeft="10dp" />
-
-
-
-<EditText
-
-    android:layout_width="200dp"
-
-    android:layout_height="wrap_content"
-
-
-    android:id="@+id/Date"/>
-
-
-
-</TableRow>
-
-<TableRow>
-
-<TextView
-
-    android:layout_width="fill_parent"
-
-    android:layout_height="wrap_content"
-
-    android:text="@string/_EndTime"
-
-    android:textSize="20dp"
-
-    android:textStyle="bold"
-    android:layout_marginLeft="10dp" />
-
-
-
-<EditText
-
-    android:layout_width="200dp"
-
-    android:layout_height="wrap_content"
-
-
-
-    android:id="@+id/StartTime"/>
-
-
-
-</TableRow>
-    <TableRow>
-
-<TextView
-
-    android:layout_width="fill_parent"
-
-    android:layout_height="wrap_content"
-
-
-
-    android:textSize="20dp"
-
-    android:textStyle="bold"
-    android:layout_marginLeft="10dp"
-
-    android:text="@string/_SeatNo"
-    android:id="@+id/txtSeatNo"/>
-
-     />
-
-
-        <EditText
-
-            android:layout_width="200dp"
-
-            android:layout_height="wrap_content"
-
-
-            android:id="@+id/SeatNo"/>
-
-    </TableRow>
-
-</TableLayout>
-
-        <Button
-
-                android:layout_width="80dp"
-
-                android:layout_height="40dp"
-
+<RelativeLayout android:id="@+id/Lay01"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                tools:context="com.swen900014.orange.rideshareoz.OfferRide">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp">
+
+        <!-- Start -->
+
+        <TableRow>
+            <TextView
+                android:id="@+id/startPointText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/StartPoint"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/Start"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"/>
+
+            <CheckBox
+                android:id="@+id/current1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:checked="false"
                 android:gravity="center"
-
-                android:textColor="#FFFFFF"
-
-                android:background="#FFCC66"
-
-                android:id="@+id/button1"
-
-                android:onClick="offerRide"
-                android:text="@string/_Submit"
-            android:layout_marginTop="300dp"
-            android:layout_marginLeft="80dp" />
+                android:text="@string/_Current"/>
+        </TableRow>
 
 
+        <TableRow android:layout_marginLeft="10dp">
+
+            <TextView
+                android:id="@+id/endPointText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/endPoint"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/End"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginRight="40dp"/>
+
+            <CheckBox
+                android:id="@+id/current2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_marginLeft="-30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:checked="false"
+                android:gravity="center"
+                android:text="@string/_Current"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/startTimeText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/startTime"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/Date"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/endTimeText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/arrivalTime"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/StartTime"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtSeatNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/seats"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/SeatNo"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"/>
+        </TableRow>
+    </TableLayout>
 
     <Button
-
+        android:id="@+id/button1"
         android:layout_width="80dp"
-
         android:layout_height="40dp"
-
-        android:gravity="center"
-
-        android:textColor="#FFFFFF"
-
-        android:background="#FFCC66"
-
-        android:id="@+id/button2"
-
-        android:text="@string/_Reset"
+        android:layout_marginLeft="80dp"
         android:layout_marginTop="300dp"
-        android:layout_marginLeft="220dp" />
+        android:background="#FFCC66"
+        android:gravity="center"
+        android:onClick="offerRide"
+        android:text="@string/_Submit"
+        android:textColor="#FFFFFF"/>
 
-
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="220dp"
+        android:layout_marginTop="300dp"
+        android:background="#FFCC66"
+        android:gravity="center"
+        android:text="@string/_Reset"
+        android:textColor="#FFFFFF"/>
 
 </RelativeLayout>

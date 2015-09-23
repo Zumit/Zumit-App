@@ -12,7 +12,6 @@
     <string name="title_my_rides" translatable="false">My Rides</string>
     <string name="title_authentication" translatable="false">Log in</string>
     <string name="PassViewPass">Passengers</string>
-    <string name="JoinRide">Join</string>
     <string name="LeaveRide">Leave</string>
     <string name="ViewRide">VIEW RIDE</string>
     <string name="startLabel">Start: </string>
@@ -22,15 +21,12 @@
     <string name="title_activity_driver_view_ride">DriverViewRide</string>
     <string name="cancelButton">Cancel</string>
     <string name="joinButton">Join</string>
-    <string name="titleLabel">Where do you want to be picked up:</string>
+    <string name="titleLabel">Where would you like to be picked up:</string>
     <string name="_offerRide">Offer</string>
     <string name="_findRide">Find</string>
     <string name="_Start">Start Point</string>
     <string name="_Current">Current</string>
-    <string name="_End">Destination</string>
-    <string name="_Date">Date</string>
-    <string name="_EndTime">End Time</string>
-    <string name="_SeatNo">Total seats</string>
+    <string name="_End">To: </string>
     <string name="_Submit"><a href="#">Submit</a></string>
     <string name="_Reset"><a href="#">Reset</a></string>
     <string name="RequestLabel">Requests:</string>
@@ -44,4 +40,11 @@
     <string name="creditText">Credit:</string>
     <string name="acceptText">Accept</string>
     <string name="rejectText">Reject</string>
+    <string name="StartPoint">From:</string>
+    <string name="arrivalTime">Arrival time:</string>
+    <string name="startTime">Start time:</string>
+    <string name="endPoint">To:</string>
+    <string name="creator">Creator:</string>
+    <string name="seats">Seats:</string>
+    <string name="departureText">Departure point:</string>
 </resources>

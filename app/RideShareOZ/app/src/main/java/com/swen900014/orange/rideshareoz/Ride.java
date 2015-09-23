@@ -193,9 +193,10 @@ public class Ride implements Serializable
 
     public boolean acceptJoin(Pickup lift)
     {
-        if (joined.size() <= limit)
+        if (waiting.contains(lift) && joined.size() <= limit)
         {
             joined.add(lift);
+            waiting.remove(lift);
 
             return true;
         }
@@ -203,6 +204,11 @@ public class Ride implements Serializable
         {
             return false;
         }
+    }
+
+    public boolean rejectJoin(Pickup lift)
+    {
+        return waiting.remove(lift);
     }
 
     public void rateDriver()
@@ -233,6 +239,11 @@ public class Ride implements Serializable
     public void setEnd(Location end)
     {
         start = end;
+    }
+
+    public int getSeats()
+    {
+        return limit;
     }
 
     public void setRideId(String id)

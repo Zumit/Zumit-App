@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -31,14 +31,18 @@ import static com.swen900014.orange.rideshareoz.Resources.*;
  */
 public class DriverViewRideActivity extends AppCompatActivity
 {
-    private TextView passText;
+    private TableLayout passengerList;
+    private TableLayout waitingList;
     private Ride ride;
+
+    private Activity thisActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_view_ride);
+        thisActivity = this;
 
         Intent received = getIntent();
 
@@ -51,28 +55,33 @@ public class DriverViewRideActivity extends AppCompatActivity
         //ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
         //        new Location(0.0, 0.0, "carlton")));
 
-        RequestAdapter requestAdapter = new RequestAdapter(this, ride.getWaiting(), ride);
-        ListView requestList = (ListView) findViewById(R.id.listView_request);
-        requestList.setAdapter(requestAdapter);
+        TextView startLabel = (TextView) findViewById(R.id.startPointText);
+        TextView endLabel = (TextView) findViewById(R.id.endPointText);
+        //TextView startTimeLabel = (TextView) findViewById(R.id.startTimeText);
+        TextView arrivalTimeLabel = (TextView) findViewById(R.id.endTimeText);
+        TextView driverText = (TextView) findViewById(R.id.driverText);
+        TextView seatsText = (TextView) findViewById(R.id.seatsText);
 
-        if (received.hasExtra("ToRemove"))
-        {
-            Pickup userInfo = (Pickup) received.getSerializableExtra("ToRemove");
-            requestAdapter.remove(userInfo);
-        }
-
-        TextView startLabel = (TextView) findViewById(R.id.startText);
-        TextView endLabel = (TextView) findViewById(R.id.endText);
-        TextView timeLabel = (TextView) findViewById(R.id.timeText);
-        TextView driverText = (TextView) findViewById(R.id.driverTextDriverView);
-        passText = (TextView) findViewById(R.id.passList);
+        passengerList = (TableLayout) findViewById(R.id.passengerList);
+        waitingList = (TableLayout) findViewById(R.id.waitingList);
 
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
-        timeLabel.setText(ride.getArrivingTime());
-        driverText.setText(ride.getDriver().getUsername() +
-                ", phone: " + ride.getDriver().getPhone() +
-                ", credit: " + ride.getDriver().getCredit());
+        arrivalTimeLabel.setText(ride.getArrivingTime());
+        driverText.setText(ride.getDriver().getUsername());
+        seatsText.setText("" + ride.getSeats());
+
+        driverText.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                intent.putExtra("Ride", ride);
+
+                thisActivity.startActivity(intent);
+            }
+        });
 
         updateView();
     }
@@ -80,16 +89,57 @@ public class DriverViewRideActivity extends AppCompatActivity
 
     public void updateView()
     {
-        String joinedPass = "";
-
         ArrayList<Pickup> joinedList = ride.getJoined();
+        ArrayList<Pickup> waitingListArray = ride.getWaiting();
 
-        for (Pickup lift : joinedList) {
-            joinedPass += "name: " + lift.getUser().getUsername() +
-                    ": phone: " + lift.getUser().getPhone() + "\n";
+        passengerList.removeAllViews();
+        waitingList.removeAllViews();
+
+        for (final Pickup lift : joinedList)
+        {
+            TextView pass = new TextView(this);
+            pass.setText("name: " + lift.getUser().getUsername());
+
+            if (ride.getRideState() == Ride.RideState.OFFERING)
+            {
+                pass.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                        intent.putExtra("Ride", ride);
+                        intent.putExtra("UserInfo", lift);
+                        thisActivity.startActivity(intent);
+                    }
+                });
+            }
+
+            passengerList.addView(pass);
         }
 
-        passText.setText(joinedPass);
+        for (final Pickup lift : waitingListArray)
+        {
+            TextView request = new TextView(this);
+            request.setText("name: " + lift.getUser().getUsername());
+
+            if (ride.getRideState() == Ride.RideState.OFFERING)
+            {
+                request.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                        intent.putExtra("Ride", ride);
+                        intent.putExtra("UserInfo", lift);
+                        thisActivity.startActivity(intent);
+                    }
+                });
+            }
+
+            waitingList.addView(request);
+        }
     }
 
     @Override
