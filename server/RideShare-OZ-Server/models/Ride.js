@@ -2,8 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../models/User.js');
 var Group = require('../models/Group.js');
-var date = require('date-and-time');
-
 
 var RideSchema = new Schema({
   arrival_time: Date,
@@ -111,7 +109,7 @@ RideSchema.statics.searchRide =function(req,callback){
       },function(err,ride){
      ride.forEach(function(ride){
       console.log(ride.end_point[0]);
-      console.log(end[0])
+      console.log(end[0]);
       if((end[0]-1<=ride.end_point[0]<=end[0]+1)&& (end[1]-1<=ride.end_point[1]<=end[1]+1))
         {rides.push(ride);}
 
