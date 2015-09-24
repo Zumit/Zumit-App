@@ -8,7 +8,7 @@ var RideSchema = new Schema({
   start_time: Date,
   seats: Number,
   start_point: {type:[Number],index:'2d'}, // Lat, Lng
-  Start_add: String,
+  start_add: String,
   end_point: {type:[Number],index:'2d'},
   destination: String,
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
@@ -31,6 +31,7 @@ var RideSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
   note: String,
 });
+
 RideSchema.statics.getAllRides = function(callback){
   this.find().populate('driver passengers.user requests.user',
       'username phone driver_license').exec({}, function(err, rides){
@@ -46,7 +47,7 @@ RideSchema.statics.createRide = function(req,callback){
   ride.seats = req.body.seat;
   var start_lon=req.body.s_lon;
   var start_lat=req.body.s_lat;
-  ride.Start_add=req.body.start_add;
+  ride.start_add=req.body.start_add;
   ride.destination=req.body.destination;
   ride.start_point=[Number(start_lon),Number(start_lat)];
   var end_lon=req.body.e_lon;
