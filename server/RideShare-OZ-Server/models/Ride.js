@@ -75,10 +75,10 @@ RideSchema.statics.searchRide =function(req,callback){
   var start=[];
   start[0]=req.query.s_lon;
   start[1]=req.query.s_lat; 
-  var end=[];
+  
   var qry=this.find();
-  end[0]=req.query.e_lon;
-  end[1]=req.query.e_lat; 
+  var e_lon=req.query.e_lon;
+  var e_lat=req.query.e_lat; 
   //need have arrival time
    var maxDistance=0.01;
    var limit=10;
@@ -109,8 +109,12 @@ RideSchema.statics.searchRide =function(req,callback){
         if (ride) {
           ride.forEach(function(ride){
             console.log(ride.end_point[0]);
-            console.log(end[0]);
-            if((end[0]-1<=ride.end_point[0]<=end[0]+1)&& (end[1]-1<=ride.end_point[1]<=end[1]+1))
+            console.log(e_lon);
+            //e_lon=Number(e_lon)+1;
+            console.log(Number(e_lon)+1);
+            console.log(Number(e_lon)-1);
+            //e_lat=Number(e_lat)+1;
+            if((Number(e_lon)-0.01)<ride.end_point[0]&&ride.end_point[0]<(Number(e_lon)+0.01)&&(Number(e_lat)-0.01)<ride.end_point[1]&&ride.end_point[1]<(Number(e_lat)+0.01))
               {rides.push(ride);}
           });
         }
