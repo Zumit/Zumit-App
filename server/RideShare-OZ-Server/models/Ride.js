@@ -68,7 +68,8 @@ RideSchema.statics.createRide = function(req,callback){
   });
 };
 
-//unfinish!!!
+// unfinish!!!
+// lat lon  desitination  date 
 RideSchema.statics.searchRide =function(req,callback){
 
   var start=[];
