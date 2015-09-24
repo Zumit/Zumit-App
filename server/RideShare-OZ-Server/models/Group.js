@@ -8,7 +8,10 @@ var GroupsSchema = new Schema({
   location: [Number],
   adminID: [{type: Schema.Types.ObjectId, ref: 'User' }],
   members: [{type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },requestDate:{ type: Date, default: Date.now }}],
+  requests: [{
+    user:{type: Schema.Types.ObjectId, ref: 'User' },
+    requestDate:{ type: Date, default: Date.now }
+  }],
 });
 
 

@@ -8,20 +8,32 @@ var RideSchema = new Schema({
   start_time: Date,
   seats: Number,
   start_point: {type:[Number],index:'2d'}, // Lat, Lng
-  Start_add :String,
+  Start_add: String,
   end_point: {type:[Number],index:'2d'},
   destination: String,
   driver: {type: Schema.Types.ObjectId, ref: 'User' },
   group: {type: Schema.Types.ObjectId, ref: 'Group'},
-  events:{type: Schema.Types.ObjectId, ref: 'Event'},
-  passengers: [{user:{ type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },pickup_time:Date,pickup_add:String}],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },pickup_point:{ type: [Number] },state:String,note:String,pickup_time:Date,pickup_add:String}],
+  events: {type: Schema.Types.ObjectId, ref: 'Event'},
+  passengers: [{
+    user:{ type: Schema.Types.ObjectId, ref: 'User' },
+    pickup_point:{ type: [Number] },
+    pickup_time:Date,
+    pickup_add:String
+  }],
+  requests: [{
+    user:{type: Schema.Types.ObjectId, ref: 'User' },
+    pickup_point:{ type: [Number] },
+    state: String,
+    note: String,
+    pickup_time: Date,
+    pickup_add: String
+  }],
   updated_at: { type: Date, default: Date.now },
   note: String,
 });
-
 RideSchema.statics.getAllRides = function(callback){
-  this.find().populate('driver passengers.user requests.user', 'username phone driver_license').exec({}, function(err, rides){
+  this.find().populate('driver passengers.user requests.user',
+      'username phone driver_license').exec({}, function(err, rides){
     callback(rides);
   });
 };
@@ -94,14 +106,21 @@ RideSchema.statics.searchRide =function(req,callback){
   });
 };
 
-RideSchema.methods.addRequest= function(user_id,req,callback){
+RideSchema.methods.addRequest = function(user_id,req,callback){
   /* console.log(this); */ 
-  var pickup_point=[];
-  pickup_point[0]=req.body.p_lon;
-  pickup_point[1]=req.body.p_lat;
-  var note=req.body.note;
-  var pickup_time=req.body.pickup_time;
-  this.requests.push({'user':user_id,'state':"unaccept",'pickup_point':pickup_point,'note':note,'pickup_time':pickup_time,'pickup_add':req.body.pickup_add});
+  var pickup_point = [];
+  pickup_point[0] = req.body.p_lon;
+  pickup_point[1] = req.body.p_lat;
+  var note = req.body.note;
+  var pickup_time = req.body.pickup_time;
+  this.requests.push({
+    'user':user_id,
+    'state':"unaccept",
+    'pickup_point':pickup_point,
+    'note':note,
+    'pickup_time':pickup_time,
+    'pickup_add':req.body.pickup_add
+  });
   this.save(function(err, doc){
     callback(doc);
   });
@@ -119,8 +138,8 @@ RideSchema.statics.cancelRide = function(req,callback){
 RideSchema.statics.rejectRequest= function(req,callback){
 var ride_id=req.body.ride_id;
 var user_id=req.userinfo._id;
-  this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){callback(doc);});
-
+  this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},
+      function(err,doc){callback(doc);});
 };
 
 
@@ -139,32 +158,34 @@ var pickup_add;
         pickup_point=request.pickup_point;
         pickup_time=request.pickup_time;
         pickup_add=request.pickup_add;
-        doc.passengers.push({'user':user_id,'pickup_point':pickup_point,'pickup_time':pickup_time,'pickup_add':pickup_add});
+        doc.passengers.push({
+          'user':user_id,
+          'pickup_point':pickup_point,
+          'pickup_time':pickup_time,
+          'pickup_add':pickup_add
+        });
         doc.save();
       }
-      
     });
-
   });
   //delete the user in requests
-   this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){
-    
-    callback(doc);
+  this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){
+  callback(doc);
   });
 };
 
-
 RideSchema.statics.kickPassenger= function(req,callback){
-var ride_id=req.body.ride_id;
-var user_id=req.userinfo._id; 
-  this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
+  var ride_id=req.body.ride_id;
+  var user_id=req.userinfo._id; 
+  this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
+      function(err,doc){callback(doc);});
 };
 
 RideSchema.statics.passengerLeave= function(req,callback){
-var ride_id=req.body.ride_id;
-var user_id=req.userinfo._id; 
-  this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},function(err,doc){callback(doc);});
+  var ride_id=req.body.ride_id;
+  var user_id=req.userinfo._id; 
+  this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
+      function(err,doc){callback(doc);});
 };
-
 
 module.exports = mongoose.model('Ride', RideSchema);
