@@ -39,6 +39,7 @@ public class MyRidesFragment extends Fragment
     private RidesAdaptor mRidesAdapter;
     private Bundle savedInstanceState;
     private boolean isSearchResults = false;
+    private Intent intent;
 
     public MyRidesFragment()
     {
@@ -51,6 +52,15 @@ public class MyRidesFragment extends Fragment
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
         this.savedInstanceState = savedInstanceState;
+
+         /* check if it offer or find  */
+        intent = this.getActivity().getIntent();
+        if (intent != null && intent.hasExtra("type")){
+            String type = intent.getStringExtra("type");
+            if(type.equals("find")){
+                isSearchResults = true;
+            }
+        }
     }
 
     @Override
@@ -74,7 +84,8 @@ public class MyRidesFragment extends Fragment
                 //TODO: start task to get serch results
                 //search parameters will be taken from the intent
             }else{
-                ridesTask.execute(GETALL_USER_URL);
+                //TODO: use /user/getRides (POST request)
+                ridesTask.execute(GETALL_RIDE_URL);
             }
 
             return true;
@@ -113,8 +124,16 @@ public class MyRidesFragment extends Fragment
         if(isSearchResults){
             //TODO: start task to get serch results
             //search parameters will be taken from the intent
+            String url = SEARCH_RIDE_URL;
+            url += "s_lon=" + intent.getStringExtra("s_lon") + "&";
+            url += "s_lat=" + intent.getStringExtra("s_lat") + "&";
+            url += "groupId=" + intent.getStringExtra("groupId") + "&";
+            url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
+            url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
+            url += "arrival_time=" + intent.getStringExtra("arrival_time");
+            ridesTask.execute(url);
         }else{
-            ridesTask.execute(GETALL_USER_URL);
+            ridesTask.execute(GETALL_RIDE_URL);
         }
 
 
@@ -168,7 +187,7 @@ public class MyRidesFragment extends Fragment
             try
             {
                 // Construct the URL for the Rides query
-                URL url = new URL(GETALL_RIDE_URL);
+                URL url = new URL(params[0]);
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -249,4 +268,6 @@ public class MyRidesFragment extends Fragment
             }
         }
     }
+
+
 }

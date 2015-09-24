@@ -49,6 +49,7 @@ public class OfferRide extends FragmentActivity implements
     private EditText EditStart, EditEnd, EditStartTime, EditEndTime;
     private EditText SpinSN;
     private TextView textSN;
+    private TextView textStartTime;
     private CheckBox Check1, Check2;
 
     private EditText startCityEdit;
@@ -96,6 +97,7 @@ public class OfferRide extends FragmentActivity implements
         EditEndTime = (EditText) findViewById(R.id.Date);
         SpinSN = (EditText) findViewById(R.id.SeatNo);
         textSN = (TextView) findViewById(R.id.txtSeatNo);
+        textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
 
@@ -106,6 +108,20 @@ public class OfferRide extends FragmentActivity implements
         endCityEdit = (EditText) findViewById(R.id.endCityEdit);
         endSuberbEdit = (EditText) findViewById(R.id.endSuberbEdit);
         endStreetEdit = (EditText) findViewById(R.id.endStreetEdit);
+
+       /* check if it offer or find  */
+        Intent intent = this.getIntent();
+        if (intent != null && intent.hasExtra("type")){
+            String type = intent.getStringExtra("type");
+            if(type.equals("find")){
+                SpinSN.setVisibility(View.INVISIBLE);
+                textSN.setVisibility(View.INVISIBLE);
+                EditStartTime.setVisibility(View.INVISIBLE);
+                textStartTime.setVisibility(View.INVISIBLE);
+                //OFFER_RIDE_URL = "http://144.6.226.237/ride/search?";
+                isFind = true;
+            }
+        }
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -286,7 +302,21 @@ public class OfferRide extends FragmentActivity implements
                             e.printStackTrace();
                         }
 
-                        sendRideInfo(activity);
+                        /* check if it offer or find  */
+                        if ( !isFind){
+                            sendRideInfo(activity);
+                        }else{
+                            Intent searchResultsIntent=new Intent(OfferRide.this, MyRidesActivity.class);
+                            searchResultsIntent.putExtra("type","find");
+                            searchResultsIntent.putExtra("s_lon",lonS);
+                            searchResultsIntent.putExtra("s_lat",latS);
+                            searchResultsIntent.putExtra("groupId","55cab5dde81ab31606e4814c");
+                            searchResultsIntent.putExtra("e_lon",lonE);
+                            searchResultsIntent.putExtra("e_lat",latE);
+                            searchResultsIntent.putExtra("arrival_time",EditEndTime.getText().toString());
+                            startActivity(searchResultsIntent);
+                        }
+
 
                         // check response, whether it received
                     }
@@ -314,20 +344,6 @@ public class OfferRide extends FragmentActivity implements
                 try
                 {
                     Log.i("jumping to my ride page", "jumping to my ride page successfully");
-                    Intent intent=new Intent(OfferRide.this, MainActivity.class);
-                    /* check if it offer or find  */
-                    // Intent intent = this.getIntent();
-                    if (intent != null && intent.hasExtra("type"))
-                    {
-                        String type = intent.getStringExtra("type");
-                        if(type.equals("find")){
-                            SpinSN.setVisibility(View.INVISIBLE);
-                            textSN.setVisibility(View.INVISIBLE);
-
-                            isFind = true;
-                        }
-                    }
-                    startActivity(intent);
 
 
                 } catch (Exception e)
@@ -434,7 +450,7 @@ public class OfferRide extends FragmentActivity implements
     {
         return !(SpinSN.getText().toString().isEmpty() ||
                 EditEndTime.getText().toString().isEmpty() ||
-                EditStartTime.getText().toString().isEmpty() ||
+                (EditStartTime.getText().toString().isEmpty() && !isFind) ||
                 startCityEdit.getText().toString().isEmpty() ||
                 startSuberbEdit.getText().toString().isEmpty() ||
                 startStreetEdit.getText().toString().isEmpty() ||
