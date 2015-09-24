@@ -8,7 +8,10 @@ var GroupsSchema = new Schema({
   location: [Number],
   adminID: [{type: Schema.Types.ObjectId, ref: 'User' }],
   members: [{type: Schema.Types.ObjectId, ref: 'User' }],
-  requests: [{user:{type: Schema.Types.ObjectId, ref: 'User' },requestDate:{ type: Date, default: Date.now }}],
+  requests: [{
+    user:{type: Schema.Types.ObjectId, ref: 'User' },
+    requestDate:{ type: Date, default: Date.now }
+  }],
 });
 
 
@@ -67,8 +70,7 @@ this.findByIdAndUpdate(req.query.group_id,{$pull:{'requests':{'user':req.query.u
   console.log(doc);
     callback(doc);
   });
-
-}
+};
 
 
 GroupsSchema.statics.leaveGroup= function(req,callback){
@@ -81,7 +83,7 @@ GroupsSchema.statics.leaveGroup= function(req,callback){
     callback(groups);
   });
 
-}
+};
 
 
 module.exports = mongoose.model('Group', GroupsSchema);

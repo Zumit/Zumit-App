@@ -14,7 +14,7 @@
     <string name="PassViewPass">Passengers</string>
     <string name="LeaveRide">Leave</string>
     <string name="ViewRide">VIEW RIDE</string>
-    <string name="startLabel">Start: </string>
+    <string name="startLabel">Address: </string>
     <string name="endLabel">End:</string>
     <string name="timeLabel">Time: </string>
     <string name="passLabel">Joined: </string>
@@ -22,6 +22,7 @@
     <string name="cancelButton">Cancel</string>
     <string name="joinButton">Join</string>
     <string name="titleLabel">Where would you like to be picked up:</string>
+
     <string name="_offerRide">Offer</string>
     <string name="_findRide">Find</string>
     <string name="_Start">Start Point</string>
@@ -33,6 +34,7 @@
     <string name="acceptButton">Accept</string>
     <string name="rejectButton">Reject</string>
     <string name="driverLabel">Driver</string>
+
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="nameText">Name:</string>
     <string name="phoneText">Phone no. :</string>
@@ -46,5 +48,5 @@
     <string name="endPoint">To:</string>
     <string name="creator">Creator:</string>
     <string name="seats">Seats:</string>
-    <string name="departureText">Departure point:</string>
+    <string name="departureText">Address:</string>
 </resources>

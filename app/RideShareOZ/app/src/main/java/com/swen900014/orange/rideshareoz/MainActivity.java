@@ -349,8 +349,8 @@ public class MainActivity extends AppCompatActivity implements
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        String scopes = "oauth2:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
-//audience:
+        String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.
+
         try
         {
             return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
