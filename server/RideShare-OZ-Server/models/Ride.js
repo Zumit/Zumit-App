@@ -102,20 +102,19 @@ RideSchema.statics.searchRide =function(req,callback){
  var rides=[];
   this.find({'group':groupID,'arrival_time':{"$gte":s_time,"$lt":e_time},
         'start_point': {
-        $nearSphere:start,
-        $maxDistance: maxDistance
+          $nearSphere:start,
+          $maxDistance: maxDistance
         }
-
       },function(err,ride){
-     ride.forEach(function(ride){
-      console.log(ride.end_point[0]);
-      console.log(end[0]);
-      if((end[0]-1<=ride.end_point[0]<=end[0]+1)&& (end[1]-1<=ride.end_point[1]<=end[1]+1))
-        {rides.push(ride);}
-
-     });
-      
-      callback(rides);
+        if (ride) {
+          ride.forEach(function(ride){
+            console.log(ride.end_point[0]);
+            console.log(end[0]);
+            if((end[0]-1<=ride.end_point[0]<=end[0]+1)&& (end[1]-1<=ride.end_point[1]<=end[1]+1))
+              {rides.push(ride);}
+          });
+        }
+        callback(rides);
     });
 
 
