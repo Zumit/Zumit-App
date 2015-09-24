@@ -39,62 +39,6 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Json Test"
-        android:id="@+id/test_query_button"
-        android:layout_below="@+id/sign_out_button"
-        android:layout_alignLeft="@+id/sign_out_button"
-        android:layout_alignStart="@+id/sign_out_button"
-        android:layout_marginTop="66dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="All Rides"
-        android:id="@+id/all_rides"
-        android:layout_below="@+id/test_query_button"
-        android:layout_toLeftOf="@+id/test_query_button"
-        android:layout_toStartOf="@+id/test_query_button" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CreateRide"
-        android:onClick="offerRide"
-        android:id="@+id/create_ride"
-        android:layout_below="@+id/test_query_button"
-        android:layout_toRightOf="@+id/all_rides"
-        android:layout_toEndOf="@+id/all_rides" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="All Users"
-        android:id="@+id/all_users"
-        android:layout_alignTop="@+id/create_ride"
-        android:layout_toRightOf="@+id/create_ride"
-        android:layout_toEndOf="@+id/create_ride" />
-
     <!-- Temporary button to inflate My Rides Activity -->
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My Rides"
-        android:id="@+id/my_rides_button"
-        android:layout_below="@+id/sign_out_button"
-        android:layout_toLeftOf="@+id/sign_out_button"
-        android:layout_toStartOf="@+id/sign_out_button" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ViewRide"
-        android:id="@+id/view_ride_button"
-        android:onClick="viewRide"
-        android:layout_alignTop="@+id/sign_in_id"
-        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
