@@ -10,7 +10,8 @@
         <TableLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:id="@+id/tableLayout">
 
             <!-- Start -->
 
@@ -43,10 +44,7 @@
             </TableRow>
 
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
+            <TableRow>
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="fill_parent"
@@ -73,7 +71,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Suberb:"
+                    android:text="Suburb:"
                     android:textSize="15dp"
                     android:textStyle="bold"
                     android:layout_column="0"/>
@@ -167,7 +165,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Suberb:"
+                    android:text="Suburb:"
                     android:textSize="15dp"
                     android:textStyle="bold"
                     android:layout_column="0"/>
@@ -201,51 +199,33 @@
             </TableRow>
 
             <TableRow android:layout_marginTop="15dp">
-                <TextView
-                    android:id="@+id/startTimeText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/startTime"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
 
-                <EditText
-                    android:id="@+id/Date"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"/>
             </TableRow>
 
             <TableRow>
-                <TextView
-                    android:id="@+id/endTimeText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/arrivalTime"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
 
-                <EditText
-                    android:id="@+id/StartTime"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set DATE"
+                    android:id="@+id/button8"
+                    android:layout_column="0"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginLeft="1dp"
+                    android:onClick="setDate"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/displayDate"
+                    android:layout_column="1" />
+
             </TableRow>
 
             <TableRow>
-                <TextView
-                    android:id="@+id/txtSeatNo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/seats"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
 
-                <EditText
-                    android:id="@+id/SeatNo"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"/>
             </TableRow>
         </TableLayout>
 
@@ -254,7 +234,7 @@
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginLeft="80dp"
-            android:layout_marginTop="550dp"
+            android:layout_marginTop="650dp"
             android:background="#FFCC66"
             android:gravity="center"
             android:onClick="offerRide"
@@ -266,11 +246,88 @@
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginLeft="220dp"
-            android:layout_marginTop="550dp"
+            android:layout_marginTop="650dp"
             android:background="#FFCC66"
             android:gravity="center"
             android:text="@string/_Reset"
             android:textColor="#FFFFFF"/>
+
+        <EditText
+            android:id="@+id/SeatNo"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/txtSeatNo"
+            android:layout_toEndOf="@+id/button5" />
+
+        <TextView
+            android:id="@+id/txtSeatNo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/seats"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_below="@+id/button5"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SET ArrivalTIME"
+            android:id="@+id/button5"
+            android:layout_column="0"
+            android:textSize="13dp"
+            android:onClick="setArrivalTime"
+            android:layout_below="@+id/button3"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SET STARTTIME"
+            android:id="@+id/button3"
+            android:layout_column="0"
+            android:textSize="13dp"
+            android:layout_below="@+id/tableLayout"
+            android:layout_alignParentStart="true"
+            android:onClick="setStartTime"
+            android:layout_marginLeft="1dp"
+            android:layout_alignEnd="@+id/button5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/textView12"
+            android:layout_alignTop="@+id/button3"
+            android:layout_toEndOf="@+id/button3"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/displayStartTime"
+            android:layout_column="1"
+            android:layout_marginLeft="13dp"
+            android:layout_alignTop="@+id/textView12"
+            android:layout_alignEnd="@+id/button2"
+            android:layout_toEndOf="@+id/textView12"
+            android:layout_marginTop="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/displayArrivalTime"
+            android:layout_column="1"
+            android:layout_marginLeft="13dp"
+            android:layout_below="@+id/button3"
+            android:layout_alignStart="@+id/textView12"
+            android:layout_alignEnd="@+id/displayStartTime"
+            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 </ScrollView>
