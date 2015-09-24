@@ -49,7 +49,7 @@
         </activity>
         <activity
             android:name=".MyRidesActivity"
-            android:label="@string/title_my_rides"
+            android:label="@string/title_ride_searchresults"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -10,6 +10,7 @@
     <string name="EndInViewRide">End:</string>
     <string name="action_refresh" translatable="false">Refresh</string>
     <string name="title_my_rides" translatable="false">My Rides</string>
+    <string name="title_ride_searchresults" translatable="false">Search Results</string>
     <string name="title_authentication" translatable="false">Log in</string>
     <string name="PassViewPass">Passengers</string>
     <string name="LeaveRide">Leave</string>
