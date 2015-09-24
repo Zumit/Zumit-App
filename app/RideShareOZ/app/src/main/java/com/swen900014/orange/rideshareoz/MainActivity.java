@@ -222,27 +222,6 @@ public class MainActivity extends AppCompatActivity implements
         {
             onSignOutClicked();
         }
-        if (v.getId() == R.id.test_query_button)
-        {
-            onTestQueryClicked("http://144.6.226.237/test/json?day=29&month=9&year=2015&start=3752&end=unimelb&includeSurrounding=True,");
-        }
-        if (v.getId() == R.id.all_rides)
-        {
-            onTestQueryClicked("http://144.6.226.237/ride/getall");
-        }
-        if (v.getId() == R.id.all_users)
-        {
-            onTestQueryClicked("http://144.6.226.237/user/getall");
-        }
-        if (v.getId() == R.id.create_ride)
-        {
-            onTestQueryClicked("http://144.6.226.237/ride/create?driverid=");
-        }
-        if (v.getId() == R.id.my_rides_button)
-        {
-            Intent myRides = new Intent(this, MyRidesActivity.class);
-            startActivity(myRides);
-        }
 
     }
 
