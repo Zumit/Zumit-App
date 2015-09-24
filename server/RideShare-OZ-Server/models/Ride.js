@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../models/User.js');
 var Group = require('../models/Group.js');
+var date = require('date-and-time');
+
 
 var RideSchema = new Schema({
   arrival_time: Date,
@@ -68,44 +70,70 @@ RideSchema.statics.createRide = function(req,callback){
   });
 };
 
-// unfinish!!!
+
 // lat lon  desitination  date 
 RideSchema.statics.searchRide =function(req,callback){
 
   var start=[];
   start[0]=req.query.s_lon;
   start[1]=req.query.s_lat; 
-  /*var end=[];
+  var end=[];
+  var qry=this.find();
   end[0]=req.query.e_lon;
-  end[1]=req.query.e_lat; */
+  end[1]=req.query.e_lat; 
   //need have arrival time
-  var maxDistance=1;
-  var limit=10;
-  var groupID=req.query.groupId;
+   var maxDistance=0.01;
+   var limit=10;
+   var groupID=req.query.groupId;
+   var arrival_time=req.query.arrival_time;
+   var s_time=arrival_time+'T00:00:00.00Z';
+   var e_time=arrival_time+'T23:59:59.00Z';
+   //console.log(s_time);
+   //console.log(e_time);
   
-  /*this.aggregate([
-    {
-      $match:{
-        'group': groupID
-      }
-    },
-    {
-      $project:{
-        _id:1
-      }
-    }
-  ], function(err, locations){}
-    callback(locations);
-  });
-*/
-  this.find({group:groupID, start_point: {
-      $near:start,
-      $maxDistance: maxDistance
-    }
-  }).limit(limit).exec(function(err, locations) {
+  // this.aggregate([
+  //   {
+  //     $match:{
+  //       'start_point': start
+  //     }
+  //   }
+    
+  // ], function(err, locations){
+  //   callback(locations);
+  // });,
+ var rides=[];
+  this.find({'group':groupID,'arrival_time':{"$gte":s_time,"$lt":e_time},
+        'start_point': {
+        $nearSphere:start,
+        $maxDistance: maxDistance
+        }
 
-    callback(locations);
-  });
+      },function(err,ride){
+     ride.forEach(function(ride){
+      console.log(ride.end_point[0]);
+      console.log(end[0])
+      if((end[0]-1<=ride.end_point[0]<=end[0]+1)&& (end[1]-1<=ride.end_point[1]<=end[1]+1))
+        {rides.push(ride);}
+
+     });
+      
+      callback(rides);
+    });
+
+
+
+  // .limit(limit).exec(function(err, locations) {
+  //       qry.where('end_point').near({
+  //         center: end,
+  //         maxDistance :maxDistance
+    
+  //       }).exec(function(err,ride){callback(ride);});
+  //     }
+  //    );
+
+
+
+
 };
 
 RideSchema.methods.addRequest = function(user_id,req,callback){
