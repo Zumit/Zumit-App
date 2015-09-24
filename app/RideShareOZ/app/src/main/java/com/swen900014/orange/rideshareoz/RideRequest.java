@@ -27,6 +27,7 @@ public class RideRequest
 
     private String lat = "";
     private String lon = "";
+    private String address = "";
 
     public RideRequest(Ride ride)
     {

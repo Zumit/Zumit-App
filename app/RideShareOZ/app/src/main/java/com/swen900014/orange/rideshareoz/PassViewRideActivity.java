@@ -29,9 +29,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
+import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.swen900014.orange.rideshareoz.Resources.JOIN_REQUEST_URL;
 
 
 /**
@@ -50,11 +53,19 @@ public class PassViewRideActivity extends FragmentActivity
             new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
     //new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362)
 
+    private String lat = "";
+    private String lon = "";
+    private String address = "";
+
     protected GoogleApiClient mGoogleApiClient;
     private PlaceAutoCompleteAdapter adapter;
-    private RideRequest joinRequest;
+    //private RideRequest joinRequest;
 
     private TextView pickUpLocText;
+
+    private TextView cityText;
+    private TextView suberbText;
+    private TextView streetText;
 
     private TableLayout passengerList;
     private Ride ride;
@@ -76,14 +87,12 @@ public class PassViewRideActivity extends FragmentActivity
         thisActivity = this;
 
         ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
-        joinRequest = new RideRequest(ride);
 
         TextView startLabel = (TextView) findViewById(R.id.startEditPass);
         TextView endLabel = (TextView) findViewById(R.id.endEditPass);
-        //TextView startTimeLabel = (TextView) findViewById(R.id.startTimeEditPass);
+        TextView startTimeLabel = (TextView) findViewById(R.id.startTimeEditPass);
         TextView arrivalTimeLabel = (TextView) findViewById(R.id.arrivalTimeEditPass);
         TextView driverText = (TextView) findViewById(R.id.driverTextPassView);
-        //passText = (TextView) findViewById(R.id.passList);
 
         TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
         TextView pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
@@ -91,6 +100,10 @@ public class PassViewRideActivity extends FragmentActivity
         pickUpLocText = (TextView) findViewById(R.id.pickUpLocText);
         //timeInputText = (TextView) findViewById(R.id.timeInputText);
         passengerList = (TableLayout) findViewById(R.id.passengerListPass);
+
+        cityText = (TextView) findViewById(R.id.cityEditPass);
+        suberbText = (TextView) findViewById(R.id.suberbEditPass);
+        streetText = (TextView) findViewById(R.id.streetEditPass);
 
         Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
 
@@ -111,12 +124,16 @@ public class PassViewRideActivity extends FragmentActivity
         {
             joinLeaveButton.setText(getString(R.string.LeaveRide));
             pickUpLocText.setVisibility(View.INVISIBLE);
+            cityText.setVisibility(View.INVISIBLE);
+            suberbText.setVisibility(View.INVISIBLE);
+            streetText.setVisibility(View.INVISIBLE);
             inputTabelName.setVisibility(View.INVISIBLE);
             pickUpLabel.setVisibility(View.INVISIBLE);
         }
 
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
+        startTimeLabel.setText(ride.getStartTime());
         arrivalTimeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername());
         seatsText.setText("" + ride.getSeats());
@@ -254,7 +271,15 @@ public class PassViewRideActivity extends FragmentActivity
         {
             if (inputValid())
             {
-                joinRequest.sendRequest(this, pickUpLocText.getText().toString());
+                address = cityText.getText().toString() + "+" +
+                        suberbText.getText().toString() + "+" +
+                        streetText.getText().toString();
+
+                address = address.replaceAll(" ", "+");
+
+                sendRequest(this);
+
+                //joinRequest.sendRequest(this, address);//pickUpLocText.getText().toString()
             }
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
@@ -304,9 +329,108 @@ public class PassViewRideActivity extends FragmentActivity
         MyRequest.getInstance(this).addToRequestQueue(leaveRequest);
     }
 
+    public void sendRequest(final Activity activity)
+    {
+        String address = cityText.getText().toString() + "+" +
+                suberbText.getText().toString() + "+" +
+                streetText.getText().toString();
+
+        String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
+                "address=" + address + ",+Australia&" +
+                "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
+
+        StringRequest getLocRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    public void onResponse(String response)
+                    {
+                        try
+                        {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            System.out.println(jsonResponse.toString());
+
+                            lat = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                    getJSONObject("geometry").getJSONObject("location").
+                                    getString("lat");
+                            lon = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                    getJSONObject("geometry").getJSONObject("location").
+                                    getString("lng");
+
+                            // Check response whether it's accurate, if not remind user
+
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        sendJoinRequest(activity);
+
+                        // check response, whether it received
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    public void onErrorResponse(VolleyError volleyError)
+                    {
+                        volleyError.printStackTrace();
+                        System.out.println("it doesn't work");
+                    }
+                });
+
+        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
+    }
+
+    private void sendJoinRequest(final Activity activity)
+    {
+        StringRequest joinRequest = new StringRequest(Request.Method.POST,
+                JOIN_REQUEST_URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
+
+                Intent intent = new Intent(activity, MyRidesActivity.class);
+                activity.startActivity(intent);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending post failed!");
+            }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+
+                address = cityText.getText().toString() + "\n" +
+                        suberbText.getText().toString() + "\n" +
+                        streetText.getText().toString();
+
+                params.put("username", User.getCurrentUser().getUsername());
+                params.put("ride_id", ride.getRideId());
+                params.put("p_lat", lat);
+                params.put("p_lon", lon);
+                params.put("pickup_add", address);
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(activity).addToRequestQueue(joinRequest);
+    }
+
     // Check whether user has typed in the pickup location
     public boolean inputValid()
     {
-        return !pickUpLocText.getText().toString().isEmpty();
+        return !cityText.getText().toString().isEmpty() &&
+                !suberbText.getText().toString().isEmpty() &&
+                !streetText.getText().toString().isEmpty();
+        //return !pickUpLocText.getText().toString().isEmpty();
     }
 }

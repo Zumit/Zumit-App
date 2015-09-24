@@ -68,19 +68,29 @@ public class Ride implements Serializable
         // a Ride object
         try
         {
+            // Get start and end address
+            String startAddress = jsonRide.getString("start_add");
+            String endAddress = jsonRide.getString("destination");
+
+            // Get start lat and lon
             tempArray = jsonRide.getJSONArray("start_point");
-            start = new Location(tempArray.getDouble(0), tempArray.getDouble(1));
+            start = new Location(tempArray.getDouble(0), tempArray.getDouble(1), startAddress);
 
+            // Get end lat and lon
             tempArray = jsonRide.getJSONArray("end_point");
-            end = new Location(tempArray.getDouble(0), tempArray.getDouble(1));
+            end = new Location(tempArray.getDouble(0), tempArray.getDouble(1), endAddress);
 
+            // Get ride id
             rideId = jsonRide.getString("_id");
 
+            // Get driver info
             tempObj = jsonRide.getJSONObject("driver");
             driver = new User(tempObj.getString("username"), "email", 123, 0, UserType.DRIVER);
 
+            // Get seat number, start time and arrival time
             limit = jsonRide.getInt("seats");
             arriving_time = jsonRide.getString("arrival_time");
+            start_time = jsonRide.getString("start_time");
 
             /* get the list of requests */
 

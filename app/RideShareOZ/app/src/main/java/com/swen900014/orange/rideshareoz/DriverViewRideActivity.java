@@ -57,7 +57,7 @@ public class DriverViewRideActivity extends AppCompatActivity
 
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
         TextView endLabel = (TextView) findViewById(R.id.endPointText);
-        //TextView startTimeLabel = (TextView) findViewById(R.id.startTimeText);
+        TextView startTimeLabel = (TextView) findViewById(R.id.startTimeText);
         TextView arrivalTimeLabel = (TextView) findViewById(R.id.endTimeText);
         TextView driverText = (TextView) findViewById(R.id.driverText);
         TextView seatsText = (TextView) findViewById(R.id.seatsText);
@@ -67,6 +67,7 @@ public class DriverViewRideActivity extends AppCompatActivity
 
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
+        startTimeLabel.setText(ride.getStartTime());
         arrivalTimeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername());
         seatsText.setText("" + ride.getSeats());
