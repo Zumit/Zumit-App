@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -56,9 +57,8 @@ public class OfferRide extends FragmentActivity implements
     private String lonE = "";
     private PlaceAutoCompleteAdapter adapter;
     private boolean isFind = false;
-
+    String OFFER_RIDE_URL = "http://144.6.226.237/ride/search?";
     protected GoogleApiClient mGoogleApiClient;
-
 
     private static final LatLngBounds BOUNDS_GREATER_Melbourne = new LatLngBounds(
             new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
@@ -86,17 +86,7 @@ public class OfferRide extends FragmentActivity implements
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
 
-        /* check if it offer or find  */
-        Intent intent = this.getIntent();
-        if (intent != null && intent.hasExtra("type")){
-            String type = intent.getStringExtra("type");
-            if(type.equals("find")){
-                SpinSN.setVisibility(View.INVISIBLE);
-                textSN.setVisibility(View.INVISIBLE);
-                //OFFER_RIDE_URL = "http://144.6.226.237/ride/search?";
-                isFind = true;
-            }
-        }
+
 
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -123,12 +113,14 @@ public class OfferRide extends FragmentActivity implements
                 Intent searchResultsIntent = new Intent(this, MyRidesActivity.class);
                 searchResultsIntent.putExtra("type","find");
                 //TODO: Fill extras with the search parameters
-                searchResultsIntent.putExtra("startLon","xxx");
-                searchResultsIntent.putExtra("startLat","xxx");
-                searchResultsIntent.putExtra("endLon","xxx");
-                searchResultsIntent.putExtra("endLat","xxx");
-                searchResultsIntent.putExtra("date","xxx");
-                searchResultsIntent.putExtra("arrivalTime","xxx");
+                searchResultsIntent.putExtra("startLon", lonS);
+                searchResultsIntent.putExtra("startLat", latS);
+                searchResultsIntent.putExtra("endLon", lonE);
+                searchResultsIntent.putExtra("endLat", latE);
+                searchResultsIntent.putExtra("date", "xxx");
+                searchResultsIntent.putExtra("arrivalTime", EditEndTime.getText().toString());
+
+
                 startActivity(searchResultsIntent);
             }
         }
@@ -293,6 +285,30 @@ public class OfferRide extends FragmentActivity implements
             @Override
             public void onResponse(String s)
             {
+                try
+                {
+                    Log.i("jumping to my ride page", "jumping to my ride page successfully");
+                    Intent intent=new Intent(OfferRide.this, MainActivity.class);
+                    /* check if it offer or find  */
+                   // Intent intent = this.getIntent();
+                    if (intent != null && intent.hasExtra("type"))
+                    {
+                        String type = intent.getStringExtra("type");
+                        if(type.equals("find")){
+                            SpinSN.setVisibility(View.INVISIBLE);
+                            textSN.setVisibility(View.INVISIBLE);
+
+                            isFind = true;
+                        }
+                    }
+                    startActivity(intent);
+
+
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+
                 System.out.println("response: " + s);
             }
         }, new Response.ErrorListener()
@@ -340,9 +356,10 @@ public class OfferRide extends FragmentActivity implements
                 params.put("seat", SpinSN.getText().toString());
                 params.put("arrival_time", EditEndTime.getText().toString());
                 params.put("start_time", EditStartTime.getText().toString());
-                params.put("eventid", "1");
-                params.put("username", User.getCurrentUser().getUsername());
 
+                params.put("username", User.getCurrentUser().getUsername());
+                params.put("destination",EditStart.getText().toString());
+                params.put("start_add",EditStart.getText().toString());
                 return params;
             }
         };
@@ -350,11 +367,20 @@ public class OfferRide extends FragmentActivity implements
         MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     public void offerRide(View view)
     {
         if (inputValid())
         {
             sendRequest(this, EditStart.getText().toString(), EditEnd.getText().toString());
+
+
         }
         else
         {
