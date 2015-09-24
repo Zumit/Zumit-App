@@ -4,7 +4,6 @@ var User = require('../models/User.js');
 var Group = require('../models/Group.js');
 var date = require('date-and-time');
 
-
 var RideSchema = new Schema({
   arrival_time: Date,
   start_time: Date,
