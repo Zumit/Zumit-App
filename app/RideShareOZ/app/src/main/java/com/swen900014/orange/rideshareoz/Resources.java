@@ -11,7 +11,8 @@ public class Resources
     public final static String GETALL_RIDE_URL = "http://144.6.226.237/ride/getall";
     public final static String GETALL_USER_URL = "http://144.6.226.237/user/getall";
     public final static String LOGIN_URL = "http://144.6.226.237/user/login";
-    public final static String OFFER_RIDE_URL = "http://144.6.226.237/ride/create?";
+    public final static String SEARCH_RIDE_URL = "http://144.6.226.237/ride/search?";
+    public final static String OFFER_RIDE_URL = "http://144.6.226.237/ride/create";
     public final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
     public final static String ACCEPT_REQUEST_URL = "http://144.6.226.237/ride/accept";
     public final static String REJECT_REQUEST_URL = "http://144.6.226.237/ride/reject";

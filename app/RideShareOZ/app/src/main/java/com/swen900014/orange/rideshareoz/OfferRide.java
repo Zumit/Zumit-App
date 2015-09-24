@@ -57,7 +57,6 @@ public class OfferRide extends FragmentActivity implements
     private String lonE = "";
     private PlaceAutoCompleteAdapter adapter;
     private boolean isFind = false;
-    String OFFER_RIDE_URL = "http://144.6.226.237/ride/search?";
     protected GoogleApiClient mGoogleApiClient;
 
     private static final LatLngBounds BOUNDS_GREATER_Melbourne = new LatLngBounds(
@@ -107,9 +106,12 @@ public class OfferRide extends FragmentActivity implements
     }
 
     @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.button1) {
-            if(isFind){
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.button1)
+        {
+            offerRide(v);
+            /*if(isFind){
                 Intent searchResultsIntent = new Intent(this, MyRidesActivity.class);
                 searchResultsIntent.putExtra("type","find");
                 //TODO: Fill extras with the search parameters
@@ -117,12 +119,16 @@ public class OfferRide extends FragmentActivity implements
                 searchResultsIntent.putExtra("startLat", latS);
                 searchResultsIntent.putExtra("endLon", lonE);
                 searchResultsIntent.putExtra("endLat", latE);
-                searchResultsIntent.putExtra("date", "xxx");
+                //searchResultsIntent.putExtra("date", "xxx");
                 searchResultsIntent.putExtra("arrivalTime", EditEndTime.getText().toString());
 
 
                 startActivity(searchResultsIntent);
             }
+            else
+            {
+
+            }*/
         }
     }
 
@@ -290,7 +296,7 @@ public class OfferRide extends FragmentActivity implements
                     Log.i("jumping to my ride page", "jumping to my ride page successfully");
                     Intent intent=new Intent(OfferRide.this, MainActivity.class);
                     /* check if it offer or find  */
-                   // Intent intent = this.getIntent();
+                    // Intent intent = this.getIntent();
                     if (intent != null && intent.hasExtra("type"))
                     {
                         String type = intent.getStringExtra("type");
