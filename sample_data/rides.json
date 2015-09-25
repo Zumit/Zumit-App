@@ -1,20 +1,20 @@
 {
   "_id":{"$oid":"55e7ed577ea19c92ac2d0911"},
   "driver":{"$oid":"55ebd465edd10def84417a43"},
-  "start_point":[-37.822913, 145.035238],
-  "end_point":[-37.796670, 144.960222],
+  "start_point":[145.035238, -37.822913],
+  "end_point":[144.960222, -37.796670],
   "start_add":"Burwood Rd/Glenferrie Rd, Hawthorn VIC 3122",
   "destination":"Grattan St/Royal Parade, Parkville VIC 3052",
   "seats": 4,
   "passengers":[
       {
           "user":{"$oid":"55ebd431a7398c5184f39b6e"},
-          "pickup_point":[-37.822913, 145.035238],
+          "pickup_point":[145.035238, -37.822913],
           "pickup_add":"Burwood Rd/Glenferrie Rd, Hawthorn VIC 3122"
       },
       {
           "user":{"$oid":"55ebd3ced6902fb183321374"},
-          "pickup_point":[-37.822913, 145.035238],
+          "pickup_point":[145.035238, -37.822913],
           "pickup_add":"Burwood Rd/Glenferrie Rd, Hawthorn VIC 3122"
       }
   ],
@@ -28,15 +28,15 @@
 {
   "_id":{"$oid":"55e7ed86d6546aebacb2edce"},
   "driver":{"$oid":"55ebd45c8a0d27bb8476be53"},
-  "start_point":[-37.870153, 144.980822],
-  "end_point":[-37.796670, 144.960222],
+  "start_point":[144.980822, -37.870153],
+  "end_point":[144.960222, -37.796670],
   "start_add":"Carlisle St, St Kilda East VIC 3183",
   "destination":"University of Melbourne/Royal Parade, Parkville VIC 3052",
   "seats": 3,
   "passengers":[
       {
           "user":{"$oid":"55ebd381e685d1378386a759"},
-          "pickup_point":[-37.870153, 144.980822],
+          "pickup_point":[144.980822, -37.870153],
           "pickup_add":"Carlisle St, St Kilda East VIC 3183"
       }
   ],
@@ -50,15 +50,15 @@
 {
   "_id":{"$oid":"55e8245cd96dfafdc45412e4"},
   "driver":{"$oid":"55ebd465edd10def84417a43"},
-  "start_point":[-37.762547, 144.973698],
-  "end_point":[-37.796670, 144.960222],
+  "start_point":[144.973698, -37.762547],
+  "end_point":[144.960222, -37.796670],
   "start_add":"23 Eddy St, Brunswick East VIC 3057",
   "destination":"University of Melbourne/Royal Parade, Parkville VIC 3052",
   "seats": 2,
   "passengers":[
       {
           "user":{"$oid":"55ebd381e685d1378386a759"},
-          "pickup_point":[-37.762547, 144.973698],
+          "pickup_point":[144.973698, -37.762547],
           "pickup_add":"23 Eddy St, Brunswick East VIC 3057"
       }
   ],
@@ -72,8 +72,8 @@
 {
   "_id":{"$oid":"55ebccc1627cfa34678b4bf2"},
   "driver":{"$oid":"55ebd381e685d1378386a759"},
-  "start_point":[-37.797416, 144.874735],
-  "end_point":[-37.796670, 144.960222],
+  "start_point":[144.874735, -37.797416],
+  "end_point":[144.960222, -37.796670],
   "start_add":"591 Barkly St, West Footscray VIC 3012",
   "destination":"University of Melbourne/Royal Parade, Parkville VIC 3052",
   "seats": 3,
@@ -89,15 +89,15 @@
 {
   "_id":{"$oid":"55ebcd1dcc5ac1e867563c44"},
   "driver":{"$oid":"55ebd431a7398c5184f39b6e"},
-  "start_point":[-37.989568, 145.213852],
-  "end_point":[-37.796670, 144.960222],
+  "start_point":[145.213852, -37.989568],
+  "end_point":[144.960222, -37.796670],
   "start_add":"8 William Ave, Dandenong South VIC 3175",
   "destination":"University of Melbourne/Royal Parade, Parkville VIC 3052",
   "seats": 1,
   "passengers":[
       {
           "user":{"$oid":"55ebd45c8a0d27bb8476be53"},
-          "pickup_point":[-37.989568, 145.213852],
+          "pickup_point":[145.213852, -37.989568],
           "pickup_add":"187 Lonsdale St, Dandenong VIC 3175"
       }
   ],
@@ -111,20 +111,20 @@
 {
   "_id":{"$oid":"55ebcd39b2d13f0c68375e67"},
   "driver":{"$oid":"55ebd381e685d1378386a759"},
-  "start_point":[-37.911497, 144.654922],
-  "end_point":[-37.796670, 144.960222],
+  "start_point":[144.654922, -37.911497],
+  "end_point":[144.960222, -37.796670],
   "start_add":"2 Doolan St, Werribee VIC 3030",
   "destination":"University of Melbourne/Royal Parade, Parkville VIC 3052",
   "seats": 3,
   "passengers":[
       {
           "user":{"$oid":"55ebd465edd10def84417a43"},
-          "pickup_point":[-37.911497, 144.654922],
+          "pickup_point":[144.654922, -37.911497],
           "pickup_add":"2 Doolan St, Werribee VIC 3030"
       },
       {
           "user":{"$oid":"55ebd3ced6902fb183321374"},
-          "pickup_point":[-37.911497, 144.654922],
+          "pickup_point":[144.654922, -37.911497],
           "pickup_add":"2 Doolan St, Werribee VIC 3030"
       }
   ],
