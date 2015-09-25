@@ -76,14 +76,9 @@ RideSchema.statics.searchRide = function(req,callback){
   start[0] = Number(req.query.s_lon);
   start[1] = Number(req.query.s_lat); 
   
-<<<<<<< HEAD
-  var e_lon=req.query.e_lon;
-  var e_lat=req.query.e_lat; 
-=======
   var qry = this.find();
   var e_lon = req.query.e_lon;
   var e_lat = req.query.e_lat; 
->>>>>>> c641c1222ba6f0732f2d27c3767cb7138cdaeaf9
   //need have arrival time
    var maxDistance = 0.01;
    var limit = 10;
