@@ -156,6 +156,12 @@ RideSchema.methods.addRequest = function(user_id,req,callback){
   pickup_point[1] = req.body.p_lat;
   var note = req.body.note;
   var pickup_time = req.body.pickup_time;
+  var count=0;
+  this.requests.forEach(function(request){
+    if (String(request.user)==String(user_id)) {
+        count=1;
+    }});
+  if(count==0){
   this.requests.push({
     'user':user_id,
     'state':"unaccept",
@@ -167,6 +173,7 @@ RideSchema.methods.addRequest = function(user_id,req,callback){
   this.save(function(err, doc){
     callback(doc);
   });
+  }else{callback("already exist");} 
 };
 
 
