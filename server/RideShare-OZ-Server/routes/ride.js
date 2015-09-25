@@ -14,8 +14,15 @@ router.get('/getall', function(req, res, next) {
   });
 });
 
-router.get('/search',function(req,res){
-  Ride.searchRide(req,function(locations){
+router.get('/search',function(req, res){
+  req.body = req.query;
+  Ride.searchRide(req, function(locations){
+    res.json(locations);
+  });
+});
+
+router.post('/search',function(req, res){
+  Ride.searchRide(req, function(locations){
     res.json(locations);
   });
 });
