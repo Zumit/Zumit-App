@@ -441,11 +441,10 @@ public class OfferRide extends FragmentActivity implements
                 params.put("seat", SpinSN.getText().toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
-                params.put("username", "qianz7@student.unimelb.edu.au");
+                params.put("username", User.getCurrentUser().getUsername());
 
                 return params;
             }
-
         };
 
         MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
@@ -487,18 +486,28 @@ public class OfferRide extends FragmentActivity implements
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
         {
-            String month = String.valueOf(monthOfYear + 1);
-            String day = String.valueOf(dayOfMonth);
-            if (monthOfYear < 10)
+            String month;
+            String day;
+
+            if (monthOfYear < 9)
             {
                 month = "0" + String.valueOf(monthOfYear + 1);
             }
+            else
+            {
+                month = String.valueOf(monthOfYear + 1);
+            }
+
             if (dayOfMonth < 10)
             {
                 day = "0" + String.valueOf(dayOfMonth);
             }
+            else
+            {
+                day = String.valueOf(dayOfMonth);
+            }
 
-            displayDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+            displayDate.setText(dayOfMonth + "-" + month + "-" + year);
             temp1 = String.valueOf(year) + "-" + month + "-" + day + "T";
         }
     };
@@ -507,16 +516,26 @@ public class OfferRide extends FragmentActivity implements
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-            String hour = String.valueOf(hourOfDay);
-            String min = String.valueOf(minute);
+            String hour;
+            String min;
+
             if (hourOfDay < 10)
             {
                 hour = "0" + String.valueOf(hourOfDay);
+            }
+            else
+            {
+                hour = String.valueOf(hourOfDay);
             }
             if (minute < 10)
             {
                 min = "0" + String.valueOf(minute);
             }
+            else
+            {
+                min = String.valueOf(minute);
+            }
+
             displayStartTime.setText(hourOfDay + ":" + minute);
             EditStartTime = temp1 + hour + ":" + min + ":00.000Z";
         }
@@ -527,16 +546,27 @@ public class OfferRide extends FragmentActivity implements
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-            String hour = String.valueOf(hourOfDay);
-            String min = String.valueOf(minute);
+            String hour;
+            String min;
+
             if (hourOfDay < 10)
             {
                 hour = "0" + String.valueOf(hourOfDay);
             }
+            else
+            {
+                hour = String.valueOf(hourOfDay);
+            }
+
             if (minute < 10)
             {
                 min = "0" + String.valueOf(minute);
             }
+            else
+            {
+                min = String.valueOf(minute);
+            }
+
             displayArrivalTime.setText(hourOfDay + ":" + minute);
             EditEndTime = temp1 + hour + ":" + min + ":00.000Z";
         }
