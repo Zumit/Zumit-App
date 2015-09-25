@@ -447,19 +447,31 @@ public class OfferRide extends FragmentActivity implements
 
 
     }
-
     DatePickerDialog.OnDateSetListener listener1 = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            displayDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+            String month=String.valueOf(monthOfYear + 1);
+            String day=String.valueOf(dayOfMonth );
+            if(monthOfYear<10)
+                month="0"+String.valueOf(monthOfYear + 1);
+            if(dayOfMonth<10)
+                day="0"+String.valueOf(dayOfMonth );
 
+            displayDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+            temp1 = String.valueOf(year) + "-" +  month + "-" +day + "T";
         }
     };
     TimePickerDialog.OnTimeSetListener listener2 = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            String hour=String.valueOf(hourOfDay);
+            String min=String.valueOf(minute );
+            if(hourOfDay<10)
+                hour="0"+String.valueOf(hourOfDay);
+            if(minute<10)
+                min="0"+String.valueOf(minute );
             displayStartTime.setText(hourOfDay + ":" + minute);
-
+            EditStartTime = temp1.toString() + hour+ ":" + min+ ":00.000Z";
         }
     };
 
@@ -467,8 +479,14 @@ public class OfferRide extends FragmentActivity implements
     TimePickerDialog.OnTimeSetListener listener4 = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            String hour=String.valueOf(hourOfDay);
+            String min=String.valueOf(minute );
+            if(hourOfDay<10)
+                hour="0"+String.valueOf(hourOfDay);
+            if(minute<10)
+                min="0"+String.valueOf(minute );
             displayArrivalTime.setText(hourOfDay + ":" + minute);
-
+            EditEndTime =  temp1.toString() + hour+ ":" + min+ ":00.000Z";
         }
     };
 
@@ -476,18 +494,22 @@ public class OfferRide extends FragmentActivity implements
 
 
 
+
+
     public void setDate(View view) {
-        new DatePickerDialog(OfferRide.this, listener1, calendar.get(calendar.YEAR), calendar.get(calendar.MONTH), calendar.get(calendar.DAY_OF_MONTH)).show();
-        temp1 = String.valueOf(calendar.get(calendar.YEAR)) + "-" + String.valueOf(calendar.get(calendar.MONTH) + 1) + "-" + String.valueOf(calendar.get(calendar.DAY_OF_MONTH)) + "T";
+        new DatePickerDialog(OfferRide.this, listener1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+
     }
     public void setStartTime(View view) {
-        new TimePickerDialog(OfferRide.this, listener2, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
-        EditStartTime = temp1.toString() + String.valueOf(calendar.get(calendar.HOUR_OF_DAY) )+ ":" + String.valueOf(calendar.get(calendar.MINUTE)) + ":00.000Z";
+        new TimePickerDialog(OfferRide.this, listener2, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        // EditStartTime = temp1.toString() + String.valueOf(calendar.get(calendar.HOUR_OF_DAY) )+ ":" + String.valueOf(calendar.get(calendar.MINUTE)) + ":00.000Z";
     }
     public void setArrivalTime(View view) {
-        new TimePickerDialog(OfferRide.this, listener4, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
-        EditEndTime = temp1.toString() +String.valueOf( calendar.get(calendar.HOUR_OF_DAY) )+ ":" + String.valueOf(calendar.get(calendar.MINUTE)) + ":00.000Z";
+        new TimePickerDialog(OfferRide.this, listener4, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        // EditEndTime = temp1.toString() +String.valueOf( calendar.get(calendar.HOUR_OF_DAY) )+ ":" + String.valueOf(calendar.get(calendar.MINUTE)) + ":00.000Z";
     }
+
+
     //Check whether all information needed for offering a ride
     // has been typed in by user
     public boolean inputValid()
