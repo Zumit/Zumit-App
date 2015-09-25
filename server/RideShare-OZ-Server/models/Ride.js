@@ -56,7 +56,7 @@ RideSchema.statics.createRide = function(req,callback){
 
   User.findById(req.userinfo._id, function(err, user){
     ride.driver = user;
-    Group.findById(req.body.groupid,function(err,group){
+    Group.findById(req.body.group_id,function(err,group){
       ride.group = group;
       ride.save(function(err, doc){
         if (err) {
