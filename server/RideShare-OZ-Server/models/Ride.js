@@ -100,6 +100,7 @@ RideSchema.statics.searchRide = function(req,callback){
   //   callback(locations);
   // });,
   var rides=[];
+
   this.find({
     'group':groupID,
     'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
@@ -107,9 +108,9 @@ RideSchema.statics.searchRide = function(req,callback){
       $nearSphere: start,
       $maxDistance: maxDistance
     }
-  },function(err,ride){
+  }).populate('driver passengers.user requests.user',
+      'username phone driver_license').exec({},function(err,ride){
     if (ride) {
-
       // console.log("============");
       // console.log(ride);
       ride.forEach(function(ride){
