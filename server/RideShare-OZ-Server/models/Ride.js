@@ -7,7 +7,7 @@ var RideSchema = new Schema({
   arrival_time: Date,
   start_time: Date,
   seats: Number,
-  start_point: {type:[Number],index:'2d'}, // Lat, Lng
+  start_point: {type:[Number],index:'2d'}, // Lon, Lat
   start_add: String,
   end_point: {type:[Number],index:'2d'},
   destination: String,
@@ -70,24 +70,30 @@ RideSchema.statics.createRide = function(req,callback){
 
 
 // lat lon  desitination  date 
-RideSchema.statics.searchRide =function(req,callback){
+RideSchema.statics.searchRide = function(req,callback){
 
-  var start=[];
-  start[0]=req.query.s_lon;
-  start[1]=req.query.s_lat; 
+  var start = [];
+  start[0] = Number(req.query.s_lon);
+  start[1] = Number(req.query.s_lat); 
   
-  var qry=this.find();
+<<<<<<< HEAD
   var e_lon=req.query.e_lon;
   var e_lat=req.query.e_lat; 
+=======
+  var qry = this.find();
+  var e_lon = req.query.e_lon;
+  var e_lat = req.query.e_lat; 
+>>>>>>> c641c1222ba6f0732f2d27c3767cb7138cdaeaf9
   //need have arrival time
-   var maxDistance=0.01;
-   var limit=10;
-   var groupID=req.query.groupId;
-   var arrival_time=req.query.arrival_time;
-   var s_time=arrival_time+'T00:00:00.00Z';
-   var e_time=arrival_time+'T23:59:59.00Z';
-   //console.log(s_time);
-   //console.log(e_time);
+   var maxDistance = 0.01;
+   var limit = 10;
+   var groupID = req.query.group_id;
+   var arrival_time = req.query.arrival_time;
+   var s_time = arrival_time.substring(0, arrival_time.length - 14) + 'T00:00:00.000Z';
+   var e_time = arrival_time.substring(0, arrival_time.length - 14) + 'T23:59:59.000Z';
+   console.log(s_time);
+   console.log(e_time);
+   console.log(start);
   
   // this.aggregate([
   //   {
@@ -99,27 +105,36 @@ RideSchema.statics.searchRide =function(req,callback){
   // ], function(err, locations){
   //   callback(locations);
   // });,
- var rides=[];
-  this.find({'group':groupID,'arrival_time':{"$gte":s_time,"$lt":e_time},
-        'start_point': {
-          $nearSphere:start,
-          $maxDistance: maxDistance
+  var rides=[];
+  this.find({
+    'group':groupID,
+    'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
+    'start_point': {
+      $nearSphere: start,
+      $maxDistance: maxDistance
+    }
+  },function(err,ride){
+    if (ride) {
+
+      // console.log("============");
+      // console.log(ride);
+      ride.forEach(function(ride){
+        // console.log(ride.end_point[0]);
+        // console.log(e_lon);
+        //e_lon=Number(e_lon)+1;
+        // console.log(Number(e_lon)+1);
+        // console.log(Number(e_lon)-1);
+        //e_lat=Number(e_lat)+1;
+        if((Number(e_lon)-0.01)<ride.end_point[0]&&ride.end_point[0]<(Number(e_lon)+0.01)&&(Number(e_lat)-0.01)<ride.end_point[1]&&ride.end_point[1]<(Number(e_lat)+0.01)){
+          rides.push(ride);
         }
-      },function(err,ride){
-        if (ride) {
-          ride.forEach(function(ride){
-            console.log(ride.end_point[0]);
-            console.log(e_lon);
-            //e_lon=Number(e_lon)+1;
-            console.log(Number(e_lon)+1);
-            console.log(Number(e_lon)-1);
-            //e_lat=Number(e_lat)+1;
-            if((Number(e_lon)-0.01)<ride.end_point[0]&&ride.end_point[0]<(Number(e_lon)+0.01)&&(Number(e_lat)-0.01)<ride.end_point[1]&&ride.end_point[1]<(Number(e_lat)+0.01))
-              {rides.push(ride);}
-          });
-        }
-        callback(rides);
-    });
+        // console.log(time);
+      });
+
+    }
+    callback(rides);
+    
+  });
 
 
 
