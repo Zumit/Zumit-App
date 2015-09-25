@@ -24,11 +24,11 @@ public class Ride implements Serializable
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
-    private RideState rideState = RideState.NOTSET;
+    private RideState rideState = RideState.New;
 
     public enum RideState implements Serializable
     {
-        OFFERING, JOINED, VIEWING, NOTSET
+        OFFERING, JOINED, VIEWING, New
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit)
@@ -154,7 +154,7 @@ public class Ride implements Serializable
 
     // Get a json array of all rides data received from server,
     // and convert it to an ArrayList of Ride objects
-    public static ArrayList<Ride> fromJson(JSONArray ridesJsonArray)
+    public static ArrayList<Ride> fromJson(JSONArray ridesJsonArray, boolean isSearchResults)
     {
         ArrayList<Ride> rides = new ArrayList<>();
         for (int i = 0; i < ridesJsonArray.length(); i++)
@@ -162,7 +162,7 @@ public class Ride implements Serializable
             try
             {
                 Ride nRide = new Ride(ridesJsonArray.getJSONObject(i));
-                if (nRide.rideState != RideState.NOTSET)
+                if (isSearchResults || (nRide.rideState != RideState.New))
                 {
                     rides.add(nRide);
                 }
