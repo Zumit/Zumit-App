@@ -130,7 +130,7 @@ public class MyRidesFragment extends Fragment
             url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
             url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
             url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
-            url += "group_id=" + intent.getStringExtra("groupId") ;
+            url += "group_id=" + intent.getStringExtra("group_id") ;
 
             ridesTask.execute(url);
         }else{
@@ -254,7 +254,7 @@ public class MyRidesFragment extends Fragment
             {
                 try
                 {
-                    ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(result));
+                    ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(result), isSearchResults);
                     mRidesAdapter.clear();
                     for (Ride listItemRide : serverRides)
                     {
