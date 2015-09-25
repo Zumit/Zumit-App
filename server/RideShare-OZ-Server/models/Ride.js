@@ -199,8 +199,16 @@ var user_id=req.userinfo._id;
 var pickup_point=[];
 var pickup_time; 
 var pickup_add;
+var user_in_passenger=0;
  //add use to passenger
   this.findById(ride_id,function(err,doc){
+
+    doc.passengers.forEach(function(passenger){
+        if (String(passenger.user)==String(user_id))
+        {user_in_passenger=1;}
+
+    });
+    if(user_in_passenger==0){
     doc.requests.forEach(function(request){
     
     
@@ -217,7 +225,7 @@ var pickup_add;
         });
         doc.save();
       }
-    });
+    });}
   });
   //delete the user in requests
   this.findByIdAndUpdate(ride_id,{$pull:{'requests':{'user':user_id}}},function(err,doc){
