@@ -73,22 +73,21 @@ RideSchema.statics.createRide = function(req,callback){
 RideSchema.statics.searchRide = function(req,callback){
 
   var start = [];
-  start[0] = Number(req.query.s_lon);
-  start[1] = Number(req.query.s_lat); 
+  start[0] = Number(req.body.s_lon);
+  start[1] = Number(req.body.s_lat); 
   
-  var qry = this.find();
-  var e_lon = req.query.e_lon;
-  var e_lat = req.query.e_lat; 
+  var e_lon = req.body.e_lon;
+  var e_lat = req.body.e_lat; 
   //need have arrival time
-   var maxDistance = 0.01;
-   var limit = 10;
-   var groupID = req.query.group_id;
-   var arrival_time = req.query.arrival_time;
-   var s_time = arrival_time.substring(0, arrival_time.length - 14) + 'T00:00:00.000Z';
-   var e_time = arrival_time.substring(0, arrival_time.length - 14) + 'T23:59:59.000Z';
-   console.log(s_time);
-   console.log(e_time);
-   console.log(start);
+  var maxDistance = 0.01;
+  var limit = 10;
+  var groupID = req.body.group_id;
+  var arrival_time = req.body.arrival_time;
+  var s_time = arrival_time.substring(0, arrival_time.length - 14) + 'T00:00:00.000Z';
+  var e_time = arrival_time.substring(0, arrival_time.length - 14) + 'T23:59:59.000Z';
+  console.log(s_time);
+  console.log(e_time);
+  console.log(start);
   
   // this.aggregate([
   //   {
