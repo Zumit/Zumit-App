@@ -125,12 +125,16 @@ public class MyRidesFragment extends Fragment
             //TODO: start task to get serch results
             //search parameters will be taken from the intent
             String url = SEARCH_RIDE_URL;
-            url += "s_lon=" + intent.getStringExtra("s_lon") + "&";
             url += "s_lat=" + intent.getStringExtra("s_lat") + "&";
-            url += "groupId=" + intent.getStringExtra("groupId") + "&";
-            url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
+            url += "s_lon=" + intent.getStringExtra("s_lon") + "&";
             url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
-            url += "arrival_time=" + intent.getStringExtra("arrival_time");
+            url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
+            url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
+
+            url += "group_Id=" + intent.getStringExtra("groupId") ;
+
+
+
             ridesTask.execute(url);
         }else{
             ridesTask.execute(GETALL_RIDE_URL);
