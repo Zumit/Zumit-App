@@ -354,13 +354,12 @@ public class OfferRide extends FragmentActivity implements
                             searchResultsIntent.putExtra("type", "find");
                             searchResultsIntent.putExtra("s_lon", lonS);
                             searchResultsIntent.putExtra("s_lat", latS);
-                            searchResultsIntent.putExtra("groupId", "55cab5dde81ab31606e4814c");
+                            searchResultsIntent.putExtra("group_id", "55cab5dde81ab31606e4814c");
                             searchResultsIntent.putExtra("e_lon", lonE);
                             searchResultsIntent.putExtra("e_lat", latE);
-                            searchResultsIntent.putExtra("arrival_time", EditEndTime.toString());
+                            searchResultsIntent.putExtra("arrival_time", EditEndTime);
                             startActivity(searchResultsIntent);
                         }
-
 
                         // check response, whether it received
                     }
@@ -438,12 +437,11 @@ public class OfferRide extends FragmentActivity implements
                     params.put("destination", endAddress);
                 }
 
-                params.put("groupid", "55cab5dde81ab31606e4814c");
+                params.put("group_id", "55cab5dde81ab31606e4814c");
                 params.put("seat", SpinSN.getText().toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
                 params.put("username", "qianz7@student.unimelb.edu.au");
-
 
                 return params;
             }
