@@ -32,6 +32,7 @@ var RideSchema = new Schema({
   note: String,
 });
 
+
 RideSchema.statics.getAllRides = function(callback){
   this.find().populate('driver passengers.user requests.user',
       'username phone driver_license').exec({}, function(err, rides){
@@ -76,14 +77,17 @@ RideSchema.statics.searchRide = function(req,callback){
   start[0] = Number(req.query.s_lon);
   start[1] = Number(req.query.s_lat); 
   
-<<<<<<< HEAD
+
   var e_lon=req.query.e_lon;
   var e_lat=req.query.e_lat; 
-=======
+
   var qry = this.find();
+  // var end=[]
+  // end[0]= req.query.e_lon;
+  // end[1]= req.query.e_lat; 
   var e_lon = req.query.e_lon;
   var e_lat = req.query.e_lat; 
->>>>>>> c641c1222ba6f0732f2d27c3767cb7138cdaeaf9
+
   //need have arrival time
    var maxDistance = 0.01;
    var limit = 10;
@@ -112,23 +116,23 @@ RideSchema.statics.searchRide = function(req,callback){
     'start_point': {
       $nearSphere: start,
       $maxDistance: maxDistance
-    }
+    } 
   },function(err,ride){
     if (ride) {
 
       // console.log("============");
       // console.log(ride);
-      ride.forEach(function(ride){
+    ride.forEach(function(ride){
         // console.log(ride.end_point[0]);
         // console.log(e_lon);
         //e_lon=Number(e_lon)+1;
         // console.log(Number(e_lon)+1);
         // console.log(Number(e_lon)-1);
         //e_lat=Number(e_lat)+1;
-        if((Number(e_lon)-0.01)<ride.end_point[0]&&ride.end_point[0]<(Number(e_lon)+0.01)&&(Number(e_lat)-0.01)<ride.end_point[1]&&ride.end_point[1]<(Number(e_lat)+0.01)){
+   if((Number(e_lon)-0.01)<ride.end_point[0]&&ride.end_point[0]<(Number(e_lon)+0.01)&&(Number(e_lat)-0.01)<ride.end_point[1]&&ride.end_point[1]<(Number(e_lat)+0.01)){
           rides.push(ride);
-        }
-        // console.log(time);
+       }
+   //      //console.log(time);
       });
 
     }
@@ -204,6 +208,7 @@ var pickup_add;
         pickup_point=request.pickup_point;
         pickup_time=request.pickup_time;
         pickup_add=request.pickup_add;
+        doc.seats=Number(doc.seats)-1;
         doc.passengers.push({
           'user':user_id,
           'pickup_point':pickup_point,
@@ -224,14 +229,23 @@ RideSchema.statics.kickPassenger= function(req,callback){
   var ride_id=req.body.ride_id;
   var user_id=req.userinfo._id; 
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
-      function(err,doc){callback(doc);});
+      function(err,doc){
+        doc.seats=Number(doc.seats)+1;
+        doc.save();
+        callback(doc);
+      });
 };
 
 RideSchema.statics.passengerLeave= function(req,callback){
   var ride_id=req.body.ride_id;
   var user_id=req.userinfo._id; 
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
-      function(err,doc){callback(doc);});
+      function(err,doc){
+       
+        doc.seats=Number(doc.seats)+1;
+        doc.save();
+        callback(doc);
+      });
 };
 
 module.exports = mongoose.model('Ride', RideSchema);
