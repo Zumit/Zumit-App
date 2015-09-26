@@ -45,15 +45,14 @@ public class DriverViewRideActivity extends AppCompatActivity
         thisActivity = this;
 
         Intent received = getIntent();
-
         ride = (Ride) received.getSerializableExtra("SelectedRide");
 
         // Test accepting and rejecting requests
         //ride.acceptJoin(new Pickup(new User("user1", "email", 123, 0, UserType.PASSENGER),
         //        new Location(0.0, 0.0, "carlton")));
 
-        ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
-                new Location(0.0, 0.0, "carlton")));
+        //ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
+        //        new Location(0.0, 0.0, "carlton")));
 
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
         TextView endLabel = (TextView) findViewById(R.id.endPointText);
