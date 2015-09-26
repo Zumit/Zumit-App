@@ -125,9 +125,9 @@ public class OfferRide extends FragmentActivity implements
             String type = intent.getStringExtra("type");
             if (type.equals("find"))
             {
-                SpinSN.setVisibility(View.INVISIBLE);
-                textSN.setVisibility(View.INVISIBLE);
-                btnStartTime.setVisibility(View.INVISIBLE);
+                SpinSN.setVisibility(View.GONE);
+                textSN.setVisibility(View.GONE);
+                btnStartTime.setVisibility(View.GONE);
                 isFind = true;
             }
         }
