@@ -238,7 +238,7 @@ RideSchema.statics.kickPassenger= function(req,callback){
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
       function(err,doc){
         // doc.seats=Number(doc.seats)+1;
-        doc.save();
+       // doc.save();
         callback(doc);
       });
 };
@@ -250,7 +250,7 @@ RideSchema.statics.passengerLeave= function(req,callback){
       function(err,doc){
        
         // doc.seats=Number(doc.seats)+1;
-        doc.save();
+       // doc.save();
         callback(doc);
       });
 };
