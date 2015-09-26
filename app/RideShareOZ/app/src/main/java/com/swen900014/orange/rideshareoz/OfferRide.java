@@ -402,14 +402,13 @@ public class OfferRide extends FragmentActivity implements
             {
                 Map<String, String> params = new HashMap<>();
 
-                startAddress = startCityEdit.getText().toString() + "\n" +
-                        startSuburbEdit.getText().toString() + "\n" +
+                startAddress = startCityEdit.getText().toString() + ", " +
+                        startSuburbEdit.getText().toString() + ", " +
                         startStreetEdit.getText().toString();
 
-                endAddress = endCityEdit.getText().toString() + "\n" +
-                        endSuburbEdit.getText().toString() + "\n" +
+                endAddress = endCityEdit.getText().toString() + ", " +
+                        endSuburbEdit.getText().toString() + ", " +
                         endStreetEdit.getText().toString();
-
 
                 if (Check1.isChecked())
                 {

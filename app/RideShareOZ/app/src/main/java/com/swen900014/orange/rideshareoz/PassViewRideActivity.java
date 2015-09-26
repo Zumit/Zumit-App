@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,7 +66,7 @@ public class PassViewRideActivity extends FragmentActivity
     private TextView pickUpLocText;
 
     private TextView stateText;
-    private TextView suberbText;
+    private TextView suburbText;
     private TextView streetText;
 
     private TableLayout passengerList;
@@ -94,6 +96,10 @@ public class PassViewRideActivity extends FragmentActivity
         TextView arrivalTimeLabel = (TextView) findViewById(R.id.arrivalTimeEditPass);
         TextView driverText = (TextView) findViewById(R.id.driverTextPassView);
 
+        TextView stateLabel = (TextView) findViewById(R.id.stateLabelPass);
+        TextView suburbLabel = (TextView) findViewById(R.id.suburbLabelPass);
+        TextView streetLabel = (TextView) findViewById(R.id.streetLabelPass);
+
         TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
         TextView pickUpLabel = (TextView) findViewById(R.id.pickUpLabel);
         TextView seatsText = (TextView) findViewById(R.id.seatsEditPass);
@@ -102,7 +108,7 @@ public class PassViewRideActivity extends FragmentActivity
         passengerList = (TableLayout) findViewById(R.id.passengerListPass);
 
         stateText = (TextView) findViewById(R.id.cityEditPass);
-        suberbText = (TextView) findViewById(R.id.suberbEditPass);
+        suburbText = (TextView) findViewById(R.id.suberbEditPass);
         streetText = (TextView) findViewById(R.id.streetEditPass);
 
         Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
@@ -123,12 +129,15 @@ public class PassViewRideActivity extends FragmentActivity
         else if (ride.getRideState() == Ride.RideState.JOINED)
         {
             joinLeaveButton.setText(getString(R.string.LeaveRide));
+
+            stateLabel.setVisibility(View.GONE);
+            suburbLabel.setVisibility(View.GONE);
+            streetLabel.setVisibility(View.GONE);
+
+
             pickUpLocText.setVisibility(View.INVISIBLE);
-            stateText.setVisibility(View.INVISIBLE);
-            suberbText.setVisibility(View.INVISIBLE);
-            streetText.setVisibility(View.INVISIBLE);
-            inputTabelName.setVisibility(View.INVISIBLE);
-            pickUpLabel.setVisibility(View.INVISIBLE);
+            inputTabelName.setVisibility(View.GONE);
+            pickUpLabel.setVisibility(View.GONE);
         }
 
         startLabel.setText(ride.getStart().getAddress());
@@ -272,7 +281,7 @@ public class PassViewRideActivity extends FragmentActivity
             if (inputValid())
             {
                 address = stateText.getText().toString() + "+" +
-                        suberbText.getText().toString() + "+" +
+                        suburbText.getText().toString() + "+" +
                         streetText.getText().toString();
 
                 address = address.replaceAll(" ", "+");
@@ -332,7 +341,7 @@ public class PassViewRideActivity extends FragmentActivity
     public void sendRequest(final Activity activity)
     {
         String address = stateText.getText().toString() + "+" +
-                suberbText.getText().toString() + "+" +
+                suburbText.getText().toString() + "+" +
                 streetText.getText().toString();
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
@@ -408,8 +417,8 @@ public class PassViewRideActivity extends FragmentActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                address = stateText.getText().toString() + "\n" +
-                        suberbText.getText().toString() + "\n" +
+                address = stateText.getText().toString() + ", " +
+                        suburbText.getText().toString() + ", " +
                         streetText.getText().toString();
 
                 params.put("username", User.getCurrentUser().getUsername());
@@ -430,7 +439,7 @@ public class PassViewRideActivity extends FragmentActivity
     public boolean inputValid()
     {
         return !stateText.getText().toString().isEmpty() &&
-                !suberbText.getText().toString().isEmpty() &&
+                !suburbText.getText().toString().isEmpty() &&
                 !streetText.getText().toString().isEmpty();
         //return !pickUpLocText.getText().toString().isEmpty();
     }

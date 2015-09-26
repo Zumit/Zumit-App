@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -71,7 +72,8 @@ public class UserInfoActivity extends AppCompatActivity
         // Hide accept and reject options if current user is
         // not driver offering the ride
         if (rideState == Ride.RideState.OFFERING &&
-                userInfo.getUser().getUsername() != ride.getDriver().getUsername())
+                userInfo.getUser().getUsername() != ride.getDriver().getUsername() &&
+                ride.hasRequest(userInfo.getUser()))
         {
             acceptButton.setOnClickListener(new View.OnClickListener()
             {
@@ -92,8 +94,8 @@ public class UserInfoActivity extends AppCompatActivity
         }
         else
         {
-            acceptButton.setVisibility(View.INVISIBLE);
-            rejectButton.setVisibility(View.INVISIBLE);
+            acceptButton.setVisibility(View.GONE);
+            rejectButton.setVisibility(View.GONE);
         }
     }
 

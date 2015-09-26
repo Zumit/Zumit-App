@@ -4,6 +4,7 @@
             tools:context="com.swen900014.orange.rideshareoz.PassViewRide" >
 
     <GridLayout
+        android:id="@+id/passGrid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -11,7 +12,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:columnCount="10"
-        android:fillViewport="true" >
+        android:fillViewport="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -204,7 +205,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/state"
-            android:id="@+id/textView10"
+            android:id="@+id/stateLabelPass"
             android:layout_row="10"
             android:layout_column="0"
             android:layout_gravity="fill_horizontal|center_horizontal"
@@ -227,7 +228,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/suburb"
-            android:id="@+id/textView11"
+            android:id="@+id/suburbLabelPass"
             android:layout_row="11"
             android:layout_column="0"
             android:layout_gravity="fill_horizontal|center_horizontal"
@@ -250,7 +251,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/street"
-            android:id="@+id/textView13"
+            android:id="@+id/streetLabelPass"
             android:layout_row="12"
             android:layout_column="0"
             android:layout_gravity="fill_horizontal|center_horizontal"

@@ -221,6 +221,32 @@ public class Ride implements Serializable
         return waiting.remove(lift);
     }
 
+    public boolean hasPass(User pass)
+    {
+        for (Pickup pick : joined)
+        {
+            if (pass.getUsername() == pick.getUser().getUsername())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasRequest(User request)
+    {
+        for (Pickup pick : waiting)
+        {
+            if (request.getUsername() == pick.getUser().getUsername())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void rateDriver()
     {
         driver.rate();
