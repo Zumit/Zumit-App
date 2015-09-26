@@ -52,8 +52,8 @@ public class DriverViewRideActivity extends AppCompatActivity
         //ride.acceptJoin(new Pickup(new User("user1", "email", 123, 0, UserType.PASSENGER),
         //        new Location(0.0, 0.0, "carlton")));
 
-        //ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
-        //        new Location(0.0, 0.0, "carlton")));
+        ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
+                new Location(0.0, 0.0, "carlton")));
 
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
         TextView endLabel = (TextView) findViewById(R.id.endPointText);
@@ -86,7 +86,6 @@ public class DriverViewRideActivity extends AppCompatActivity
 
         updateView();
     }
-
 
     public void updateView()
     {

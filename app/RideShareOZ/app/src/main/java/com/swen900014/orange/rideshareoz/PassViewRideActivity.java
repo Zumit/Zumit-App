@@ -288,8 +288,6 @@ public class PassViewRideActivity extends FragmentActivity
                 address = address.replaceAll(" ", "+");
 
                 sendRequest(this);
-
-                //joinRequest.sendRequest(this, address);//pickUpLocText.getText().toString()
             }
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
