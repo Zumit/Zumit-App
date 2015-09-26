@@ -4,306 +4,157 @@
             android:layout_height="match_parent"
             tools:context="com.swen900014.orange.rideshareoz.OfferRide" >
 
-    <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" >
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:rowCount="11"
+        android:columnCount="6">
 
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:id="@+id/tableLayout">
+        <TextView
+            android:id="@+id/startPointText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/StartPoint"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_gravity="center_horizontal"/>
 
-            <!-- Start -->
+        <AutoCompleteTextView
+            android:id="@+id/Start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_columnSpan="6"
+            android:layout_row="1"
+            android:layout_gravity="fill_horizontal"
+            android:textSize="12dp"
+            android:inputType="textAutoComplete"/>
 
-            <TableRow>
-                <TextView
-                    android:id="@+id/startPointText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="@string/StartPoint"
-                    android:textSize="20dp"
-                    android:textStyle="bold"/>
+        <CheckBox
+            android:id="@+id/current1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:gravity="center"
+            android:text="@string/_Current"
+            android:layout_column="1"
+            android:layout_row="0"
+            />
 
-                <AutoCompleteTextView
-                    android:id="@+id/Start"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="30dp"/>
+        <TextView
+            android:id="@+id/endPointText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/endPoint"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
 
-                <CheckBox
-                    android:id="@+id/current1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="5dp"
-                    android:checked="false"
-                    android:gravity="center"
-                    android:text="@string/_Current"/>
-            </TableRow>
+        <AutoCompleteTextView
+            android:id="@+id/End"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_columnSpan="6"
+            android:layout_gravity="fill_horizontal"
+            android:textSize="12dp"
+            android:inputType="textMultiLine"/>
 
-
-            <TableRow>
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="State:"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_column="0"/>
-
-                <EditText
-                    android:id="@+id/srartCityEdit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Suburb:"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_column="0"/>
-
-                <EditText
-                    android:id="@+id/startSuberbEdit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Street:"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_column="0"/>
-
-                <EditText
-                    android:id="@+id/startStreetEdit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow android:layout_marginLeft="10dp"
-                      android:layout_marginTop="15dp">
-
-                <TextView
-                    android:id="@+id/endPointText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/endPoint"
-                    android:textSize="20dp"
-                    android:textStyle="bold"/>
-
-                <AutoCompleteTextView
-                    android:id="@+id/End"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="-5dp"
-                    android:layout_marginRight="40dp"/>
-
-                <CheckBox
-                    android:id="@+id/current2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_column="2"
-                    android:layout_marginLeft="-30dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="5dp"
-                    android:checked="false"
-                    android:gravity="center"
-                    android:text="@string/_Current"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="State:"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_column="0"/>
-
-                <EditText
-                    android:id="@+id/endCityEdit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Suburb:"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_column="0"/>
-
-                <EditText
-                    android:id="@+id/endSuberbEdit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Street:"
-                    android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_column="0"/>
-
-                <EditText
-                    android:id="@+id/endStreetEdit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow android:layout_marginTop="15dp">
-
-            </TableRow>
-
-            <TableRow>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set DATE"
-                    android:id="@+id/button8"
-                    android:layout_column="0"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginLeft="1dp"
-                    android:onClick="setDate"
-                    android:textSize="13dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/displayDate"
-                    android:layout_column="1" />
-
-            </TableRow>
-
-            <TableRow>
-
-            </TableRow>
-        </TableLayout>
+        <CheckBox
+            android:id="@+id/current2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_marginTop="10dp"
+            android:checked="false"
+            android:gravity="center"
+            android:text="@string/_Current"
+            android:layout_row="2"/>
 
         <Button
-            android:id="@+id/button1"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="650dp"
-            android:background="#FFCC66"
-            android:gravity="center"
-            android:onClick="offerRide"
-            android:text="@string/_Submit"
-            android:textColor="#FFFFFF"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/EditDate"
+            android:id="@+id/setDateButton"
+            android:layout_column="0"
+            android:onClick="setDate"
+            android:textSize="13sp"
+            android:layout_row="4"
+            android:layout_gravity="fill_horizontal"
+            android:layout_marginTop="10dp"/>
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="220dp"
-            android:layout_marginTop="650dp"
-            android:background="#FFCC66"
-            android:gravity="center"
-            android:text="@string/_Reset"
-            android:textColor="#FFFFFF"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/displayDate"
+            android:layout_column="1"
+            android:layout_columnSpan="5"
+            android:layout_row="4"
+            android:layout_marginTop="10dp"/>
 
         <EditText
             android:id="@+id/SeatNo"
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/txtSeatNo"
-            android:layout_toEndOf="@+id/button5" />
+            android:layout_row="7"
+            android:layout_column="1"
+            android:layout_columnSpan="5"
+            android:layout_gravity="fill_horizontal"
+            android:layout_marginTop="10dp"
+            android:inputType="number"/>
 
         <TextView
             android:id="@+id/txtSeatNo"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:text="@string/seats"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_below="@+id/button5"
-            android:layout_centerHorizontal="true" />
+            android:layout_column="0"
+            android:layout_row="7"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SET ArrivalTIME"
-            android:id="@+id/button5"
+            android:text="@string/ArrivalTime"
+            android:id="@+id/setEndTimeButton"
             android:layout_column="0"
-            android:textSize="13dp"
+            android:textSize="13sp"
             android:onClick="setArrivalTime"
-            android:layout_below="@+id/button3"
-            android:layout_alignParentStart="true" />
+            android:layout_row="6"
+            android:layout_gravity="fill_horizontal"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SET STARTTIME"
-            android:id="@+id/button3"
+            android:text="@string/rideStartTime"
+            android:id="@+id/setStartTimeButton"
             android:layout_column="0"
-            android:textSize="13dp"
-            android:layout_below="@+id/tableLayout"
-            android:layout_alignParentStart="true"
+            android:textSize="13sp"
             android:onClick="setStartTime"
-            android:layout_marginLeft="1dp"
-            android:layout_alignEnd="@+id/button5" />
+            android:layout_row="5"
+            android:layout_gravity="fill_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/textView12"
-            android:layout_alignTop="@+id/button3"
-            android:layout_toEndOf="@+id/button3"
-            android:layout_marginLeft="17dp"
-            android:layout_marginTop="8dp" />
+            android:layout_column="1"
+            android:layout_row="4"
+            android:layout_columnSpan="5"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="fill_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -311,11 +162,9 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/displayStartTime"
             android:layout_column="1"
-            android:layout_marginLeft="13dp"
-            android:layout_alignTop="@+id/textView12"
-            android:layout_alignEnd="@+id/button2"
-            android:layout_toEndOf="@+id/textView12"
-            android:layout_marginTop="5dp" />
+            android:layout_row="5"
+            android:layout_gravity="fill_horizontal"
+            android:layout_columnSpan="5"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -323,11 +172,50 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/displayArrivalTime"
             android:layout_column="1"
-            android:layout_marginLeft="13dp"
-            android:layout_below="@+id/button3"
-            android:layout_alignStart="@+id/textView12"
-            android:layout_alignEnd="@+id/displayStartTime"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:layout_columnSpan="5"
+            android:layout_row="6"
+            android:layout_gravity="fill_horizontal"/>
 
-    </RelativeLayout>
+        <GridLayout
+            android:layout_column="0"
+            android:layout_row="10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|fill"
+            android:columnCount="6"
+            android:rowCount="1"
+            android:layout_columnSpan="6"
+            android:layout_marginTop="15dp">
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:background="#FFCC66"
+            android:gravity="center"
+            android:onClick="offerRide"
+            android:text="@string/_Submit"
+            android:textColor="#FFFFFF"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="15dp"/>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:background="#FFCC66"
+                android:gravity="center"
+                android:text="@string/_Reset"
+                android:textColor="#FFFFFF"
+                android:layout_row="0"
+                android:layout_column="5"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="15dp"/>
+        </GridLayout>
+
+    </GridLayout>
 </ScrollView>

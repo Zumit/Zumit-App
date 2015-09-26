@@ -53,4 +53,7 @@
     <string name="state">State:</string>
     <string name="suburb">suburb:</string>
     <string name="street">street</string>
+    <string name="EditDate">Set DATE</string>
+    <string name="ArrivalTime">SET ArrivalTIME</string>
+    <string name="rideStartTime">SET STARTTIME</string>
 </resources>

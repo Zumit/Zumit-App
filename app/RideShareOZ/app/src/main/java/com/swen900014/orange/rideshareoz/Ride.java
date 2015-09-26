@@ -174,7 +174,6 @@ public class Ride implements Serializable
         return rides;
     }
 
-
     // For Testing without receiving server data
     public Ride(RideState s)
     {
@@ -203,22 +202,35 @@ public class Ride implements Serializable
 
     public boolean acceptJoin(Pickup lift)
     {
-        if (waiting.contains(lift) && joined.size() <= limit)
+        for (Pickup pickup : waiting)
         {
-            joined.add(lift);
-            waiting.remove(lift);
+            if (pickup.getUser().getUsername().equals(lift.getUser().getUsername()))
+            {
+                joined.add(lift);
+                waiting.remove(pickup);
 
-            return true;
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+
+        System.out.println("accept fails");
+        return false;
     }
 
     public boolean rejectJoin(Pickup lift)
     {
-        return waiting.remove(lift);
+        for (Pickup pickup : waiting)
+        {
+            if (pickup.getUser().getUsername().equals(lift.getUser().getUsername()))
+            {
+                waiting.remove(pickup);
+
+                return true;
+            }
+        }
+
+        System.out.println("reject fails");
+        return false;
     }
 
     public boolean hasPass(User pass)
@@ -238,7 +250,7 @@ public class Ride implements Serializable
     {
         for (Pickup pick : waiting)
         {
-            if (request.getUsername() == pick.getUser().getUsername())
+            if (request.getUsername().equals(pick.getUser().getUsername()))
             {
                 return true;
             }
