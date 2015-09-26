@@ -3,18 +3,23 @@ package com.swen900014.orange.rideshareoz;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -52,23 +57,21 @@ public class OfferRide extends FragmentActivity implements
         View.OnClickListener
 {
     private final String TAG = "OfferRide";
-    private String temp1 = "";
+    private String temp1 = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
-    private EditText SpinSN;
+  //  private EditText SpinSN;
     private TextView textSN;
     private TextView textStartTime;
     private CheckBox Check1, Check2;
 
-    private EditText startCityEdit;
-    private EditText startSuburbEdit;
-    private EditText startStreetEdit;
+    private AutoCompleteTextView EditStart;
+    private AutoCompleteTextView EditEnd;
 
-    private EditText endCityEdit;
-    private EditText endSuburbEdit;
-    private EditText endStreetEdit;
+    private Spinner spinner;
 
-    private Button btnSubmit, btnDate, btnStartTime, btnArrivalTime;
+    private ArrayAdapter<CharSequence> spinnerAdapter;
+    private Button btnSubmit,btnReset ,btnDate, btnStartTime, btnArrivalTime;
 
     private String latS = "";
     private String lonS = "";
@@ -100,28 +103,24 @@ public class OfferRide extends FragmentActivity implements
                 .build();
 
         btnSubmit = (Button) findViewById(R.id.button1);
-        btnDate = (Button) findViewById(R.id.button8);
-        btnStartTime = (Button) findViewById(R.id.button3);
-        btnArrivalTime = (Button) findViewById(R.id.button5);
+        btnReset= (Button) findViewById(R.id.button2);
+        btnDate = (Button) findViewById(R.id.setDateButton);
+        btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
+        btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
         // btnReset = (Button) findViewById(R.id.button2);
-
+        spinner = (Spinner)findViewById(R.id.spinner);
         displayDate = (TextView) findViewById(R.id.displayDate);
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
 
-        SpinSN = (EditText) findViewById(R.id.SeatNo);
+       // SpinSN = (EditText) findViewById(R.id.SeatNo);
         textSN = (TextView) findViewById(R.id.txtSeatNo);
         textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
 
-        startCityEdit = (EditText) findViewById(R.id.srartCityEdit);
-        startSuburbEdit = (EditText) findViewById(R.id.startSuberbEdit);
-        startStreetEdit = (EditText) findViewById(R.id.startStreetEdit);
 
-        endCityEdit = (EditText) findViewById(R.id.endCityEdit);
-        endSuburbEdit = (EditText) findViewById(R.id.endSuberbEdit);
-        endStreetEdit = (EditText) findViewById(R.id.endStreetEdit);
+
 
        /* check if it offer or find  */
         Intent intent = this.getIntent();
@@ -130,86 +129,84 @@ public class OfferRide extends FragmentActivity implements
             String type = intent.getStringExtra("type");
             if (type.equals("find"))
             {
-                SpinSN.setVisibility(View.INVISIBLE);
+               // SpinSN.setVisibility(View.INVISIBLE);
                 textSN.setVisibility(View.INVISIBLE);
                 btnStartTime.setVisibility(View.INVISIBLE);
                 isFind = true;
             }
         }
-
+        //auto-complete adapter
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
                 BOUNDS_GREATER_Melbourne, null);
-        AutoCompleteTextView EditStart = (AutoCompleteTextView)
+        EditStart = (AutoCompleteTextView)
                 findViewById(R.id.Start);
         EditStart.setOnItemClickListener(mAutoCompleteClickListener);
         EditStart.setAdapter(adapter);
-        AutoCompleteTextView EditEnd = (AutoCompleteTextView)
+        EditEnd = (AutoCompleteTextView)
                 findViewById(R.id.End);
         EditEnd.setOnItemClickListener(mAutoCompleteClickListener);
         EditEnd.setAdapter(adapter);
+        //spinner adapter
+        spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SeatNo=String.valueOf(position+1) ;
+                if (position>0)
+                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " selected", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+
+        });
         //btnReset.setOnClickListener(new resetOnClickListener());
         btnSubmit.setOnClickListener(this);
+        btnReset.setOnClickListener(this);
         btnDate.setOnClickListener(this);
         btnStartTime.setOnClickListener(this);
         btnArrivalTime.setOnClickListener(this);
+
         getIntent();
     }
 
     @Override
     public void onClick(View v)
     {
+        if (v.getId() == R.id.button2)
+        {
+            EditStart.setText("");
+            EditEnd.setText("");
+            displayDate.setText("");
+            displayStartTime.setText("");
+            displayArrivalTime.setText("");
+
+
+        }
         if (v.getId() == R.id.button1)
         {
             offerRide(v);
-            /*if(isFind){
-                Intent searchResultsIntent = new Intent(this, MyRidesActivity.class);
-                searchResultsIntent.putExtra("type","find");
-                //TODO: Fill extras with the search parameters
-                searchResultsIntent.putExtra("startLon", lonS);
-                searchResultsIntent.putExtra("startLat", latS);
-                searchResultsIntent.putExtra("endLon", lonE);
-                searchResultsIntent.putExtra("endLat", latE);
-                //searchResultsIntent.putExtra("date", "xxx");
-                searchResultsIntent.putExtra("arrivalTime", EditEndTime.getText().toString());
-
-
-                startActivity(searchResultsIntent);
-
-
-            }
-            else
-            {
-
-            }
-            Intent intent=new Intent(OfferRide.this, MainActivity.class);
-                     check if it offer or find
-            // Intent intent = this.getIntent();
-            if (intent != null && intent.hasExtra("type"))
-            {
-                String type = intent.getStringExtra("type");
-                if(type.equals("find")){
-                    SpinSN.setVisibility(View.INVISIBLE);
-                    textSN.setVisibility(View.INVISIBLE);
-
-                    isFind = true;
-                }
-            }
-            startActivity(intent);
-            */
         }
-        if (v.getId() == R.id.button8)
+        if (v.getId() == R.id.setDateButton)
         {
             setDate(v);
         }
         //   new DatePickerDialog(OfferRide.this, listener1, calendar.get(calendar.YEAR), calendar.get(calendar.MONTH), calendar.get(calendar.DAY_OF_MONTH)).show();
-        if (v.getId() == R.id.button3)
+        if (v.getId() == R.id.setStartTimeButton)
         {
             setStartTime(v);
         }
         //  new TimePickerDialog(OfferRide.this, listener2, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
-        if (v.getId() == R.id.button5)
+        if (v.getId() == R.id.setEndTimeButton)
         {
             setArrivalTime(v);
         }
@@ -270,8 +267,10 @@ public class OfferRide extends FragmentActivity implements
 
     public void sendRequest(final Activity activity)
     {
+        String startAddressToGoogle = startAddress.replaceAll(" ", "+");
+
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + startAddress + ",+Australia&" +
+                "address=" + startAddressToGoogle + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
         final StringRequest getStartLocRequest = new StringRequest(Request.Method.GET, url,
@@ -315,8 +314,10 @@ public class OfferRide extends FragmentActivity implements
 
     private void getEndpointLoc(final Activity activity)
     {
+        String endAddressToGoogle = endAddress.replaceAll(" ", "+");
+
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + endAddress + ",+Australia&" +
+                "address=" + endAddressToGoogle + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
         final StringRequest getEndLocRequest = new StringRequest(Request.Method.GET, url,
@@ -386,8 +387,9 @@ public class OfferRide extends FragmentActivity implements
             {
                 System.out.println("response: " + s);
 
-                Intent intent = new Intent(activity, MyRidesActivity.class);
-                activity.startActivity(intent);
+                activity.finish();
+                //Intent intent = new Intent(activity, MyRidesActivity.class);
+                //activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {
@@ -403,14 +405,6 @@ public class OfferRide extends FragmentActivity implements
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-
-                startAddress = startCityEdit.getText().toString() + ", " +
-                        startSuburbEdit.getText().toString() + ", " +
-                        startStreetEdit.getText().toString();
-
-                endAddress = endCityEdit.getText().toString() + ", " +
-                        endSuburbEdit.getText().toString() + ", " +
-                        endStreetEdit.getText().toString();
 
                 if (Check1.isChecked())
                 {
@@ -439,7 +433,7 @@ public class OfferRide extends FragmentActivity implements
                 }
 
                 params.put("group_id", "55cab5dde81ab31606e4814c");
-                params.put("seat", SpinSN.getText().toString());
+                params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
                 params.put("username", User.getCurrentUser().getUsername());
@@ -463,16 +457,8 @@ public class OfferRide extends FragmentActivity implements
     {
         if (inputValid())
         {
-            startAddress = startCityEdit.getText().toString() + "+" +
-                    startSuburbEdit.getText().toString() + "+" +
-                    startStreetEdit.getText().toString();
-
-            endAddress = endCityEdit.getText().toString() + "+" +
-                    endSuburbEdit.getText().toString() + "+" +
-                    endStreetEdit.getText().toString();
-
-            startAddress = startAddress.replaceAll(" ", "+");
-            endAddress = endAddress.replaceAll(" ", "+");
+            startAddress = EditStart.getText().toString();
+            endAddress = EditEnd.getText().toString();
 
             sendRequest(this);
         }
@@ -512,82 +498,108 @@ public class OfferRide extends FragmentActivity implements
             temp1 = String.valueOf(year) + "-" + month + "-" + day + "T";
         }
     };
+
+
+    String hours="";
+    String mins="";
+    String houra="";
+    String mina="";
+
     TimePickerDialog.OnTimeSetListener listener2 = new TimePickerDialog.OnTimeSetListener()
     {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-            String hour;
-            String min;
+
 
             if (hourOfDay < 10)
             {
-                hour = "0" + String.valueOf(hourOfDay);
+                hours = "0" + String.valueOf(hourOfDay);
             }
             else
             {
-                hour = String.valueOf(hourOfDay);
+                hours = String.valueOf(hourOfDay);
             }
             if (minute < 10)
             {
-                min = "0" + String.valueOf(minute);
+                mins = "0" + String.valueOf(minute);
             }
             else
             {
-                min = String.valueOf(minute);
+                mins = String.valueOf(minute);
             }
 
             displayStartTime.setText(hourOfDay + ":" + minute);
-            EditStartTime = temp1 + hour + ":" + min + ":00.000Z";
+            EditStartTime = temp1 + hours+ ":" + mins + ":00.000Z";
         }
     };
+
 
     TimePickerDialog.OnTimeSetListener listener4 = new TimePickerDialog.OnTimeSetListener()
     {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-            String hour;
-            String min;
+
 
             if (hourOfDay < 10)
             {
-                hour = "0" + String.valueOf(hourOfDay);
+                houra = "0" + String.valueOf(hourOfDay);
             }
             else
             {
-                hour = String.valueOf(hourOfDay);
+                houra = String.valueOf(hourOfDay);
             }
 
             if (minute < 10)
             {
-                min = "0" + String.valueOf(minute);
+                mina = "0" + String.valueOf(minute);
             }
             else
             {
-                min = String.valueOf(minute);
+                mina = String.valueOf(minute);
             }
 
             displayArrivalTime.setText(hourOfDay + ":" + minute);
-            EditEndTime = temp1 + hour + ":" + min + ":00.000Z";
+            EditEndTime = temp1 + houra + ":" + mina + ":00.000Z";
+            checkTime(hours, mins,houra, mina);
         }
     };
 
+    public void checkTime(String hours,String mins,String houra,String mina){
+        if(hours.compareTo(houra)==0)
+        {
+            if(mins.compareTo(mina)>0)
+            {
+                Toast.makeText(getApplicationContext(),"Arrival time must be later than start time!",Toast.LENGTH_SHORT).show();
+                btnSubmit.setEnabled(false);}
+            else btnSubmit.setEnabled(true);
+        }
+        else
+            if (hours.compareTo(houra)>0)
+            {
+                Toast.makeText(getApplicationContext(),"Arrival time must be later than start time!",Toast.LENGTH_SHORT).show();
+                btnSubmit.setEnabled(false);}
+            else btnSubmit.setEnabled(true);
+    }
 
     public void setDate(View view)
     {
-        new DatePickerDialog(OfferRide.this, listener1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(OfferRide.this, listener1, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 
     public void setStartTime(View view)
     {
-        new TimePickerDialog(OfferRide.this, listener2, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        new TimePickerDialog(OfferRide.this, listener2, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), true).show();
     }
 
     public void setArrivalTime(View view)
     {
-        new TimePickerDialog(OfferRide.this, listener4, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        new TimePickerDialog(OfferRide.this, listener4, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), true).show();
     }
 
     //Check whether all information needed for offering a ride

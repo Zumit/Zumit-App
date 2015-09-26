@@ -35,7 +35,14 @@
     <string name="acceptButton">Accept</string>
     <string name="rejectButton">Reject</string>
     <string name="driverLabel">Driver</string>
-
+    <string-array name="seats">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="nameText">Name:</string>
     <string name="phoneText">Phone no. :</string>
@@ -53,4 +60,7 @@
     <string name="state">State:</string>
     <string name="suburb">suburb:</string>
     <string name="street">street</string>
+    <string name="EditDate">Set DATE</string>
+    <string name="ArrivalTime">SET ArrivalTIME</string>
+    <string name="rideStartTime">SET STARTTIME</string>
 </resources>
