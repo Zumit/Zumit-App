@@ -3,18 +3,23 @@ package com.swen900014.orange.rideshareoz;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -52,10 +57,10 @@ public class OfferRide extends FragmentActivity implements
         View.OnClickListener
 {
     private final String TAG = "OfferRide";
-    private String temp1 = "";
+    private String temp1 = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
-    private EditText SpinSN;
+  //  private EditText SpinSN;
     private TextView textSN;
     private TextView textStartTime;
     private CheckBox Check1, Check2;
@@ -63,15 +68,10 @@ public class OfferRide extends FragmentActivity implements
     private AutoCompleteTextView EditStart;
     private AutoCompleteTextView EditEnd;
 
-    /*private EditText startCityEdit;
-    private EditText startSuburbEdit;
-    private EditText startStreetEdit;
+    private Spinner spinner;
 
-    private EditText endCityEdit;
-    private EditText endSuburbEdit;
-    private EditText endStreetEdit;
-*/
-    private Button btnSubmit, btnDate, btnStartTime, btnArrivalTime;
+    private ArrayAdapter<CharSequence> spinnerAdapter;
+    private Button btnSubmit,btnReset ,btnDate, btnStartTime, btnArrivalTime;
 
     private String latS = "";
     private String lonS = "";
@@ -103,20 +103,24 @@ public class OfferRide extends FragmentActivity implements
                 .build();
 
         btnSubmit = (Button) findViewById(R.id.button1);
+        btnReset= (Button) findViewById(R.id.button2);
         btnDate = (Button) findViewById(R.id.setDateButton);
         btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
         btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
         // btnReset = (Button) findViewById(R.id.button2);
-
+        spinner = (Spinner)findViewById(R.id.spinner);
         displayDate = (TextView) findViewById(R.id.displayDate);
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
 
-        SpinSN = (EditText) findViewById(R.id.SeatNo);
+       // SpinSN = (EditText) findViewById(R.id.SeatNo);
         textSN = (TextView) findViewById(R.id.txtSeatNo);
         textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
+
+
+
 
        /* check if it offer or find  */
         Intent intent = this.getIntent();
@@ -125,13 +129,13 @@ public class OfferRide extends FragmentActivity implements
             String type = intent.getStringExtra("type");
             if (type.equals("find"))
             {
-                SpinSN.setVisibility(View.INVISIBLE);
+               // SpinSN.setVisibility(View.INVISIBLE);
                 textSN.setVisibility(View.INVISIBLE);
                 btnStartTime.setVisibility(View.INVISIBLE);
                 isFind = true;
             }
         }
-
+        //auto-complete adapter
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
                 BOUNDS_GREATER_Melbourne, null);
@@ -143,9 +147,31 @@ public class OfferRide extends FragmentActivity implements
                 findViewById(R.id.End);
         EditEnd.setOnItemClickListener(mAutoCompleteClickListener);
         EditEnd.setAdapter(adapter);
+        //spinner adapter
+        spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAdapter);
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                SeatNo=String.valueOf(position+1) ;
+                if (position>0)
+                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " selected", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+
+        });
         //btnReset.setOnClickListener(new resetOnClickListener());
         btnSubmit.setOnClickListener(this);
+        btnReset.setOnClickListener(this);
         btnDate.setOnClickListener(this);
         btnStartTime.setOnClickListener(this);
         btnArrivalTime.setOnClickListener(this);
@@ -156,6 +182,16 @@ public class OfferRide extends FragmentActivity implements
     @Override
     public void onClick(View v)
     {
+        if (v.getId() == R.id.button2)
+        {
+            EditStart.setText("");
+            EditEnd.setText("");
+            displayDate.setText("");
+            displayStartTime.setText("");
+            displayArrivalTime.setText("");
+
+
+        }
         if (v.getId() == R.id.button1)
         {
             offerRide(v);
@@ -397,7 +433,7 @@ public class OfferRide extends FragmentActivity implements
                 }
 
                 params.put("group_id", "55cab5dde81ab31606e4814c");
-                params.put("seat", SpinSN.getText().toString());
+                params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
                 params.put("username", User.getCurrentUser().getUsername());
@@ -462,67 +498,90 @@ public class OfferRide extends FragmentActivity implements
             temp1 = String.valueOf(year) + "-" + month + "-" + day + "T";
         }
     };
+
+
+    String hours="";
+    String mins="";
+    String houra="";
+    String mina="";
+
     TimePickerDialog.OnTimeSetListener listener2 = new TimePickerDialog.OnTimeSetListener()
     {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-            String hour;
-            String min;
+
 
             if (hourOfDay < 10)
             {
-                hour = "0" + String.valueOf(hourOfDay);
+                hours = "0" + String.valueOf(hourOfDay);
             }
             else
             {
-                hour = String.valueOf(hourOfDay);
+                hours = String.valueOf(hourOfDay);
             }
             if (minute < 10)
             {
-                min = "0" + String.valueOf(minute);
+                mins = "0" + String.valueOf(minute);
             }
             else
             {
-                min = String.valueOf(minute);
+                mins = String.valueOf(minute);
             }
 
             displayStartTime.setText(hourOfDay + ":" + minute);
-            EditStartTime = temp1 + hour + ":" + min + ":00.000Z";
+            EditStartTime = temp1 + hours+ ":" + mins + ":00.000Z";
         }
     };
+
 
     TimePickerDialog.OnTimeSetListener listener4 = new TimePickerDialog.OnTimeSetListener()
     {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute)
         {
-            String hour;
-            String min;
+
 
             if (hourOfDay < 10)
             {
-                hour = "0" + String.valueOf(hourOfDay);
+                houra = "0" + String.valueOf(hourOfDay);
             }
             else
             {
-                hour = String.valueOf(hourOfDay);
+                houra = String.valueOf(hourOfDay);
             }
 
             if (minute < 10)
             {
-                min = "0" + String.valueOf(minute);
+                mina = "0" + String.valueOf(minute);
             }
             else
             {
-                min = String.valueOf(minute);
+                mina = String.valueOf(minute);
             }
 
             displayArrivalTime.setText(hourOfDay + ":" + minute);
-            EditEndTime = temp1 + hour + ":" + min + ":00.000Z";
+            EditEndTime = temp1 + houra + ":" + mina + ":00.000Z";
+            checkTime(hours, mins,houra, mina);
         }
     };
 
+    public void checkTime(String hours,String mins,String houra,String mina){
+        if(hours.compareTo(houra)==0)
+        {
+            if(mins.compareTo(mina)>0)
+            {
+                Toast.makeText(getApplicationContext(),"Arrival time must be later than start time!",Toast.LENGTH_SHORT).show();
+                btnSubmit.setEnabled(false);}
+            else btnSubmit.setEnabled(true);
+        }
+        else
+            if (hours.compareTo(houra)>0)
+            {
+                Toast.makeText(getApplicationContext(),"Arrival time must be later than start time!",Toast.LENGTH_SHORT).show();
+                btnSubmit.setEnabled(false);}
+            else btnSubmit.setEnabled(true);
+    }
 
     public void setDate(View view)
     {
