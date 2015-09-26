@@ -1,5 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -144,10 +146,13 @@ public class Ride implements Serializable
         } finally
         {
             //TODO: optimize this using object comparison
-            if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
-            {
+            try {
+                if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername())) {
                 /* add to the offering list*/
-                this.rideState = RideState.OFFERING;
+                    this.rideState = RideState.OFFERING;
+                }
+            }catch (NullPointerException e){
+                Log.e("RideParse:", this.getStart().getAddress());
             }
         }
     }
