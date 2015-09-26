@@ -44,7 +44,7 @@ public class RidesAdaptor extends ArrayAdapter<Ride>
 
         // Populate the data into the template view using the data object
         tvType.setText(ride.getRideState().toString() + " ");
-        tvFromTo.setText(ride.getStart().getAddress() + " To " + ride.getEnd().getAddress());
+        tvFromTo.setText(ride.getStart().getDisplayName() + " To " + ride.getEnd().getDisplayName());
         tvRequests.setText(" " + Integer.toString(ride.getWaiting().size()));
         tvJoins.setText(Integer.toString(ride.getJoined().size()) + " ");
         tvDate.setText(ride.getArrivingTime());

@@ -8,6 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
 import java.io.Serializable;
+import java.util.StringTokenizer;
 
 
 /**
@@ -21,11 +22,35 @@ public class Location implements Serializable
     private String address = "dummy";
     private String suburb;
 
+    /*
+    Display name is the suburb unless it is a landmark
+     */
+    private String displayName;
+
+    private String extractDisplayName(String address){
+        String name ="";
+        /* drop street name if exist */
+        if(address.contains(","))
+        {
+            int index = address.indexOf(",");
+            address = address.substring(index+1);
+            StringTokenizer st = new StringTokenizer(address);
+            int count = st.countTokens();
+            for (int i = 0; i<count-2; i++){
+                name += st.nextToken() + " ";
+            }
+            name = name.substring(0,name.length()-1);
+        }
+
+        return name;
+    }
+
     public Location(Double lat, Double lon, String address)
     {
         this.lat = lat;
         this.lon = lon;
         this.address = address;
+        this.displayName = extractDisplayName(address);
     }
 
     public Location(Double lat, Double lon)
@@ -119,5 +144,9 @@ public class Location implements Serializable
 
     public void setSuburb(String suburb) {
         this.suburb = suburb;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }
