@@ -60,14 +60,17 @@ public class OfferRide extends FragmentActivity implements
     private TextView textStartTime;
     private CheckBox Check1, Check2;
 
-    private EditText startCityEdit;
+    private AutoCompleteTextView EditStart;
+    private AutoCompleteTextView EditEnd;
+
+    /*private EditText startCityEdit;
     private EditText startSuburbEdit;
     private EditText startStreetEdit;
 
     private EditText endCityEdit;
     private EditText endSuburbEdit;
     private EditText endStreetEdit;
-
+*/
     private Button btnSubmit, btnDate, btnStartTime, btnArrivalTime;
 
     private String latS = "";
@@ -100,9 +103,9 @@ public class OfferRide extends FragmentActivity implements
                 .build();
 
         btnSubmit = (Button) findViewById(R.id.button1);
-        btnDate = (Button) findViewById(R.id.button8);
-        btnStartTime = (Button) findViewById(R.id.button3);
-        btnArrivalTime = (Button) findViewById(R.id.button5);
+        btnDate = (Button) findViewById(R.id.setDateButton);
+        btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
+        btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
         // btnReset = (Button) findViewById(R.id.button2);
 
         displayDate = (TextView) findViewById(R.id.displayDate);
@@ -114,14 +117,6 @@ public class OfferRide extends FragmentActivity implements
         textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
-
-        startCityEdit = (EditText) findViewById(R.id.srartCityEdit);
-        startSuburbEdit = (EditText) findViewById(R.id.startSuberbEdit);
-        startStreetEdit = (EditText) findViewById(R.id.startStreetEdit);
-
-        endCityEdit = (EditText) findViewById(R.id.endCityEdit);
-        endSuburbEdit = (EditText) findViewById(R.id.endSuberbEdit);
-        endStreetEdit = (EditText) findViewById(R.id.endStreetEdit);
 
        /* check if it offer or find  */
         Intent intent = this.getIntent();
@@ -140,11 +135,11 @@ public class OfferRide extends FragmentActivity implements
         adapter = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
                 BOUNDS_GREATER_Melbourne, null);
-        AutoCompleteTextView EditStart = (AutoCompleteTextView)
+        EditStart = (AutoCompleteTextView)
                 findViewById(R.id.Start);
         EditStart.setOnItemClickListener(mAutoCompleteClickListener);
         EditStart.setAdapter(adapter);
-        AutoCompleteTextView EditEnd = (AutoCompleteTextView)
+        EditEnd = (AutoCompleteTextView)
                 findViewById(R.id.End);
         EditEnd.setOnItemClickListener(mAutoCompleteClickListener);
         EditEnd.setAdapter(adapter);
@@ -154,6 +149,7 @@ public class OfferRide extends FragmentActivity implements
         btnDate.setOnClickListener(this);
         btnStartTime.setOnClickListener(this);
         btnArrivalTime.setOnClickListener(this);
+
         getIntent();
     }
 
@@ -163,53 +159,18 @@ public class OfferRide extends FragmentActivity implements
         if (v.getId() == R.id.button1)
         {
             offerRide(v);
-            /*if(isFind){
-                Intent searchResultsIntent = new Intent(this, MyRidesActivity.class);
-                searchResultsIntent.putExtra("type","find");
-                //TODO: Fill extras with the search parameters
-                searchResultsIntent.putExtra("startLon", lonS);
-                searchResultsIntent.putExtra("startLat", latS);
-                searchResultsIntent.putExtra("endLon", lonE);
-                searchResultsIntent.putExtra("endLat", latE);
-                //searchResultsIntent.putExtra("date", "xxx");
-                searchResultsIntent.putExtra("arrivalTime", EditEndTime.getText().toString());
-
-
-                startActivity(searchResultsIntent);
-
-
-            }
-            else
-            {
-
-            }
-            Intent intent=new Intent(OfferRide.this, MainActivity.class);
-                     check if it offer or find
-            // Intent intent = this.getIntent();
-            if (intent != null && intent.hasExtra("type"))
-            {
-                String type = intent.getStringExtra("type");
-                if(type.equals("find")){
-                    SpinSN.setVisibility(View.INVISIBLE);
-                    textSN.setVisibility(View.INVISIBLE);
-
-                    isFind = true;
-                }
-            }
-            startActivity(intent);
-            */
         }
-        if (v.getId() == R.id.button8)
+        if (v.getId() == R.id.setDateButton)
         {
             setDate(v);
         }
         //   new DatePickerDialog(OfferRide.this, listener1, calendar.get(calendar.YEAR), calendar.get(calendar.MONTH), calendar.get(calendar.DAY_OF_MONTH)).show();
-        if (v.getId() == R.id.button3)
+        if (v.getId() == R.id.setStartTimeButton)
         {
             setStartTime(v);
         }
         //  new TimePickerDialog(OfferRide.this, listener2, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
-        if (v.getId() == R.id.button5)
+        if (v.getId() == R.id.setEndTimeButton)
         {
             setArrivalTime(v);
         }
@@ -270,8 +231,10 @@ public class OfferRide extends FragmentActivity implements
 
     public void sendRequest(final Activity activity)
     {
+        String startAddressToGoogle = startAddress.replaceAll(" ", "+");
+
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + startAddress + ",+Australia&" +
+                "address=" + startAddressToGoogle + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
         final StringRequest getStartLocRequest = new StringRequest(Request.Method.GET, url,
@@ -315,8 +278,10 @@ public class OfferRide extends FragmentActivity implements
 
     private void getEndpointLoc(final Activity activity)
     {
+        String endAddressToGoogle = endAddress.replaceAll(" ", "+");
+
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + endAddress + ",+Australia&" +
+                "address=" + endAddressToGoogle + ",+Australia&" +
                 "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
         final StringRequest getEndLocRequest = new StringRequest(Request.Method.GET, url,
@@ -386,8 +351,9 @@ public class OfferRide extends FragmentActivity implements
             {
                 System.out.println("response: " + s);
 
-                Intent intent = new Intent(activity, MyRidesActivity.class);
-                activity.startActivity(intent);
+                activity.finish();
+                //Intent intent = new Intent(activity, MyRidesActivity.class);
+                //activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {
@@ -403,14 +369,6 @@ public class OfferRide extends FragmentActivity implements
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
-
-                startAddress = startCityEdit.getText().toString() + ", " +
-                        startSuburbEdit.getText().toString() + ", " +
-                        startStreetEdit.getText().toString();
-
-                endAddress = endCityEdit.getText().toString() + ", " +
-                        endSuburbEdit.getText().toString() + ", " +
-                        endStreetEdit.getText().toString();
 
                 if (Check1.isChecked())
                 {
@@ -463,16 +421,8 @@ public class OfferRide extends FragmentActivity implements
     {
         if (inputValid())
         {
-            startAddress = startCityEdit.getText().toString() + "+" +
-                    startSuburbEdit.getText().toString() + "+" +
-                    startStreetEdit.getText().toString();
-
-            endAddress = endCityEdit.getText().toString() + "+" +
-                    endSuburbEdit.getText().toString() + "+" +
-                    endStreetEdit.getText().toString();
-
-            startAddress = startAddress.replaceAll(" ", "+");
-            endAddress = endAddress.replaceAll(" ", "+");
+            startAddress = EditStart.getText().toString();
+            endAddress = EditEnd.getText().toString();
 
             sendRequest(this);
         }
@@ -576,18 +526,21 @@ public class OfferRide extends FragmentActivity implements
 
     public void setDate(View view)
     {
-        new DatePickerDialog(OfferRide.this, listener1, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        new DatePickerDialog(OfferRide.this, listener1, calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 
     public void setStartTime(View view)
     {
-        new TimePickerDialog(OfferRide.this, listener2, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        new TimePickerDialog(OfferRide.this, listener2, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), true).show();
     }
 
     public void setArrivalTime(View view)
     {
-        new TimePickerDialog(OfferRide.this, listener4, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
+        new TimePickerDialog(OfferRide.this, listener4, calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE), true).show();
     }
 
     //Check whether all information needed for offering a ride
