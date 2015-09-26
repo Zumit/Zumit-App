@@ -24,11 +24,11 @@ public class Ride implements Serializable
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
-    private RideState rideState = RideState.New;
+    private RideState rideState = RideState.NEW;
 
     public enum RideState implements Serializable
     {
-        OFFERING, JOINED, VIEWING, New
+        OFFERING, JOINED, VIEWING, NEW
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit)
@@ -162,7 +162,7 @@ public class Ride implements Serializable
             try
             {
                 Ride nRide = new Ride(ridesJsonArray.getJSONObject(i));
-                if (isSearchResults || (nRide.rideState != RideState.New))
+                if (isSearchResults || (nRide.rideState != RideState.NEW))
                 {
                     rides.add(nRide);
                 }

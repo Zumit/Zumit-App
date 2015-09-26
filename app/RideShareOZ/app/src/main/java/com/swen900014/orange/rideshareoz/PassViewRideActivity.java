@@ -109,7 +109,9 @@ public class PassViewRideActivity extends FragmentActivity
 
         if (ride.getRideState() == Ride.RideState.VIEWING)
         {
-            joinLeaveButton.setText(getString(R.string.joinButton));
+            inputTabelName.setVisibility(View.GONE);
+            pickUpLocText.setVisibility(View.GONE);
+            joinLeaveButton.setVisibility(View.GONE);
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
         {
@@ -117,6 +119,10 @@ public class PassViewRideActivity extends FragmentActivity
 
             pickUpLocText.setVisibility(View.GONE);
             inputTabelName.setVisibility(View.GONE);
+        }
+        else
+        {
+            joinLeaveButton.setText(getString(R.string.joinButton));
         }
 
         startLabel.setText(ride.getStart().getAddress());
@@ -255,17 +261,10 @@ public class PassViewRideActivity extends FragmentActivity
 
     public void onClick(View view)
     {
-        if (ride.getRideState() == Ride.RideState.VIEWING)
+        if (ride.getRideState() == Ride.RideState.NEW)
         {
             if (inputValid())
             {
-                /*address = stateText.getText().toString() + "+" +
-                        suburbText.getText().toString() + "+" +
-                        streetText.getText().toString();
-
-                address = address.replaceAll(" ", "+");
-                */
-
                 address = pickUpLocText.getText().toString();
 
                 sendRequest(this);
@@ -350,6 +349,7 @@ public class PassViewRideActivity extends FragmentActivity
 
                             // Check response whether it's accurate, if not remind user
 
+                            System.out.println("s" + response);
                         }
                         catch (Exception e)
                         {

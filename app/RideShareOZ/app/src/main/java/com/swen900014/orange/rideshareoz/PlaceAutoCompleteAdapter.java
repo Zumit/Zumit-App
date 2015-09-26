@@ -1,10 +1,16 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -18,6 +24,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,12 +42,14 @@ public class PlaceAutoCompleteAdapter extends
     private GoogleApiClient mGoogleApiClient;
     private LatLngBounds mBounds;
     private AutocompleteFilter mPlaceFilter;
+    private Context mContext;
 
     public PlaceAutoCompleteAdapter(Context context, int resource, GoogleApiClient gac,
                                     LatLngBounds bounds, AutocompleteFilter filter)
     {
         super(context, resource);
 
+        mContext = context;
         mGoogleApiClient = gac;
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -58,6 +67,27 @@ public class PlaceAutoCompleteAdapter extends
     public int getCount()
     {
         return mResultList.size();
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
+        LayoutInflater inflater = (LayoutInflater) mContext
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = inflater.inflate(R.layout.auto_place_list, parent,
+                false);
+        TextView nameView = (TextView) rowView.findViewById(R.id.description);
+        PlaceAutoComplete place = mResultList.get(position);
+
+        nameView.setText(place.toString());
+
+        return rowView;
+    }
+
+    public void onClick(View view)
+    {
+        AutoCompleteTextView address = (AutoCompleteTextView)
+                ((Activity) mContext).findViewById(R.id.pickUpLocText);
     }
 
     @Override
