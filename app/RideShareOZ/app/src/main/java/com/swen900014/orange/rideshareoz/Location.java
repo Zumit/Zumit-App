@@ -29,17 +29,11 @@ public class Location implements Serializable
 
     private String extractDisplayName(String address){
         String name ="";
-        /* drop street name if exist */
-        if(address.contains(","))
-        {
-            int index = address.indexOf(",");
-            address = address.substring(index+1);
-            StringTokenizer st = new StringTokenizer(address);
-            int count = st.countTokens();
-            for (int i = 0; i<count-2; i++){
-                name += st.nextToken() + " ";
-            }
-            name = name.substring(0,name.length()-1);
+        StringTokenizer st = new StringTokenizer(address, ",");
+        int count = st.countTokens();
+        //get the suburb name
+        for (int i = 0; i<count-2; i++){
+            name = st.nextToken();
         }
 
         return name;
