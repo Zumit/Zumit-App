@@ -26,22 +26,23 @@
             android:id="@+id/Start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_columnSpan="5"
-            android:layout_row="0"
-            android:layout_gravity="fill_horizontal"/>
+            android:layout_column="0"
+            android:layout_columnSpan="6"
+            android:layout_row="1"
+            android:layout_gravity="fill_horizontal"
+            android:textSize="12dp"
+            android:inputType="textAutoComplete"/>
 
         <CheckBox
             android:id="@+id/current1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:checked="false"
             android:gravity="center"
             android:text="@string/_Current"
             android:layout_column="1"
-            android:layout_row="1"
-            android:layout_columnSpan="3"/>
+            android:layout_row="0"
+            />
 
         <TextView
             android:id="@+id/endPointText"
@@ -52,27 +53,30 @@
             android:textStyle="bold"
             android:layout_column="0"
             android:layout_row="2"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
 
         <AutoCompleteTextView
             android:id="@+id/End"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_row="2"
-            android:layout_column="1"
-            android:layout_columnSpan="5"
-            android:layout_gravity="fill_horizontal"/>
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_columnSpan="6"
+            android:layout_gravity="fill_horizontal"
+            android:textSize="12dp"
+            android:inputType="textMultiLine"/>
 
         <CheckBox
             android:id="@+id/current2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:checked="false"
             android:gravity="center"
             android:text="@string/_Current"
-            android:layout_row="3"/>
+            android:layout_row="2"/>
 
         <Button
             android:layout_width="wrap_content"
