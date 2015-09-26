@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -21,20 +20,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.JOIN_REQUEST_URL;
+import static com.swen900014.orange.rideshareoz.Resources.*;
 
 
 /**
@@ -48,19 +41,12 @@ public class PassViewRideActivity extends FragmentActivity
         implements GoogleApiClient.OnConnectionFailedListener
 {
     private final static String TAG = "Passenger View Ride";
-    private final static String LEAVE_RIDE_URL = "";
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
-    //new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362)
 
     private String lat = "";
     private String lon = "";
     private String address = "";
 
     protected GoogleApiClient mGoogleApiClient;
-    private PlaceAutoCompleteAdapter adapter;
-    //private RideRequest joinRequest;
-
     private AutoCompleteTextView pickUpLocText;
 
     private TableLayout passengerList;
@@ -92,21 +78,23 @@ public class PassViewRideActivity extends FragmentActivity
 
         TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
         TextView seatsText = (TextView) findViewById(R.id.seatsEditPass);
+
+        // Set up auto-place-complete text view
         pickUpLocText = (AutoCompleteTextView) findViewById(R.id.pickUpLocText);
-        //timeInputText = (TextView) findViewById(R.id.timeInputText);
         passengerList = (TableLayout) findViewById(R.id.passengerListPass);
-
-        Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
-
-        adapter = new PlaceAutoCompleteAdapter(this,
-                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
-                BOUNDS_GREATER_SYDNEY, null);
 
         pickUpLocText = (AutoCompleteTextView)
                 findViewById(R.id.pickUpLocText);
-        pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
+
+        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(this,
+                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
+                BOUNDS_GREATER_MELBOURNE, null, pickUpLocText);
+        //pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
         pickUpLocText.setAdapter(adapter);
 
+        Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
+
+        // Display views based on the state of the ride
         if (ride.getRideState() == Ride.RideState.VIEWING)
         {
             inputTabelName.setVisibility(View.GONE);
@@ -208,7 +196,7 @@ public class PassViewRideActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private AdapterView.OnItemClickListener mAutoCompleteClickListener
+    /*private AdapterView.OnItemClickListener mAutoCompleteClickListener
             = new AdapterView.OnItemClickListener()
     {
         @Override
@@ -247,7 +235,7 @@ public class PassViewRideActivity extends FragmentActivity
 
             places.release();
         }
-    };
+    };*/
 
     public void onConnectionFailed(ConnectionResult connectionResult)
     {
@@ -268,6 +256,11 @@ public class PassViewRideActivity extends FragmentActivity
                 address = pickUpLocText.getText().toString();
 
                 sendRequest(this);
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Please fill in the address",
+                        Toast.LENGTH_SHORT).show();
             }
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
@@ -290,8 +283,6 @@ public class PassViewRideActivity extends FragmentActivity
 
                 // Get back to the my rides page
                 activity.finish();
-                //Intent intent = new Intent(activity, MyRidesActivity.class);
-                //activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {
@@ -306,9 +297,8 @@ public class PassViewRideActivity extends FragmentActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                // User name and ride id for the ride to join
-                String accountName = User.getCurrentUser().getUsername();
-                params.put("username", accountName);
+                // User name and ride id
+                params.put("username", User.getCurrentUser().getUsername());
                 params.put("ride_id", ride.getRideId());
 
                 return params;
@@ -320,11 +310,6 @@ public class PassViewRideActivity extends FragmentActivity
 
     public void sendRequest(final Activity activity)
     {
-        /*String address = stateText.getText().toString() + "+" +
-                suburbText.getText().toString() + "+" +
-                streetText.getText().toString();
-        */
-
         String addressToGoogle = address.replaceAll(" ", "+");
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
@@ -384,8 +369,6 @@ public class PassViewRideActivity extends FragmentActivity
                 System.out.println("response: " + s);
 
                 activity.finish();
-                //Intent intent = new Intent(activity, MyRidesActivity.class);
-                //activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {

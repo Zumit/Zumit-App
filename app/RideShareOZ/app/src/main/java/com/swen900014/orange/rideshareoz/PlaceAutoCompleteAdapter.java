@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +44,11 @@ public class PlaceAutoCompleteAdapter extends
     private LatLngBounds mBounds;
     private AutocompleteFilter mPlaceFilter;
     private Context mContext;
+    private AutoCompleteTextView autoCompleteTextView;
 
     public PlaceAutoCompleteAdapter(Context context, int resource, GoogleApiClient gac,
-                                    LatLngBounds bounds, AutocompleteFilter filter)
+                                    LatLngBounds bounds, AutocompleteFilter filter,
+                                    AutoCompleteTextView textView)
     {
         super(context, resource);
 
@@ -53,6 +56,7 @@ public class PlaceAutoCompleteAdapter extends
         mGoogleApiClient = gac;
         mBounds = bounds;
         mPlaceFilter = filter;
+        autoCompleteTextView = textView;
     }
 
     public void setBounds(LatLngBounds bounds)
@@ -76,50 +80,63 @@ public class PlaceAutoCompleteAdapter extends
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.auto_place_list, parent,
                 false);
-        TextView nameView = (TextView) rowView.findViewById(R.id.description);
         PlaceAutoComplete place = mResultList.get(position);
 
-        nameView.setText(place.toString());
+        final TextView placeView = (TextView) rowView.findViewById(R.id.description);
+        placeView.setText(place.toString());
+        placeView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                autoCompleteTextView.setText(placeView.getText());
+            }
+        });
 
         return rowView;
     }
 
-    public void onClick(View view)
-    {
-        AutoCompleteTextView address = (AutoCompleteTextView)
-                ((Activity) mContext).findViewById(R.id.pickUpLocText);
-    }
-
     @Override
-    public Filter getFilter() {
-        Filter filter = new Filter() {
+    public Filter getFilter()
+    {
+        Filter filter = new Filter()
+        {
             @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
+            protected FilterResults performFiltering(CharSequence constraint)
+            {
                 FilterResults results = new FilterResults();
                 // Skip the autocomplete query if no constraints are given.
-                if (constraint != null) {
+                if (constraint != null)
+                {
                     // Query the autocomplete API for the (constraint) search string.
                     mResultList = getAutoComplete(constraint);
-                    if (mResultList != null) {
+                    if (mResultList != null)
+                    {
                         // The API successfully returned results.
                         results.values = mResultList;
                         results.count = mResultList.size();
                     }
                 }
+
                 return results;
             }
 
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0) {
+            protected void publishResults(CharSequence constraint, FilterResults results)
+            {
+                if (results != null && results.count > 0)
+                {
                     // The API returned at least one result, update the data.
                     notifyDataSetChanged();
-                } else {
+                }
+                else
+                {
                     // The API did not return any results, invalidate the data set.
                     notifyDataSetInvalidated();
                 }
             }
         };
+
         return filter;
     }
 
@@ -147,7 +164,8 @@ public class PlaceAutoCompleteAdapter extends
 
             if (!status.isSuccess())
             {
-                if (!status.isSuccess()) {
+                if (!status.isSuccess())
+                {
                     Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
                             Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
