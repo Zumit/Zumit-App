@@ -376,7 +376,7 @@ public class OfferRide extends FragmentActivity implements
         MyRequest.getInstance(activity).addToRequestQueue(getEndLocRequest);
     }
 
-    private void sendRideInfo(Activity activity)
+    private void sendRideInfo(final Activity activity)
     {
         StringRequest OfferRequest = new StringRequest(Request.Method.POST,
                 OFFER_RIDE_URL, new Response.Listener<String>()
@@ -384,8 +384,10 @@ public class OfferRide extends FragmentActivity implements
             @Override
             public void onResponse(String s)
             {
-
                 System.out.println("response: " + s);
+
+                Intent intent = new Intent(activity, MyRidesActivity.class);
+                activity.startActivity(intent);
             }
         }, new Response.ErrorListener()
         {

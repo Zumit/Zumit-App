@@ -11,7 +11,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:columnCount="10"
+        android:columnCount="6"
         android:fillViewport="true">
 
         <TextView
@@ -302,9 +302,9 @@
             android:layout_row="14"
             android:layout_column="0"
             android:layout_gravity="center_horizontal"
-            android:layout_columnSpan="6"
             android:text="@string/joinButton"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:layout_columnSpan="6"/>
 
     </GridLayout>
 </ScrollView>

@@ -133,9 +133,10 @@ public class PassViewRideActivity extends FragmentActivity
             stateLabel.setVisibility(View.GONE);
             suburbLabel.setVisibility(View.GONE);
             streetLabel.setVisibility(View.GONE);
-
-
-            pickUpLocText.setVisibility(View.INVISIBLE);
+            stateText.setVisibility(View.GONE);
+            suburbText.setVisibility(View.GONE);
+            streetText.setVisibility(View.GONE);
+            pickUpLocText.setVisibility(View.GONE);
             inputTabelName.setVisibility(View.GONE);
             pickUpLabel.setVisibility(View.GONE);
         }
@@ -149,9 +150,9 @@ public class PassViewRideActivity extends FragmentActivity
 
         // Currently there is no pick up time of passengers
         TextView pickupTimeLabel = (TextView) findViewById(R.id.pickuptimeLabel);
-        pickupTimeLabel.setVisibility(View.INVISIBLE);
+        pickupTimeLabel.setVisibility(View.GONE);
         TextView pickupTimeText = (TextView) findViewById(R.id.pickupTimeText);
-        pickupTimeText.setVisibility(View.INVISIBLE);
+        pickupTimeText.setVisibility(View.GONE);
 
         driverText.setOnClickListener(new View.OnClickListener()
         {

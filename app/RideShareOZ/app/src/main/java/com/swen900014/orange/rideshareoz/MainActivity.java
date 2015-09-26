@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener
 {
     private final static String TAG = "MAIN_Authentication";
-    //private final static String SERVER_CLIENT_ID =
-    //        "728068031979-l803m9527jv2ks6hh4qm8sg6nqr8thgl.apps.googleusercontent.com" +
-    //                ":api_scope:https://www.googleapis.com/auth/plus.login";
 
     /* Request code used to invoke sign in user interactions. */
     private final static int RC_SIGN_IN = 0;
@@ -58,8 +55,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     private boolean mShouldResolve = false;
-
-    Bundle savedInstanceState;
+    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
