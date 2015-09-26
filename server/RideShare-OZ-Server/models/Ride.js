@@ -161,7 +161,7 @@ RideSchema.methods.addRequest = function(user_id,req,callback){
     if (String(request.user)==String(user_id)) {
         count=1;
     }});
-  if(count==0){
+  if(count===0){
   this.requests.push({
     'user':user_id,
     'state':"unaccept",
@@ -208,15 +208,14 @@ var user_in_passenger=0;
         {user_in_passenger=1;}
 
     });
-    if(user_in_passenger==0){
-    doc.requests.forEach(function(request){
-    
+    if(user_in_passenger===0){
+      doc.requests.forEach(function(request){
     
       if (String(request.user)==String(user_id)) {
         pickup_point=request.pickup_point;
         pickup_time=request.pickup_time;
         pickup_add=request.pickup_add;
-        doc.seats=Number(doc.seats)-1;
+        // doc.seats=Number(doc.seats)-1;
         doc.passengers.push({
           'user':user_id,
           'pickup_point':pickup_point,
@@ -238,8 +237,8 @@ RideSchema.statics.kickPassenger= function(req,callback){
   var user_id=req.userinfo._id; 
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
       function(err,doc){
-        doc.seats=Number(doc.seats)+1;
-        doc.save();
+        // doc.seats=Number(doc.seats)+1;
+       // doc.save();
         callback(doc);
       });
 };
@@ -250,8 +249,8 @@ RideSchema.statics.passengerLeave= function(req,callback){
   this.findByIdAndUpdate(ride_id,{$pull:{'passengers':{'user':user_id}}},
       function(err,doc){
        
-        doc.seats=Number(doc.seats)+1;
-        doc.save();
+        // doc.seats=Number(doc.seats)+1;
+       // doc.save();
         callback(doc);
       });
 };

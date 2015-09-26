@@ -1,5 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -144,10 +146,13 @@ public class Ride implements Serializable
         } finally
         {
             //TODO: optimize this using object comparison
-            if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
-            {
+            try {
+                if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername())) {
                 /* add to the offering list*/
-                this.rideState = RideState.OFFERING;
+                    this.rideState = RideState.OFFERING;
+                }
+            }catch (NullPointerException e){
+                Log.e("RideParse:", this.getStart().getAddress());
             }
         }
     }
@@ -173,7 +178,6 @@ public class Ride implements Serializable
         }
         return rides;
     }
-
 
     // For Testing without receiving server data
     public Ride(RideState s)
@@ -203,22 +207,35 @@ public class Ride implements Serializable
 
     public boolean acceptJoin(Pickup lift)
     {
-        if (waiting.contains(lift) && joined.size() <= limit)
+        for (Pickup pickup : waiting)
         {
-            joined.add(lift);
-            waiting.remove(lift);
+            if (pickup.getUser().getUsername().equals(lift.getUser().getUsername()))
+            {
+                joined.add(lift);
+                waiting.remove(pickup);
 
-            return true;
+                return true;
+            }
         }
-        else
-        {
-            return false;
-        }
+
+        System.out.println("accept fails");
+        return false;
     }
 
     public boolean rejectJoin(Pickup lift)
     {
-        return waiting.remove(lift);
+        for (Pickup pickup : waiting)
+        {
+            if (pickup.getUser().getUsername().equals(lift.getUser().getUsername()))
+            {
+                waiting.remove(pickup);
+
+                return true;
+            }
+        }
+
+        System.out.println("reject fails");
+        return false;
     }
 
     public boolean hasPass(User pass)
@@ -238,7 +255,7 @@ public class Ride implements Serializable
     {
         for (Pickup pick : waiting)
         {
-            if (request.getUsername() == pick.getUser().getUsername())
+            if (request.getUsername().equals(pick.getUser().getUsername()))
             {
                 return true;
             }

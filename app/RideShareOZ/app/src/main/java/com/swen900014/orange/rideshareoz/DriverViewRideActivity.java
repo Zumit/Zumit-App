@@ -45,7 +45,6 @@ public class DriverViewRideActivity extends AppCompatActivity
         thisActivity = this;
 
         Intent received = getIntent();
-
         ride = (Ride) received.getSerializableExtra("SelectedRide");
 
         // Test accepting and rejecting requests
@@ -86,7 +85,6 @@ public class DriverViewRideActivity extends AppCompatActivity
 
         updateView();
     }
-
 
     public void updateView()
     {

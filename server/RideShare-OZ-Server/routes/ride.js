@@ -28,12 +28,16 @@ router.post('/search',function(req, res){
 });
 
 router.post('/request',function(req,res){
+  
   Ride.findById(req.body.ride_id, function(err, ride){
+    if(ride){
     ride.addRequest(req.userinfo._id,req, function(updated_ride){
       res.json(updated_ride);
+
     });
+  }else{ res.json("no ride");}
   });
-  
+
 });
 
 router.post('/cancel',function(req,res){

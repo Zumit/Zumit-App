@@ -154,7 +154,6 @@ public class UserInfoActivity extends AppCompatActivity
 
                 ride.rejectJoin(userInfo);
                 Intent intent = new Intent(activity, DriverViewRideActivity.class);
-                //intent.putExtra("ToRemove", userInfo);
                 intent.putExtra("SelectedRide", ride);
 
                 activity.startActivity(intent);

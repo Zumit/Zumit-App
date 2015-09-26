@@ -12,6 +12,8 @@ var UserSchema = new Schema({
   rides: [{type: Schema.Types.ObjectId, ref: 'Ride' }],
   events: [{type: Schema.Types.ObjectId, ref: 'Event' }],
   updated_at: { type: Date, default: Date.now },
+  driver_rate:{ type: Number, default:0},
+  passenger_rate:{ type: Number,default:0},
 });
 
 UserSchema.statics.createUser = function(username, callback){
