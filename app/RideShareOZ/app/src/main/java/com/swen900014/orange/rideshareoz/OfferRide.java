@@ -135,18 +135,29 @@ public class OfferRide extends FragmentActivity implements
                 isFind = true;
             }
         }
-        //auto-complete adapter
-        adapter = new PlaceAutoCompleteAdapter(this,
-                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
-                BOUNDS_GREATER_Melbourne, null);
+
+
         EditStart = (AutoCompleteTextView)
                 findViewById(R.id.Start);
-        EditStart.setOnItemClickListener(mAutoCompleteClickListener);
-        EditStart.setAdapter(adapter);
+
+
         EditEnd = (AutoCompleteTextView)
                 findViewById(R.id.End);
-        EditEnd.setOnItemClickListener(mAutoCompleteClickListener);
-        EditEnd.setAdapter(adapter);
+
+
+
+        //auto-complete adapter
+        PlaceAutoCompleteAdapter adapterS = new PlaceAutoCompleteAdapter(this,
+                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
+                BOUNDS_GREATER_MELBOURNE, null, EditStart);
+        EditStart.setAdapter(adapterS);
+
+        PlaceAutoCompleteAdapter adapterE = new PlaceAutoCompleteAdapter(this,
+                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
+                BOUNDS_GREATER_MELBOURNE, null, EditEnd);
+        EditEnd.setAdapter(adapterE);
+
+
         //spinner adapter
         spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

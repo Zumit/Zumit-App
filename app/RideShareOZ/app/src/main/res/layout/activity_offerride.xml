@@ -30,7 +30,7 @@
             android:layout_columnSpan="5"
             android:layout_row="0"
             android:layout_gravity="fill_horizontal"
-            android:inputType="textAutoComplete|textPostalAddress|textMultiLine"/>
+            android:inputType="textMultiLine|textAutoComplete|textPostalAddress"/>
 
         <CheckBox
             android:id="@+id/current1"
@@ -63,7 +63,7 @@
             android:layout_column="1"
             android:layout_columnSpan="5"
             android:layout_gravity="fill_horizontal"
-            android:inputType="textAutoComplete|textPostalAddress|textMultiLine"/>
+            android:inputType="textMultiLine|textAutoComplete|textPostalAddress"/>
 
         <CheckBox
             android:id="@+id/current2"
