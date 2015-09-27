@@ -569,7 +569,7 @@ public class OfferRide extends FragmentActivity implements
     public void checkTime(String hours,String mins,String houra,String mina){
         if(hours.compareTo(houra)==0)
         {
-            if(mins.compareTo(mina)>0)
+            if(mins.compareTo(mina)>=0)
             {
                 Toast.makeText(getApplicationContext(),"Arrival time must be later than start time!",Toast.LENGTH_SHORT).show();
                 btnSubmit.setEnabled(false);}
