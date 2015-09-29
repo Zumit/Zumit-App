@@ -64,6 +64,7 @@ public class OfferRide extends FragmentActivity implements
 
     private Button btnSubmit;
 
+    // Coordinates of start and end addresses
     private String latS = "";
     private String lonS = "";
     private String latE = "";
@@ -72,7 +73,11 @@ public class OfferRide extends FragmentActivity implements
     private String startAddress = "";
     private String endAddress = "";
 
+    // Determine whether this class is
+    // used for offering a ride or searching a
+    // ride
     private boolean isFind = false;
+
     protected GoogleApiClient mGoogleApiClient;
 
     private Calendar calendar = Calendar.getInstance();
@@ -145,7 +150,8 @@ public class OfferRide extends FragmentActivity implements
             }
         });
 
-        /* check if it offer or find  */
+        /*  Check if the current state is offering a ride or
+          * searching a ride */
         Intent intent = this.getIntent();
 
         if (intent != null && intent.hasExtra("type"))
@@ -254,6 +260,10 @@ public class OfferRide extends FragmentActivity implements
                     public void onErrorResponse(VolleyError volleyError)
                     {
                         volleyError.printStackTrace();
+
+                        Toast.makeText(activity, "Invalid address",
+                                Toast.LENGTH_SHORT).show();
+
                         System.out.println("it doesn't work");
                     }
                 });
@@ -319,6 +329,10 @@ public class OfferRide extends FragmentActivity implements
                     public void onErrorResponse(VolleyError volleyError)
                     {
                         volleyError.printStackTrace();
+
+                        Toast.makeText(activity, "Invalid address",
+                                Toast.LENGTH_SHORT).show();
+
                         System.out.println("it doesn't work");
                     }
                 });
@@ -534,7 +548,6 @@ public class OfferRide extends FragmentActivity implements
     {
         new DatePickerDialog(OfferRide.this, listener1, calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-
     }
 
     public void setStartTime(View view)
@@ -553,8 +566,17 @@ public class OfferRide extends FragmentActivity implements
     // has been typed in by user
     public boolean inputValid()
     {
-        return !(EditEndTime.isEmpty() || EditStartTime.isEmpty() ||
-                EditStart.getText().toString().isEmpty() ||
-                EditEnd.getText().toString().isEmpty());
+        if (!isFind)
+        {
+            return !(EditEndTime.isEmpty() || EditStartTime.isEmpty() ||
+                    EditStart.getText().toString().isEmpty() ||
+                    EditEnd.getText().toString().isEmpty());
+        }
+        else
+        {
+            return !(EditEndTime.isEmpty() ||
+                    EditStart.getText().toString().isEmpty() ||
+                    EditEnd.getText().toString().isEmpty());
+        }
     }
 }
