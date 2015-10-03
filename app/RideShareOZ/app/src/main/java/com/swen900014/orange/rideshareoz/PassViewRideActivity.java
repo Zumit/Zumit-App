@@ -196,47 +196,6 @@ public class PassViewRideActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*private AdapterView.OnItemClickListener mAutoCompleteClickListener
-            = new AdapterView.OnItemClickListener()
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final PlaceAutoCompleteAdapter.PlaceAutoComplete place = adapter.getItem(position);
-            final String placeId = place.placeId;
-
-            Log.i(TAG, "Autocomplete place selected: " + place.description);
-
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.
-                    getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceCallback);
-
-            Toast.makeText(getApplicationContext(), "clicked: " + place.description,
-                    Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "Called getPlaceById to get Place details for " + place.placeId);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceCallback
-            = new ResultCallback<PlaceBuffer>()
-    {
-        @Override
-        public void onResult(PlaceBuffer places)
-        {
-            if (!places.getStatus().isSuccess())
-            {
-                Log.e(TAG, "Place query did not complete. Error : " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-
-            final Place place = places.get(0);
-
-            Log.i(TAG, "Place details received: " + place.getName());
-
-            places.release();
-        }
-    };*/
-
     public void onConnectionFailed(ConnectionResult connectionResult)
     {
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "

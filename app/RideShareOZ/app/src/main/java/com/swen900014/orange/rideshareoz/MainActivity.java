@@ -19,7 +19,6 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -108,14 +107,14 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_OfferRide)
         {
             Intent offerRide = new Intent(this, OfferRide.class);
-            offerRide.putExtra(Intent.EXTRA_TEXT,"offer");
+            offerRide.putExtra(Intent.EXTRA_TEXT, "offer");
             startActivity(offerRide);
             return true;
         }
         if (id == R.id.action_FindRide)
         {
             Intent findRideIntent = new Intent(this, OfferRide.class);
-            findRideIntent.putExtra("type","find");
+            findRideIntent.putExtra("type", "find");
             startActivity(findRideIntent);
             return true;
         }
@@ -188,17 +187,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    // Button event for the view ride button
-    // by Yu
-    public void viewRide(View v)
-    {
-        //Intent passViewRide = new Intent(this, PassViewRideActivity.class);
-        //startActivity(passViewRide);
-
-        Intent driverViewRide = new Intent(this, DriverViewRideActivity.class);
-        startActivity(driverViewRide);
-    }
-
     // Button event for the Offer ride button
     // by Fallie
     public void offerRide(View v)
@@ -218,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements
         {
             onSignOutClicked();
         }
-
     }
 
     private void onTestQueryClicked(String url)
@@ -370,8 +357,6 @@ public class MainActivity extends AppCompatActivity implements
                 token = result;
 
                 new SendUserID().execute(result);
-
-
             }
             else
             {

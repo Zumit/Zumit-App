@@ -34,7 +34,6 @@ public class DriverViewRideActivity extends AppCompatActivity
     private TableLayout passengerList;
     private TableLayout waitingList;
     private Ride ride;
-
     private Activity thisActivity;
 
     @Override

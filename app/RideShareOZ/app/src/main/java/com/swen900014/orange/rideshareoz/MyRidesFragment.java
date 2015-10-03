@@ -32,12 +32,12 @@ import static com.swen900014.orange.rideshareoz.Resources.*;
 
 /**
  * Created by George on 6/09/2015.
+ * Display a single ride info in the Myrides activity
  */
 
 public class MyRidesFragment extends Fragment
 {
     private RidesAdaptor mRidesAdapter;
-    private Bundle savedInstanceState;
     private boolean isSearchResults = false;
     private Intent intent;
 
@@ -49,15 +49,17 @@ public class MyRidesFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
-        this.savedInstanceState = savedInstanceState;
 
          /* check if it offer or find  */
         intent = this.getActivity().getIntent();
-        if (intent != null && intent.hasExtra("type")){
+        if (intent != null && intent.hasExtra("type"))
+        {
             String type = intent.getStringExtra("type");
-            if(type.equals("find")){
+            if (type.equals("find"))
+            {
                 isSearchResults = true;
             }
         }
@@ -66,7 +68,6 @@ public class MyRidesFragment extends Fragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-
         //inflater.inflate(R.menu.myridesfragment, menu);
     }
 
@@ -80,10 +81,13 @@ public class MyRidesFragment extends Fragment
         if (id == R.id.action_refresh)
         {
             FetchRidesTask ridesTask = new FetchRidesTask();
-            if(isSearchResults){
+            if (isSearchResults)
+            {
                 //TODO: start task to get serch results
                 //search parameters will be taken from the intent
-            }else{
+            }
+            else
+            {
                 //TODO: use /user/getRides (POST request)
                 ridesTask.execute(GETALL_RIDE_URL);
             }
@@ -121,7 +125,8 @@ public class MyRidesFragment extends Fragment
 
         /* ignore the test data and load the actual data from server */
         FetchRidesTask ridesTask = new FetchRidesTask();
-        if(isSearchResults){
+        if (isSearchResults)
+        {
             //TODO: start task to get serch results
             //search parameters will be taken from the intent
             String url = SEARCH_RIDE_URL;
@@ -130,10 +135,12 @@ public class MyRidesFragment extends Fragment
             url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
             url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
             url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
-            url += "group_id=" + intent.getStringExtra("group_id") ;
+            url += "group_id=" + intent.getStringExtra("group_id");
 
             ridesTask.execute(url);
-        }else{
+        }
+        else
+        {
             ridesTask.execute(GETALL_RIDE_URL);
         }
 
