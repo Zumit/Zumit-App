@@ -76,11 +76,7 @@ public class User implements Serializable
 
     public static void setCurrentUser(User currentUser)
     {
-        if (User.currentUser == null)
-        {
-            User.currentUser = currentUser;
-        }
-
+        User.currentUser = currentUser;
     }
 
     public static User getCurrentUser()

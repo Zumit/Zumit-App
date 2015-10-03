@@ -292,16 +292,15 @@ public class MainActivity extends AppCompatActivity implements
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         User.setCurrentUser(User.GetUser(account.name));
 
+        //Send Authentication Token to server and set current User
+        new GetUserIDTask().execute();
 
         setContentView(R.layout.activity_myrides);
-        if (savedInstanceState == null)
-        {
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, (new MyRidesFragment()))
                     .commit();
         }
-
-        new GetUserIDTask().execute();
     }
 
     public static GoogleApiClient getUserGoogleApiClient()
