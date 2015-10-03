@@ -1,11 +1,10 @@
 package com.swen900014.orange.rideshareoz;
 
 
+import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,17 +14,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.swen900014.orange.rideshareoz.Resources.*;
 
@@ -40,6 +40,7 @@ public class MyRidesFragment extends Fragment
     private RidesAdaptor mRidesAdapter;
     private boolean isSearchResults = false;
     private Intent intent;
+    private Activity thisActivity;
 
     public MyRidesFragment()
     {
@@ -52,6 +53,8 @@ public class MyRidesFragment extends Fragment
 
         // Add this line in order for this fragment to handle menu events.
         setHasOptionsMenu(true);
+
+        thisActivity = this.getActivity();
 
          /* check if it offer or find  */
         intent = this.getActivity().getIntent();
@@ -77,7 +80,8 @@ public class MyRidesFragment extends Fragment
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        /*int id = item.getItemId();
+
         if (id == R.id.action_refresh)
         {
             FetchRidesTask ridesTask = new FetchRidesTask();
@@ -93,7 +97,8 @@ public class MyRidesFragment extends Fragment
             }
 
             return true;
-        }
+        }*/
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,7 +108,7 @@ public class MyRidesFragment extends Fragment
     {
 
         // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        Ride[] data = {
+        /*Ride[] data = {
                 new Ride(Ride.RideState.VIEWING),
                 new Ride(Ride.RideState.JOINED),
                 new Ride(Ride.RideState.OFFERING),
@@ -114,7 +119,7 @@ public class MyRidesFragment extends Fragment
                 new Ride(Ride.RideState.JOINED),
                 new Ride(Ride.RideState.VIEWING),
                 new Ride(Ride.RideState.OFFERING)
-        };
+        };*/
         //List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
         List<Ride> currentRides = new ArrayList<>();
 
@@ -124,26 +129,15 @@ public class MyRidesFragment extends Fragment
         mRidesAdapter = new RidesAdaptor(getActivity(), (ArrayList<Ride>) currentRides);
 
         /* ignore the test data and load the actual data from server */
-        FetchRidesTask ridesTask = new FetchRidesTask();
         if (isSearchResults)
         {
             //TODO: start task to get serch results
-            //search parameters will be taken from the intent
-            String url = SEARCH_RIDE_URL;
-            url += "s_lat=" + intent.getStringExtra("s_lat") + "&";
-            url += "s_lon=" + intent.getStringExtra("s_lon") + "&";
-            url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
-            url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
-            url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
-            url += "group_id=" + intent.getStringExtra("group_id");
-
-            ridesTask.execute(url);
+            sendSearchRequest();
         }
         else
         {
-            ridesTask.execute(GETALL_RIDE_URL);
+            sendGetRidesRequest();
         }
-
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
 
@@ -152,7 +146,6 @@ public class MyRidesFragment extends Fragment
         listView.setAdapter(mRidesAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
-
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
@@ -175,107 +168,95 @@ public class MyRidesFragment extends Fragment
         return rootView;
     }
 
-    public class FetchRidesTask extends AsyncTask<String, Void, String>
+    public void sendGetRidesRequest()
     {
-
-        private final String LOG_TAG = FetchRidesTask.class.getSimpleName();
-
-        @Override
-        protected String doInBackground(String... params)
+        StringRequest getRidesRequest = new StringRequest(Request.Method.POST,
+                GETUSER_RELAVENT_RIDE_URL, new Response.Listener<String>()
         {
-
-            // These two need to be declared outside the try/catch
-            // so that they can be closed in the finally block.
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
-            String ridesJsonStr = null;
-
-            try
+            @Override
+            public void onResponse(String s)
             {
-                // Construct the URL for the Rides query
-                URL url = new URL(params[0]);
+                System.out.println("response: " + s);
 
-                // Create the request to OpenWeatherMap, and open the connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null)
-                {
-                    // Nothing to do.
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null)
-                {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                }
-
-                if (buffer.length() == 0)
-                {
-                    // Stream was empty.  No point in parsing.
-                    return null;
-                }
-                ridesJsonStr = buffer.toString();
-            } catch (IOException e)
-            {
-                Log.e(LOG_TAG, "Error ", e);
-                // If the code didn't successfully get the  data, there's no point in attemping
-                // to parse it.
-                return null;
-            } finally
-            {
-                if (urlConnection != null)
-                {
-                    urlConnection.disconnect();
-                }
-                if (reader != null)
-                {
-                    try
-                    {
-                        reader.close();
-                    } catch (final IOException e)
-                    {
-                        Log.e(LOG_TAG, "Error closing stream", e);
-                    }
-                }
+                storeRides(s);
             }
-
-            return ridesJsonStr;
-        }
-
-        @Override
-        protected void onPostExecute(String result)
+        }, new Response.ErrorListener()
         {
-            if (result != null)
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
             {
-                try
-                {
-                    ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(result), isSearchResults);
-                    mRidesAdapter.clear();
-                    for (Ride listItemRide : serverRides)
-                    {
-                        mRidesAdapter.add(listItemRide);
-                    }
-                } catch (JSONException e)
-                {
-                    e.printStackTrace();
-                }
+                volleyError.printStackTrace();
 
-                // New data is back from the server.  Hooray!
+                System.out.println("Sending post failed!");
             }
-        }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("username", User.getCurrentUser().getUsername());
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(thisActivity).addToRequestQueue(getRidesRequest);
     }
 
+    public void sendSearchRequest()
+    {
+        //search parameters will be taken from the intent
+        String url = SEARCH_RIDE_URL;
 
+        url += "s_lat=" + intent.getStringExtra("s_lat") + "&";
+        url += "s_lon=" + intent.getStringExtra("s_lon") + "&";
+        url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
+        url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
+        url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
+        url += "group_id=" + intent.getStringExtra("group_id");
+
+        StringRequest searchRequest = new StringRequest(Request.Method.GET,
+                url, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
+
+                storeRides(s);
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending post failed!");
+            }
+        });
+
+        MyRequest.getInstance(thisActivity).addToRequestQueue(searchRequest);
+    }
+    
+    private void storeRides(String response)
+    {
+        if (response != null)
+        {
+            try
+            {
+                ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(response), isSearchResults);
+                mRidesAdapter.clear();
+                for (Ride listItemRide : serverRides)
+                {
+                    mRidesAdapter.add(listItemRide);
+                }
+            } catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+
+            // New data is back from the server.  Hooray!
+        }
+    }
 }

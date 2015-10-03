@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements
 
     /* Should we automatically resolve ConnectionResults when possible? */
 
-
     private boolean mShouldResolve = false;
     private Bundle savedInstanceState;
 
