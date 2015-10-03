@@ -1,6 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by Sangzhuoyang Yu on 9/11/15.
@@ -16,6 +17,8 @@ public class User implements Serializable
     private int credit;
     private UserType userType;
 
+    private static HashMap<String, User> allUsers = new HashMap<String, User>();
+
     private static User currentUser;
 
     public User(String name, String email, int phone, int credit, UserType userType)
@@ -30,6 +33,15 @@ public class User implements Serializable
     public User(String username)
     {
         this.name = username;
+        allUsers.put(username, this);
+    }
+
+    public static User GetUser(String username){
+        if(allUsers.containsKey(username)){
+            return allUsers.get(username);
+        }else{
+            return new User(username);
+        }
     }
 
     public void rate()
