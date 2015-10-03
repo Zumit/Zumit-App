@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.io.Serializable;
-import java.util.HashMap;
+
 
 /**
  * Created by George & Sangzhuoyang Yu on 9/6/15.
@@ -35,8 +35,6 @@ public class Ride implements Serializable
     {
         ONCE, DAILY, WEEKLY
     }
-
-    private static HashMap<Ride, String> myRidesList;
 
     public enum RideState implements Serializable
     {
@@ -202,17 +200,11 @@ public class Ride implements Serializable
         this.joined = new ArrayList<>();
         this.waiting = new ArrayList<>();
         this.rideState = s;
-
     }
 
     public boolean isDriver()
     {
         return true;
-    }
-
-    public void initRideList()
-    {
-        myRidesList = new HashMap<>();
     }
 
     public boolean acceptJoin(Pickup lift)
