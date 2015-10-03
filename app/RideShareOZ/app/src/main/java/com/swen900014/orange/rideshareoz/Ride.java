@@ -135,7 +135,7 @@ public class Ride implements Serializable
                     tempObj = tempArray.getJSONObject(i);
                     JSONObject joinedPassObj = tempObj.getJSONObject("user");
                     String username = joinedPassObj.getString("username");
-                    User pass = new User(username, "email", 123, 0);//, UserType.PASSENGER
+                    User pass = new User(username, "email", "000", 0, UserType.PASSENGER);
 
                     //TODO: optimize this using object comparison
                     if (User.getCurrentUser().getUsername().equals(username))
