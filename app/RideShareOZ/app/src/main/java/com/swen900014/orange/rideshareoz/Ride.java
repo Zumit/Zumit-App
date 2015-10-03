@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by George & Sangzhuoyang Yu on 9/6/15.
@@ -19,6 +20,7 @@ public class Ride implements Serializable
     private String rideId;
     private Location start;
     private Location end;
+    private Group group;
     private String arriving_time;
     private String start_time;
     private User driver;
@@ -27,6 +29,8 @@ public class Ride implements Serializable
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
     private RideState rideState = RideState.NEW;
+
+    private static HashMap<Ride, String> myRidesList;
 
     public enum RideState implements Serializable
     {
@@ -200,9 +204,9 @@ public class Ride implements Serializable
         return true;
     }
 
-    public boolean joined()
+    public void initRideList()
     {
-        return true;
+        myRidesList = new HashMap<>();
     }
 
     public boolean acceptJoin(Pickup lift)
@@ -338,6 +342,11 @@ public class Ride implements Serializable
     public User getDriver()
     {
         return driver;
+    }
+
+    public Group getGroup()
+    {
+        return group;
     }
 
     public RideState getRideState()
