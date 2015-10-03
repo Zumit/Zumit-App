@@ -29,6 +29,12 @@ public class Ride implements Serializable
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
     private RideState rideState = RideState.NEW;
+    private RideRegularity rideRegularity = RideRegularity.ONCE;
+
+    public enum RideRegularity implements Serializable
+    {
+        ONCE, DAILY, WEEKLY
+    }
 
     private static HashMap<Ride, String> myRidesList;
 
