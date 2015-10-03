@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Plus.API)
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
+        mGoogleApiClient.connect();
     }
 
 
@@ -171,14 +172,16 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart()
     {
         super.onStart();
-        mGoogleApiClient.connect();
+        //ReAuthentication is not required
+        //mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        //ReAuthentication is not required
+        //mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -287,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements
         //set current user
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        User.setCurrentUser(new User(account.name));
+        User.setCurrentUser(User.GetUser(account.name));
 
 
         setContentView(R.layout.activity_myrides);
