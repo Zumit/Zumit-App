@@ -95,7 +95,7 @@ public class Ride implements Serializable
 
             // Get driver info
             tempObj = jsonRide.getJSONObject("driver");
-            driver = new User(tempObj.getString("username"), "email", 123, 0);//, UserType.DRIVER
+            driver = new User(tempObj.getString("username"), "email", "123", 0);
 
             // Get seat number, start time and arrival time
             limit = jsonRide.getInt("seats");
@@ -112,7 +112,7 @@ public class Ride implements Serializable
                 JSONObject requestingPassObj = tempObj.getJSONObject("user");
                 String username = requestingPassObj.getString("username");
 
-                User pass = new User(username, "email", 123, 0);//, UserType.PASSENGER
+                User pass = new User(username, "email", "123", 0);
 
                 //TODO: optimize this using object comparison
                 if (User.getCurrentUser().getUsername().equals(username))
@@ -135,7 +135,7 @@ public class Ride implements Serializable
                     tempObj = tempArray.getJSONObject(i);
                     JSONObject joinedPassObj = tempObj.getJSONObject("user");
                     String username = joinedPassObj.getString("username");
-                    User pass = new User(username, "email", "000", 0, UserType.PASSENGER);
+                    User pass = new User(username, "email", "000", 0);
 
                     //TODO: optimize this using object comparison
                     if (User.getCurrentUser().getUsername().equals(username))
@@ -194,7 +194,7 @@ public class Ride implements Serializable
         this.end = new Location("UniMelb");
 
         this.arriving_time = "13:30:00";
-        this.driver = new User("George", "george.nader@gmail.com", 0, 0);//, UserType.DRIVER
+        this.driver = new User("George", "george.nader@gmail.com", "0", 0);
         this.limit = 4;
         rideId = "0";
         this.joined = new ArrayList<>();

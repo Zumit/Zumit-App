@@ -238,7 +238,7 @@ public class MyRidesFragment extends Fragment
 
         MyRequest.getInstance(thisActivity).addToRequestQueue(searchRequest);
     }
-    
+
     private void storeRides(String response)
     {
         if (response != null)

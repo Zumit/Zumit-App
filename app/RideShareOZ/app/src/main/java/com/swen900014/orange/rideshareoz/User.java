@@ -20,8 +20,7 @@ public class User implements Serializable
 
     private static User currentUser;
 
-    public User(String name, String email, int phone, int credit)
-    public User(String name, String email, String phone, int credit, UserType userType)
+    public User(String name, String email, String phone, int credit)
     {
         this.name = name;
         this.email = email;
