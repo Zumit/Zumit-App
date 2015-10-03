@@ -210,11 +210,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void onTestQueryClicked(String url)
-    {
-        new SendURL().execute(url);
-    }
-
     public static void signOut()
     {
         if (mGoogleApiClient.isConnected())
@@ -363,116 +358,6 @@ public class MainActivity extends AppCompatActivity implements
             {
                 // There was some error getting the ID Token
                 // ...
-            }
-        }
-    }
-
-    public class SendURL extends AsyncTask<String, Void, String>
-    {
-
-        final String LogTag = "SendURL";
-
-        @Override
-        protected String doInBackground(String... params)
-        {
-            // These two need to be declared outside the try/catch
-            // so that they can be closed in the finally block
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
-            String ridesJason = null;
-
-            try
-            {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                String urlAddress;
-
-                if (params[0].endsWith("http://144.6.226.237/ride/create?driverid="))
-                {
-                    urlAddress = params[0] + getAuthToken();
-                }
-                else
-                {
-                    urlAddress = params[0];
-                }
-                URL url = new URL(urlAddress);
-
-                // Create the request to OpenWeatherMap, and open the connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null)
-                {
-                    // Nothing to do.
-                    Log.e(LogTag, "input Stream empty");
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null)
-                {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                }
-
-                if (buffer.length() == 0)
-                {
-                    // Stream was empty.  No point in parsing.
-                    Log.e(LogTag, "Buffer empty");
-                    return null;
-                }
-                ridesJason = buffer.toString();
-                //Log.e(LogTag, ridesJason );
-            } catch (IOException e)
-            {
-                Log.e(LogTag, "Error ", e);
-                // If the code didn't successfully get the weather data, there's no point in attemping
-                // to parse it.
-                return null;
-            } finally
-            {
-                if (urlConnection != null)
-                {
-                    urlConnection.disconnect();
-                }
-                if (reader != null)
-                {
-                    try
-                    {
-                        reader.close();
-                    } catch (final IOException e)
-                    {
-                        Log.e(LogTag, "Error closing stream", e);
-                    }
-                }
-            }
-
-            return ridesJason;
-        }
-
-        @Override
-        protected void onPostExecute(String result)
-        {
-
-            if (result != null)
-            {
-                // Successfully retrieved rides
-                Log.d(LogTag, result);
-            }
-            else
-            {
-                // No Rides :(
-                Log.e(LogTag, "no rides");
             }
         }
     }
