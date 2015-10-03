@@ -25,4 +25,7 @@ public class Resources
     public final static String REJECT_REQUEST_URL = "http://144.6.226.237/ride/reject";
     public final static String JOIN_REQUEST_URL = "http://144.6.226.237/ride/request";
     public final static String LEAVE_RIDE_URL = "http://144.6.226.237/ride/leave";
+
+    public final static String JOIN_GROUP_URL = "http://144.6.226.237/group/request";
+    public final static String LEAVE_GROUP_URL = "http://144.6.226.237/group/leave";
 }

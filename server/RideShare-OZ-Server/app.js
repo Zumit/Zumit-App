@@ -62,7 +62,12 @@ app.use(function(req,res,next){
       }
     });
   } else {
-    next(); }
+    if (req.query.username) {
+      console.log("ssss======");
+      req.userinfo = {'email': req.query.username};
+    }
+    next();
+  }
   // console.log("=========");
   // next();
 });
