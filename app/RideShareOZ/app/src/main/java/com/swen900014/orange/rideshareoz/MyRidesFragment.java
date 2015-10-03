@@ -131,7 +131,6 @@ public class MyRidesFragment extends Fragment
         /* ignore the test data and load the actual data from server */
         if (isSearchResults)
         {
-            //TODO: start task to get serch results
             sendSearchRequest();
         }
         else
