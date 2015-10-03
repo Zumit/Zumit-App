@@ -13,7 +13,7 @@ public class User implements Serializable
 {
     private String name;
     private String email;
-    private int phone;
+    private String phone;
     private int credit;
     private UserType userType;
 
@@ -21,7 +21,7 @@ public class User implements Serializable
 
     private static User currentUser;
 
-    public User(String name, String email, int phone, int credit, UserType userType)
+    public User(String name, String email, String phone, int credit, UserType userType)
     {
         this.name = name;
         this.email = email;
@@ -64,7 +64,7 @@ public class User implements Serializable
         return userType;
     }
 
-    public int getPhone()
+    public String getPhone()
     {
         return phone;
     }
@@ -82,5 +82,9 @@ public class User implements Serializable
     public static User getCurrentUser()
     {
         return currentUser;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
