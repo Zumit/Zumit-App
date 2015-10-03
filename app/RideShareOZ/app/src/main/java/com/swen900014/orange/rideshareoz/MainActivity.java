@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements
         //set current user
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        User.setCurrentUser(User.GetUser(account.name));
+        User.setCurrentUser(User.addUserIfNotExist(account.name, account.name, "",0));
 
         //Send Authentication Token to server and set current User
         new GetUserIDTask().execute();

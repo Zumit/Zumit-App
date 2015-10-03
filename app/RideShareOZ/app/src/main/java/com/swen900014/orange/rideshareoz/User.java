@@ -15,32 +15,35 @@ public class User implements Serializable
     private String email;
     private String phone;
     private int credit;
-    private UserType userType;
 
     private static HashMap<String, User> allUsers = new HashMap<String, User>();
 
     private static User currentUser;
 
-    public User(String name, String email, String phone, int credit, UserType userType)
+    public User(String name, String email, String phone, int credit)
     {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.credit = credit;
-        this.userType = userType;
     }
 
     public User(String username)
     {
         this.name = username;
-        allUsers.put(username, this);
     }
 
-    public static User GetUser(String username){
+    public static User getUser(String name) {
+        return allUsers.get(name);
+    }
+
+    public static User addUserIfNotExist(String username, String email, String phone, int credit){
         if(allUsers.containsKey(username)){
             return allUsers.get(username);
         }else{
-            return new User(username);
+            User newUser = new User(username, email, phone, credit);
+            allUsers.put(newUser.name,newUser);
+            return newUser;
         }
     }
 
@@ -59,10 +62,6 @@ public class User implements Serializable
         return email;
     }
 
-    public UserType getUserType()
-    {
-        return userType;
-    }
 
     public String getPhone()
     {
