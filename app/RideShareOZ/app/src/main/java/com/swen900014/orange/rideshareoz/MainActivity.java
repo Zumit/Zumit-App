@@ -1,6 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.AsyncTask;
@@ -302,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements
         return mGoogleApiClient;
     }
 
-    public String getAuthToken()
+    public static String getAuthToken(Context context)
     {
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
@@ -311,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements
 
         try
         {
-            return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
+            return GoogleAuthUtil.getToken(context, account, scopes);
         } catch (IOException e)
         {
             Log.e(TAG, "Error retrieving ID token.", e);
@@ -340,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected String doInBackground(Void... params)
         {
-            return getAuthToken();
+            return getAuthToken(getApplicationContext());
         }
 
         @Override
