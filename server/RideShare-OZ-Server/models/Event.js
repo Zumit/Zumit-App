@@ -3,12 +3,13 @@ var Schema = mongoose.Schema;
 
 var EventSchema = new Schema({
   eventName: String,
-  eventlocation: String,
-  eventInfo: [Number],
+  eventInfo: String,
+  eventlocation: [Number],
+  location: String,
   startTime:Date,
+  endTime:Date,
   group: {type: Schema.Types.ObjectId, ref: 'Group'},
   organizer: {type: Schema.Types.ObjectId, ref: 'User' },
-  Members: [{type: Schema.Types.ObjectId, ref: 'User' }],
 });
 
 
@@ -21,7 +22,9 @@ var EventSchema = new Schema({
   events.eventlocation=[lon,lat];
   events.eventInfo=req.query.eventInfo;
   events.group=req.query.group_id;
-  events.startTime=req.query.date;
+  events.startTime=req.query.start_time;
+  events.endTime=req.query.end_time;
+  events.location=req.query.location;
   User.findById(req.query.organizer, function(err, user){
     events.organizer=user;
     events.save(function(err, doc){
