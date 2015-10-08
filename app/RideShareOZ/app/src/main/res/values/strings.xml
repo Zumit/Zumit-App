@@ -63,4 +63,8 @@
     <string name="EditDate">Set DATE</string>
     <string name="ArrivalTime">SET ArrivalTIME</string>
     <string name="rideStartTime">SET STARTTIME</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_view_group">ViewGroupActivity</string>
 </resources>

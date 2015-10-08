@@ -1,6 +1,5 @@
 package com.swen900014.orange.rideshareoz;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +23,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -164,14 +161,11 @@ public class PlaceAutoCompleteAdapter extends
 
             if (!status.isSuccess())
             {
-                if (!status.isSuccess())
-                {
-                    Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
-                            Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
-                    acp.release();
-                    return null;
-                }
+                Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
+                        Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error getting autocomplete prediction API call: " + status.toString());
+                acp.release();
+                return null;
             }
 
             Log.i(TAG, "Query completed. received " + acp.getCount() + " predictions");

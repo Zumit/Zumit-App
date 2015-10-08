@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../models/User.js');
 var Group = require('../models/Group.js');
+var distance= require('google-distance-matrix');
 
 var RideSchema = new Schema({
   arrival_time: Date,
@@ -79,6 +80,9 @@ RideSchema.statics.searchRide = function(req,callback){
   
   var e_lon = req.body.e_lon;
   var e_lat = req.body.e_lat; 
+  var end=[];
+  end[0]=e_lon;
+  end[1]=e_lat;
   //need have arrival time
   var maxDistance = 0.01;
   var limit = 10;
@@ -86,68 +90,84 @@ RideSchema.statics.searchRide = function(req,callback){
   var arrival_time = req.body.arrival_time;
   var s_time = arrival_time.substring(0, arrival_time.length - 14) + 'T00:00:00.000Z';
   var e_time = arrival_time.substring(0, arrival_time.length - 14) + 'T23:59:59.000Z';
-  console.log(s_time);
-  console.log(e_time);
-  console.log(start);
   
-  // this.aggregate([
-  //   {
-  //     $match:{
-  //       'start_point': start
-  //     }
-  //   }
-    
-  // ], function(err, locations){
-  //   callback(locations);
-  // });,
-  var rides=[];
+var origins=[] 
+var destinations = [];
+distance.key('AIzaSyDRcEadcdHfKKNyeQSRDtsSVsGaKEM2r2M');
+distance.units('imperial');
 
+  var rides=[];
+  var count=0;
   this.find({
     'group':groupID,
     'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
-    'start_point': {
-      $nearSphere: start,
+    'end_point': {
+      $nearSphere: end,
       $maxDistance: maxDistance
 
     }
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
-    if (ride) {
-      // console.log("============");
-      // console.log(ride);
-    ride.forEach(function(ride){
-        // console.log(ride.end_point[0]);
-        // console.log(e_lon);
-        //e_lon=Number(e_lon)+1;
-        // console.log(Number(e_lon)+1);
-        // console.log(Number(e_lon)-1);
-        //e_lat=Number(e_lat)+1;
-   if((Number(e_lon)-0.01)<ride.end_point[0]&&ride.end_point[0]<(Number(e_lon)+0.01)&&(Number(e_lat)-0.01)<ride.end_point[1]&&ride.end_point[1]<(Number(e_lat)+0.01)){
-          rides.push(ride);
-       }
-   //      //console.log(time);
+    if (ride.length!=0) {
+      
+     var length=ride.length;
+     ride.forEach(function(ride){
+        
+      origins[0]=ride.start_add;
+      destinations[0]=ride.destination;
+      destinations[1]=req.body.origins;
+      origins[1]=req.body.origins;
+      
+      
+       distance.matrix(origins, destinations, function (err, distances){
+         count++;
+        if(distances) {
+          
+        if (distances.status == 'OK') {
+          if (distances.rows[0].elements[0].status == 'OK'){
+            var h1=distances.rows[0].elements[0].duration.value;
+            //console.log(h1);
+          }
+          if (distances.rows[0].elements[1].status == 'OK'){
+            var h2=distances.rows[0].elements[1].duration.value;
+            //console.log(h2);
+          }
+          if (distances.rows[1].elements[1].status == 'OK'){
+            var h3=distances.rows[1].elements[0].duration.value;
+            //console.log(h3);
+          }
+          
+           if(Number(h3)+Number(h2)+900>Number(h1)){
+              rides.push(ride);
+              
+            }
+          }
+        }
+         if(length==count)
+         {
+           callback(rides);
+          }else{console.log(count);}
       });
+         
+        //return rides;
+     });
 
+      
+    }else
+    {
+      
+      callback ("no result");
     }
-    callback(rides);
     
+   
+
   });
 
 
-
-  // .limit(limit).exec(function(err, locations) {
-  //       qry.where('end_point').near({
-  //         center: end,
-  //         maxDistance :maxDistance
-    
-  //       }).exec(function(err,ride){callback(ride);});
-  //     }
-  //    );
-
-
-
-
 };
+
+
+
 
 RideSchema.methods.addRequest = function(user_id,req,callback){
   /* console.log(this); */ 

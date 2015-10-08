@@ -1,7 +1,9 @@
 package com.swen900014.orange.rideshareoz;
 
 /**
- * Created by uidu9665 on 6/09/2015.
+ * Created by Geroge on 6/09/2015.
+ * Display a list of rides relevant to the current user,
+ * or a list of search results
  */
 
 

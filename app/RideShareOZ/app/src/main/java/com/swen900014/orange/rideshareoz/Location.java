@@ -1,12 +1,14 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.StringTokenizer;
 
@@ -27,12 +29,15 @@ public class Location implements Serializable
      */
     private String displayName;
 
-    private String extractDisplayName(String address){
-        String name ="";
+    private String extractDisplayName(String address)
+    {
+        String name = "";
         StringTokenizer st = new StringTokenizer(address, ",");
         int count = st.countTokens();
+
         //get the suburb name
-        for (int i = 0; i<count-2; i++){
+        for (int i = 0; i < count - 2; i++)
+        {
             name = st.nextToken();
         }
 
@@ -78,8 +83,7 @@ public class Location implements Serializable
 
                             // Check response whether it's accurate, if not remind user
 
-                        }
-                        catch (Exception e)
+                        } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
@@ -99,7 +103,7 @@ public class Location implements Serializable
         MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
     }
 
-    public Location( String address)
+    public Location(String address)
     {
         this.address = address;
     }
@@ -124,23 +128,28 @@ public class Location implements Serializable
         return lon;
     }
 
-    public String getSuburb() {
+    public String getSuburb()
+    {
         return suburb;
     }
 
-    public String getAddress() {
+    public String getAddress()
+    {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(String address)
+    {
         this.address = address;
     }
 
-    public void setSuburb(String suburb) {
+    public void setSuburb(String suburb)
+    {
         this.suburb = suburb;
     }
 
-    public String getDisplayName() {
+    public String getDisplayName()
+    {
         return displayName;
     }
 }

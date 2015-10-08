@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.io.Serializable;
 
+
 /**
  * Created by George & Sangzhuoyang Yu on 9/6/15.
  * Encapsulate ride data, including all info needed
@@ -19,6 +20,7 @@ public class Ride implements Serializable
     private String rideId;
     private Location start;
     private Location end;
+    private Group group;
     private String arriving_time;
     private String start_time;
     private User driver;
@@ -27,6 +29,12 @@ public class Ride implements Serializable
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
     private RideState rideState = RideState.NEW;
+    private RideRegularity rideRegularity = RideRegularity.ONCE;
+
+    public enum RideRegularity implements Serializable
+    {
+        ONCE, DAILY, WEEKLY
+    }
 
     public enum RideState implements Serializable
     {
@@ -87,7 +95,7 @@ public class Ride implements Serializable
 
             // Get driver info
             tempObj = jsonRide.getJSONObject("driver");
-            driver = new User(tempObj.getString("username"), "email", 123, 0, UserType.DRIVER);
+            driver = User.addUserIfNotExist(tempObj.getString("username"), tempObj.getString("username"), tempObj.getString("phone"), 0);
 
             // Get seat number, start time and arrival time
             limit = jsonRide.getInt("seats");
@@ -104,7 +112,7 @@ public class Ride implements Serializable
                 JSONObject requestingPassObj = tempObj.getJSONObject("user");
                 String username = requestingPassObj.getString("username");
 
-                User pass = new User(username, "email", 123, 0, UserType.PASSENGER);
+                User pass = User.addUserIfNotExist(username, tempObj.getString("username"), tempObj.getString("phone"), 0);
 
                 //TODO: optimize this using object comparison
                 if (User.getCurrentUser().getUsername().equals(username))
@@ -127,10 +135,10 @@ public class Ride implements Serializable
                     tempObj = tempArray.getJSONObject(i);
                     JSONObject joinedPassObj = tempObj.getJSONObject("user");
                     String username = joinedPassObj.getString("username");
-                    User pass = new User(username, "email", 123, 0, UserType.PASSENGER);
+                    User pass = User.addUserIfNotExist(username, username, joinedPassObj.getString("phone"), 0);
 
                     //TODO: optimize this using object comparison
-                    if (User.getCurrentUser().getUsername().equals(username))
+                    if (User.getCurrentUser() == pass)
                     {
                         this.rideState = RideState.JOINED;
                     }
@@ -147,7 +155,7 @@ public class Ride implements Serializable
         {
             //TODO: optimize this using object comparison
             try {
-                if (this.getDriver().getUsername().equals(User.getCurrentUser().getUsername())) {
+                if (this.getDriver() == User.getCurrentUser() ) {
                 /* add to the offering list*/
                     this.rideState = RideState.OFFERING;
                 }
@@ -186,21 +194,15 @@ public class Ride implements Serializable
         this.end = new Location("UniMelb");
 
         this.arriving_time = "13:30:00";
-        this.driver = new User("George", "george.nader@gmail.com", 0, 0, UserType.DRIVER);
+        this.driver = new User("George", "george.nader@gmail.com", "000", 0);
         this.limit = 4;
         rideId = "0";
         this.joined = new ArrayList<>();
         this.waiting = new ArrayList<>();
         this.rideState = s;
-
     }
 
     public boolean isDriver()
-    {
-        return true;
-    }
-
-    public boolean joined()
     {
         return true;
     }
@@ -338,6 +340,11 @@ public class Ride implements Serializable
     public User getDriver()
     {
         return driver;
+    }
+
+    public Group getGroup()
+    {
+        return group;
     }
 
     public RideState getRideState()

@@ -35,6 +35,17 @@ router.post('/getRides', function(req, res, next) {
   });
 });
 
+router.get('/getRides', function(req, res, next) {
+  User.findOne({'username': req.userinfo.email}, function(err, user){
+    /* res.json(user); */
+    console.log(req.userinfo.email);
+    console.log(user);
+    user.getRides(function(rides){
+      res.json(rides);
+    });
+  });
+});
+
 router.post('/update', function(req, res, next){
   User.findOne({'username': req.userinfo.email}, function(err, user){
     user.address = (req.body.address)? req.body.address : user.address;

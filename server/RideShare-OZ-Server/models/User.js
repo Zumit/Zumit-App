@@ -33,7 +33,7 @@ UserSchema.statics.getAllUsers = function(callback){
 };
 
 UserSchema.methods.getRides = function(callback){
-  var conditions = {$or:[{'driver':this}, {'passengers':this}]};
+  var conditions = {$or:[{'driver':this}, {'passengers.user':this}, {'requests.user':this}]};
   /* var conditions = {}; */
   this.model('Ride').find(conditions).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({}, function(err, rides){

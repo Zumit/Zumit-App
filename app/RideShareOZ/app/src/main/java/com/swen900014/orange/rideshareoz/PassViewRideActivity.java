@@ -2,8 +2,8 @@ package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +37,7 @@ import static com.swen900014.orange.rideshareoz.Resources.*;
  * to send join request and leave request of the ride
  * to the server.
  */
-public class PassViewRideActivity extends FragmentActivity
+public class PassViewRideActivity extends AppCompatActivity
         implements GoogleApiClient.OnConnectionFailedListener
 {
     private final static String TAG = "Passenger View Ride";
@@ -196,47 +196,6 @@ public class PassViewRideActivity extends FragmentActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /*private AdapterView.OnItemClickListener mAutoCompleteClickListener
-            = new AdapterView.OnItemClickListener()
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            final PlaceAutoCompleteAdapter.PlaceAutoComplete place = adapter.getItem(position);
-            final String placeId = place.placeId;
-
-            Log.i(TAG, "Autocomplete place selected: " + place.description);
-
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.
-                    getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceCallback);
-
-            Toast.makeText(getApplicationContext(), "clicked: " + place.description,
-                    Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "Called getPlaceById to get Place details for " + place.placeId);
-        }
-    };
-
-    private ResultCallback<PlaceBuffer> mUpdatePlaceCallback
-            = new ResultCallback<PlaceBuffer>()
-    {
-        @Override
-        public void onResult(PlaceBuffer places)
-        {
-            if (!places.getStatus().isSuccess())
-            {
-                Log.e(TAG, "Place query did not complete. Error : " + places.getStatus().toString());
-                places.release();
-                return;
-            }
-
-            final Place place = places.get(0);
-
-            Log.i(TAG, "Place details received: " + place.getName());
-
-            places.release();
-        }
-    };*/
-
     public void onConnectionFailed(ConnectionResult connectionResult)
     {
         Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
@@ -255,7 +214,7 @@ public class PassViewRideActivity extends FragmentActivity
             {
                 address = pickUpLocText.getText().toString();
 
-                sendRequest(this);
+                joinRide();
             }
             else
             {
@@ -265,13 +224,13 @@ public class PassViewRideActivity extends FragmentActivity
         }
         else if (ride.getRideState() == Ride.RideState.JOINED)
         {
-            leaveRide(this);
+            sendLeaveRideRequest();
         }
 
         updateView();
     }
 
-    public void leaveRide(final Activity activity)
+    public void sendLeaveRideRequest()
     {
         StringRequest leaveRequest = new StringRequest(Request.Method.POST,
                 LEAVE_RIDE_URL, new Response.Listener<String>()
@@ -282,7 +241,7 @@ public class PassViewRideActivity extends FragmentActivity
                 System.out.println("response: " + s);
 
                 // Get back to the my rides page
-                activity.finish();
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -305,11 +264,12 @@ public class PassViewRideActivity extends FragmentActivity
             }
         };
 
-        MyRequest.getInstance(this).addToRequestQueue(leaveRequest);
+        MyRequest.getInstance(thisActivity).addToRequestQueue(leaveRequest);
     }
 
-    public void sendRequest(final Activity activity)
+    public void joinRide()
     {
+        // Retrieve coordinates of the pick up point from google server first
         String addressToGoogle = address.replaceAll(" ", "+");
 
         String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
@@ -341,7 +301,7 @@ public class PassViewRideActivity extends FragmentActivity
                             e.printStackTrace();
                         }
 
-                        sendJoinRequest(activity);
+                        sendJoinRequest();
 
                         // check response, whether it received
                     }
@@ -355,10 +315,10 @@ public class PassViewRideActivity extends FragmentActivity
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
+        MyRequest.getInstance(thisActivity).addToRequestQueue(getLocRequest);
     }
 
-    private void sendJoinRequest(final Activity activity)
+    private void sendJoinRequest()
     {
         StringRequest joinRequest = new StringRequest(Request.Method.POST,
                 JOIN_REQUEST_URL, new Response.Listener<String>()
@@ -368,7 +328,7 @@ public class PassViewRideActivity extends FragmentActivity
             {
                 System.out.println("response: " + s);
 
-                activity.finish();
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -384,13 +344,7 @@ public class PassViewRideActivity extends FragmentActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                /*address = stateText.getText().toString() + ", " +
-                        suburbText.getText().toString() + ", " +
-                        streetText.getText().toString();
-                */
-
                 params.put("username", User.getCurrentUser().getUsername());
-                params.put("group_id", "55cab5dde81ab31606e4814c");
                 params.put("ride_id", ride.getRideId());
                 params.put("p_lat", lat);
                 params.put("p_lon", lon);
@@ -400,7 +354,7 @@ public class PassViewRideActivity extends FragmentActivity
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(joinRequest);
+        MyRequest.getInstance(thisActivity).addToRequestQueue(joinRequest);
     }
 
     // Check whether user has typed in the pickup location

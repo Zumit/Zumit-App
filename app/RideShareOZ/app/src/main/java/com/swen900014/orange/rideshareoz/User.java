@@ -1,6 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by Sangzhuoyang Yu on 9/11/15.
@@ -12,24 +13,38 @@ public class User implements Serializable
 {
     private String name;
     private String email;
-    private int phone;
+    private String phone;
     private int credit;
-    private UserType userType;
+
+    private static HashMap<String, User> allUsers = new HashMap<String, User>();
 
     private static User currentUser;
 
-    public User(String name, String email, int phone, int credit, UserType userType)
+    public User(String name, String email, String phone, int credit)
     {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.credit = credit;
-        this.userType = userType;
     }
 
     public User(String username)
     {
         this.name = username;
+    }
+
+    public static User getUser(String name) {
+        return allUsers.get(name);
+    }
+
+    public static User addUserIfNotExist(String username, String email, String phone, int credit){
+        if(allUsers.containsKey(username)){
+            return allUsers.get(username);
+        }else{
+            User newUser = new User(username, email, phone, credit);
+            allUsers.put(newUser.name,newUser);
+            return newUser;
+        }
     }
 
     public void rate()
@@ -47,12 +62,8 @@ public class User implements Serializable
         return email;
     }
 
-    public UserType getUserType()
-    {
-        return userType;
-    }
 
-    public int getPhone()
+    public String getPhone()
     {
         return phone;
     }
@@ -64,15 +75,15 @@ public class User implements Serializable
 
     public static void setCurrentUser(User currentUser)
     {
-        if (User.currentUser == null)
-        {
-            User.currentUser = currentUser;
-        }
-
+        User.currentUser = currentUser;
     }
 
     public static User getCurrentUser()
     {
         return currentUser;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

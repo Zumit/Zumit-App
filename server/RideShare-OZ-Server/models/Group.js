@@ -5,7 +5,8 @@ var User = require('../models/User.js');
 var GroupsSchema = new Schema({
   groupname: String,
   introduction: String,
-  location: [Number],
+  group_location: [Number],
+  location :String,
   adminID: [{type: Schema.Types.ObjectId, ref: 'User' }],
   members: [{type: Schema.Types.ObjectId, ref: 'User' }],
   requests: [{
@@ -21,7 +22,8 @@ GroupsSchema.statics.createGroup= function(req,callback) {
   groups.groupname = req.query.name;
   var lon=req.query.g_lon;
   var lat=req.query.g_lat;
-  groups.location=[lon,lat];
+  groups.gruop_location=[lon,lat];
+  groups.location=rq.query.location;
   groups.introduction=req.query.introduction;
   User.findById(req.query.admin_id, function(err, user){
     groups.adminID=user;

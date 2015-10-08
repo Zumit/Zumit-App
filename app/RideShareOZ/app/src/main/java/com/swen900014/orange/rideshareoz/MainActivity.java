@@ -1,6 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.AsyncTask;
@@ -19,7 +20,6 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements
 
     /* Should we automatically resolve ConnectionResults when possible? */
 
-
     private boolean mShouldResolve = false;
     private Bundle savedInstanceState;
 
@@ -75,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
                 .addApi(Plus.API)
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
+        mGoogleApiClient.connect();
     }
 
 
@@ -108,14 +108,14 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_OfferRide)
         {
             Intent offerRide = new Intent(this, OfferRide.class);
-            offerRide.putExtra(Intent.EXTRA_TEXT,"offer");
+            offerRide.putExtra(Intent.EXTRA_TEXT, "offer");
             startActivity(offerRide);
             return true;
         }
         if (id == R.id.action_FindRide)
         {
             Intent findRideIntent = new Intent(this, OfferRide.class);
-            findRideIntent.putExtra("type","find");
+            findRideIntent.putExtra("type", "find");
             startActivity(findRideIntent);
             return true;
         }
@@ -172,31 +172,22 @@ public class MainActivity extends AppCompatActivity implements
     protected void onStart()
     {
         super.onStart();
-        mGoogleApiClient.connect();
+        //ReAuthentication is not required
+        //mGoogleApiClient.connect();
     }
 
     @Override
     protected void onStop()
     {
         super.onStop();
-        mGoogleApiClient.disconnect();
+        //ReAuthentication is not required
+        //mGoogleApiClient.disconnect();
     }
 
     @Override
     public void onConnectionSuspended(int i)
     {
 
-    }
-
-    // Button event for the view ride button
-    // by Yu
-    public void viewRide(View v)
-    {
-        //Intent passViewRide = new Intent(this, PassViewRideActivity.class);
-        //startActivity(passViewRide);
-
-        Intent driverViewRide = new Intent(this, DriverViewRideActivity.class);
-        startActivity(driverViewRide);
     }
 
     // Button event for the Offer ride button
@@ -218,12 +209,6 @@ public class MainActivity extends AppCompatActivity implements
         {
             onSignOutClicked();
         }
-
-    }
-
-    private void onTestQueryClicked(String url)
-    {
-        new SendURL().execute(url);
     }
 
     public static void signOut()
@@ -300,18 +285,17 @@ public class MainActivity extends AppCompatActivity implements
         //set current user
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        User.setCurrentUser(new User(account.name));
+        User.setCurrentUser(User.addUserIfNotExist(account.name, account.name, "",0));
 
+        //Send Authentication Token to server and set current User
+        new GetUserIDTask().execute();
 
         setContentView(R.layout.activity_myrides);
-        if (savedInstanceState == null)
-        {
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, (new MyRidesFragment()))
                     .commit();
         }
-
-        new GetUserIDTask().execute();
     }
 
     public static GoogleApiClient getUserGoogleApiClient()
@@ -319,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements
         return mGoogleApiClient;
     }
 
-    public String getAuthToken()
+    public static String getAuthToken(Context context)
     {
         //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
@@ -328,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements
 
         try
         {
-            return GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
+            return GoogleAuthUtil.getToken(context, account, scopes);
         } catch (IOException e)
         {
             Log.e(TAG, "Error retrieving ID token.", e);
@@ -357,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements
         @Override
         protected String doInBackground(Void... params)
         {
-            return getAuthToken();
+            return getAuthToken(getApplicationContext());
         }
 
         @Override
@@ -370,123 +354,11 @@ public class MainActivity extends AppCompatActivity implements
                 token = result;
 
                 new SendUserID().execute(result);
-
-
             }
             else
             {
                 // There was some error getting the ID Token
                 // ...
-            }
-        }
-    }
-
-    public class SendURL extends AsyncTask<String, Void, String>
-    {
-
-        final String LogTag = "SendURL";
-
-        @Override
-        protected String doInBackground(String... params)
-        {
-            // These two need to be declared outside the try/catch
-            // so that they can be closed in the finally block
-            HttpURLConnection urlConnection = null;
-            BufferedReader reader = null;
-
-            // Will contain the raw JSON response as a string.
-            String ridesJason = null;
-
-            try
-            {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
-                String urlAddress;
-
-                if (params[0].endsWith("http://144.6.226.237/ride/create?driverid="))
-                {
-                    urlAddress = params[0] + getAuthToken();
-                }
-                else
-                {
-                    urlAddress = params[0];
-                }
-                URL url = new URL(urlAddress);
-
-                // Create the request to OpenWeatherMap, and open the connection
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null)
-                {
-                    // Nothing to do.
-                    Log.e(LogTag, "input Stream empty");
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-                while ((line = reader.readLine()) != null)
-                {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
-                    buffer.append(line + "\n");
-                }
-
-                if (buffer.length() == 0)
-                {
-                    // Stream was empty.  No point in parsing.
-                    Log.e(LogTag, "Buffer empty");
-                    return null;
-                }
-                ridesJason = buffer.toString();
-                //Log.e(LogTag, ridesJason );
-            } catch (IOException e)
-            {
-                Log.e(LogTag, "Error ", e);
-                // If the code didn't successfully get the weather data, there's no point in attemping
-                // to parse it.
-                return null;
-            } finally
-            {
-                if (urlConnection != null)
-                {
-                    urlConnection.disconnect();
-                }
-                if (reader != null)
-                {
-                    try
-                    {
-                        reader.close();
-                    } catch (final IOException e)
-                    {
-                        Log.e(LogTag, "Error closing stream", e);
-                    }
-                }
-            }
-
-            return ridesJason;
-        }
-
-        @Override
-        protected void onPostExecute(String result)
-        {
-
-            if (result != null)
-            {
-                // Successfully retrieved rides
-                Log.d(LogTag, result);
-            }
-            else
-            {
-                // No Rides :(
-                Log.e(LogTag, "no rides");
             }
         }
     }
