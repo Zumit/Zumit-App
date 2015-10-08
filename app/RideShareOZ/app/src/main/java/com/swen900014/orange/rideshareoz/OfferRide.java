@@ -5,9 +5,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.location.*;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -32,6 +34,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
@@ -40,12 +44,17 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.swen900014.orange.rideshareoz.Resources.*;
-
+import  com.swen900014.orange.rideshareoz.GPSTracker;
 
 /**
  * Created by Qianwen Zhang on 9/12/15.
@@ -60,7 +69,7 @@ public class OfferRide extends FragmentActivity implements
     private String temp1 = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
-  //  private EditText SpinSN;
+
     private TextView textSN;
     private TextView textStartTime;
     private CheckBox Check1, Check2;
@@ -77,6 +86,11 @@ public class OfferRide extends FragmentActivity implements
     private String lonS = "";
     private String latE = "";
     private String lonE = "";
+//current GPS location
+    private double  latC=0 ;
+    private double  lonC=0 ;
+
+
 
     private String startAddress = "";
     private String endAddress = "";
@@ -91,6 +105,10 @@ public class OfferRide extends FragmentActivity implements
     Calendar calendar = Calendar.getInstance();
     private TextView displayDate, displayStartTime, displayArrivalTime;
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -99,9 +117,9 @@ public class OfferRide extends FragmentActivity implements
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, 0 /* clientId */, this)
+                .addApi(LocationServices.API)
                 .addApi(Places.GEO_DATA_API)
                 .build();
-
         btnSubmit = (Button) findViewById(R.id.button1);
         btnReset= (Button) findViewById(R.id.button2);
         btnDate = (Button) findViewById(R.id.setDateButton);
@@ -113,13 +131,25 @@ public class OfferRide extends FragmentActivity implements
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
 
-       // SpinSN = (EditText) findViewById(R.id.SeatNo);
+
         textSN = (TextView) findViewById(R.id.txtSeatNo);
         textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
+       //gps
 
+        GPSTracker gps = new GPSTracker(this);
 
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+            latC = gps.getLatitude();
+            lonC = gps.getLongitude();
+        }else{
+        // can't get location
+        // GPS or Network is not enabled
+        // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
 
 
        /* check if it offer or find  */
@@ -167,9 +197,9 @@ public class OfferRide extends FragmentActivity implements
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SeatNo=String.valueOf(position+1) ;
-                if (position>0)
-                Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " selected", Toast.LENGTH_LONG).show();
+                SeatNo = String.valueOf(position + 1);
+                if (position > 0)
+                    Toast.makeText(getBaseContext(), parent.getItemAtPosition(position) + " selected", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -180,7 +210,7 @@ public class OfferRide extends FragmentActivity implements
 
 
         });
-        //btnReset.setOnClickListener(new resetOnClickListener());
+
         btnSubmit.setOnClickListener(this);
         btnReset.setOnClickListener(this);
         btnDate.setOnClickListener(this);
@@ -189,6 +219,10 @@ public class OfferRide extends FragmentActivity implements
 
         getIntent();
     }
+
+
+
+
 
     @Override
     public void onClick(View v)
@@ -411,17 +445,18 @@ public class OfferRide extends FragmentActivity implements
 
                 System.out.println("Sending post failed!");
             }
-        })
-        {
+        }) {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
 
                 if (Check1.isChecked())
                 {
-                    params.put("s_lat", "111");
-                    params.put("s_lon", "111");
-                    params.put("start_add", "mine");
+                   params.put("s_lat", Double.toString(latC));
+                   params.put("s_lon",Double.toString(lonC) );
+                    // params.put("s_lat", "123.456");
+                   // params.put("s_lon", "123.456");
+                    params.put("start_add", "50 Swanston Street, Carlton, Victoria");
                 }
                 else
                 {
@@ -432,9 +467,11 @@ public class OfferRide extends FragmentActivity implements
 
                 if (Check2.isChecked())
                 {
-                    params.put("e_lat", "222");
-                    params.put("e_lon", "222");
-                    params.put("destination", "mine");
+                    params.put("e_lat", Double.toString(latC));
+                   params.put("e_lon", Double.toString(lonC) );
+                   // params.put("e_lat", "123.456");
+                   // params.put("e_lon", "123.456");
+                    params.put("destination", "50 Swanston Street, Carlton, Victoria");
                 }
                 else
                 {
@@ -613,6 +650,9 @@ public class OfferRide extends FragmentActivity implements
                 calendar.get(Calendar.MINUTE), true).show();
     }
 
+
+
+
     //Check whether all information needed for offering a ride
     // has been typed in by user
     public boolean inputValid()
@@ -630,4 +670,6 @@ public class OfferRide extends FragmentActivity implements
         //EditEnd.getText().toString().isEmpty());*/
         return true;
     }
+
+
 }
