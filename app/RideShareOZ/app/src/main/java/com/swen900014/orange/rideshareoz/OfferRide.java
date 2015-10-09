@@ -1,14 +1,12 @@
 package com.swen900014.orange.rideshareoz;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.*;
-import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -32,22 +30,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -65,10 +54,19 @@ public class OfferRide extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
+    String[] EVENTS = {"BBQ","OCEAN ROAD","3D PRINTING"};
+    String[] GROUPS = {"UNIMELB","UNIMONASH","RMIT"};
     private final String TAG = "OfferRide";
+    private String event = "";
+    private String group = "";
     private String temp1 = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
+
+    String hours="";
+    String mins="";
+    String houra="";
+    String mina="";
 
     private TextView textSN;
     private TextView textStartTime;
@@ -80,18 +78,16 @@ public class OfferRide extends FragmentActivity implements
     private Spinner spinner;
 
     private ArrayAdapter<CharSequence> spinnerAdapter;
-    private Button btnSubmit,btnReset ,btnDate, btnStartTime, btnArrivalTime;
+    private Button btnSubmit,btnReset ,btnDate, btnStartTime, btnArrivalTime,btnSelectEvent, btnSelectGroup;
 
     private String latS = "";
     private String lonS = "";
     private String latE = "";
     private String lonE = "";
 //current GPS location
-    private double  latC=0 ;
-    private double  lonC=0 ;
-
-
-
+    private double  latC = 0;
+    private double  lonC = 0;
+    private String currentAddress = "";
     private String startAddress = "";
     private String endAddress = "";
 
@@ -104,9 +100,6 @@ public class OfferRide extends FragmentActivity implements
 
     Calendar calendar = Calendar.getInstance();
     private TextView displayDate, displayStartTime, displayArrivalTime;
-
-
-
 
 
     @Override
@@ -125,25 +118,26 @@ public class OfferRide extends FragmentActivity implements
         btnDate = (Button) findViewById(R.id.setDateButton);
         btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
         btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
-        // btnReset = (Button) findViewById(R.id.button2);
+        btnSelectEvent = (Button) findViewById(R.id.buttonEvent);
+        btnSelectGroup= (Button) findViewById(R.id.buttonGroup);
+
         spinner = (Spinner)findViewById(R.id.spinner);
         displayDate = (TextView) findViewById(R.id.displayDate);
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
-
 
         textSN = (TextView) findViewById(R.id.txtSeatNo);
         textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
        //gps
-
-        GPSTracker gps = new GPSTracker(this);
+         GPSTracker gps = new GPSTracker(this);
 
         // check if GPS enabled
-        if(gps.canGetLocation()){
+         if(gps.canGetLocation()){
             latC = gps.getLatitude();
             lonC = gps.getLongitude();
+
         }else{
         // can't get location
         // GPS or Network is not enabled
@@ -211,6 +205,8 @@ public class OfferRide extends FragmentActivity implements
 
         });
 
+        btnSelectEvent.setOnClickListener(this);
+        btnSelectGroup.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         btnReset.setOnClickListener(this);
         btnDate.setOnClickListener(this);
@@ -235,7 +231,14 @@ public class OfferRide extends FragmentActivity implements
             displayStartTime.setText("");
             displayArrivalTime.setText("");
 
-
+        }
+        if (v.getId() == R.id.buttonEvent)
+        {
+            selectEvent(v);
+        }
+        if (v.getId() == R.id.buttonGroup)
+        {
+            selectGroup(v);
         }
         if (v.getId() == R.id.button1)
         {
@@ -258,46 +261,42 @@ public class OfferRide extends FragmentActivity implements
         //  new TimePickerDialog(OfferRide.this, listener4, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
     }
 
-    private AdapterView.OnItemClickListener mAutoCompleteClickListener
-            = new AdapterView.OnItemClickListener()
-    {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            final PlaceAutoCompleteAdapter.PlaceAutoComplete place = adapter.getItem(position);
-            final String placeId = place.placeId;
+    private void selectEvent(View v) {
 
-            Log.i(TAG, "Autocomplete place selected: " + place.description);
+        //receive a list of event
 
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.
-                    getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceCallback);
+        AlertDialog.Builder builder = new AlertDialog.Builder(OfferRide.this);
+        builder.setTitle("Select Event");
+        builder.setItems(EVENTS, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-            Toast.makeText(getApplicationContext(), "clicked: " + place.description,
-                    Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "Called getPlaceById to get Place details for " + place.placeId);
-        }
-    };
-    private ResultCallback<PlaceBuffer> mUpdatePlaceCallback
-            = new ResultCallback<PlaceBuffer>()
-    {
-        @Override
-        public void onResult(PlaceBuffer places)
-        {
-            if (!places.getStatus().isSuccess())
-            {
-                Log.e(TAG, "Place query did not complete. Error : " + places.getStatus().toString());
-                places.release();
-                return;
+                Toast.makeText(getApplicationContext(), "You have selected" + EVENTS[which], Toast.LENGTH_SHORT).show();
+                event =  EVENTS[which];
             }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
-            final Place place = places.get(0);
+    private void selectGroup(View v) {
 
-            Log.i(TAG, "Place details received: " + place.getName());
+        //receive a list of group
 
-            places.release();
-        }
-    };
+        AlertDialog.Builder builder = new AlertDialog.Builder(OfferRide.this);
+        builder.setTitle("Select Group");
+        builder.setItems(GROUPS, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                Toast.makeText(getApplicationContext(), "You have selected" + GROUPS[which], Toast.LENGTH_SHORT).show();
+                group = GROUPS[which];
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
 
     public void onConnectionFailed(ConnectionResult connectionResult)
     {
@@ -310,6 +309,44 @@ public class OfferRide extends FragmentActivity implements
                 Toast.LENGTH_SHORT).show();
     }
 
+    //reverse Address
+    public void reverseAddress(final Activity activity) {
+        final String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="
+                + latC + "," + lonC + "&key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
+        final StringRequest getCurrentAddressRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    public void onResponse(String response)
+                    {
+                        try
+                        {
+                            JSONObject jsonResponse = new JSONObject(response);
+                            System.out.println(jsonResponse.toString());
+
+                            currentAddress = jsonResponse.getJSONArray("results").getJSONObject(0)
+                                    .getString("formatted_address");
+
+
+
+                        } catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    public void onErrorResponse(VolleyError volleyError)
+                    {
+                        volleyError.printStackTrace();
+                        System.out.println("it doesn't work");
+                    }
+                });
+
+        MyRequest.getInstance(activity).addToRequestQueue(getCurrentAddressRequest);
+    }
     public void sendRequest(final Activity activity)
     {
         String startAddressToGoogle = startAddress.replaceAll(" ", "+");
@@ -450,13 +487,13 @@ public class OfferRide extends FragmentActivity implements
             {
                 Map<String, String> params = new HashMap<>();
 
+
+
                 if (Check1.isChecked())
                 {
                    params.put("s_lat", Double.toString(latC));
                    params.put("s_lon",Double.toString(lonC) );
-                    // params.put("s_lat", "123.456");
-                   // params.put("s_lon", "123.456");
-                    params.put("start_add", "50 Swanston Street, Carlton, Victoria");
+                   params.put("start_add", currentAddress);
                 }
                 else
                 {
@@ -468,10 +505,8 @@ public class OfferRide extends FragmentActivity implements
                 if (Check2.isChecked())
                 {
                     params.put("e_lat", Double.toString(latC));
-                   params.put("e_lon", Double.toString(lonC) );
-                   // params.put("e_lat", "123.456");
-                   // params.put("e_lon", "123.456");
-                    params.put("destination", "50 Swanston Street, Carlton, Victoria");
+                    params.put("e_lon", Double.toString(lonC) );
+                    params.put("destination", currentAddress);
                 }
                 else
                 {
@@ -503,6 +538,10 @@ public class OfferRide extends FragmentActivity implements
 
     public void offerRide(View view)
     {
+        if(Check1.isChecked()||Check2.isChecked())
+        {
+            reverseAddress(this);
+        }
         if (inputValid())
         {
             startAddress = EditStart.getText().toString();
@@ -547,11 +586,6 @@ public class OfferRide extends FragmentActivity implements
         }
     };
 
-
-    String hours="";
-    String mins="";
-    String houra="";
-    String mina="";
 
     TimePickerDialog.OnTimeSetListener listener2 = new TimePickerDialog.OnTimeSetListener()
     {

@@ -23,11 +23,9 @@ router.get('/create', function(req, res) {
 });
 
 router.get('/request',function(req,res){
-  Group.findById(req.query.group_id, function(err, group){
-    group.addRequest(req.query.user_id,function(updated_group){
-      res.json(updated_group);
-    });
-  });
+ Group.addRequest(req,function(group){
+    res.json(group);
+ });
   
 });
 
