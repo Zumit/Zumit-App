@@ -121,6 +121,7 @@ public class Ride implements Serializable
                 }
                 tempLocationArray = tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                loc.setAddress(tempObj.getString("pickup_add"));
 
                 waiting.add(new Pickup(pass, loc));
             }
@@ -145,6 +146,7 @@ public class Ride implements Serializable
 
                     tempLocationArray = tempObj.getJSONArray("pickup_point");
                     Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                    loc.setAddress(tempObj.getString("pickup_add"));
                     joined.add(new Pickup(pass, loc));
                 }
             }
