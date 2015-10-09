@@ -3,6 +3,7 @@ package com.swen900014.orange.rideshareoz;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -36,15 +37,6 @@ public class Event implements Serializable
         return allEvents.get(Id);
     }
 
-    public static Event addGroupIfNotExist(String id, String name, String description, Location location, String s_time, String e_time){
-        if(!allEvents.containsKey(id)){
-            Event newEvent = new Event(id, name, description,location, s_time,e_time);
-            allEvents.put(newEvent.eventId, newEvent);
-            return newEvent;
-        }else{
-            return allEvents.get(id);
-        }
-    }
 
     public Event(JSONObject eventJson)
     {
@@ -53,5 +45,12 @@ public class Event implements Serializable
 
     public String getName() {
         return name;
+    }
+
+    public static ArrayList<Event> getAllEvents(){
+
+        ArrayList<Event> events = new ArrayList<Event>();
+        events.addAll(allEvents.values());
+        return events;
     }
 }
