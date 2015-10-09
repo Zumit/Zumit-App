@@ -148,9 +148,10 @@ public class Group implements Serializable
     public Group(JSONObject groupJson) throws JSONException {
         JSONObject tempObj;
 
-        this.groupId = groupJson.getString("_id");
-        this.name = groupJson.getString("groupname");
-        this.description = groupJson.getString("introduction");
+        tempObj = groupJson.getJSONObject("group");
+        this.groupId = tempObj.getString("_id");
+        this.name = tempObj.getString("groupname");
+        this.description = tempObj.getString("introduction");
 
         String state = groupJson.getString("state");
         if(state.equals("joined")){
