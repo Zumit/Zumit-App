@@ -55,7 +55,7 @@ RideSchema.statics.createRide = function(req,callback){
   var end_lon=req.body.e_lon;
   var end_lat=req.body.e_lat;
   ride.end_point=[Number(end_lon),Number(end_lat)];
-
+  ride.events=req.body.event_id;
   User.findById(req.userinfo._id, function(err, user){
     ride.driver = user;
     Group.findById(req.body.group_id,function(err,group){

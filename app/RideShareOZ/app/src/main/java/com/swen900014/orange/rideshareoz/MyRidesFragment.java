@@ -175,8 +175,6 @@ public class MyRidesFragment extends Fragment
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 storeRides(s);
             }
         }, new Response.ErrorListener()
@@ -193,8 +191,8 @@ public class MyRidesFragment extends Fragment
             {
                 Map<String, String> params = new HashMap<>();
 
-                //params.put("username", User.getCurrentUser().getUsername());
-                params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
+                params.put("username", User.getCurrentUser().getUsername());
+                //params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
 
                 return params;
             }

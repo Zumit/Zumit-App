@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var Event = require('../models/Event.js');
 
-router.get('/', function(req, res, next) {
+router.get('/getall', function(req, res, next) {
 
-  Group.find({}, function(err, groups){
-    res.json(groups);
+  Event.find({}, function(err, events){
+    res.json(events);
   });
 
 });

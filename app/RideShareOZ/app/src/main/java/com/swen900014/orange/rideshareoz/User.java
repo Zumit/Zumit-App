@@ -47,9 +47,9 @@ public class User implements Serializable
         }
     }
 
-    public void rate()
+    public void rate(int score)
     {
-
+        credit += score;
     }
 
     public String getUsername()
