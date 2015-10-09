@@ -76,8 +76,9 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
         mGoogleApiClient.connect();
 
-        //Load all groups and events to be available for offer and find rides
+        //Load all groups and events to be available for offer and search rides
         Group.loadGroups(this);
+        Event.loadEvents(this);
     }
 
 
