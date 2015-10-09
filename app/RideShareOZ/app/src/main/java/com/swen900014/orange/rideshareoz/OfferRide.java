@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.*;
-import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -34,28 +30,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.ActivityRecognition;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -104,8 +85,8 @@ public class OfferRide extends FragmentActivity implements
     private String latE = "";
     private String lonE = "";
 //current GPS location
-    private double  latC=-37.796369;
-    private double  lonC=144.961174;
+    private double  latC = 0;
+    private double  lonC = 0;
     private String currentAddress = "";
     private String startAddress = "";
     private String endAddress = "";
@@ -150,7 +131,7 @@ public class OfferRide extends FragmentActivity implements
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
        //gps
-        /* GPSTracker gps = new GPSTracker(this);
+         GPSTracker gps = new GPSTracker(this);
 
         // check if GPS enabled
          if(gps.canGetLocation()){
@@ -163,7 +144,7 @@ public class OfferRide extends FragmentActivity implements
         // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
         }
-*/
+
 
        /* check if it offer or find  */
         Intent intent = this.getIntent();
