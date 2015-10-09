@@ -51,4 +51,7 @@ public class Event implements Serializable
 
     }
 
+    public String getName() {
+        return name;
+    }
 }
