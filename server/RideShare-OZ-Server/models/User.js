@@ -45,7 +45,7 @@ UserSchema.methods.getRides = function(callback){
 UserSchema.statics.getGroups = function(req,callback){
   
   this.findById(req.userinfo._id).populate('groups.group',
-      'groupName introduction').exec({}, function(err,user){
+      'groupname introduction').exec({}, function(err,user){
     callback(user.groups);  
 });
 
