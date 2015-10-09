@@ -38,18 +38,47 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
 
   GroupsSchema.statics.addRequest= function(req,callback){
-   User.findById(req.query.user_id,function(err,user){
-    user.groups.push({'group':req.query.group_id,'state':'request'});
-    user.save();
-  });
+
+    var check=0;
 
   this.findById(req.query.group_id,function(err,group){
-      group.requests.push({'user':req.query.user_id});
-      group.save();
-      callback(group);
-    })
 
+      group.requests.forEach(function(request){
+        if(String(request.user)==String(req.query.user_id))
+        {
+            check++;
+            console.log(check);
+        }
+      });
+
+       group.members.forEach(function(member){
+        if(String(member.user)==String(req.query.user_id))
+        {
+            check++;
+            console.log(check);
+        }
+      });
+
+     if(check==0){
+          console.log(check);
+        User.findById(req.query.user_id,function(err,user){
+          user.groups.push({'group':req.query.group_id,'state':'request'});
+          user.save();
+        });
+
+  
+          group.requests.push({'user':req.query.user_id});
+          group.save(function(err,doc){callback(group);});
+          
+       
+      }else{callback("already request!");}
+
+  });
+
+ 
 };
+
+
 
   GroupsSchema.statics.acceptRequest= function(req,callback){
 
