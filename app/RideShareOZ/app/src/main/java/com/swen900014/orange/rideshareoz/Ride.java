@@ -24,7 +24,7 @@ public class Ride implements Serializable
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int seats;      //Max number of passengers who can join
+    private int seats;      // Max number of passengers who can join
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
@@ -266,14 +266,34 @@ public class Ride implements Serializable
         return false;
     }
 
-    public void rateDriver(int score)
+    public boolean isDriverRated()
     {
-        driver.rate(score);
+        boolean driverRated = false;
+
+        for (Pickup pickup : joined)
+        {
+            if (pickup.getUser().getUsername() == User.getCurrentUser().getUsername())
+            {
+                driverRated = pickup.isDriverRated();
+            }
+        }
+
+        return driverRated;
     }
 
-    public void ratePassenger(int index, int score)
+    public boolean isPassRated(String passName)
     {
-        joined.get(index).getUser().rate(score);
+        boolean isPassRated = false;
+
+        for (Pickup pickup : joined)
+        {
+            if (pickup.getUser().getUsername() == passName)
+            {
+                isPassRated = pickup.isRatedByDriver();
+            }
+        }
+
+        return isPassRated;
     }
 
     public void setArrivingTime(String arriving_time)
