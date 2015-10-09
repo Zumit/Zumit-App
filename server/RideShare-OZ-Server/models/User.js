@@ -27,7 +27,7 @@ UserSchema.statics.createUser = function(username, callback){
 };
 
 UserSchema.statics.getAllUsers = function(callback){
-  this.find({}, function(err, users){
+  this.find({}).populate('groups.group', 'groupname').exec({}, function(err, users){
     callback(users);
   });
 };

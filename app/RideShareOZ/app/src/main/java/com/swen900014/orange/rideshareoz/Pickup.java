@@ -1,7 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
-
 import java.io.Serializable;
+
 
 /**
  * Created by George on 16/09/2015.
@@ -12,11 +12,21 @@ public class Pickup implements Serializable
 {
     private User user;
     private Location location;
+    private boolean ratedByDriver; // Whether this passenger has been rated by driver
+    private boolean driverRated;   // Whether this ride(driver) has been rated
 
     public Pickup(User user, Location location)
     {
         this.user = user;
         this.location = location;
+    }
+
+    public Pickup(User user, Location location, boolean ratedByDriver, boolean driverRated)
+    {
+        this.user = user;
+        this.location = location;
+        this.ratedByDriver = ratedByDriver;
+        this.driverRated = driverRated;
     }
 
     public Location getLocation()
@@ -27,5 +37,15 @@ public class Pickup implements Serializable
     public User getUser()
     {
         return user;
+    }
+
+    public boolean isDriverRated()
+    {
+        return driverRated;
+    }
+
+    public boolean isRatedByDriver()
+    {
+        return ratedByDriver;
     }
 }

@@ -4,7 +4,12 @@
   "phone":"0422368947",
   "DoB":"1991-08-14",
   "driver_license":"IN: 456669",
-  "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
+  "groups":[
+      {
+          "group":{"$oid":"55cab5dde81ab31606e4814c"},
+          "state":"joined"
+      }
+  ],
   "events":[],
   "rides":[],
   "updated_at":{"$date":"2015-09-06T05:51:33Z"},
@@ -16,7 +21,12 @@
   "phone":"0411345877",
   "DoB":"1994-02-21",
   "driver_license":"AU: 898892",
-  "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
+  "groups":[
+      {
+          "group":{"$oid":"55cab5dde81ab31606e4814c"},
+          "state":"joined"
+      }
+  ],
   "events":[],
   "rides":[],
   "updated_at":{"$date":"2015-09-06T05:51:33Z"},
@@ -28,7 +38,12 @@
   "phone":"0424976291",
   "DoB":"1971-01-16",
   "driver_license":"IN: 212930",
-  "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
+  "groups":[
+      {
+          "group":{"$oid":"55cab5dde81ab31606e4814c"},
+          "state":"joined"
+      }
+  ],
   "events":[],
   "rides":[],
   "updated_at":{"$date":"2015-09-06T05:51:33Z"},
@@ -40,7 +55,12 @@
   "phone":"0422123988",
   "DoB":"1996-11-01",
   "driver_license":"",
-  "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
+  "groups":[
+      {
+          "group":{"$oid":"55cab5dde81ab31606e4814c"},
+          "state":"joined"
+      }
+  ],
   "events":[],
   "rides":[],
   "updated_at":{"$date":"2015-09-06T05:51:33Z"},
@@ -52,7 +72,12 @@
   "phone":"0429239410",
   "DoB":"1956-12-31",
   "driver_license":"AU: 892384",
-  "groups":[{"$oid":"55cab5dde81ab31606e4814c"}],
+  "groups":[
+      {
+          "group":{"$oid":"55cab5dde81ab31606e4814c"},
+          "state":"joined"
+      }
+  ],
   "events":[],
   "rides":[],
   "updated_at":{"$date":"2015-09-06T05:51:33Z"},
