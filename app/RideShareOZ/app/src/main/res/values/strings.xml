@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">RideShareOZ</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_signout">Sign out</string>
     <string name="action_account">Account</string>
@@ -23,9 +22,8 @@
     <string name="cancelButton">Cancel</string>
     <string name="joinButton">Join</string>
     <string name="titleLabel">Where would you like to be picked up:</string>
-
     <string name="_offerRide">Offer</string>
-    <string name="_findRide">Find</string>
+    <string name="_findRide">Search</string>
     <string name="_Start">Start Point</string>
     <string name="_Current">Current</string>
     <string name="_End">To: </string>
@@ -35,14 +33,6 @@
     <string name="acceptButton">Accept</string>
     <string name="rejectButton">Reject</string>
     <string name="driverLabel">Driver</string>
-    <string-array name="seats">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-    </string-array>
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="nameText">Name:</string>
     <string name="phoneText">Phone no. :</string>
@@ -61,10 +51,26 @@
     <string name="suburb">suburb:</string>
     <string name="street">street</string>
     <string name="EditDate">Set DATE</string>
-    <string name="ArrivalTime">SET ArrivalTIME</string>
-    <string name="rideStartTime">SET STARTTIME</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ArrivalTime">SET ARRIVAL TIME</string>
+    <string name="rideStartTime">SET START TIME</string>
     <string name="title_activity_view_group">ViewGroupActivity</string>
+    <string name="rateRideString">How is the trip:</string>
+    <string name="rateString">RATE</string>
+
+    <string-array name="seats">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <string-array name="rate_array">
+        <item>Bad experience\!\!</item>
+        <item>Not good</item>
+        <item>It\'s OK</item>
+        <item>Pretty good</item>
+        <item>I enjoy it\!\!</item>
+    </string-array>
 </resources>

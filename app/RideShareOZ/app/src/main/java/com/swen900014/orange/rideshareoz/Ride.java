@@ -24,7 +24,7 @@ public class Ride implements Serializable
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int limit;      //Max number of passengers who can join
+    private int seats;      //Max number of passengers who can join
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
@@ -38,7 +38,7 @@ public class Ride implements Serializable
 
     public enum RideState implements Serializable
     {
-        OFFERING, JOINED, VIEWING, NEW
+        OFFERING, JOINED, VIEWING, NEW, PASSED
     }
 
     public Ride(String start, String end, String arriving_time, User driver, int limit)
@@ -47,7 +47,7 @@ public class Ride implements Serializable
         this.end = new Location(end);
         this.arriving_time = arriving_time;
         this.driver = driver;
-        this.limit = limit;
+        this.seats = limit;
         rideId = "0";
         joined = new ArrayList<>(limit);
         waiting = new ArrayList<>();
@@ -60,7 +60,7 @@ public class Ride implements Serializable
         this.end = new Location(end);
         this.arriving_time = arriving_time;
         this.driver = driver;
-        this.limit = limit;
+        this.seats = limit;
         rideId = "0";
         this.joined = (ArrayList<Pickup>) joined.clone();
         this.waiting = (ArrayList<Pickup>) waiting.clone();
@@ -98,7 +98,7 @@ public class Ride implements Serializable
             driver = User.addUserIfNotExist(tempObj.getString("username"), tempObj.getString("username"), tempObj.getString("phone"), 0);
 
             // Get seat number, start time and arrival time
-            limit = jsonRide.getInt("seats");
+            seats = jsonRide.getInt("seats");
             arriving_time = jsonRide.getString("arrival_time");
             start_time = jsonRide.getString("start_time");
 
@@ -195,7 +195,7 @@ public class Ride implements Serializable
 
         this.arriving_time = "13:30:00";
         this.driver = new User("George", "george.nader@gmail.com", "000", 0);
-        this.limit = 4;
+        this.seats = 4;
         rideId = "0";
         this.joined = new ArrayList<>();
         this.waiting = new ArrayList<>();
@@ -266,14 +266,14 @@ public class Ride implements Serializable
         return false;
     }
 
-    public void rateDriver()
+    public void rateDriver(int score)
     {
-        driver.rate();
+        driver.rate(score);
     }
 
-    public void ratePassenger(int index)
+    public void ratePassenger(int index, int score)
     {
-        joined.get(index).getUser().rate();
+        joined.get(index).getUser().rate(score);
     }
 
     public void setArrivingTime(String arriving_time)
@@ -296,9 +296,9 @@ public class Ride implements Serializable
         start = end;
     }
 
-    public int getSeats()
+    public String getSeats()
     {
-        return limit;
+        return Integer.toString(seats);
     }
 
     public void setRideId(String id)

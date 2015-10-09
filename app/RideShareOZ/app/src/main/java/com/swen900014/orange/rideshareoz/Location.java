@@ -58,51 +58,6 @@ public class Location implements Serializable
         this.lon = lon;
     }
 
-    public void getLocation(final Activity activity)
-    {
-        String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + address + ",+Australia&" +
-                "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
-
-        StringRequest getLocRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>()
-                {
-                    public void onResponse(String response)
-                    {
-                        try
-                        {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            System.out.println(jsonResponse.toString());
-
-                            lat = Double.parseDouble(jsonResponse.getJSONArray("results").getJSONObject(0).
-                                    getJSONObject("geometry").getJSONObject("location").
-                                    getString("lat"));
-                            lon = Double.parseDouble(jsonResponse.getJSONArray("results").getJSONObject(0).
-                                    getJSONObject("geometry").getJSONObject("location").
-                                    getString("lng"));
-
-                            // Check response whether it's accurate, if not remind user
-
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                        // check response, whether it received
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    public void onErrorResponse(VolleyError volleyError)
-                    {
-                        volleyError.printStackTrace();
-                        System.out.println("it doesn't work");
-                    }
-                });
-
-        MyRequest.getInstance(activity).addToRequestQueue(getLocRequest);
-    }
-
     public Location(String address)
     {
         this.address = address;

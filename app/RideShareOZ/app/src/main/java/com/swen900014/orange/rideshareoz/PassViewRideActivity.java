@@ -8,8 +8,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
 
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,12 +46,15 @@ public class PassViewRideActivity extends AppCompatActivity
 {
     private final static String TAG = "Passenger View Ride";
 
+    private int score;
+
     private String lat = "";
     private String lon = "";
     private String address = "";
 
     protected GoogleApiClient mGoogleApiClient;
     private AutoCompleteTextView pickUpLocText;
+    private Spinner spinnerRate;
 
     private TableLayout passengerList;
     private Ride ride;
@@ -64,10 +71,7 @@ public class PassViewRideActivity extends AppCompatActivity
                 .enableAutoManage(this, 0 /* clientId */, this)
                 .addApi(Places.GEO_DATA_API)
                 .build();
-        //mGoogleApiClient.connect();
-
         thisActivity = this;
-
         ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
 
         TextView startLabel = (TextView) findViewById(R.id.startEditPass);
@@ -75,56 +79,17 @@ public class PassViewRideActivity extends AppCompatActivity
         TextView startTimeLabel = (TextView) findViewById(R.id.startTimeEditPass);
         TextView arrivalTimeLabel = (TextView) findViewById(R.id.arrivalTimeEditPass);
         TextView driverText = (TextView) findViewById(R.id.driverTextPassView);
-
         TextView inputTabelName = (TextView) findViewById(R.id.inputTableName);
         TextView seatsText = (TextView) findViewById(R.id.seatsEditPass);
+        TextView rateLabel = (TextView) findViewById(R.id.rateRideLabel);
 
-        // Set up auto-place-complete text view
-        pickUpLocText = (AutoCompleteTextView) findViewById(R.id.pickUpLocText);
-        passengerList = (TableLayout) findViewById(R.id.passengerListPass);
-
-        pickUpLocText = (AutoCompleteTextView)
-                findViewById(R.id.pickUpLocText);
-
-        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(this,
-                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
-                BOUNDS_GREATER_MELBOURNE, null, pickUpLocText);
-        //pickUpLocText.setOnItemClickListener(mAutoCompleteClickListener);
-        pickUpLocText.setAdapter(adapter);
-
-        Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
-
-        // Display views based on the state of the ride
-        if (ride.getRideState() == Ride.RideState.VIEWING)
-        {
-            inputTabelName.setVisibility(View.GONE);
-            pickUpLocText.setVisibility(View.GONE);
-            joinLeaveButton.setVisibility(View.GONE);
-        }
-        else if (ride.getRideState() == Ride.RideState.JOINED)
-        {
-            joinLeaveButton.setText(getString(R.string.LeaveRide));
-
-            pickUpLocText.setVisibility(View.GONE);
-            inputTabelName.setVisibility(View.GONE);
-        }
-        else
-        {
-            joinLeaveButton.setText(getString(R.string.joinButton));
-        }
-
+        // Display ride information
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
         startTimeLabel.setText(ride.getStartTime());
         arrivalTimeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername());
-        seatsText.setText("" + ride.getSeats());
-
-        // Currently there is no pick up time of passengers
-        TextView pickupTimeLabel = (TextView) findViewById(R.id.pickuptimeLabel);
-        pickupTimeLabel.setVisibility(View.GONE);
-        TextView pickupTimeText = (TextView) findViewById(R.id.pickupTimeText);
-        pickupTimeText.setVisibility(View.GONE);
+        seatsText.setText(ride.getSeats());
 
         driverText.setOnClickListener(new View.OnClickListener()
         {
@@ -138,20 +103,77 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         });
 
-        updateView();
+        // Set up auto-place-complete text view
+        pickUpLocText = (AutoCompleteTextView) findViewById(R.id.pickUpLocText);
+        passengerList = (TableLayout) findViewById(R.id.passengerListPass);
+
+        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(this,
+                android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
+                BOUNDS_GREATER_MELBOURNE, null, pickUpLocText);
+        pickUpLocText.setAdapter(adapter);
+
+        Button joinLeaveButton = (Button) findViewById(R.id.joinButton);
+        Button rateButton = (Button) findViewById(R.id.rateRideButton);
+
+        // Display views based on the state of the ride
+        if (ride.getRideState() == Ride.RideState.JOINED)
+        {
+            joinLeaveButton.setText(getString(R.string.LeaveRide));
+            joinLeaveButton.setVisibility(View.VISIBLE);
+        }
+        else if (ride.getRideState() == Ride.RideState.NEW)
+        {
+            joinLeaveButton.setText(getString(R.string.joinButton));
+            inputTabelName.setVisibility(View.VISIBLE);
+            pickUpLocText.setVisibility(View.VISIBLE);
+            joinLeaveButton.setVisibility(View.VISIBLE);
+        }
+        else if (ride.getRideState() == Ride.RideState.PASSED)
+        {
+            rateLabel.setVisibility(View.VISIBLE);
+            rateButton.setVisibility(View.VISIBLE);
+            spinnerRate.setVisibility(View.VISIBLE);
+        }
+
+        // Rating spinner
+        spinnerRate = (Spinner) findViewById(R.id.spinnerRate);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.rate_array, android.R.layout.simple_spinner_item);
+
+        spinnerRate.setAdapter(spinnerAdapter);
+        spinnerRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                score = position - 2;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+
+            }
+        });
+
+        displayPassengers();
     }
 
-    public void updateView()
+    public void displayPassengers()
     {
         ArrayList<Pickup> joinedList = ride.getJoined();
 
         passengerList.removeAllViews();
 
+        // Display joined passengers
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
-            pass.setText("name: " + lift.getUser().getUsername());
+            pass.setText(lift.getUser().getUsername());
 
+            // Only people who joined the ride is able to view
+            // other users' information
             if (ride.getRideState() == Ride.RideState.JOINED)
             {
                 pass.setOnClickListener(new View.OnClickListener()
@@ -203,7 +225,7 @@ public class PassViewRideActivity extends AppCompatActivity
 
         // TODO(Developer): Check error code and notify the user of error state and resolution.
         Toast.makeText(this, "Could not connect to Google API Client: Error " +
-                        connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
+                connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
     public void onClick(View view)
@@ -226,8 +248,21 @@ public class PassViewRideActivity extends AppCompatActivity
         {
             sendLeaveRideRequest();
         }
+    }
 
-        updateView();
+    public void rate(View view)
+    {
+        if (spinnerRate.isSelected())
+        {
+            ride.rateDriver(score);
+
+            thisActivity.finish();
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Please select a rating option",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void sendLeaveRideRequest()
@@ -251,7 +286,8 @@ public class PassViewRideActivity extends AppCompatActivity
                 volleyError.printStackTrace();
                 System.out.println("Sending post failed!");
             }
-        }){
+        })
+        {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
@@ -295,8 +331,7 @@ public class PassViewRideActivity extends AppCompatActivity
                             // Check response whether it's accurate, if not remind user
 
                             System.out.println("s" + response);
-                        }
-                        catch (Exception e)
+                        } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
@@ -339,7 +374,8 @@ public class PassViewRideActivity extends AppCompatActivity
 
                 System.out.println("Sending post failed!");
             }
-        }){
+        })
+        {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
