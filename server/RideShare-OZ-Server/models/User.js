@@ -8,7 +8,7 @@ var UserSchema = new Schema({
   phone: String,
   DoB: Date,
   driver_license: String,
-  groups: [{type: Schema.Types.ObjectId, ref: 'Group' }],
+  groups: [{group:{type: Schema.Types.ObjectId, ref: 'Group' },state:String}],
   rides: [{type: Schema.Types.ObjectId, ref: 'Ride' }],
   events: [{type: Schema.Types.ObjectId, ref: 'Event' }],
   updated_at: { type: Date, default: Date.now },
@@ -40,5 +40,16 @@ UserSchema.methods.getRides = function(callback){
     callback(rides);
   });
 };
+
+
+UserSchema.statics.getGroups = function(req,callback){
+  
+  this.findById(req.userinfo._id).populate('groups.group',
+      'groupname introduction').exec({}, function(err,user){
+    callback(user.groups);  
+});
+
+};
+
 
 module.exports = mongoose.model('User', UserSchema);

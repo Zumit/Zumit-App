@@ -29,7 +29,7 @@ public class GPSTracker extends Service implements LocationListener,android.loca
     // flag for network status
     boolean isNetworkEnabled = false;
 
-    // flag for GPS status
+    // flag for get location method status
     boolean canGetLocation = false;
 
     Location location; // location
@@ -82,7 +82,7 @@ public class GPSTracker extends Service implements LocationListener,android.loca
                             if(location !=null){
                                 Log.d("Location", "Latitude: "+ location.getLatitude());
                                 Log.d("Location", "location: "+ location.getLongitude());
-                                //长时间的监听位置更新可能导致耗电量急剧上升,一旦获取到位置后，就停止监听
+
                                 locationManager.removeUpdates(this);
                                 break;
                             }else{
@@ -117,7 +117,7 @@ public class GPSTracker extends Service implements LocationListener,android.loca
                         if(location !=null){
                             Log.d("Location", "Latitude: "+ location.getLatitude());
                             Log.d("Location", "location: "+ location.getLongitude());
-                            //长时间的监听位置更新可能导致耗电量急剧上升,一旦获取到位置后，就停止监听
+
                             locationManager.removeUpdates(this);
                             break;
                         }else{

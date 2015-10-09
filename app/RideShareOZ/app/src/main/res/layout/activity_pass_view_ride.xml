@@ -177,7 +177,8 @@
             android:layout_column="0"
             android:layout_columnSpan="6"
             android:layout_gravity="fill_horizontal"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:visibility="gone"/>
 
         <AutoCompleteTextView
             android:layout_width="wrap_content"
@@ -188,31 +189,6 @@
             android:layout_gravity="fill_horizontal"
             android:layout_marginTop="10dp"
             android:layout_columnSpan="6"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/timeLabel"
-            android:id="@+id/pickuptimeLabel"
-            android:layout_row="13"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal|center_horizontal"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"/>
-
-        <EditText
-            android:ems="10"
-            android:id="@+id/pickupTimeText"
-            android:inputType="textPostalAddress"
-            android:layout_row="13"
-            android:layout_column="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_columnSpan="5"
             android:visibility="gone"/>
 
         <Button
@@ -225,7 +201,43 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/joinButton"
             android:layout_marginTop="15dp"
-            android:layout_columnSpan="6"/>
+            android:layout_columnSpan="6"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/rateRideString"
+            android:id="@+id/rateRideLabel"
+            android:layout_row="15"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_columnSpan="6"
+            android:visibility="gone"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rateString"
+            android:id="@+id/rateRideButton"
+            android:onClick="rate"
+            android:layout_row="16"
+            android:layout_column="0"
+            android:layout_columnSpan="3"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <Spinner
+            android:layout_width="161dp"
+            android:layout_height="46dp"
+            android:id="@+id/spinnerRate"
+            android:layout_row="16"
+            android:layout_column="5"
+            android:spinnerMode="dropdown"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
     </GridLayout>
 </ScrollView>
