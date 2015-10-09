@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var User = require('../models/User.js');
 
 var EventSchema = new Schema({
   eventName: String,
@@ -25,7 +26,8 @@ var EventSchema = new Schema({
   events.startTime=req.query.start_time;
   events.endTime=req.query.end_time;
   events.location=req.query.location;
-  User.findById(req.query.organizer, function(err, user){
+  User.findById(req.userinfo._id, function(err, user){
+    console.log(user);
     events.organizer=user;
     events.save(function(err, doc){
       if (err) {
