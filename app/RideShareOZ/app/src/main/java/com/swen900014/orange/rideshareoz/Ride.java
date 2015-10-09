@@ -99,8 +99,8 @@ public class Ride implements Serializable
 
             // Get seat number, start time and arrival time
             seats = jsonRide.getInt("seats");
-            arriving_time = jsonRide.getString("arrival_time");
-            start_time = jsonRide.getString("start_time");
+            arriving_time = DateFormatter.format(jsonRide.getString("arrival_time"));
+            start_time = DateFormatter.format(jsonRide.getString("start_time"));
 
             /* get the list of requests */
 
