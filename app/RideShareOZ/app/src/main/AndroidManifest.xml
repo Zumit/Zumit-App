@@ -71,7 +71,7 @@
             android:name=".GPSTracker"
             android:value=".com.swen900014.orange.rideshareoz.GPSTracker"
             android:enabled="true" >
-    </service>
+        </service>
     </application>
 
 </manifest>
