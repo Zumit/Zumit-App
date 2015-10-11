@@ -19,7 +19,9 @@ var RideSchema = new Schema({
     user:{ type: Schema.Types.ObjectId, ref: 'User' },
     pickup_point:{ type: [Number] },
     pickup_time:Date,
-    pickup_add:String
+    pickup_add:String,
+    rate_me:String,
+    rate_driver: String
   }],
   requests: [{
     user:{type: Schema.Types.ObjectId, ref: 'User' },
@@ -31,6 +33,7 @@ var RideSchema = new Schema({
   }],
   updated_at: { type: Date, default: Date.now },
   note: String,
+  state: String;
 });
 
 
@@ -240,7 +243,9 @@ var user_in_passenger=0;
           'user':user_id,
           'pickup_point':pickup_point,
           'pickup_time':pickup_time,
-          'pickup_add':pickup_add
+          'pickup_add':pickup_add,
+          'rate_me':'unrate',
+          'rate_driver':'unrate'
         });
         doc.save();
       }
