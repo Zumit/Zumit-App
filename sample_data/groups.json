@@ -24,6 +24,8 @@
   "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
   "admins":[],
   "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
   ],
   "requests":[],
   "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
