@@ -26,7 +26,7 @@ public class Group implements Serializable
     private String name;
     private String description;
 
-    private static HashMap<String, Group> myGroups = new HashMap<String, Group>();
+    public static HashMap<String, Group> myGroups = new HashMap<String, Group>();
     private static HashMap<String, Group> requestedGroups = new HashMap<String, Group>();
     private static HashMap<String, Group> allOtherGroups = new HashMap<String, Group>();
 
@@ -36,6 +36,7 @@ public class Group implements Serializable
     {
         JOINED, REQUESTING, NEW
     }
+
 
     public Group(String groupId, String name, String description)
     {
@@ -96,6 +97,12 @@ public class Group implements Serializable
 
         }
 
+    }
+
+    public static ArrayList<Group> getMyGroups(){
+        ArrayList<Group> allGroups = new ArrayList<Group>();
+        allGroups.addAll(myGroups.values());
+        return allGroups;
     }
 
     public static ArrayList<Group> getAllGroups(){

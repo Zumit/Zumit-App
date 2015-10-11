@@ -128,4 +128,8 @@ public class Event implements Serializable
         this.start_time = eventJson.getString("startTime");
         this.end_time = eventJson.getString("endTime");
     }
+    public String getEventId()
+    {
+        return eventId;
+    }
 }

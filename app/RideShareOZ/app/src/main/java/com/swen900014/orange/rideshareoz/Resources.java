@@ -29,7 +29,7 @@ public class Resources
     public final static String JOIN_GROUP_URL = "http://144.6.226.237/group/request";
     public final static String LEAVE_GROUP_URL = "http://144.6.226.237/group/leave";
 
-    public final static String GETALL_GROUP_URL = "http://144.6.226.237/user/getgroups";
+    public final static String GETALL_GROUP_URL = "http://144.6.226.237/user/getGroups";
     public final static String GETALL_EVENT_URL = "http://144.6.226.237/event/getall";
 
 }
