@@ -46,13 +46,6 @@ public class DriverViewRideActivity extends AppCompatActivity
         Intent received = getIntent();
         ride = (Ride) received.getSerializableExtra("SelectedRide");
 
-        // Test accepting and rejecting requests
-        //ride.acceptJoin(new Pickup(new User("user1", "email", 123, 0, UserType.PASSENGER),
-        //        new Location(0.0, 0.0, "carlton")));
-
-        //ride.addWaiting(new Pickup(new User("user2", "email", 123, 0, UserType.PASSENGER),
-        //        new Location(0.0, 0.0, "carlton")));
-
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
         TextView endLabel = (TextView) findViewById(R.id.endPointText);
         TextView startTimeLabel = (TextView) findViewById(R.id.startTimeText);
@@ -68,7 +61,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         startTimeLabel.setText(ride.getStartTime());
         arrivalTimeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername());
-        seatsText.setText("" + ride.getSeats());
+        seatsText.setText(ride.getSeats());
 
         driverText.setOnClickListener(new View.OnClickListener()
         {
@@ -82,10 +75,10 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
         });
 
-        updateView();
+        displayRequestsAndJoinedPass();
     }
 
-    public void updateView()
+    public void displayRequestsAndJoinedPass()
     {
         ArrayList<Pickup> joinedList = ride.getJoined();
         ArrayList<Pickup> waitingListArray = ride.getWaiting();
@@ -93,33 +86,31 @@ public class DriverViewRideActivity extends AppCompatActivity
         passengerList.removeAllViews();
         waitingList.removeAllViews();
 
+        // Display joined passengers
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
-            pass.setText("name: " + lift.getUser().getUsername());
-
-            if (ride.getRideState() == Ride.RideState.OFFERING)
+            pass.setText(lift.getUser().getUsername());
+            pass.setOnClickListener(new View.OnClickListener()
             {
-                pass.setOnClickListener(new View.OnClickListener()
+                @Override
+                public void onClick(View v)
                 {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                        intent.putExtra("Ride", ride);
-                        intent.putExtra("UserInfo", lift);
-                        thisActivity.startActivity(intent);
-                    }
-                });
-            }
+                    Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                    intent.putExtra("Ride", ride);
+                    intent.putExtra("UserInfo", lift);
+                    thisActivity.startActivity(intent);
+                }
+            });
 
             passengerList.addView(pass);
         }
 
+        // Display requesting users
         for (final Pickup lift : waitingListArray)
         {
             TextView request = new TextView(this);
-            request.setText("name: " + lift.getUser().getUsername());
+            request.setText(lift.getUser().getUsername());
 
             if (ride.getRideState() == Ride.RideState.OFFERING)
             {
@@ -178,11 +169,8 @@ public class DriverViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 // Get back to the my rides page
-                Intent intent = new Intent(activity, MyRidesActivity.class);
-                activity.startActivity(intent);
+                activity.finish();
             }
         }, new Response.ErrorListener()
         {
