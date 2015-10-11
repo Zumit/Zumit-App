@@ -50,8 +50,6 @@ CreditSchema.statics.addRate = function(req,callback){
 						}
 					}
 				],function(err,result){
-					console.log("=================");
-					console.log(result);
 					User.findById(ratee_id,function(err,user){
 						user.passenger_rate=(Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1);
 						user.save();
@@ -79,13 +77,14 @@ CreditSchema.statics.addRate = function(req,callback){
 						}
 					}
 				],function(err,result){
+
 					User.findById(ratee_id,function(err,user){
 						user.driver_rate=(Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1);
 						user.save();
 					});
 
 					Ride.update(
-   					{'_id':req.body.ride_id,'passengers.user':ratee_id},
+   					{'_id':req.body.ride_id,'passengers.user':req.userinfo._id},
     				{'$set':{'passengers.$.rated': true }},function(err,user){
      			 	console.log("RATE save");
     				}
