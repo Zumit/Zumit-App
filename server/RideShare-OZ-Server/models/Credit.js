@@ -50,6 +50,14 @@ CreditSchema.statics.addRate = function(req,callback){
 						user.passenger_rate=(Number(result[0].avgRate)+Number(req.query.rate))/(Number(result[0].count)+1);
 						user.save();
 					});
+					Ride.update(
+   					{'_id':req.query.ride_id,'passengers.user':req.query.receiver_id},
+    				{'$set':{'passengers.$.rated_by_driver': true }},function(err,user){
+     			 	console.log("RATE save");
+    				}
+    				);
+
+
 				});
 				
 			}else if(req.query.type==="driver"){
@@ -69,6 +77,15 @@ CreditSchema.statics.addRate = function(req,callback){
 						user.driver_rate=(Number(result[0].avgRate)+Number(req.query.rate))/(Number(result[0].count)+1);
 						user.save();
 					});
+
+					Ride.update(
+   					{'_id':req.query.ride_id,'passengers.user':req.query.rater_id},
+    				{'$set':{'passengers.$.rated': true }},function(err,user){
+     			 	console.log("RATE save");
+    				}
+    				);
+
+
 				});	
 			} 
 
