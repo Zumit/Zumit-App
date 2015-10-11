@@ -19,7 +19,7 @@ router.get('/create', function(req, res) {
   Group.createGroup(req,function(groups){
   res.json(groups);
 
- })
+ });
 });
 
 router.get('/request',function(req,res){
@@ -34,7 +34,7 @@ router.get('/accept', function(req, res) {
   Group.acceptRequest(req,function(groups){
   res.json(groups);
 
- })
+ });
 });
 
 router.get('/reject', function(req, res) {
@@ -42,7 +42,7 @@ router.get('/reject', function(req, res) {
   Group.rejectRequest(req,function(groups){
   res.json(groups);
 
- })
+ });
 });
 
 router.get('/leave', function(req, res) {
@@ -50,7 +50,7 @@ router.get('/leave', function(req, res) {
   Group.leaveGroup(req,function(groups){
   res.json(groups);
 
- })
+ });
 });
 
 

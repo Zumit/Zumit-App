@@ -24,7 +24,7 @@ public class Ride implements Serializable
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int seats;      //Max number of passengers who can join
+    private int seats;      // Max number of passengers who can join
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
@@ -99,8 +99,8 @@ public class Ride implements Serializable
 
             // Get seat number, start time and arrival time
             seats = jsonRide.getInt("seats");
-            arriving_time = jsonRide.getString("arrival_time");
-            start_time = jsonRide.getString("start_time");
+            arriving_time = DateFormatter.format(jsonRide.getString("arrival_time"));
+            start_time = DateFormatter.format(jsonRide.getString("start_time"));
 
             /* get the list of requests */
 
@@ -121,6 +121,7 @@ public class Ride implements Serializable
                 }
                 tempLocationArray = tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                loc.setAddress(tempObj.getString("pickup_add"));
 
                 waiting.add(new Pickup(pass, loc));
             }
@@ -145,6 +146,7 @@ public class Ride implements Serializable
 
                     tempLocationArray = tempObj.getJSONArray("pickup_point");
                     Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                    loc.setAddress(tempObj.getString("pickup_add"));
                     joined.add(new Pickup(pass, loc));
                 }
             }
@@ -266,14 +268,34 @@ public class Ride implements Serializable
         return false;
     }
 
-    public void rateDriver(int score)
+    public boolean isDriverRated()
     {
-        driver.rate(score);
+        boolean driverRated = false;
+
+        for (Pickup pickup : joined)
+        {
+            if (pickup.getUser().getUsername() == User.getCurrentUser().getUsername())
+            {
+                driverRated = pickup.isDriverRated();
+            }
+        }
+
+        return driverRated;
     }
 
-    public void ratePassenger(int index, int score)
+    public boolean isPassRated(String passName)
     {
-        joined.get(index).getUser().rate(score);
+        boolean isPassRated = false;
+
+        for (Pickup pickup : joined)
+        {
+            if (pickup.getUser().getUsername() == passName)
+            {
+                isPassRated = pickup.isRatedByDriver();
+            }
+        }
+
+        return isPassRated;
     }
 
     public void setArrivingTime(String arriving_time)

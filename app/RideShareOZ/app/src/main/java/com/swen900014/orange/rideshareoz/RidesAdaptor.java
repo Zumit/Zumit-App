@@ -47,7 +47,7 @@ public class RidesAdaptor extends ArrayAdapter<Ride>
         tvFromTo.setText(ride.getStart().getDisplayName() + " To " + ride.getEnd().getDisplayName());
         tvRequests.setText(" " + Integer.toString(ride.getWaiting().size()));
         tvJoins.setText(Integer.toString(ride.getJoined().size()) + " ");
-        tvDate.setText(ride.getArrivingTime());
+        tvDate.setText(ride.getArrivingTime() + "  ");
         // Return the completed view to render on screen
         return convertView;
     }

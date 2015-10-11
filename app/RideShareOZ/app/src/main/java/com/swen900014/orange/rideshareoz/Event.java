@@ -1,13 +1,24 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.app.Activity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Sangzhuoyang Yu & George on 10/2/15.
- * Encapsulate group info.
+ * Encapsulate event info.
  */
 public class Event implements Serializable
 {
@@ -22,9 +33,9 @@ public class Event implements Serializable
     private static HashMap<String, Event> allEvents = new HashMap<String, Event>();
 
 
-    public Event(String groupId, String name, String description, Location location, String s_time, String e_time)
+    public Event(String eventId, String name, String description, Location location, String s_time, String e_time)
     {
-        this.eventId = groupId;
+        this.eventId = eventId;
         this.name = name;
         this.description = description;
         this.start_time = s_time;
@@ -36,19 +47,85 @@ public class Event implements Serializable
         return allEvents.get(Id);
     }
 
-    public static Event addGroupIfNotExist(String id, String name, String description, Location location, String s_time, String e_time){
-        if(!allEvents.containsKey(id)){
-            Event newEvent = new Event(id, name, description,location, s_time,e_time);
-            allEvents.put(newEvent.eventId, newEvent);
-            return newEvent;
-        }else{
-            return allEvents.get(id);
+    public String getName() {
+        return name;
+    }
+
+    public static ArrayList<Event> getAllEvents(){
+
+        ArrayList<Event> events = new ArrayList<Event>();
+        events.addAll(allEvents.values());
+        return events;
+    }
+
+    public static void storeEvents(JSONArray eventsJsonArray){
+
+        allEvents.clear();
+        for (int i = 0; i < eventsJsonArray.length(); i++){
+
+            try {
+                Event newEvent = new Event(eventsJsonArray.getJSONObject(i));
+                allEvents.put(newEvent.eventId, newEvent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
-    }
-
-    public Event(JSONObject eventJson)
-    {
 
     }
 
+
+
+    public static void loadEvents(final Activity activity){
+        StringRequest getRidesRequest = new StringRequest(Request.Method.GET,
+                Resources.GETALL_EVENT_URL , new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                System.out.println("response: " + s);
+                try {
+                    storeEvents(new JSONArray(s));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending post failed!");
+            }
+        }){
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(activity).addToRequestQueue(getRidesRequest);
+    }
+
+    public Event(JSONObject eventJson) throws JSONException {
+
+        JSONArray tempLocationArray;
+
+        this.eventId = eventJson.getString("_id");
+        this.name = eventJson.getString("eventName");
+        this.description = eventJson.getString("eventInfo");
+        tempLocationArray = eventJson.getJSONArray("eventlocation");
+        Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+        loc.setAddress(eventJson.getString("location"));
+        this.eventLocation = loc;
+        this.start_time = eventJson.getString("startTime");
+        this.end_time = eventJson.getString("endTime");
+    }
 }

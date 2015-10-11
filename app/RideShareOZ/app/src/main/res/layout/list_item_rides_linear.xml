@@ -51,7 +51,8 @@
         android:text="Small Text"
         android:id="@+id/textViewDate"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textViewType"
-        android:layout_toEndOf="@+id/textViewType" />
+        android:layout_toLeftOf="@+id/textViewJoins"
+        android:layout_toStartOf="@+id/textViewJoins"
+        android:textColor="#1b17ff" />
 
 </RelativeLayout>

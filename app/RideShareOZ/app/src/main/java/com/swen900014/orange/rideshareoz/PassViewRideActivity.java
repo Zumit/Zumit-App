@@ -130,9 +130,14 @@ public class PassViewRideActivity extends AppCompatActivity
         }
         else if (ride.getRideState() == Ride.RideState.PASSED)
         {
-            rateLabel.setVisibility(View.VISIBLE);
-            rateButton.setVisibility(View.VISIBLE);
-            spinnerRate.setVisibility(View.VISIBLE);
+            // Passenger is allowed to rate the driver if they
+            // haven't done that
+            if (ride.isDriverRated())
+            {
+                rateLabel.setVisibility(View.VISIBLE);
+                rateButton.setVisibility(View.VISIBLE);
+                spinnerRate.setVisibility(View.VISIBLE);
+            }
         }
 
         // Rating spinner
@@ -147,7 +152,7 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                score = position - 2;
+                score = position + 1;
             }
 
             @Override
@@ -254,9 +259,7 @@ public class PassViewRideActivity extends AppCompatActivity
     {
         if (spinnerRate.isSelected())
         {
-            ride.rateDriver(score);
-
-            thisActivity.finish();
+            sendRateRequest();
         }
         else
         {
@@ -385,6 +388,43 @@ public class PassViewRideActivity extends AppCompatActivity
                 params.put("p_lat", lat);
                 params.put("p_lon", lon);
                 params.put("pickup_add", address);
+
+                return params;
+            }
+        };
+
+        MyRequest.getInstance(thisActivity).addToRequestQueue(joinRequest);
+    }
+
+    private void sendRateRequest()
+    {
+        StringRequest joinRequest = new StringRequest(Request.Method.POST,
+                JOIN_REQUEST_URL, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                thisActivity.finish();
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending rate post failed!");
+            }
+        })
+        {
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("username", User.getCurrentUser().getUsername());
+                params.put("ride_id", ride.getRideId());
+                params.put("rate", Integer.toString(score));
+                params.put("type", "driver");
 
                 return params;
             }

@@ -9,4 +9,8 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_FindRide" android:title="@string/_findRide"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_Groups" android:title="@string/_Groups"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_Events" android:title="@string/_Events"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
