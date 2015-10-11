@@ -111,6 +111,12 @@ public class Group implements Serializable
         }
     }
 
+    public static ArrayList<Group> getMyGroups()
+    {
+        ArrayList<Group> allGroups = new ArrayList<>();
+        allGroups.addAll(myGroups.values());
+        return allGroups;
+    }
     public static ArrayList<Group> getAllGroups()
     {
         ArrayList<Group> allGroups = new ArrayList<>();

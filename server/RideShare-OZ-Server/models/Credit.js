@@ -24,19 +24,23 @@ CreditSchema.statics.getAllCredit = function(callback){
 CreditSchema.statics.addRate = function(req,callback){
 	var Credit = mongoose.model('Credit');
   	var credit = new Credit();
-  		if(req.query.type==="driver"||req.query.type==="passenger"){
+  	var ratee_id;
+  		if(req.body.type==="driver"||req.body.type==="passenger"){
+  			User.find({'username':req.body.rateeName},function(err,user){
+  				ratee_id=user[0]._id;
   			
-			credit.ride_id=req.query.ride_id;
-			credit.rater=req.query.rater_id;
-			credit.receiver=req.query.receiver_id;
-			credit.comment=req.query.comment;
-			credit.rate=req.query.rate;
-			credit.type=req.query.type;
+  			console.log(ratee_id)
+			credit.ride_id=req.body.ride_id;
+			credit.rater=req.userinfo._id;
+			credit.receiver=ratee_id;
+			credit.comment=req.body.comment;
+			credit.rate=req.body.rate;
+			credit.type=req.body.type;
 			credit.save();
-			if(req.query.type==="passenger"){
-				this.aggregate([
+			if(req.body.type==="passenger"){
+				Credit.aggregate([
 					{	
-						$match:{$and:[{type:"passenger"},{receiver:req.query.receiver_id}]}
+						$match:{$and:[{type:"passenger"},{receiver:String(ratee_id)}]}
 					},
 					{
 						$group:{
@@ -46,12 +50,14 @@ CreditSchema.statics.addRate = function(req,callback){
 						}
 					}
 				],function(err,result){
-					User.findById(req.query.receiver_id,function(err,user){
-						user.passenger_rate=(Number(result[0].avgRate)+Number(req.query.rate))/(Number(result[0].count)+1);
+					console.log("=================");
+					console.log(result);
+					User.findById(ratee_id,function(err,user){
+						user.passenger_rate=(Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1);
 						user.save();
 					});
 					Ride.update(
-   					{'_id':req.query.ride_id,'passengers.user':req.query.receiver_id},
+   					{'_id':req.body.ride_id,'passengers.user':ratee_id},
     				{'$set':{'passengers.$.rated_by_driver': true }},function(err,user){
      			 	console.log("RATE save");
     				}
@@ -60,10 +66,10 @@ CreditSchema.statics.addRate = function(req,callback){
 
 				});
 				
-			}else if(req.query.type==="driver"){
-				this.aggregate([
+			}else if(req.body.type==="driver"){
+				Credit.aggregate([
 					{	
-						$match:{$and:[{type:"driver"},{receiver:req.query.receiver_id}]}
+						$match:{$and:[{type:"driver"},{receiver:String(ratee_id)}]}
 					},
 					{
 						$group:{
@@ -73,13 +79,13 @@ CreditSchema.statics.addRate = function(req,callback){
 						}
 					}
 				],function(err,result){
-					User.findById(req.query.receiver_id,function(err,user){
-						user.driver_rate=(Number(result[0].avgRate)+Number(req.query.rate))/(Number(result[0].count)+1);
+					User.findById(ratee_id,function(err,user){
+						user.driver_rate=(Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1);
 						user.save();
 					});
 
 					Ride.update(
-   					{'_id':req.query.ride_id,'passengers.user':req.query.rater_id},
+   					{'_id':req.body.ride_id,'passengers.user':ratee_id},
     				{'$set':{'passengers.$.rated': true }},function(err,user){
      			 	console.log("RATE save");
     				}
@@ -90,6 +96,8 @@ CreditSchema.statics.addRate = function(req,callback){
 			} 
 
 			callback("save success!");
+
+			});
 	}else{
 		callback("type is wrong!");
 	}

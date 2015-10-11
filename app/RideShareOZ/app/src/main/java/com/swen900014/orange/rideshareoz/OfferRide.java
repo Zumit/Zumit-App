@@ -16,9 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -37,13 +35,13 @@ import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.*;
-import  com.swen900014.orange.rideshareoz.GPSTracker;
+import static com.swen900014.orange.rideshareoz.Resources.BOUNDS_GREATER_MELBOURNE;
+import static com.swen900014.orange.rideshareoz.Resources.OFFER_RIDE_URL;
 
 /**
  * Created by Qianwen Zhang on 9/12/15.
@@ -54,11 +52,16 @@ public class OfferRide extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
-    String[] EVENTS = {"BBQ","OCEAN ROAD","3D PRINTING"};
-    String[] GROUPS = {"UNIMELB","UNIMONASH","RMIT"};
+   // String[] EVENTS = {"BBQ","OCEAN ROAD","3D PRINTING"};
+
+
+    ArrayList<Group> selectGroups = null;
+    ArrayList<Event> selectEvents = null;
+
+
     private final String TAG = "OfferRide";
-    private String event = "";
-    private String group = "";
+    private String eventId = "";
+    private String groupId = "";
     private String temp1 = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
@@ -167,8 +170,6 @@ public class OfferRide extends FragmentActivity implements
         EditEnd = (AutoCompleteTextView)
                 findViewById(R.id.End);
 
-
-
         //auto-complete adapter
         PlaceAutoCompleteAdapter adapterS = new PlaceAutoCompleteAdapter(this,
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
@@ -179,7 +180,6 @@ public class OfferRide extends FragmentActivity implements
                 android.R.layout.simple_expandable_list_item_1, mGoogleApiClient,
                 BOUNDS_GREATER_MELBOURNE, null, EditEnd);
         EditEnd.setAdapter(adapterE);
-
 
         //spinner adapter
         spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
@@ -229,11 +229,16 @@ public class OfferRide extends FragmentActivity implements
             displayDate.setText("");
             displayStartTime.setText("");
             displayArrivalTime.setText("");
-
+            eventId = "";
+            groupId = "";
+            btnSelectEvent.setEnabled(true);
+            btnSelectGroup.setEnabled(true);
         }
+
         if (v.getId() == R.id.buttonEvent)
         {
             selectEvent(v);
+
         }
         if (v.getId() == R.id.buttonGroup)
         {
@@ -260,40 +265,57 @@ public class OfferRide extends FragmentActivity implements
         //  new TimePickerDialog(OfferRide.this, listener4, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
     }
 
+    private void selectGroup(View v) {
+
+        //receive a list of group
+        selectGroups = Group.getMyGroups();
+        final String[] groupsArray = new String[selectGroups.size()];
+        for(int i=0; i<selectGroups.size(); i++)
+        {
+            groupsArray[i] = selectGroups.get(i).getName();
+        }
+
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(OfferRide.this);
+        builder1.setTitle("Select Group");
+        builder1.setItems(groupsArray, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+
+                Toast.makeText(getApplicationContext(), "You have selected" +groupsArray[position], Toast.LENGTH_SHORT).show();
+                groupId = selectGroups.get(position).getGroupId();
+            }
+        });
+        AlertDialog alertDialog = builder1.create();
+        alertDialog.show();
+        btnSelectEvent.setEnabled(false);
+    }
+
     private void selectEvent(View v) {
 
         //receive a list of event
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(OfferRide.this);
-        builder.setTitle("Select Event");
-        builder.setItems(EVENTS, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                Toast.makeText(getApplicationContext(), "You have selected" + EVENTS[which], Toast.LENGTH_SHORT).show();
-                event =  EVENTS[which];
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void selectGroup(View v) {
-
         //receive a list of group
+        selectEvents = Event.getAllEvents();
+        final String[] eventsArray = new String[selectEvents.size()];
+        for(int i=0; i<selectEvents.size(); i++)
+        {
+            eventsArray[i] = selectEvents.get(i).getName();
+        }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(OfferRide.this);
-        builder.setTitle("Select Group");
-        builder.setItems(GROUPS, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(OfferRide.this);
+        builder1.setTitle("Select Event");
+        builder1.setItems(eventsArray, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int position) {
 
-                Toast.makeText(getApplicationContext(), "You have selected" + GROUPS[which], Toast.LENGTH_SHORT).show();
-                group = GROUPS[which];
+                Toast.makeText(getApplicationContext(), "You have selected" +eventsArray[position], Toast.LENGTH_SHORT).show();
+                eventId = selectEvents.get(position).getEventId();
             }
         });
-        AlertDialog alertDialog = builder.create();
+        AlertDialog alertDialog = builder1.create();
         alertDialog.show();
+        btnSelectGroup.setEnabled(false);
     }
 
 
@@ -514,7 +536,8 @@ public class OfferRide extends FragmentActivity implements
                     params.put("destination", endAddress);
                 }
 
-                params.put("group_id", "55cab5dde81ab31606e4814c");
+                params.put("group_id", groupId);
+                params.put("event_id", eventId);
                 params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);

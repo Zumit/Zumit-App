@@ -1,19 +1,17 @@
 package com.swen900014.orange.rideshareoz;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.location.Location;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -197,11 +195,8 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     {
         if (locationManager != null)
         {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
-                    PackageManager.PERMISSION_GRANTED &&
-                    checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                            PackageManager.PERMISSION_GRANTED)
-            {
+
+
                 // TODO: Consider calling
                 //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
                 // here to request the missing permissions, and then overriding
@@ -218,7 +213,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 
             locationManager.removeUpdates(GPSTracker.this);
         }
-    }
+
 
     /**
      * Function to get latitude

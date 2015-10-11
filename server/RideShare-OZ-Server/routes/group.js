@@ -14,6 +14,18 @@ router.get('/getall', function(req, res, next) {
 
 });
 
+router.get('/getallNoMember', function(req, res, next) {
+  Group.find({}, {'members':0}).exec({}, function(err, groups){
+    res.json(groups);
+  });
+});
+
+router.post('/getallNoMember', function(req, res, next) {
+  Group.find({}, {'members':0}).exec({}, function(err, groups){
+    res.json(groups);
+  });
+});
+
 router.post('/create', function(req, res) {
 
   Group.createGroup(req,function(groups){

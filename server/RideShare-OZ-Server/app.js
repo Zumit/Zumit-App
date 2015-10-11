@@ -57,11 +57,13 @@ app.use(function(req,res,next){
         User.find({'username':doc.email},function(err, users){
           console.log(users);
           if (users.length !== 0) {
-            req.userinfo._id = users[0]._id;
+          req.userinfo._id = users[0]._id;
           }
+
           next();
         });
       }
+
     });
   } else {
     if (req.query.username) {
