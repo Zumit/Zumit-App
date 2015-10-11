@@ -25,6 +25,8 @@ var msg = require('./routes/msg');
 var test = require('./routes/test');
 var events = require('./routes/event');
 var credit= require('./routes/credit');
+var admin= require('./routes/admin');
+
 // model
 var User = require('./models/User.js');
 
@@ -80,6 +82,7 @@ app.use('/msg', msg);
 app.use('/test', test);
 app.use('/event', events);
 app.use('/credit', credit);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
