@@ -18,6 +18,7 @@ public class Resources
     public final static String GETALL_USER_URL = "http://144.6.226.237/user/getall";
     public final static String GETUSER_RELAVENT_RIDE_URL = "http://144.6.226.237/user/getRides";
     public final static String LOGIN_URL = "http://144.6.226.237/user/login";
+
     public final static String SEARCH_RIDE_URL = "http://144.6.226.237/ride/search?";
     public final static String OFFER_RIDE_URL = "http://144.6.226.237/ride/create?";
     public final static String CANCEL_RIDE_URL = "http://144.6.226.237/ride/cancel";
@@ -29,7 +30,8 @@ public class Resources
     public final static String JOIN_GROUP_URL = "http://144.6.226.237/group/request";
     public final static String LEAVE_GROUP_URL = "http://144.6.226.237/group/leave";
 
-    public final static String GETALL_GROUP_URL = "http://144.6.226.237/user/getgroups";
+    public final static String GETALL_GROUP_URL = "http://144.6.226.237/user/getGroups";
     public final static String GETALL_EVENT_URL = "http://144.6.226.237/event/getall";
 
+    public final static String RATE_USER_URL = "http://144.6.226.237/credit/rate";
 }

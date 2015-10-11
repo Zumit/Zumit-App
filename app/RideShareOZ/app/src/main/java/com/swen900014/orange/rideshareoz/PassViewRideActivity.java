@@ -399,8 +399,8 @@ public class PassViewRideActivity extends AppCompatActivity
 
     private void sendRateRequest()
     {
-        StringRequest joinRequest = new StringRequest(Request.Method.POST,
-                JOIN_REQUEST_URL, new Response.Listener<String>()
+        StringRequest rateRequest = new StringRequest(Request.Method.POST,
+                RATE_USER_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
@@ -423,6 +423,7 @@ public class PassViewRideActivity extends AppCompatActivity
                 Map<String, String> params = new HashMap<>();
 
                 params.put("username", User.getCurrentUser().getUsername());
+                params.put("rateeName", ride.getDriver().getUsername());
                 params.put("ride_id", ride.getRideId());
                 params.put("rate", Integer.toString(score));
                 params.put("type", "driver");
@@ -431,7 +432,7 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(joinRequest);
+        MyRequest.getInstance(thisActivity).addToRequestQueue(rateRequest);
     }
 
     // Check whether user has typed in the pickup location

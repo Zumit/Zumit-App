@@ -104,8 +104,6 @@ public class GroupFragment extends Fragment
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 storeGroups(s);
             }
         }, new Response.ErrorListener()
