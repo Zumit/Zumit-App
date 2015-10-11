@@ -94,24 +94,24 @@ RideSchema.statics.searchRide = function(req,callback){
   var arrival_time = req.body.arrival_time;
   var s_time = arrival_time.substring(0, arrival_time.length - 14) + 'T00:00:00.000Z';
   var e_time = arrival_time.substring(0, arrival_time.length - 14) + 'T23:59:59.000Z';
-  
-var origins=[] 
-var destinations = [];
-distance.key('AIzaSyDRcEadcdHfKKNyeQSRDtsSVsGaKEM2r2M');
-distance.units('imperial');
 
-  var rides=[];
-  var count=0;
+  var origins = [];
+  var destinations = [];
+  distance.key('AIzaSyDRcEadcdHfKKNyeQSRDtsSVsGaKEM2r2M');
+  distance.units('imperial');
+
+  var rides = [];
+  var count = 0;
   this.find({
     'group':groupID,
     'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
     'end_point': {
       $nearSphere: end,
       $maxDistance: maxDistance
-
     }
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
+
     if (ride.length!=0) {
       
      var length=ride.length;
@@ -143,31 +143,21 @@ distance.units('imperial');
           
            if(Number(h3)+Number(h2)<Number(h1)+900){
               rides.push(ride);
-              
             }
-          }
         }
-         if(length==count)
-         {
-           callback(rides);
-          }else{console.log(count);}
-      });
-         
-        //return rides;
-     });
 
-      
-    }else
-    {
-      
+          if(length==count) {
+            callback(rides);
+          }
+          else{console.log(count);}
+        }
+        });
+
+      });
+    }else {
       callback ("no result");
     }
-    
-   
-
   });
-
-
 };
 
 

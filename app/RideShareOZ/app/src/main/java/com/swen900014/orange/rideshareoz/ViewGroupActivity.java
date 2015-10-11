@@ -37,16 +37,29 @@ public class ViewGroupActivity extends AppCompatActivity
 
         // Receive group object from MyGroup Activity
         Intent intent = getIntent();
-        mGroup = (Group) intent.getSerializableExtra("group");
+        mGroup = (Group) intent.getSerializableExtra("SelectedGroup");
 
-        // Join request have already been sent
-        if (mGroup.getGroupState() == Group.GroupState.REQUESTING)
-        {
-            Button join_leave_button = (Button) findViewById(R.id.join_leave_groupButton);
-            join_leave_button.setVisibility(View.GONE);
-        }
+        updateView();
 
         thisActivity = this;
+    }
+
+    public void updateView()
+    {
+        Button join_leave_button = (Button) findViewById(R.id.join_leave_groupButton);
+
+        if (mGroup.getGroupState() == Group.GroupState.REQUESTING)
+        {
+            join_leave_button.setVisibility(View.GONE);
+        }
+        else if (mGroup.getGroupState() == Group.GroupState.JOINED)
+        {
+            join_leave_button.setText(R.string.LeaveButton);
+        }
+        else
+        {
+            join_leave_button.setText(R.string.joinButton);
+        }
     }
 
     public void onClick(View view)

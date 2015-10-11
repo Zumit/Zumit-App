@@ -49,7 +49,7 @@ CreditSchema.statics.addRate = function(req,callback){
 					User.findById(req.query.receiver_id,function(err,user){
 						user.passenger_rate=(Number(result[0].avgRate)+Number(req.query.rate))/(Number(result[0].count)+1);
 						user.save();
-					})
+					});
 				});
 				
 			}else if(req.query.type==="driver"){
@@ -68,13 +68,13 @@ CreditSchema.statics.addRate = function(req,callback){
 					User.findById(req.query.receiver_id,function(err,user){
 						user.driver_rate=(Number(result[0].avgRate)+Number(req.query.rate))/(Number(result[0].count)+1);
 						user.save();
-					})
+					});
 				});	
 			} 
 
 			callback("save success!");
 	}else{
-		callback("type is wrong!")
+		callback("type is wrong!");
 	}
 
 
@@ -97,7 +97,7 @@ CreditSchema.statics.avgRate = function(req,callback){
 		],function(err,result){
 			console.log(result[0].avgRate);
 			callback(result);
-		})
+		});
 };
 
 

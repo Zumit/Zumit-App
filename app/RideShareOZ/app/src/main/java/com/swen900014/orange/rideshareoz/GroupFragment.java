@@ -27,8 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.GETUSER_RELAVENT_RIDE_URL;
-
 
 /**
  * Created by George on 6/09/2015.
@@ -38,13 +36,7 @@ import static com.swen900014.orange.rideshareoz.Resources.GETUSER_RELAVENT_RIDE_
 public class GroupFragment extends Fragment
 {
     private GroupsAdaptor mGroupAdaptor;
-    private boolean isSearchResults = false;
-    private Intent intent;
     private Activity thisActivity;
-
-    public GroupFragment()
-    {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -55,7 +47,6 @@ public class GroupFragment extends Fragment
         setHasOptionsMenu(true);
 
         thisActivity = this.getActivity();
-
     }
 
     @Override
@@ -67,8 +58,6 @@ public class GroupFragment extends Fragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -78,13 +67,12 @@ public class GroupFragment extends Fragment
     {
         List<Group> currentGroups = new ArrayList<>();
 
-        // Now that we have some dummy  data, create an ArrayAdapter.
+        // Now that we have some dummy data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy data) and
         // use it to populate the ListView it's attached to.
         mGroupAdaptor = new GroupsAdaptor(getActivity(), (ArrayList<Group>) currentGroups);
 
         /* load the actual data from server */
-
         sendGetGroupsRequest();
 
 
@@ -98,11 +86,8 @@ public class GroupFragment extends Fragment
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
-                Intent intent;
                 Group selectedGroup = mGroupAdaptor.getItem(position);
-                intent = new Intent(getActivity(), ViewGroupActivity.class);
-
-
+                Intent intent = new Intent(getActivity(), ViewGroupActivity.class);
                 intent.putExtra("SelectedGroup", selectedGroup);
                 startActivity(intent);
             }
@@ -113,7 +98,7 @@ public class GroupFragment extends Fragment
 
     public void sendGetGroupsRequest()
     {
-        StringRequest getRidesRequest = new StringRequest(Request.Method.POST,
+        StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
                 Resources.GETALL_GROUP_URL, new Response.Listener<String>()
         {
             @Override
@@ -132,21 +117,21 @@ public class GroupFragment extends Fragment
 
                 System.out.println("Sending post failed!");
             }
-        }){
+        })
+        {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
 
-                //params.put("username", User.getCurrentUser().getUsername());
-                params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
+                params.put("username", User.getCurrentUser().getUsername());
+                //params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(getRidesRequest);
+        MyRequest.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
     }
-
 
     private void storeGroups(String response)
     {
@@ -154,19 +139,26 @@ public class GroupFragment extends Fragment
         {
             ArrayList<Group> serverGroups = null;
 
-            try {
+            try
+            {
                 Group.storeGroups(new JSONArray(response));
                 serverGroups = Group.getAllGroups();
-            } catch (JSONException e) {
+            } catch (JSONException e)
+            {
                 e.printStackTrace();
             }
+
             mGroupAdaptor.clear();
-            for (Group listItemGroup : serverGroups)
+
+            if (serverGroups != null)
             {
-                mGroupAdaptor.add(listItemGroup);
+                for (Group listItemGroup : serverGroups)
+                {
+                    mGroupAdaptor.add(listItemGroup);
+                }
             }
 
-            // New data is back from the server.  Hooray!
+            // Group data is back from the server.  Hooray!
         }
     }
 }

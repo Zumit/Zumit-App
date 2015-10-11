@@ -12,7 +12,7 @@
     <string name="title_ride_searchresults" translatable="false">Search Results</string>
     <string name="title_authentication" translatable="false">Log in</string>
     <string name="PassViewPass">Passengers</string>
-    <string name="LeaveRide">Leave</string>
+    <string name="LeaveButton">Leave</string>
     <string name="ViewRide">VIEW RIDE</string>
     <string name="startLabel">Address: </string>
     <string name="endLabel">End:</string>
@@ -58,6 +58,7 @@
     <string name="title_activity_view_group">ViewGroupActivity</string>
     <string name="title_activity_groups">Groups</string>
     <string name="rateRideString">RATE</string>
+    <string name="AboutTheGroup">About the group:</string>
 
     <string-array name="seats">
         <item>1</item>
