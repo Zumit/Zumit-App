@@ -91,7 +91,6 @@ public class OfferRide extends FragmentActivity implements
     private String startAddress = "";
     private String endAddress = "";
 
-    private PlaceAutoCompleteAdapter adapter;
     private boolean isFind = false;
     protected GoogleApiClient mGoogleApiClient;
 
@@ -332,7 +331,7 @@ public class OfferRide extends FragmentActivity implements
                         {
                             e.printStackTrace();
                         }
-
+                        sendRequest(activity);
 
                     }
                 },
@@ -536,24 +535,7 @@ public class OfferRide extends FragmentActivity implements
         return true;
     }
 
-    public void offerRide(View view)
-    {
-        if(Check1.isChecked()||Check2.isChecked())
-        {
-            reverseAddress(this);
-        }
-        if (inputValid())
-        {
-            startAddress = EditStart.getText().toString();
-            endAddress = EditEnd.getText().toString();
 
-            sendRequest(this);
-        }
-        else
-        {
-            System.out.println("Invalid input in offerRide");
-        }
-    }
 
     DatePickerDialog.OnDateSetListener listener1 = new DatePickerDialog.OnDateSetListener()
     {
@@ -703,6 +685,26 @@ public class OfferRide extends FragmentActivity implements
         //EditStart.getText().toString().isEmpty() ||u
         //EditEnd.getText().toString().isEmpty());*/
         return true;
+    }
+
+    public void offerRide(View view)
+    {
+
+        startAddress = EditStart.getText().toString();
+        endAddress = EditEnd.getText().toString();
+        if (Check1.isChecked()||Check2.isChecked())
+        {
+            reverseAddress(this);
+        }
+        else
+        if (inputValid())
+        {
+            sendRequest(this);
+        }
+        else
+        {
+            System.out.println("Invalid input in offerRide");
+        }
     }
 
 

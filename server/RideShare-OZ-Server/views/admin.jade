@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  table
+    tr
+      th ID
+      th Name
+      th Location
+      th Introduction
+    each group, index in groups
+      tr
+        td= groups[index]._id
+        td= groups[index].groupname
+        td= groups[index].location
+        td= groups[index].introduction
