@@ -8,9 +8,7 @@ var UserSchema = new Schema({
   phone: String,
   DoB: Date,
   driver_license: String,
-  groups: [{group:{type: Schema.Types.ObjectId, ref: 'Group' },state:String}],
-  rides: [{type: Schema.Types.ObjectId, ref: 'Ride' }],
-  events: [{type: Schema.Types.ObjectId, ref: 'Event' }],
+  groups: [{group:{type: Schema.Types.ObjectId, ref: 'Group' }, state:String}],
   updated_at: { type: Date, default: Date.now },
   driver_rate:{ type: Number, default:0},
   passenger_rate:{ type: Number,default:0},
@@ -43,12 +41,10 @@ UserSchema.methods.getRides = function(callback){
 
 
 UserSchema.statics.getGroups = function(req,callback){
-  
   this.findById(req.userinfo._id).populate('groups.group',
       'groupname introduction').exec({}, function(err,user){
     callback(user.groups);  
-});
-
+  });
 };
 
 
