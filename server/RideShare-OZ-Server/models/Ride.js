@@ -110,7 +110,7 @@ RideSchema.statics.searchRide = function(req,callback){
     }
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
-    if (ride.length!=0) {
+    if (ride.length !== 0) {
       var length=ride.length;
       ride.forEach(function(ride){
         origins[0]=ride.start_add;
