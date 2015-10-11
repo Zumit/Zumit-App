@@ -20,8 +20,8 @@ var RideSchema = new Schema({
     pickup_point:{ type: [Number] },
     pickup_time:Date,
     pickup_add:String,
-    rate_me:String,
-    rate_driver: String
+    rated_by_driver:Boolean,
+    rated: Boolean
   }],
   requests: [{
     user:{type: Schema.Types.ObjectId, ref: 'User' },
@@ -33,7 +33,7 @@ var RideSchema = new Schema({
   }],
   updated_at: { type: Date, default: Date.now },
   note: String,
-  state: String;
+  finished: Boolean
 });
 
 
@@ -47,6 +47,7 @@ RideSchema.statics.getAllRides = function(callback){
 RideSchema.statics.createRide = function(req,callback){
   var Ride = mongoose.model('Ride');
   var ride = new Ride();
+  ride.finished=false;
   ride.arrival_time = req.body.arrival_time;
   ride.start_time=req.body.start_time;
   ride.seats = req.body.seat;
@@ -140,7 +141,7 @@ distance.units('imperial');
             //console.log(h3);
           }
           
-           if(Number(h3)+Number(h2)+900>Number(h1)){
+           if(Number(h3)+Number(h2)<Number(h1)+900){
               rides.push(ride);
               
             }
@@ -244,8 +245,8 @@ var user_in_passenger=0;
           'pickup_point':pickup_point,
           'pickup_time':pickup_time,
           'pickup_add':pickup_add,
-          'rate_me':'unrate',
-          'rate_driver':'unrate'
+          'rated_by_driver':false,
+          'rated':false
         });
         doc.save();
       }
