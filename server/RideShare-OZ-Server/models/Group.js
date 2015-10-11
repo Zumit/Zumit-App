@@ -59,7 +59,7 @@ GroupsSchema.statics.createGroup= function(req,callback) {
         }
       });
 
-     if(check == 0){
+     if(check === 0){
           console.log(check);
         User.findById(req.query.user_id,function(err,user){
           user.groups.push({'group':req.query.group_id,'state':'request'});

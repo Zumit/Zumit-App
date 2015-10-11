@@ -33,7 +33,7 @@ var RideSchema = new Schema({
   }],
   updated_at: { type: Date, default: Date.now },
   note: String,
-  state: String;
+  state: String
 });
 
 
@@ -93,80 +93,60 @@ RideSchema.statics.searchRide = function(req,callback){
   var arrival_time = req.body.arrival_time;
   var s_time = arrival_time.substring(0, arrival_time.length - 14) + 'T00:00:00.000Z';
   var e_time = arrival_time.substring(0, arrival_time.length - 14) + 'T23:59:59.000Z';
-  
-var origins=[] 
-var destinations = [];
-distance.key('AIzaSyDRcEadcdHfKKNyeQSRDtsSVsGaKEM2r2M');
-distance.units('imperial');
 
-  var rides=[];
-  var count=0;
+  var origins = [];
+  var destinations = [];
+  distance.key('AIzaSyDRcEadcdHfKKNyeQSRDtsSVsGaKEM2r2M');
+  distance.units('imperial');
+
+  var rides = [];
+  var count = 0;
   this.find({
     'group':groupID,
     'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
     'end_point': {
       $nearSphere: end,
       $maxDistance: maxDistance
-
     }
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
     if (ride.length!=0) {
-      
-     var length=ride.length;
-     ride.forEach(function(ride){
-        
-      origins[0]=ride.start_add;
-      destinations[0]=ride.destination;
-      destinations[1]=req.body.origins;
-      origins[1]=req.body.origins;
-      
-      
-       distance.matrix(origins, destinations, function (err, distances){
-         count++;
-        if(distances) {
-          
-        if (distances.status == 'OK') {
-          if (distances.rows[0].elements[0].status == 'OK'){
-            var h1=distances.rows[0].elements[0].duration.value;
-            //console.log(h1);
-          }
-          if (distances.rows[0].elements[1].status == 'OK'){
-            var h2=distances.rows[0].elements[1].duration.value;
-            //console.log(h2);
-          }
-          if (distances.rows[1].elements[1].status == 'OK'){
-            var h3=distances.rows[1].elements[0].duration.value;
-            //console.log(h3);
-          }
-          
-           if(Number(h3)+Number(h2)+900>Number(h1)){
-              rides.push(ride);
-              
+      var length=ride.length;
+      ride.forEach(function(ride){
+        origins[0]=ride.start_add;
+        destinations[0]=ride.destination;
+        destinations[1]=req.body.origins;
+        origins[1]=req.body.origins;
+        distance.matrix(origins, destinations, function (err, distances){
+          count++;
+          if(distances) {
+            if (distances.status == 'OK') {
+              if (distances.rows[0].elements[0].status == 'OK'){
+                var h1=distances.rows[0].elements[0].duration.value;
+                //console.log(h1);
+              }
+              if (distances.rows[0].elements[1].status == 'OK'){
+                var h2=distances.rows[0].elements[1].duration.value;
+                //console.log(h2);
+              }
+              if (distances.rows[1].elements[1].status == 'OK'){
+                var h3=distances.rows[1].elements[0].duration.value;
+                //console.log(h3);
+              }
+              if(Number(h3)+Number(h2)+900>Number(h1)){
+                rides.push(ride);
+              }
             }
           }
-        }
-         if(length==count)
-         {
-           callback(rides);
+          if(length==count) {
+            callback(rides);
           }else{console.log(count);}
+        });
       });
-         
-        //return rides;
-     });
-
-      
-    }else
-    {
-      
+    }else {
       callback ("no result");
     }
-    
-   
-
   });
-
-
 };
 
 
