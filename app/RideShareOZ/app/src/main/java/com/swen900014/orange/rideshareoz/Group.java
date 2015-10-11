@@ -26,9 +26,9 @@ public class Group implements Serializable
     private String name;
     private String description;
 
-    private static HashMap<String, Group> myGroups = new HashMap<String, Group>();
-    private static HashMap<String, Group> requestedGroups = new HashMap<String, Group>();
-    private static HashMap<String, Group> allOtherGroups = new HashMap<String, Group>();
+    private static HashMap<String, Group> myGroups = new HashMap<>();
+    private static HashMap<String, Group> requestedGroups = new HashMap<>();
+    private static HashMap<String, Group> allOtherGroups = new HashMap<>();
 
     private GroupState groupState;
 
@@ -44,80 +44,96 @@ public class Group implements Serializable
         this.description = description;
 
         groupState = GroupState.NEW;
-
     }
 
-    public static Group getGroup(String groupId){
+    public static Group getGroup(String groupId)
+    {
         return allOtherGroups.get(groupId);
     }
 
-    public static Group addGroupIfNotExist(String id, String name, String description, GroupState state){
-        if(!allOtherGroups.containsKey(id) && !myGroups.containsKey(id)){
+    public static Group addGroupIfNotExist(String id, String name, String description, GroupState state)
+    {
+        if (!allOtherGroups.containsKey(id) && !myGroups.containsKey(id))
+        {
             Group newGroup = new Group(id, name, description);
-            if (state == GroupState.NEW){
+            if (state == GroupState.NEW)
+            {
                 newGroup.groupState = GroupState.NEW;
                 allOtherGroups.put(newGroup.groupId, newGroup);
-            }else{
+            }
+            else
+            {
                 newGroup.groupState = state;
                 myGroups.put(newGroup.groupId, newGroup);
             }
 
             return newGroup;
-        }else{
-            if (state == GroupState.NEW){
+        }
+        else
+        {
+            if (state == GroupState.NEW)
+            {
                 return allOtherGroups.get(id);
-            }else{
+            }
+            else
+            {
                 return myGroups.get(id);
             }
         }
     }
 
-
-
-    public static void storeGroups(JSONArray groupsJsonArray){
-
+    public static void storeGroups(JSONArray groupsJsonArray)
+    {
         myGroups.clear();
         requestedGroups.clear();
         allOtherGroups.clear();
-        for (int i = 0; i < groupsJsonArray.length(); i++){
-
-            try {
+        for (int i = 0; i < groupsJsonArray.length(); i++)
+        {
+            try
+            {
                 Group newGroup = new Group(groupsJsonArray.getJSONObject(i));
-                if(newGroup.groupState == GroupState.NEW){
+                if (newGroup.groupState == GroupState.NEW)
+                {
                     allOtherGroups.put(newGroup.groupId, newGroup);
-                }else if(newGroup.groupState == GroupState.JOINED){
+                }
+                else if (newGroup.groupState == GroupState.JOINED)
+                {
                     myGroups.put(newGroup.groupId, newGroup);
-                }else{
+                }
+                else
+                {
                     requestedGroups.put(newGroup.groupId, newGroup);
                 }
-            } catch (JSONException e) {
+            } catch (JSONException e)
+            {
                 e.printStackTrace();
             }
-
         }
-
     }
 
-    public static ArrayList<Group> getAllGroups(){
-        ArrayList<Group> allGroups = new ArrayList<Group>();
+    public static ArrayList<Group> getAllGroups()
+    {
+        ArrayList<Group> allGroups = new ArrayList<>();
         allGroups.addAll(myGroups.values());
         allGroups.addAll(requestedGroups.values());
         allGroups.addAll(allOtherGroups.values());
         return allGroups;
     }
 
-
-    public static void loadGroups(final Activity activity){
-        StringRequest getRidesRequest = new StringRequest(Request.Method.POST,
-                Resources.GETALL_GROUP_URL , new Response.Listener<String>()
+    public static void loadGroups(final Activity activity)
+    {
+        StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
+                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
             {
                 System.out.println("response: " + s);
-                try {
+                try
+                {
                     storeGroups(new JSONArray(s));
-                } catch (JSONException e) {
+                } catch (JSONException e)
+                {
                     e.printStackTrace();
                 }
             }
@@ -130,38 +146,45 @@ public class Group implements Serializable
 
                 System.out.println("Sending post failed!");
             }
-        }){
+        })
+        {
             protected Map<String, String> getParams()
             {
                 Map<String, String> params = new HashMap<>();
 
-                //params.put("username", User.getCurrentUser().getUsername());
-                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                params.put("username", User.getCurrentUser().getUsername());
+                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(getRidesRequest);
+        MyRequest.getInstance(activity).addToRequestQueue(getGroupsRequest);
     }
 
-    public Group(JSONObject groupJson) throws JSONException {
-        JSONObject tempObj;
-
-        tempObj = groupJson.getJSONObject("group");
+    public Group(JSONObject groupJson) throws JSONException
+    {
+        JSONObject tempObj = groupJson.getJSONObject("group");
         this.groupId = tempObj.getString("_id");
         this.name = tempObj.getString("groupname");
         this.description = tempObj.getString("introduction");
 
         String state = groupJson.getString("state");
-        if(state.equals("joined")){
-            this.groupState = GroupState.JOINED;
-        }else if(state.equals("request")){
-            this.groupState = GroupState.REQUESTING;
-        }else{
-            this.groupState = GroupState.NEW;
-        }
 
+        switch (state)
+        {
+            case "joined":
+                this.groupState = GroupState.JOINED;
+                break;
+
+            case "request":
+                this.groupState = GroupState.REQUESTING;
+                break;
+
+            default:
+                this.groupState = GroupState.NEW;
+                break;
+        }
     }
 
     public GroupState getGroupState()

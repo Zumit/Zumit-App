@@ -8,10 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +51,7 @@ public class ViewGroupActivity extends AppCompatActivity
     {
         Button join_leave_button = (Button) findViewById(R.id.join_leave_groupButton);
 
+        // Display Button correctly based on the state of group
         if (mGroup.getGroupState() == Group.GroupState.REQUESTING)
         {
             join_leave_button.setVisibility(View.GONE);
@@ -60,6 +64,13 @@ public class ViewGroupActivity extends AppCompatActivity
         {
             join_leave_button.setText(R.string.joinButton);
         }
+
+        // Display group name and description
+        TextView groupNameLabel = (TextView) findViewById(R.id.groupNameText);
+        groupNameLabel.setText(mGroup.getName());
+
+        TextView groupDesLabel = (TextView) findViewById(R.id.groupDescriptionText);
+        groupDesLabel.setText(mGroup.getDescription());
     }
 
     public void onClick(View view)

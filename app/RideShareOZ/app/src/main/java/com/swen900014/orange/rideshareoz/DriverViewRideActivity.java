@@ -98,7 +98,7 @@ public class DriverViewRideActivity extends AppCompatActivity
                 {
                     Intent intent = new Intent(thisActivity, UserInfoActivity.class);
                     intent.putExtra("Ride", ride);
-                    intent.putExtra("UserInfo", lift);
+                    intent.putExtra("Pickup", lift);
                     thisActivity.startActivity(intent);
                 }
             });

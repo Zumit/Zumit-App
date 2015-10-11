@@ -57,11 +57,22 @@ app.use(function(req,res,next){
         User.find({'username':doc.email},function(err, users){
           console.log(users);
           if (users.length !== 0) {
-            req.userinfo._id = users[0]._id;
+          req.userinfo._id = users[0]._id;
           }
+
+          if (req.body.rateeName){
+            User.find({'username':req.body.rateeName},function(err,ratee){
+              if(ratee.length !==0){
+                req.ratee_id=ratee[0]._id;
+                console.log(req.ratee_id);
+              }
+            });  
+          }
+
           next();
         });
       }
+
     });
   } else {
     if (req.query.username) {
