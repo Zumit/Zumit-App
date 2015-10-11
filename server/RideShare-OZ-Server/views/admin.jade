@@ -1,17 +1,18 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
-  table
-    tr
-      th ID
-      th Name
-      th Location
-      th Introduction
-    each group, index in groups
-      tr
-        td= groups[index]._id
-        td= groups[index].groupname
-        td= groups[index].location
-        td= groups[index].introduction
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, maximum-scale=1, inital-scale=1')
+    link(rel='stylesheet', type='text/css', href='/stylesheet/mystyle.css')
+    title CustomerEvent
+  body
+    form(method='post', action='login.php')
+      table#login_table
+        tr
+          td
+            input.login_text(type='text', name='username', value='', placeholder='Username')
+        tr
+          td
+            input.login_text(type='password', name='password', placeholder='Password')
+        tr
+          td
+            input#login_button.my_button(type='submit', value='Log in')

@@ -20,8 +20,8 @@ var RideSchema = new Schema({
     pickup_point:{ type: [Number] },
     pickup_time:Date,
     pickup_add:String,
-    rate_me:String,
-    rate_driver: String
+    rated_by_driver:Boolean,
+    rated: Boolean
   }],
   requests: [{
     user:{type: Schema.Types.ObjectId, ref: 'User' },
@@ -33,7 +33,7 @@ var RideSchema = new Schema({
   }],
   updated_at: { type: Date, default: Date.now },
   note: String,
-  state: String
+  finished: Boolean
 });
 
 
@@ -47,6 +47,7 @@ RideSchema.statics.getAllRides = function(callback){
 RideSchema.statics.createRide = function(req,callback){
   var Ride = mongoose.model('Ride');
   var ride = new Ride();
+  ride.finished=false;
   ride.arrival_time = req.body.arrival_time;
   ride.start_time=req.body.start_time;
   ride.seats = req.body.seat;
@@ -110,38 +111,51 @@ RideSchema.statics.searchRide = function(req,callback){
     }
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
-    if (ride.length !== 0) {
-      var length=ride.length;
-      ride.forEach(function(ride){
-        origins[0]=ride.start_add;
-        destinations[0]=ride.destination;
-        destinations[1]=req.body.origins;
-        origins[1]=req.body.origins;
-        distance.matrix(origins, destinations, function (err, distances){
-          count++;
-          if(distances) {
-            if (distances.status == 'OK') {
-              if (distances.rows[0].elements[0].status == 'OK'){
-                var h1=distances.rows[0].elements[0].duration.value;
-                //console.log(h1);
-              }
-              if (distances.rows[0].elements[1].status == 'OK'){
-                var h2=distances.rows[0].elements[1].duration.value;
-                //console.log(h2);
-              }
-              if (distances.rows[1].elements[1].status == 'OK'){
-                var h3=distances.rows[1].elements[0].duration.value;
-                //console.log(h3);
-              }
-              if(Number(h3)+Number(h2)+900>Number(h1)){
-                rides.push(ride);
-              }
-            }
+
+    if (ride.length!=0) {
+      
+     var length=ride.length;
+     ride.forEach(function(ride){
+        
+      origins[0]=ride.start_add;
+      destinations[0]=ride.destination;
+      destinations[1]=req.body.origins;
+      origins[1]=req.body.origins;
+      
+      var h1=999999;
+      var h2=999999; 
+      var h3=999999;
+
+       distance.matrix(origins, destinations, function (err, distances){
+         count++;
+        if(distances) {
+          
+        if (distances.status == 'OK') {
+          if (distances.rows[0].elements[0].status == 'OK'){
+             h1=distances.rows[0].elements[0].duration.value;
+            //console.log(h1);
           }
+          if (distances.rows[0].elements[1].status == 'OK'){
+             h2=distances.rows[0].elements[1].duration.value;
+            //console.log(h2);
+          }
+          if (distances.rows[1].elements[1].status == 'OK'){
+             h3=distances.rows[1].elements[0].duration.value;
+            //console.log(h3);
+          }
+          
+           if(Number(h3)+Number(h2)<Number(h1)+900){
+              rides.push(ride);
+            }
+        }
+
           if(length==count) {
             callback(rides);
-          }else{console.log(count);}
+          }
+          else{console.log(count);}
+        }
         });
+
       });
     }else {
       callback ("no result");
@@ -224,8 +238,8 @@ var user_in_passenger=0;
           'pickup_point':pickup_point,
           'pickup_time':pickup_time,
           'pickup_add':pickup_add,
-          'rate_me':'unrate',
-          'rate_driver':'unrate'
+          'rated_by_driver':false,
+          'rated':false
         });
         doc.save();
       }

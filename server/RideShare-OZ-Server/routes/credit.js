@@ -12,7 +12,7 @@ router.get('/getall', function(req, res, next) {
  });
 });
 
-router.get('/rate', function(req, res) {
+router.post('/rate', function(req, res) {
  Credit.addRate(req,function(rate){
  	res.json(rate);
  });

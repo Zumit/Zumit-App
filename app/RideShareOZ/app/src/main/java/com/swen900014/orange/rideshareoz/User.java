@@ -1,5 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
+import android.app.Activity;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -17,8 +19,8 @@ public class User implements Serializable
     private int credit;
 
     private static HashMap<String, User> allUsers = new HashMap<String, User>();
-
     private static User currentUser;
+    private static String token;
 
     public User(String name, String email, String phone, int credit)
     {
@@ -62,7 +64,6 @@ public class User implements Serializable
         return email;
     }
 
-
     public String getPhone()
     {
         return phone;
@@ -85,5 +86,15 @@ public class User implements Serializable
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public static void updateToken(Activity activity)
+    {
+        token = MainActivity.getAuthToken(activity.getApplicationContext());
+    }
+
+    public static String getToken()
+    {
+        return token;
     }
 }
