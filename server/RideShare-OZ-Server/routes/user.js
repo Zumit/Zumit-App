@@ -72,7 +72,7 @@ router.get('/getall', function(req, res, next) {
 });
 
 
-router.post('/getgroups', function(req, res) {
+router.post('/getGroups', function(req, res) {
   User.getGroups(req,function(users){
     res.json(users);
   });
