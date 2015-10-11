@@ -122,22 +122,25 @@ RideSchema.statics.searchRide = function(req,callback){
       destinations[1]=req.body.origins;
       origins[1]=req.body.origins;
       
-      
+      var h1=999999;
+      var h2=999999; 
+      var h3=999999;
+
        distance.matrix(origins, destinations, function (err, distances){
          count++;
         if(distances) {
           
         if (distances.status == 'OK') {
           if (distances.rows[0].elements[0].status == 'OK'){
-            var h1=distances.rows[0].elements[0].duration.value;
+             h1=distances.rows[0].elements[0].duration.value;
             //console.log(h1);
           }
           if (distances.rows[0].elements[1].status == 'OK'){
-            var h2=distances.rows[0].elements[1].duration.value;
+             h2=distances.rows[0].elements[1].duration.value;
             //console.log(h2);
           }
           if (distances.rows[1].elements[1].status == 'OK'){
-            var h3=distances.rows[1].elements[0].duration.value;
+             h3=distances.rows[1].elements[0].duration.value;
             //console.log(h3);
           }
           
