@@ -60,15 +60,6 @@ app.use(function(req,res,next){
           req.userinfo._id = users[0]._id;
           }
 
-          if (req.body.rateeName){
-            User.find({'username':req.body.rateeName},function(err,ratee){
-              if(ratee.length !==0){
-                req.ratee_id=ratee[0]._id;
-                console.log(req.ratee_id);
-              }
-            });  
-          }
-
           next();
         });
       }
