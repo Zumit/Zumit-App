@@ -14,7 +14,7 @@ router.get('/getall', function(req, res, next) {
 
 });
 
-router.get('/create', function(req, res) {
+router.post('/create', function(req, res) {
 
   Group.createGroup(req,function(groups){
   res.json(groups);
@@ -22,14 +22,14 @@ router.get('/create', function(req, res) {
  });
 });
 
-router.get('/request',function(req,res){
+router.post('/request',function(req,res){
  Group.addRequest(req,function(group){
     res.json(group);
  });
   
 });
 
-router.get('/accept', function(req, res) {
+router.post('/accept', function(req, res) {
 
   Group.acceptRequest(req,function(groups){
   res.json(groups);
@@ -37,7 +37,7 @@ router.get('/accept', function(req, res) {
  });
 });
 
-router.get('/reject', function(req, res) {
+router.post('/reject', function(req, res) {
 
   Group.rejectRequest(req,function(groups){
   res.json(groups);
@@ -45,7 +45,7 @@ router.get('/reject', function(req, res) {
  });
 });
 
-router.get('/leave', function(req, res) {
+router.post('/leave', function(req, res) {
 
   Group.leaveGroup(req,function(groups){
   res.json(groups);
