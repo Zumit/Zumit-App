@@ -99,8 +99,8 @@ public class Ride implements Serializable
 
             // Get seat number, start time and arrival time
             seats = jsonRide.getInt("seats");
-            arriving_time = jsonRide.getString("arrival_time");
-            start_time = jsonRide.getString("start_time");
+            arriving_time = DateFormatter.format(jsonRide.getString("arrival_time"));
+            start_time = DateFormatter.format(jsonRide.getString("start_time"));
 
             /* get the list of requests */
 
@@ -121,6 +121,7 @@ public class Ride implements Serializable
                 }
                 tempLocationArray = tempObj.getJSONArray("pickup_point");
                 Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                loc.setAddress(tempObj.getString("pickup_add"));
 
                 waiting.add(new Pickup(pass, loc));
             }
@@ -145,6 +146,7 @@ public class Ride implements Serializable
 
                     tempLocationArray = tempObj.getJSONArray("pickup_point");
                     Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                    loc.setAddress(tempObj.getString("pickup_add"));
                     joined.add(new Pickup(pass, loc));
                 }
             }

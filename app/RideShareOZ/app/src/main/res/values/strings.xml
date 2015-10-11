@@ -33,6 +33,8 @@
     <string name="acceptButton">Accept</string>
     <string name="rejectButton">Reject</string>
     <string name="driverLabel">Driver</string>
+    <string name="_Groups">Groups</string>
+    <string name="_Events">Events</string>
     <string name="title_activity_user_info">UserInfoActivity</string>
     <string name="nameText">Name:</string>
     <string name="phoneText">Phone no. :</string>
@@ -54,8 +56,8 @@
     <string name="ArrivalTime">SET ARRIVAL TIME</string>
     <string name="rideStartTime">SET START TIME</string>
     <string name="title_activity_view_group">ViewGroupActivity</string>
-    <string name="rateRideString">How is the trip:</string>
-    <string name="rateString">RATE</string>
+    <string name="title_activity_groups">Groups</string>
+    <string name="rateRideString">RATE</string>
 
     <string-array name="seats">
         <item>1</item>

@@ -75,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements
                 .addScope(new Scope(Scopes.PROFILE))
                 .build();
         mGoogleApiClient.connect();
+
+        //Load all groups and events to be available for offer and search rides
+        Group.loadGroups(this);
+        Event.loadEvents(this);
     }
 
 
@@ -117,6 +121,12 @@ public class MainActivity extends AppCompatActivity implements
             Intent findRideIntent = new Intent(this, OfferRide.class);
             findRideIntent.putExtra("type", "find");
             startActivity(findRideIntent);
+            return true;
+        }
+        if (id == R.id.action_Groups)
+        {
+            Intent groupsIntent = new Intent(this, GroupsActivity.class);
+            startActivity(groupsIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
