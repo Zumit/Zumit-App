@@ -19,13 +19,13 @@ var GroupsSchema = new Schema({
 GroupsSchema.statics.createGroup= function(req,callback) {
   var Group = mongoose.model('Group');
   var groups = new Group();
-  groups.groupname = req.query.name;
-  var lon=req.query.g_lon;
-  var lat=req.query.g_lat;
+  groups.groupname = req.body.name;
+  var lon=req.body.g_lon;
+  var lat=req.body.g_lat;
   groups.gruop_location=[lon,lat];
-  groups.location=rq.query.location;
-  groups.introduction=req.query.introduction;
-  User.findById(req.query.admin_id, function(err, user){
+  groups.location=rq.body.location;
+  groups.introduction=req.body.introduction;
+  User.findById(req.userinfo._id, function(err, user){
     groups.adminID=user;
     groups.save(function(err, doc){
       if (err) {
@@ -41,10 +41,10 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
     var check=0;
 
-  this.findById(req.query.group_id,function(err,group){
+  this.findById(req.body.group_id,function(err,group){
 
       group.requests.forEach(function(request){
-        if(String(request.user)==String(req.query.user_id))
+        if(String(request.user)==String(req.userinfo._id))
         {
             check++;
             console.log(check);
@@ -52,7 +52,7 @@ GroupsSchema.statics.createGroup= function(req,callback) {
       });
 
        group.members.forEach(function(member){
-        if(String(member.user)==String(req.query.user_id))
+        if(String(member.user)==String(req.userinfo._id))
         {
             check++;
             console.log(check);
@@ -61,8 +61,8 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
      if(check === 0){
           console.log(check);
-        User.findById(req.query.user_id,function(err,user){
-          user.groups.push({'group':req.query.group_id,'state':'request'});
+        User.findById(req.body.user_id,function(err,user){
+          user.groups.push({'group':req.body.group_id,'state':'request'});
           user.save();
         });
 
@@ -84,19 +84,14 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
  //add use to passenger
 
-   this.findById(req.query.group_id,function(err,doc){
-    doc.members.push({user:req.query.user_id});
+   this.findById(req.body.group_id,function(err,doc){
+    doc.members.push({user:req.userinfo._id});
     doc.save();
   });
 
-  //change
-  // User.findById(req.query.user_id,function(err,user){
-  // 	user.groups.push(req.query.group_id);
-  // 	user.save();
-  // }); 
 
   User.update(
-    {'_id':req.query.user_id,'groups.group':req.query.group_id},
+    {'_id':req.userinfo._id,'groups.group':req.body.group_id},
     {'$set':{'groups.$.state':'joined'}},function(err,user){
       console.log("use save");
     }
@@ -104,7 +99,7 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
   //delete the user in requests
   
-   this.findByIdAndUpdate(req.query.group_id,{$pull:{'requests':{'user':req.query.user_id}}},function(err,doc){
+   this.findByIdAndUpdate(req.body.group_id,{$pull:{'requests':{'user':req.userinfo._id}}},function(err,doc){
     //doc.save();
     callback(doc);
   });
@@ -115,13 +110,13 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
 GroupsSchema.statics.rejectRequest= function(req,callback){
 
-User.findByIdAndUpdate(req.query.user_id,{$pull:{'groups':{'group':req.query.group_id}}},function(err,user){
+User.findByIdAndUpdate(req.userinfo._id,{$pull:{'groups':{'group':req.body.group_id}}},function(err,user){
    console.log("user group:Requst delete");
    //callback("success");
 });
 
 
-this.findByIdAndUpdate(req.query.group_id,{$pull:{'requests':{'user':req.query.user_id}}},function(err,doc){
+this.findByIdAndUpdate(req.body.group_id,{$pull:{'requests':{'user':req.userinfo._id}}},function(err,doc){
   console.log(doc);
     callback(doc);
   });
@@ -130,11 +125,21 @@ this.findByIdAndUpdate(req.query.group_id,{$pull:{'requests':{'user':req.query.u
 
 GroupsSchema.statics.leaveGroup= function(req,callback){
 
-	User.findByIdAndUpdate(req.query.user_id, {$pull:{'groups':{'group':req.query.group_id}}},function(err,groups){
+	User.findByIdAndUpdate(
+    req.userinfo._id, {
+      $pull:{'groups':
+        {'group':req.body.group_id}
+      }
+    },function(err,groups){
 		//console.log(groups);
 	});
-	this.findByIdAndUpdate(req.query.group_id,{$pull:{'members':{'user':req.query.user_id}}},function(err,groups){
-    //console.log(groups);
+	this.findByIdAndUpdate(
+    req.body.group_id,{
+      $pull:{'members':
+        {'user':req.userinfo._id}
+      }
+    },function(err,groups){
+    
     callback(groups);
   });
 
