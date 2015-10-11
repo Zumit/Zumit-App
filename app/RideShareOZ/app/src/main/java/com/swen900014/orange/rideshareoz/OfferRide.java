@@ -233,7 +233,6 @@ public class OfferRide extends FragmentActivity implements
             groupId = "";
             btnSelectEvent.setEnabled(true);
             btnSelectGroup.setEnabled(true);
-
         }
 
         if (v.getId() == R.id.buttonEvent)
