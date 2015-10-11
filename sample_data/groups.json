@@ -3,6 +3,7 @@
   "groupname":"Students of MelbUni",
   "introduction":"This is the private group for students in the University of Melbourne",
   "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
   "admins":[],
   "members":[
       {"$oid":"55ebd465edd10def84417a43"},
@@ -10,6 +11,19 @@
       {"$oid":"55ebd431a7398c5184f39b6e"},
       {"$oid":"55ebd3ced6902fb183321374"},
       {"$oid":"55ebd381e685d1378386a759"}
+  ],
+  "requests":[],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d44"},
+  "groupname":"Staffs of MelbUni",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
   ],
   "requests":[],
   "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
