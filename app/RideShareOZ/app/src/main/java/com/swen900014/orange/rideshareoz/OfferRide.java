@@ -130,7 +130,7 @@ public class OfferRide extends FragmentActivity implements
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
        //gps
-     /*    GPSTracker gps = new GPSTracker(this);
+         GPSTracker gps = new GPSTracker(this);
 
         // check if GPS enabled
          if(gps.canGetLocation()){

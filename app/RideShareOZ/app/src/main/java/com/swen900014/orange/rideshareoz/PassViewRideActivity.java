@@ -118,7 +118,7 @@ public class PassViewRideActivity extends AppCompatActivity
         // Display views based on the state of the ride
         if (ride.getRideState() == Ride.RideState.JOINED)
         {
-            joinLeaveButton.setText(getString(R.string.LeaveRide));
+            joinLeaveButton.setText(getString(R.string.LeaveButton));
             joinLeaveButton.setVisibility(View.VISIBLE);
         }
         else if (ride.getRideState() == Ride.RideState.NEW)
@@ -137,30 +137,31 @@ public class PassViewRideActivity extends AppCompatActivity
                 rateLabel.setVisibility(View.VISIBLE);
                 rateButton.setVisibility(View.VISIBLE);
                 spinnerRate.setVisibility(View.VISIBLE);
+
+                // Rating spinner
+                spinnerRate = (Spinner) findViewById(R.id.spinnerRate);
+                spinnerRate.setSelected(false);
+                // Create an ArrayAdapter using the string array and a default spinner layout
+                ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
+                        R.array.rate_array, android.R.layout.simple_spinner_item);
+
+                spinnerRate.setAdapter(spinnerAdapter);
+                spinnerRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+                {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+                    {
+                        score = position + 1;
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent)
+                    {
+
+                    }
+                });
             }
         }
-
-        // Rating spinner
-        spinnerRate = (Spinner) findViewById(R.id.spinnerRate);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.rate_array, android.R.layout.simple_spinner_item);
-
-        spinnerRate.setAdapter(spinnerAdapter);
-        spinnerRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                score = position + 1;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-
-            }
-        });
 
         displayPassengers();
     }

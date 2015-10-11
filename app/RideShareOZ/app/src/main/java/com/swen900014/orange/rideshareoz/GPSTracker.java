@@ -37,8 +37,8 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     boolean canGetLocation = false;
 
     Location location; // location
-    double latitude = 77; // latitude
-    double longitude = 77; // longitude
+    double latitude = 0; // latitude
+    double longitude = 0; // longitude
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 10 meters
@@ -131,24 +131,6 @@ public class GPSTracker extends Service implements LocationListener, android.loc
                 }
                 if (isNetworkEnabled)
                 {
-                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
-                            PackageManager.PERMISSION_GRANTED &&
-                            checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                                    PackageManager.PERMISSION_GRANTED)
-                    {
-                        // TODO: Consider calling
-                        //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for Activity#requestPermissions for more details.
-                        Toast.makeText(getApplicationContext(), "Missing ACCESS_FINE_LOCATION",
-                                Toast.LENGTH_SHORT).show();
-
-                        return null;
-                    }
-
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES,
                             MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                     if (location == null)
@@ -164,7 +146,6 @@ public class GPSTracker extends Service implements LocationListener, android.loc
                             {
                                 Log.d("Location", "Latitude: " + location.getLatitude());
                                 Log.d("Location", "location: " + location.getLongitude());
-                                //长时间的监听位置更新可能导致耗电量急剧上升,一旦获取到位置后，就停止监听
                                 locationManager.removeUpdates(this);
                                 break;
                             }

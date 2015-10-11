@@ -53,19 +53,6 @@ public class Ride implements Serializable
         waiting = new ArrayList<>();
     }
 
-    public Ride(String start, String end, String arriving_time, User driver, int limit,
-                ArrayList<Pickup> joined, ArrayList<Pickup> waiting)
-    {
-        this.start = new Location(start);
-        this.end = new Location(end);
-        this.arriving_time = arriving_time;
-        this.driver = driver;
-        this.seats = limit;
-        rideId = "0";
-        this.joined = (ArrayList<Pickup>) joined.clone();
-        this.waiting = (ArrayList<Pickup>) waiting.clone();
-    }
-
     public Ride(JSONObject jsonRide)
     {
         JSONObject tempObj;
@@ -204,11 +191,6 @@ public class Ride implements Serializable
         this.rideState = s;
     }
 
-    public boolean isDriver()
-    {
-        return true;
-    }
-
     public boolean acceptJoin(Pickup lift)
     {
         for (Pickup pickup : waiting)
@@ -222,7 +204,7 @@ public class Ride implements Serializable
             }
         }
 
-        System.out.println("accept fails");
+        // Accept fails
         return false;
     }
 
@@ -238,7 +220,7 @@ public class Ride implements Serializable
             }
         }
 
-        System.out.println("reject fails");
+        // Reject fails
         return false;
     }
 
