@@ -89,8 +89,10 @@ public class Ride implements Serializable
             arriving_time = DateFormatter.format(jsonRide.getString("arrival_time"));
             start_time = DateFormatter.format(jsonRide.getString("start_time"));
 
-            /* get the list of requests */
+            // Is this ride already finished?
+            boolean finished = jsonRide.getBoolean("finished");
 
+            /* get the list of requests */
             tempArray = jsonRide.getJSONArray("requests");
 
             for (int i = 0; i < tempArray.length(); i++)
@@ -123,6 +125,9 @@ public class Ride implements Serializable
                     tempObj = tempArray.getJSONObject(i);
                     JSONObject joinedPassObj = tempObj.getJSONObject("user");
                     String username = joinedPassObj.getString("username");
+                    boolean isRatedByDriver = tempObj.getBoolean("rated_by_driver");
+                    boolean hasRatedDriver = tempObj.getBoolean("rated");
+
                     User pass = User.addUserIfNotExist(username, username, joinedPassObj.getString("phone"), 0);
 
                     //TODO: optimize this using object comparison
@@ -134,23 +139,23 @@ public class Ride implements Serializable
                     tempLocationArray = tempObj.getJSONArray("pickup_point");
                     Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
                     loc.setAddress(tempObj.getString("pickup_add"));
-                    joined.add(new Pickup(pass, loc));
+                    joined.add(new Pickup(pass, loc, isRatedByDriver, hasRatedDriver));
                 }
+            }
+
+            if (finished)
+            {
+                /* add to the offering list*/
+                this.rideState = RideState.PASSED;
+            }
+            else if (this.getDriver() == User.getCurrentUser())
+            {
+                /* add to the passed list*/
+                this.rideState = RideState.OFFERING;
             }
         } catch (JSONException e)
         {
             e.printStackTrace();
-        } finally
-        {
-            //TODO: optimize this using object comparison
-            try {
-                if (this.getDriver() == User.getCurrentUser() ) {
-                /* add to the offering list*/
-                    this.rideState = RideState.OFFERING;
-                }
-            }catch (NullPointerException e){
-                Log.e("RideParse:", this.getStart().getAddress());
-            }
         }
     }
 
@@ -174,21 +179,6 @@ public class Ride implements Serializable
             }
         }
         return rides;
-    }
-
-    // For Testing without receiving server data
-    public Ride(RideState s)
-    {
-        this.start = new Location("Epping");
-        this.end = new Location("UniMelb");
-
-        this.arriving_time = "13:30:00";
-        this.driver = new User("George", "george.nader@gmail.com", "000", 0);
-        this.seats = 4;
-        rideId = "0";
-        this.joined = new ArrayList<>();
-        this.waiting = new ArrayList<>();
-        this.rideState = s;
     }
 
     public boolean acceptJoin(Pickup lift)

@@ -128,7 +128,6 @@ public class Group implements Serializable
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
                 try
                 {
                     storeGroups(new JSONArray(s));

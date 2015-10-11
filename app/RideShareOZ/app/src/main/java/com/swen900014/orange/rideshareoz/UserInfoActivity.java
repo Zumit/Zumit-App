@@ -33,7 +33,7 @@ import static com.swen900014.orange.rideshareoz.Resources.*;
 public class UserInfoActivity extends AppCompatActivity
 {
     private Ride ride;
-    private Pickup userInfo;
+    private Pickup pickup;
     private Activity thisActivity;
     private int score;  // Rating score
 
@@ -51,11 +51,11 @@ public class UserInfoActivity extends AppCompatActivity
 
         if (intent.hasExtra("Pickup"))
         {
-            userInfo = (Pickup) intent.getSerializableExtra("Pickup");
+            pickup = (Pickup) intent.getSerializableExtra("Pickup");
         }
         else
         {
-            userInfo = new Pickup(ride.getDriver(), ride.getEnd(), true, true);
+            pickup = new Pickup(ride.getDriver(), ride.getEnd(), true, true);
         }
 
         thisActivity = this;
@@ -66,15 +66,15 @@ public class UserInfoActivity extends AppCompatActivity
         TextView creditText = (TextView) findViewById(R.id.ShowCredit);
         TextView departureText = (TextView) findViewById(R.id.ShowDeparture);
 
-        nameText.setText(userInfo.getUser().getUsername());
-        phoneText.setText(userInfo.getUser().getPhone());
-        emailText.setText(userInfo.getUser().getEmail());
-        creditText.setText(Integer.toString(userInfo.getUser().getCredit()));
-        departureText.setText(userInfo.getLocation().getAddress());
+        nameText.setText(pickup.getUser().getUsername());
+        phoneText.setText(pickup.getUser().getPhone());
+        emailText.setText(pickup.getUser().getEmail());
+        creditText.setText(Integer.toString(pickup.getUser().getCredit()));
+        departureText.setText(pickup.getLocation().getAddress());
 
         // Hide accept and reject options if current user is
         // not driver offering the ride
-        if (rideState == Ride.RideState.OFFERING && ride.hasRequest(userInfo.getUser()))
+        if (rideState == Ride.RideState.OFFERING && ride.hasRequest(pickup.getUser()))
         {
             Button acceptButton = (Button) findViewById(R.id.acceptButton);
             Button rejectButton = (Button) findViewById(R.id.rejectButton);
@@ -87,7 +87,7 @@ public class UserInfoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    sendAcceptRequest(userInfo, ride, thisActivity);
+                    sendAcceptRequest(pickup, ride, thisActivity);
                 }
             });
             rejectButton.setOnClickListener(new View.OnClickListener()
@@ -95,17 +95,17 @@ public class UserInfoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    sendRejectRequest(ride, userInfo, thisActivity);
+                    sendRejectRequest(ride, pickup, thisActivity);
                 }
             });
         }
         // Show rating options for driver to rate passengers
         else if (rideState == Ride.RideState.PASSED &&
                 !User.getCurrentUser().getUsername()
-                        .equals(userInfo.getUser().getUsername()) &&
+                        .equals(pickup.getUser().getUsername()) &&
                 User.getCurrentUser().getUsername()
                         .equals(ride.getDriver().getUsername()) &&
-                !userInfo.isRatedByDriver())
+                !ride.isPassRated(pickup.getUser().getUsername()))
         {
             Button rateButton = (Button) findViewById(R.id.ratePassButton);
             rateButton.setVisibility(View.VISIBLE);
@@ -176,7 +176,7 @@ public class UserInfoActivity extends AppCompatActivity
                 Map<String, String> params = new HashMap<>();
 
                 params.put("username", User.getCurrentUser().getUsername());
-                params.put("rateeName", userInfo.getUser().getUsername());
+                params.put("rateeName", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
                 params.put("rate", Integer.toString(score));
                 params.put("type", "driver");
@@ -241,7 +241,7 @@ public class UserInfoActivity extends AppCompatActivity
             {
                 System.out.println("response: " + s);
 
-                ride.rejectJoin(userInfo);
+                ride.rejectJoin(pickup);
                 Intent intent = new Intent(activity, DriverViewRideActivity.class);
                 intent.putExtra("SelectedRide", ride);
 
