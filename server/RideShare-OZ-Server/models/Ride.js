@@ -38,8 +38,8 @@ var RideSchema = new Schema({
 
 
 RideSchema.statics.getAllRides = function(callback){
-  this.find().populate('driver passengers.user requests.user',
-      'username phone driver_license').exec({}, function(err, rides){
+  this.find().populate('driver ',
+      'username phone driver_license driver_rate').populate('passengers.user  requests.user','username phone passenger_rate').exec({}, function(err, rides){
     callback(rides);
   });
 };
