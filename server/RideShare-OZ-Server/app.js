@@ -43,6 +43,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 app.use(function(req,res,next){
   if (req.method === 'POST') {
@@ -85,6 +86,10 @@ app.use('/test', test);
 app.use('/event', events);
 app.use('/credit', credit);
 app.use('/admin', admin);
+
+app.get('/templates/:name', function(req, res){
+  res.render('templates/' + req.params.name);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
