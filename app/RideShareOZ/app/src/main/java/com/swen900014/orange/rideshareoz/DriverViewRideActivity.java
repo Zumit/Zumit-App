@@ -75,36 +75,14 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
         });
 
-        displayRequestsAndJoinedPass();
+        displayPassengers();
+        displayRequests();
     }
 
-    public void displayRequestsAndJoinedPass()
+    public void displayRequests()
     {
-        ArrayList<Pickup> joinedList = ride.getJoined();
         ArrayList<Pickup> waitingListArray = ride.getWaiting();
-
-        passengerList.removeAllViews();
         waitingList.removeAllViews();
-
-        // Display joined passengers
-        for (final Pickup lift : joinedList)
-        {
-            TextView pass = new TextView(this);
-            pass.setText(lift.getUser().getUsername());
-            pass.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                    intent.putExtra("Ride", ride);
-                    intent.putExtra("Pickup", lift);
-                    thisActivity.startActivity(intent);
-                }
-            });
-
-            passengerList.addView(pass);
-        }
 
         // Display requesting users
         for (final Pickup lift : waitingListArray)
@@ -128,6 +106,33 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
 
             waitingList.addView(request);
+        }
+    }
+
+    public void displayPassengers()
+    {
+        ArrayList<Pickup> joinedList = ride.getJoined();
+
+        passengerList.removeAllViews();
+
+        // Display joined passengers
+        for (final Pickup lift : joinedList)
+        {
+            TextView pass = new TextView(this);
+            pass.setText(lift.getUser().getUsername());
+            pass.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                    intent.putExtra("Ride", ride);
+                    intent.putExtra("Pickup", lift);
+                    thisActivity.startActivity(intent);
+                }
+            });
+
+            passengerList.addView(pass);
         }
     }
 

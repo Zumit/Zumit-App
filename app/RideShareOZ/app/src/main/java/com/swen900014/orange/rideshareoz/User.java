@@ -1,9 +1,7 @@
 package com.swen900014.orange.rideshareoz;
 
-import android.app.Activity;
-
 import java.io.Serializable;
-import java.util.HashMap;
+
 
 /**
  * Created by Sangzhuoyang Yu on 9/11/15.
@@ -16,13 +14,19 @@ public class User implements Serializable
     private String name;
     private String email;
     private String phone;
-    private int credit;
+    private String credit;
 
-    private static HashMap<String, User> allUsers = new HashMap<String, User>();
     private static User currentUser;
-    private static String token;
 
-    public User(String name, String email, String phone, int credit)
+    public User()
+    {
+        name = "";
+        email = "";
+        phone = "";
+        credit = "";
+    }
+
+    public User(String name, String email, String phone, String credit)
     {
         this.name = name;
         this.email = email;
@@ -33,25 +37,6 @@ public class User implements Serializable
     public User(String username)
     {
         this.name = username;
-    }
-
-    public static User getUser(String name) {
-        return allUsers.get(name);
-    }
-
-    public static User addUserIfNotExist(String username, String email, String phone, int credit){
-        if(allUsers.containsKey(username)){
-            return allUsers.get(username);
-        }else{
-            User newUser = new User(username, email, phone, credit);
-            allUsers.put(newUser.name,newUser);
-            return newUser;
-        }
-    }
-
-    public void rate(int score)
-    {
-        credit += score;
     }
 
     public String getUsername()
@@ -69,7 +54,7 @@ public class User implements Serializable
         return phone;
     }
 
-    public int getCredit()
+    public String getCredit()
     {
         return credit;
     }
@@ -84,17 +69,23 @@ public class User implements Serializable
         return currentUser;
     }
 
-    public void setPhone(String phone) {
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public void setCredit(String credit)
+    {
+        this.credit = credit;
+    }
+
+    public void setPhone(String phone)
+    {
         this.phone = phone;
-    }
-
-    public static void updateToken(Activity activity)
-    {
-        token = MainActivity.getAuthToken(activity.getApplicationContext());
-    }
-
-    public static String getToken()
-    {
-        return token;
     }
 }

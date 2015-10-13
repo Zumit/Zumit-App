@@ -134,7 +134,6 @@ public class Group implements Serializable
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
                 try
                 {
                     storeGroups(new JSONArray(s));
@@ -168,29 +167,36 @@ public class Group implements Serializable
         MyRequest.getInstance(activity).addToRequestQueue(getGroupsRequest);
     }
 
-    public Group(JSONObject groupJson) throws JSONException
+    public Group(JSONObject groupJson)
     {
-        JSONObject tempObj = groupJson.getJSONObject("group");
-        this.groupId = tempObj.getString("_id");
-        this.name = tempObj.getString("groupname");
-        this.description = tempObj.getString("introduction");
-
-        String state = groupJson.getString("state");
-
-        switch (state)
+        try
         {
-            case "joined":
-                this.groupState = GroupState.JOINED;
-                break;
-
-            case "request":
-                this.groupState = GroupState.REQUESTING;
-                break;
-
-            default:
-                this.groupState = GroupState.NEW;
-                break;
+            JSONObject groupJsonObj = groupJson.getJSONObject("group");
+            JsonParser.parseGroup(groupJsonObj, this);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
         }
+    }
+
+    public void setGroupState(GroupState groupState)
+    {
+        this.groupState = groupState;
+    }
+
+    public void setGroupId(String id)
+    {
+        groupId = id;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
     public GroupState getGroupState()
