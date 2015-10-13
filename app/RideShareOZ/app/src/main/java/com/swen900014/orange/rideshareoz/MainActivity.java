@@ -24,7 +24,6 @@ import com.google.android.gms.plus.Plus;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -171,8 +170,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showSignedOutUI()
     {
-        //Intent authentication = new Intent(this, AuthenticationActivity.class);
-        //startActivity(authentication);
         setContentView(R.layout.activity_login);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
@@ -289,19 +286,17 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showSignedInUI()
     {
-
-        //Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-
         //set current user
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        User.setCurrentUser(User.addUserIfNotExist(account.name, account.name, "",0));
+        User.setCurrentUser(new User(account.name, account.name, "0", "0"));
 
         //Send Authentication Token to server and set current User
         new GetUserIDTask().execute();
 
         setContentView(R.layout.activity_myrides);
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
+        {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, (new MyRidesFragment()))
                     .commit();
@@ -315,7 +310,6 @@ public class MainActivity extends AppCompatActivity implements
 
     public static String getAuthToken(Context context)
     {
-        //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.

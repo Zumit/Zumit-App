@@ -54,7 +54,6 @@ public class PassViewRideActivity extends AppCompatActivity
 
     protected GoogleApiClient mGoogleApiClient;
     private AutoCompleteTextView pickUpLocText;
-    private Spinner spinnerRate;
 
     private TableLayout passengerList;
     private Ride ride;
@@ -132,15 +131,15 @@ public class PassViewRideActivity extends AppCompatActivity
         {
             // Passenger is allowed to rate the driver if they
             // haven't done that
-            if (ride.isDriverRated())
+            if (!ride.isDriverRated())
             {
                 rateLabel.setVisibility(View.VISIBLE);
                 rateButton.setVisibility(View.VISIBLE);
-                spinnerRate.setVisibility(View.VISIBLE);
 
                 // Rating spinner
-                spinnerRate = (Spinner) findViewById(R.id.spinnerRate);
-                spinnerRate.setSelected(false);
+                Spinner spinnerRate = (Spinner) findViewById(R.id.spinnerRateDriver);
+                spinnerRate.setVisibility(View.VISIBLE);
+
                 // Create an ArrayAdapter using the string array and a default spinner layout
                 ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                         R.array.rate_array, android.R.layout.simple_spinner_item);
@@ -180,7 +179,7 @@ public class PassViewRideActivity extends AppCompatActivity
 
             // Only people who joined the ride is able to view
             // other users' information
-            if (ride.getRideState() == Ride.RideState.JOINED)
+            if (ride.hasPass(User.getCurrentUser()))
             {
                 pass.setOnClickListener(new View.OnClickListener()
                 {
@@ -189,7 +188,7 @@ public class PassViewRideActivity extends AppCompatActivity
                     {
                         Intent intent = new Intent(thisActivity, UserInfoActivity.class);
                         intent.putExtra("Ride", ride);
-                        intent.putExtra("UserInfo", lift);
+                        intent.putExtra("Pickup", lift);
                         thisActivity.startActivity(intent);
                     }
                 });
@@ -258,15 +257,8 @@ public class PassViewRideActivity extends AppCompatActivity
 
     public void rate(View view)
     {
-        if (spinnerRate.isSelected())
-        {
-            sendRateRequest();
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Please select a rating option",
-                    Toast.LENGTH_SHORT).show();
-        }
+        sendRateRequest();
+        System.out.println("Score hahassssssssssssss:     " + score);
     }
 
     public void sendLeaveRideRequest()

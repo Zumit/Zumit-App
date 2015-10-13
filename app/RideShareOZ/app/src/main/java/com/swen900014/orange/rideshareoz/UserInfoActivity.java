@@ -69,7 +69,7 @@ public class UserInfoActivity extends AppCompatActivity
         nameText.setText(pickup.getUser().getUsername());
         phoneText.setText(pickup.getUser().getPhone());
         emailText.setText(pickup.getUser().getEmail());
-        creditText.setText(Integer.toString(pickup.getUser().getCredit()));
+        creditText.setText(pickup.getUser().getCredit());
         departureText.setText(pickup.getLocation().getAddress());
 
         // Hide accept and reject options if current user is

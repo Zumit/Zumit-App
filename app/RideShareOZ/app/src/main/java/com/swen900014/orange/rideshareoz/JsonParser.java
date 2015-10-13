@@ -1,0 +1,159 @@
+package com.swen900014.orange.rideshareoz;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+/**
+ * Created by Sangzhuoyang Yu on 10/12/15.
+ * Parse JSON obj get from server.
+ */
+public class JsonParser
+{
+    public static void parseUser(JSONObject jsonUser, User user) throws JSONException
+    {
+        String username = jsonUser.getString("username");
+        //String credit = jsonUser.getString("credit");
+        String credit = "0";
+        String phone = jsonUser.getString("phone");
+
+        user.setName(username);
+        user.setCredit(credit);
+        user.setPhone(phone);
+    }
+
+    public static void parseRide(JSONObject jsonRide, Ride ride) throws JSONException
+    {
+        JSONObject tempObj;
+        JSONArray tempArray;
+        JSONArray tempLocationArray;
+
+        try
+        {
+            // Get start and end address
+            String startAddress = jsonRide.getString("start_add");
+            String endAddress = jsonRide.getString("destination");
+
+            // Get start lat and lon
+            tempArray = jsonRide.getJSONArray("start_point");
+            Location start = new Location(tempArray.getDouble(0), tempArray.getDouble(1), startAddress);
+            ride.setStart(start);
+
+            // Get end lat and lon
+            tempArray = jsonRide.getJSONArray("end_point");
+            Location end = new Location(tempArray.getDouble(0), tempArray.getDouble(1), endAddress);
+            ride.setEnd(end);
+
+            // Get ride id
+            String rideId = jsonRide.getString("_id");
+            ride.setRideId(rideId);
+
+            // Get driver info
+            tempObj = jsonRide.getJSONObject("driver");
+            User driver = new User();
+            JsonParser.parseUser(tempObj, driver);
+            ride.setDriver(driver);
+
+            // Get seat number, start time and arrival time
+            int seats = jsonRide.getInt("seats");
+            String arriving_time = DateFormatter.format(jsonRide.getString("arrival_time"));
+            String start_time = DateFormatter.format(jsonRide.getString("start_time"));
+
+            ride.setSeats(seats);
+            ride.setArrivingTime(arriving_time);
+            ride.setStartTime(start_time);
+
+            // Is this ride already finished?
+            boolean finished = jsonRide.getBoolean("finished");
+
+            /* get the list of requests */
+            tempArray = jsonRide.getJSONArray("requests");
+
+            for (int i = 0; i < tempArray.length(); i++)
+            {
+                tempObj = tempArray.getJSONObject(i);
+                JSONObject requestingPassObj = tempObj.getJSONObject("user");
+
+                User passWaiting = new User();
+                JsonParser.parseUser(requestingPassObj, passWaiting);
+
+                if (User.getCurrentUser().getUsername().equals(passWaiting.getUsername()))
+                {
+                    ride.setState(Ride.RideState.VIEWING);
+                }
+
+                tempLocationArray = tempObj.getJSONArray("pickup_point");
+                Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                loc.setAddress(tempObj.getString("pickup_add"));
+
+                ride.addWaiting(new Pickup(passWaiting, loc));
+            }
+
+            /* get the list of joins */
+            tempArray = jsonRide.getJSONArray("passengers");
+
+            if (tempArray != null)
+            {
+                for (int i = 0; i < tempArray.length(); i++)
+                {
+                    tempObj = tempArray.getJSONObject(i);
+                    JSONObject joinedPassObj = tempObj.getJSONObject("user");
+                    boolean isRatedByDriver = tempObj.getBoolean("rated_by_driver");
+                    boolean hasRatedDriver = tempObj.getBoolean("rated");
+
+                    User passJoined = new User();
+                    JsonParser.parseUser(joinedPassObj, passJoined);
+
+                    if (User.getCurrentUser().getUsername().equals(passJoined.getUsername()))
+                    {
+                        ride.setState(Ride.RideState.JOINED);
+                    }
+
+                    tempLocationArray = tempObj.getJSONArray("pickup_point");
+                    Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+                    loc.setAddress(tempObj.getString("pickup_add"));
+                    ride.addJoin(new Pickup(passJoined, loc, isRatedByDriver, hasRatedDriver));
+                }
+            }
+
+            if (finished)
+            {
+                /* add to the offering list*/
+                ride.setState(Ride.RideState.PASSED);
+            }
+            else if (ride.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
+            {
+                /* add to the passed list*/
+                ride.setState(Ride.RideState.OFFERING);
+            }
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static void parseGroup(JSONObject groupJson, Group group) throws JSONException
+    {
+        group.setGroupId(groupJson.getString("_id"));
+        group.setName(groupJson.getString("groupname"));
+        group.setDescription(groupJson.getString("introduction"));
+
+        String state = groupJson.getString("state");
+
+        switch (state)
+        {
+            case "joined":
+                group.setGroupState(Group.GroupState.JOINED);
+                break;
+
+            case "request":
+                group.setGroupState(Group.GroupState.REQUESTING);
+                break;
+
+            default:
+                group.setGroupState(Group.GroupState.NEW);
+                break;
+        }
+    }
+}
