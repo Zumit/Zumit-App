@@ -1,5 +1,95 @@
-extends layout
+doctype html
+html(lang='en', ng-app='RDash')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title RDash AngularJS
+    // STYLES
+    // build:css lib/css/main.min.css
+    link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', type='text/css', href='bower_components/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', type='text/css', href='bower_components/rdash-ui/dist/css/rdash.min.css')
+    // endbuild
+    // SCRIPTS
+    // build:js lib/js/main.min.js
+    script(type='text/javascript', src='bower_components/angular/angular.min.js')
+    script(type='text/javascript', src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js')
+    script(type='text/javascript', src='bower_components/angular-cookies/angular-cookies.min.js')
+    script(type='text/javascript', src='bower_components/angular-ui-router/release/angular-ui-router.min.js')
+    // endbuild
+    // Custom Scripts
+    script(type='text/javascript', src='javascripts/dashboard.min.js')
+  body(ng-controller='MasterCtrl')
+    #page-wrapper(ng-class="{'open': toggle}", ng-cloak)
+      // Sidebar
+      #sidebar-wrapper
+        ul.sidebar
+          li.sidebar-main
+            a(ng-click='toggleSidebar()')
+              | Dashboard
+              span.menu-icon.glyphicon.glyphicon-transfer
+          li.sidebar-title
+            span NAVIGATION
+          li.sidebar-list
+            a(href='#')
+              | Dashboard 
+              span.menu-icon.fa.fa-tachometer
+          li.sidebar-list
+            a(href='#/tables')
+              | Tables 
+              span.menu-icon.fa.fa-table
+        .sidebar-footer
+          .col-xs-4
+            a(href='https://github.com/rdash/rdash-angular', target='_blank')
+              | Github
+          .col-xs-4
+            a(href='https://github.com/rdash/rdash-angular/README.md', target='_blank')
+              | About
+          .col-xs-4
+            a(href='#')
+              | Support
+      // End Sidebar
+      #content-wrapper
+        .page-content
+          // Header Bar
+          .row.header
+            .col-xs-12
+              .user.pull-right
+                .item.dropdown
+                  a.dropdown-toggle(href='#')
+                    img(src='images/avatar.jpg')
+                  ul.dropdown-menu.dropdown-menu-right
+                    li.dropdown-header
+                      | Joe Bloggs
+                    li.divider
+                    li.link
+                      a(href='#')
+                        | Profile
+                    li.link
+                      a(href='#')
+                        | Menu Item
+                    li.link
+                      a(href='#')
+                        | Menu Item
+                    li.divider
+                    li.link
+                      a(href='#')
+                        | Logout
+                .item.dropdown
+                  a.dropdown-toggle(href='#')
+                    i.fa.fa-bell-o
+                  ul.dropdown-menu.dropdown-menu-right
+                    li.dropdown-header
+                      | Notifications
+                    li.divider
+                    li
+                      a(href='#') Server Down!
+              .meta
+                .page
+                  | Dashboard
+                .breadcrumb-links
+                  | Home / Dashboard
+          // Main Content
+          div(ui-view)
 
-block content
-  h1= title
-  p Welcome to #{title}
+
