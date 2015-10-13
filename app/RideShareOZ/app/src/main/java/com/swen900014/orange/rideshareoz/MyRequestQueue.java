@@ -13,23 +13,23 @@ import com.android.volley.toolbox.Volley;
  * once the program starts, and destroyed
  * at the end of the whole program lifetime.
  */
-public class MyRequest
+public class MyRequestQueue
 {
-    private static MyRequest mInstance;
+    private static MyRequestQueue mInstance;
     private static Context mCtx;
     private RequestQueue mRequestQueue;
 
-    private MyRequest(Context context)
+    private MyRequestQueue(Context context)
     {
         mCtx = context;
         mRequestQueue = getRequestQueue();
     }
 
-    public static synchronized MyRequest getInstance(Context context)
+    public static synchronized MyRequestQueue getInstance(Context context)
     {
         if (mInstance == null)
         {
-            mInstance = new MyRequest(context);
+            mInstance = new MyRequestQueue(context);
         }
 
         return mInstance;

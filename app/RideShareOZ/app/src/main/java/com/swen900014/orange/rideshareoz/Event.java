@@ -111,7 +111,7 @@ public class Event implements Serializable
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(getRidesRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getRidesRequest);
     }
 
     public Event(JSONObject eventJson) throws JSONException {

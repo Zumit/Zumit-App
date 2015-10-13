@@ -164,7 +164,7 @@ public class Group implements Serializable
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(getGroupsRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getGroupsRequest);
     }
 
     public Group(JSONObject groupJson)

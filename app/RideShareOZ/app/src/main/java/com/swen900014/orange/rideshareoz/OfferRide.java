@@ -366,7 +366,7 @@ public class OfferRide extends FragmentActivity implements
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getCurrentAddressRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getCurrentAddressRequest);
     }
     public void sendRequest(final Activity activity)
     {
@@ -412,7 +412,7 @@ public class OfferRide extends FragmentActivity implements
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getStartLocRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getStartLocRequest);
     }
 
     private void getEndpointLoc(final Activity activity)
@@ -477,7 +477,7 @@ public class OfferRide extends FragmentActivity implements
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getEndLocRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getEndLocRequest);
     }
 
     private void sendRideInfo(final Activity activity)
@@ -547,7 +547,7 @@ public class OfferRide extends FragmentActivity implements
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(OfferRequest);
     }
 
     @Override

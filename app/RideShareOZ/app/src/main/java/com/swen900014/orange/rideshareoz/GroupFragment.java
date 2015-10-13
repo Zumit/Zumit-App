@@ -128,7 +128,7 @@ public class GroupFragment extends Fragment
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
     }
 
     private void storeGroups(String response)

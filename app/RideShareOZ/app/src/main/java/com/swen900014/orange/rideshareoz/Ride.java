@@ -22,7 +22,8 @@ public class Ride implements Serializable
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int seats;      // Max number of passengers who can join
+    private int seats;          // Max number of passengers who can join
+    private boolean finished;   // Whether the ride is finished
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
@@ -197,9 +198,9 @@ public class Ride implements Serializable
         this.end = end;
     }
 
-    public String getSeats()
+    public void setFinished(boolean finished)
     {
-        return Integer.toString(seats);
+        this.finished = finished;
     }
 
     public void setRideId(String id)
@@ -220,6 +221,11 @@ public class Ride implements Serializable
     public void addJoin(Pickup pickup)
     {
         joined.add(pickup);
+    }
+
+    public String getSeats()
+    {
+        return Integer.toString(seats);
     }
 
     public String getArrivingTime()
@@ -270,5 +276,10 @@ public class Ride implements Serializable
     public ArrayList<Pickup> getWaiting()
     {
         return waiting;
+    }
+
+    public boolean isFinished()
+    {
+        return finished;
     }
 }

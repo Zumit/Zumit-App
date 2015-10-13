@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,9 +34,7 @@ public class UserInfoActivity extends AppCompatActivity
     private Ride ride;
     private Pickup pickup;
     private Activity thisActivity;
-    private int score;  // Rating score
-
-    private Spinner spinnerRate;
+    private int score;   // Marking passenger
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,6 +57,7 @@ public class UserInfoActivity extends AppCompatActivity
 
         thisActivity = this;
 
+        // Display user information
         TextView nameText = (TextView) findViewById(R.id.ShowName);
         TextView phoneText = (TextView) findViewById(R.id.ShowPhone);
         TextView emailText = (TextView) findViewById(R.id.ShowEmail);
@@ -111,7 +109,7 @@ public class UserInfoActivity extends AppCompatActivity
             rateButton.setVisibility(View.VISIBLE);
 
             // Rating spinner
-            spinnerRate = (Spinner) findViewById(R.id.spinnerRatePass);
+            Spinner spinnerRate = (Spinner) findViewById(R.id.spinnerRatePass);
             spinnerRate.setVisibility(View.VISIBLE);
             spinnerRate.setSelected(false);
 
@@ -137,17 +135,9 @@ public class UserInfoActivity extends AppCompatActivity
         }
     }
 
-    public void ratePass()
+    public void ratePassenger(View view)
     {
-        if (spinnerRate.isSelected())
-        {
-            sendRateRequest();
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Please select a rating option",
-                    Toast.LENGTH_SHORT).show();
-        }
+        sendRateRequest();
     }
 
     private void sendRateRequest()
@@ -179,13 +169,13 @@ public class UserInfoActivity extends AppCompatActivity
                 params.put("rateeName", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
                 params.put("rate", Integer.toString(score));
-                params.put("type", "driver");
+                params.put("type", "passenger");
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(rateRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rateRequest);
     }
 
     public void sendAcceptRequest(final Pickup lift, final Ride ride,
@@ -227,7 +217,7 @@ public class UserInfoActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(acceptRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(acceptRequest);
     }
 
     public void sendRejectRequest(final Ride ride, final Pickup lift,
@@ -268,7 +258,7 @@ public class UserInfoActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(rejectRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(rejectRequest);
     }
 
     @Override

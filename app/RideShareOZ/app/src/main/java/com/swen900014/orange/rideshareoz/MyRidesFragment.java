@@ -150,7 +150,8 @@ public class MyRidesFragment extends Fragment
             {
                 Intent intent;
                 Ride selectedRide = mRidesAdapter.getItem(position);
-                if (selectedRide.getRideState().equals(Ride.RideState.OFFERING))
+                if (selectedRide.getDriver().getUsername()
+                        .equals(User.getCurrentUser().getUsername()))
                 {
                     intent = new Intent(getActivity(), DriverViewRideActivity.class);
                 }
@@ -198,7 +199,7 @@ public class MyRidesFragment extends Fragment
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(getRidesRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getRidesRequest);
     }
 
     public void sendSearchRequest()
@@ -219,8 +220,6 @@ public class MyRidesFragment extends Fragment
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 storeRides(s);
             }
         }, new Response.ErrorListener()
@@ -234,7 +233,7 @@ public class MyRidesFragment extends Fragment
             }
         });
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(searchRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(searchRequest);
     }
 
     private void storeRides(String response)
@@ -245,6 +244,7 @@ public class MyRidesFragment extends Fragment
             {
                 ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(response), isSearchResults);
                 mRidesAdapter.clear();
+
                 for (Ride listItemRide : serverRides)
                 {
                     mRidesAdapter.add(listItemRide);

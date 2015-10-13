@@ -46,7 +46,7 @@ public class PassViewRideActivity extends AppCompatActivity
 {
     private final static String TAG = "Passenger View Ride";
 
-    private int score;
+    private int score;     // Marking the driver
 
     private String lat = "";
     private String lon = "";
@@ -296,7 +296,7 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(leaveRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(leaveRequest);
     }
 
     public void joinRide()
@@ -346,7 +346,7 @@ public class PassViewRideActivity extends AppCompatActivity
                     }
                 });
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(getLocRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getLocRequest);
     }
 
     private void sendJoinRequest()
@@ -386,7 +386,7 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(joinRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(joinRequest);
     }
 
     private void sendRateRequest()
@@ -424,7 +424,7 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(rateRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rateRequest);
     }
 
     // Check whether user has typed in the pickup location

@@ -112,7 +112,6 @@ public class DriverViewRideActivity extends AppCompatActivity
     public void displayPassengers()
     {
         ArrayList<Pickup> joinedList = ride.getJoined();
-
         passengerList.removeAllViews();
 
         // Display joined passengers
@@ -199,6 +198,6 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(this).addToRequestQueue(cancelRequest);
+        MyRequestQueue.getInstance(this).addToRequestQueue(cancelRequest);
     }
 }
