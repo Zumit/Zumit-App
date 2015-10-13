@@ -148,6 +148,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
+
+
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()

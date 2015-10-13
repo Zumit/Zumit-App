@@ -258,7 +258,6 @@ public class PassViewRideActivity extends AppCompatActivity
     public void rate(View view)
     {
         sendRateRequest();
-        System.out.println("Score hahassssssssssssss:     " + score);
     }
 
     public void sendLeaveRideRequest()
@@ -269,8 +268,6 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 // Get back to the my rides page
                 thisActivity.finish();
             }
@@ -324,7 +321,7 @@ public class PassViewRideActivity extends AppCompatActivity
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lng");
 
-                            // Check response whether it's accurate, if not remind user
+                            // Check response whether it's valid, if not remind user
 
                             System.out.println("s" + response);
                         } catch (Exception e)
@@ -332,9 +329,8 @@ public class PassViewRideActivity extends AppCompatActivity
                             e.printStackTrace();
                         }
 
+                        // Join request must be sent after the coordinates are received from google
                         sendJoinRequest();
-
-                        // check response, whether it received
                     }
                 },
                 new Response.ErrorListener()
@@ -357,8 +353,6 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()
