@@ -106,21 +106,6 @@ public class MyRidesFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-
-        // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        /*Ride[] data = {
-                new Ride(Ride.RideState.VIEWING),
-                new Ride(Ride.RideState.JOINED),
-                new Ride(Ride.RideState.OFFERING),
-                new Ride(Ride.RideState.VIEWING),
-                new Ride(Ride.RideState.OFFERING),
-                new Ride(Ride.RideState.JOINED),
-                new Ride(Ride.RideState.OFFERING),
-                new Ride(Ride.RideState.JOINED),
-                new Ride(Ride.RideState.VIEWING),
-                new Ride(Ride.RideState.OFFERING)
-        };*/
-        //List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
         List<Ride> currentRides = new ArrayList<>();
 
         // Now that we have some dummy  data, create an ArrayAdapter.
@@ -192,8 +177,8 @@ public class MyRidesFragment extends Fragment
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
 
                 return params;
             }
