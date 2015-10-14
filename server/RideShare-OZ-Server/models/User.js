@@ -35,7 +35,9 @@ UserSchema.methods.getRides = function(callback){
   var conditions = {$or:[{'driver':this}, {'passengers.user':this}, {'requests.user':this}]};
   /* var conditions = {}; */
   this.model('Ride').find(conditions).populate('driver ',
-      'username phone driver_license driver_rate').populate('passengers.user  requests.user','username phone passenger_rate').exec({}, function(err, rides){
+      'username phone driver_license driver_rate').populate('passengers.user  requests.user','username phone passenger_rate').
+      populate('group','groupname').
+    exec({}, function(err, rides){
     callback(rides);
   });
 };
@@ -45,6 +47,16 @@ UserSchema.statics.getGroups = function(req,callback){
       'groupname introduction').exec({}, function(err,user){
     callback(user.groups);  
   });
+};
+
+UserSchema.methods.getAllGroup = function(callback){
+
+
+  this.model('Group').find({'members':this},function(err,group){console.log(group);
+    callback(group);
+  });//.exec({},function(err,groups){ callback(groups);})
+
+
 };
 
 

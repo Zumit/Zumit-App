@@ -78,4 +78,15 @@ router.post('/getGroups', function(req, res) {
   });
 });
 
+router.get('/getAllGroup', function(req, res) {
+  User.findById(req.query.user_id,function(err,user){
+
+    user.getAllGroup(function(group){
+      res.json(group);
+    });
+  });
+
+
+});
+
 module.exports = router;
