@@ -115,7 +115,7 @@ GroupsSchema.statics.leaveGroup= function(req,callback){
 	this.findByIdAndUpdate(
     req.body.group_id,{
       $pull:{'members':
-        {'user':req.userinfo._id}
+        req.userinfo._id
       }
     },function(err,groups){
     
