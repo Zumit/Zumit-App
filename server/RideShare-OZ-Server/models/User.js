@@ -69,7 +69,7 @@ UserSchema.methods.getAllGroups = function(callback){
 
   });
 
-  this.model('Group').find({members:{$nin:[this]}},function(err,group){
+  this.model('Group').find({$and:[{'members':{$nin:[this]}},{'requests.user':{$nin:[this]}}]},function(err,group){
     group.forEach(function(g){
       
       var record={'group':{'_id':g._id,'groupname':g.groupname,'introduction':g.introduction},'state':'unjoined'}
