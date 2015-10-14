@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements
     private boolean mShouldResolve = false;
     private Bundle savedInstanceState;
 
+    private MyRidesFragment activityFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements
         //Load all groups and events to be available for offer and search rides
         Group.loadGroups(this);
         Event.loadEvents(this);
+
     }
 
 
@@ -181,6 +184,15 @@ public class MainActivity extends AppCompatActivity implements
         super.onStart();
         //ReAuthentication is not required
         //mGoogleApiClient.connect();
+
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        //refresh rides
+        activityFragment.sendGetRidesRequest();
     }
 
     @Override
@@ -297,8 +309,9 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_myrides);
         if (savedInstanceState == null)
         {
+            activityFragment = new MyRidesFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, (new MyRidesFragment()))
+                    .add(R.id.container, (activityFragment))
                     .commit();
         }
     }
