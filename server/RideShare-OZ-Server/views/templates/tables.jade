@@ -1,29 +1,17 @@
 .row(data-ng-controller='TableCtrl')
   .col-lg-12
     rd-widget
-      rd-widget-header(icon='fa-tasks', title='Servers')
+      rd-widget-header(icon='fa-tasks', title='Groups')
         a(href='#') Manage
       rd-widget-body(classes='medium no-padding')
         .table-responsive
           table.table.table-hover
             tbody
-              tr(data-ng-repeat='group in groups', ng-click="setMemReq($index);")
+              tr(data-ng-repeat='group in groups', ng-click="setMemReq($index);", ng-class="{'info':$index==selectedIndex}")
                 td {{group.groupname}}
                 td {{group.location}}
                 td {{group.introduction}}
                 td {{group.group_location}}
-              tr
-                td RDVMPC003
-                td 76.117.212.33
-                td
-                  span.text-danger(tooltip='Server Down!')
-                    i.fa.fa-warning
-              tr
-                td RDESX004
-                td 252.37.192.235
-                td
-                  span.text-success
-                    i.fa.fa-check
       rd-widget-footer
         ul.pagination.pagination-sm.pull-right
           li
@@ -43,7 +31,7 @@
         .clearfix
   .col-lg-6
     rd-widget
-      rd-widget-header(icon='fa-tasks', title='Striped Servers')
+      rd-widget-header(icon='fa-tasks', title='Members')
         a(href='#') Manage
       rd-widget-body(classes='medium no-padding')
         .table-responsive
@@ -68,15 +56,21 @@
 
   .col-lg-6
     rd-widget
-      rd-widget-header(icon='fa-tasks', title='Striped Servers')
+      rd-widget-header(icon='fa-tasks', title='Requests')
         a(href='#') Manage
       rd-widget-body(classes='medium no-padding')
         .table-responsive
           table.table.table-striped
             tbody
               tr(data-ng-repeat='request in requests')
-                td {request.username}}
-                td {request.phone}}
+                td {{request.user.username}}
+                td {{request.requestDate}}
+                td
+                  span.text-success(tooltip='Accept')
+                    i.fa.fa-check
+                td
+                  span.text-danger(tooltip='Reject')
+                    i.fa.fa-times
       rd-widget-footer
         ul.pagination.pagination-sm.pull-right
           li

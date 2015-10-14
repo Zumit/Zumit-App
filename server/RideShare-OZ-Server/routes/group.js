@@ -7,7 +7,7 @@ var Group = require('../models/Group.js');
 /* GET users listing. */
 router.get('/getall', function(req, res, next) {
 
-  Group.find().populate('members',
+  Group.find().populate('members requests.user',
       'username phone driver_license').exec({}, function(err, groups){
     res.json(groups);
   });

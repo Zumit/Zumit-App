@@ -83,7 +83,8 @@ function TableCtrl($scope, $http) {
   });
 
   $scope.groups;
-  $scope.request;
+  $scope.selectedIndex;
+  $scope.requests;
   $scope.members;
 
   $scope.testMsg = [{
@@ -91,9 +92,10 @@ function TableCtrl($scope, $http) {
   }];
 
   $scope.setMemReq = function(index){
-    // console.log("======================", index);
-    $scope.request = $scope.groups[index].requests;
+    console.log("======================", index);
+    $scope.selectedIndex = index;
+    $scope.requests = $scope.groups[index].requests;
     $scope.members = $scope.groups[index].members;
-    // console.log($scope.members);
+    // console.log($scope.);
   };
 }
