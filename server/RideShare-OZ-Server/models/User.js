@@ -39,7 +39,6 @@ UserSchema.methods.getRides = function(callback){
   });
 };
 
-
 UserSchema.statics.getGroups = function(req,callback){
   this.findById(req.userinfo._id).populate('groups.group',
       'groupname introduction').exec({}, function(err,user){
@@ -47,5 +46,12 @@ UserSchema.statics.getGroups = function(req,callback){
   });
 };
 
+UserSchema.method.getAllGroups = function(req,callback){
+  this.model('Group').find()
+  // this.findById(req.userinfo._id).populate('groups.group',
+      // 'groupname introduction').exec({}, function(err,user){
+    // callback(user.groups);  
+  // });
+};
 
 module.exports = mongoose.model('User', UserSchema);
