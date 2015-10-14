@@ -66,10 +66,10 @@ public class OfferRide extends FragmentActivity implements
     private String EditStartTime = "";
     private String EditEndTime = "";
 
-    String hours="";
-    String mins="";
-    String houra="";
-    String mina="";
+    private String hours="";
+    private String mins="";
+    private String houra="";
+    private String mina="";
 
     private TextView textSN;
     private TextView textStartTime;
@@ -95,6 +95,7 @@ public class OfferRide extends FragmentActivity implements
     private String endAddress = "";
 
     private boolean isFind = false;
+    private boolean isEvent = false;
     protected GoogleApiClient mGoogleApiClient;
 
     private static final LatLngBounds BOUNDS_GREATER_Melbourne = new LatLngBounds(
@@ -238,6 +239,7 @@ public class OfferRide extends FragmentActivity implements
         if (v.getId() == R.id.buttonEvent)
         {
             selectEvent(v);
+            EditEnd.setEnabled(false);
 
         }
         if (v.getId() == R.id.buttonGroup)
@@ -292,10 +294,10 @@ public class OfferRide extends FragmentActivity implements
     }
 
     private void selectEvent(View v) {
+        isEvent = true;
 
         //receive a list of event
 
-        //receive a list of group
         selectEvents = Event.getAllEvents();
         final String[] eventsArray = new String[selectEvents.size()];
         for(int i=0; i<selectEvents.size(); i++)
@@ -311,6 +313,10 @@ public class OfferRide extends FragmentActivity implements
 
                 Toast.makeText(getApplicationContext(), "You have selected" +eventsArray[position], Toast.LENGTH_SHORT).show();
                 eventId = selectEvents.get(position).getEventId();
+                EditEnd.setHint(selectEvents.get(position).getEventLocation().getAddress());
+                endAddress = selectEvents.get(position).getEventLocation().getAddress();
+                latE =  Double.toString(selectEvents.get(position).getEventLocation().getLat());
+                lonE =  Double.toString(selectEvents.get(position).getEventLocation().getLon());
             }
         });
         AlertDialog alertDialog = builder1.create();
@@ -400,7 +406,8 @@ public class OfferRide extends FragmentActivity implements
                             e.printStackTrace();
                         }
 
-                        getEndpointLoc(activity);
+                       if(!isEvent){ getEndpointLoc(activity);}
+                        else sendRideInfo(activity);
                     }
                 },
                 new Response.ErrorListener()
@@ -712,9 +719,11 @@ public class OfferRide extends FragmentActivity implements
 
     public void offerRide(View view)
     {
-
         startAddress = EditStart.getText().toString();
-        endAddress = EditEnd.getText().toString();
+        if(!isEvent)
+        {
+            endAddress = EditEnd.getText().toString();
+        }
         if (Check1.isChecked()||Check2.isChecked())
         {
             reverseAddress(this);

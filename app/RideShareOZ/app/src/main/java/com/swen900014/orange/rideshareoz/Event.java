@@ -132,4 +132,8 @@ public class Event implements Serializable
     {
         return eventId;
     }
+    public Location getEventLocation()
+    {
+        return eventLocation;
+    }
 }
