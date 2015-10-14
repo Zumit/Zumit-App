@@ -42,10 +42,6 @@ public class MyRidesFragment extends Fragment
     private Intent intent;
     private Activity thisActivity;
 
-    public MyRidesFragment()
-    {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -80,25 +76,6 @@ public class MyRidesFragment extends Fragment
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*int id = item.getItemId();
-
-        if (id == R.id.action_refresh)
-        {
-            FetchRidesTask ridesTask = new FetchRidesTask();
-            if (isSearchResults)
-            {
-                //TODO: start task to get serch results
-                //search parameters will be taken from the intent
-            }
-            else
-            {
-                //TODO: use /user/getRides (POST request)
-                ridesTask.execute(GETALL_RIDE_URL);
-            }
-
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -106,21 +83,6 @@ public class MyRidesFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-
-        // Create some dummy data for the ListView.  Here's a sample weekly forecast
-        /*Ride[] data = {
-                new Ride(Ride.RideState.VIEWING),
-                new Ride(Ride.RideState.JOINED),
-                new Ride(Ride.RideState.OFFERING),
-                new Ride(Ride.RideState.VIEWING),
-                new Ride(Ride.RideState.OFFERING),
-                new Ride(Ride.RideState.JOINED),
-                new Ride(Ride.RideState.OFFERING),
-                new Ride(Ride.RideState.JOINED),
-                new Ride(Ride.RideState.VIEWING),
-                new Ride(Ride.RideState.OFFERING)
-        };*/
-        //List<Ride> currentRides = new ArrayList<Ride>(Arrays.asList(data));
         List<Ride> currentRides = new ArrayList<>();
 
         // Now that we have some dummy  data, create an ArrayAdapter.

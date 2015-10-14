@@ -48,8 +48,8 @@ public class PassViewRideActivity extends AppCompatActivity
 
     private int score;     // Marking the driver
 
-    private String lat = "";
-    private String lon = "";
+    private String latitude = "";
+    private String longitude = "";
     private String address = "";
 
     protected GoogleApiClient mGoogleApiClient;
@@ -233,7 +233,7 @@ public class PassViewRideActivity extends AppCompatActivity
                 connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
-    public void onClick(View view)
+    public void joinOrLeaveRide(View view)
     {
         if (ride.getRideState() == Ride.RideState.NEW)
         {
@@ -312,18 +312,15 @@ public class PassViewRideActivity extends AppCompatActivity
                         try
                         {
                             JSONObject jsonResponse = new JSONObject(response);
-                            System.out.println(jsonResponse.toString());
 
-                            lat = jsonResponse.getJSONArray("results").getJSONObject(0).
+                            latitude = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lat");
-                            lon = jsonResponse.getJSONArray("results").getJSONObject(0).
+                            longitude = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lng");
 
                             // Check response whether it's valid, if not remind user
-
-                            System.out.println("s" + response);
                         } catch (Exception e)
                         {
                             e.printStackTrace();
@@ -338,7 +335,7 @@ public class PassViewRideActivity extends AppCompatActivity
                     public void onErrorResponse(VolleyError volleyError)
                     {
                         volleyError.printStackTrace();
-                        System.out.println("it doesn't work");
+                        System.out.println("Retrieve coordinates failed");
                     }
                 });
 
@@ -372,8 +369,8 @@ public class PassViewRideActivity extends AppCompatActivity
 
                 params.put("username", User.getCurrentUser().getUsername());
                 params.put("ride_id", ride.getRideId());
-                params.put("p_lat", lat);
-                params.put("p_lon", lon);
+                params.put("p_lat", latitude);
+                params.put("p_lon", longitude);
                 params.put("pickup_add", address);
 
                 return params;
@@ -391,6 +388,7 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
+                ride.setDriverRated(User.getCurrentUser(), true);
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()

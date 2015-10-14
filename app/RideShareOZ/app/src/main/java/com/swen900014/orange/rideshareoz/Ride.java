@@ -111,11 +111,11 @@ public class Ride implements Serializable
         return false;
     }
 
-    public boolean hasPass(User pass)
+    public boolean hasPass(User passenger)
     {
         for (Pickup pick : joined)
         {
-            if (pass.getUsername().equals(pick.getUser().getUsername()))
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
             {
                 return true;
             }
@@ -135,6 +135,17 @@ public class Ride implements Serializable
         }
 
         return false;
+    }
+
+    public void setDriverRated(User passenger, boolean driverRated)
+    {
+        for (Pickup pick : joined)
+        {
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
+            {
+                pick.setDriverRated(driverRated);
+            }
+        }
     }
 
     public boolean isDriverRated()

@@ -56,6 +56,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         passengerList = (TableLayout) findViewById(R.id.passengerList);
         waitingList = (TableLayout) findViewById(R.id.waitingList);
 
+        // Display ride information
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
         startTimeLabel.setText(ride.getStartTime());
@@ -63,6 +64,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         driverText.setText(ride.getDriver().getUsername());
         seatsText.setText(ride.getSeats());
 
+        // Click and go to driver user info page
         driverText.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -99,7 +101,7 @@ public class DriverViewRideActivity extends AppCompatActivity
                     {
                         Intent intent = new Intent(thisActivity, UserInfoActivity.class);
                         intent.putExtra("Ride", ride);
-                        intent.putExtra("UserInfo", lift);
+                        intent.putExtra("Pickup", lift);
                         thisActivity.startActivity(intent);
                     }
                 });
@@ -162,10 +164,10 @@ public class DriverViewRideActivity extends AppCompatActivity
 
     public void cancelRide(View view)
     {
-        sendCancelRequest(this);
+        sendCancelRequest();
     }
 
-    public void sendCancelRequest(final Activity activity)
+    public void sendCancelRequest()
     {
         StringRequest cancelRequest = new StringRequest(Request.Method.POST,
                 CANCEL_RIDE_URL, new Response.Listener<String>()
@@ -174,7 +176,7 @@ public class DriverViewRideActivity extends AppCompatActivity
             public void onResponse(String s)
             {
                 // Get back to the my rides page
-                activity.finish();
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -198,6 +200,6 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequestQueue.getInstance(this).addToRequestQueue(cancelRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(cancelRequest);
     }
 }
