@@ -49,7 +49,7 @@ UserSchema.statics.getGroups = function(req,callback){
   });
 };
 
-UserSchema.methods.getAllGroup = function(callback){
+UserSchema.methods.getAllGroups = function(callback){
 
   var groups=[];
 
