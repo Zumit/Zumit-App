@@ -171,8 +171,7 @@ public class Group implements Serializable
     {
         try
         {
-            JSONObject groupJsonObj = groupJson.getJSONObject("group");
-            JsonParser.parseGroup(groupJsonObj, this);
+            JsonParser.parseGroup(groupJson, this);
         } catch (JSONException e)
         {
             e.printStackTrace();

@@ -135,9 +135,11 @@ public class JsonParser
 
     public static void parseGroup(JSONObject groupJson, Group group) throws JSONException
     {
-        group.setGroupId(groupJson.getString("_id"));
-        group.setName(groupJson.getString("groupname"));
-        group.setDescription(groupJson.getString("introduction"));
+        JSONObject groupJsonObj = groupJson.getJSONObject("group");
+
+        group.setGroupId(groupJsonObj.getString("_id"));
+        group.setName(groupJsonObj.getString("groupname"));
+        group.setDescription(groupJsonObj.getString("introduction"));
 
         String state = groupJson.getString("state");
 
