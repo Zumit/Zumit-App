@@ -8,6 +8,10 @@
       {
           "group":{"$oid":"55cab5dde81ab31606e4814c"},
           "state":"joined"
+      },
+      {
+          "group":{"$oid":"5619d370192e12a9e00d6d44"},
+          "state":"request"
       }
   ],
   "events":[],
