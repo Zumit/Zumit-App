@@ -39,41 +39,17 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
   GroupsSchema.statics.addRequest= function(req,callback){
 
-    var check=0;
-
-  this.findById(req.body.group_id,function(err,group){
-
-      group.requests.forEach(function(request){
-        if(String(request.user)==String(req.userinfo._id))
-        {
-            check++;
-            console.log(check);
-        }
-      });
-
-       group.members.forEach(function(member){
-        if(String(member.user)==String(req.userinfo._id))
-        {
-            check++;
-            console.log(check);
-        }
-      });
-
-     if(check === 0){
-          console.log(check);
-        User.findById(req.body.user_id,function(err,user){
+          User.findById(req.userinfo._id,function(err,user){
           user.groups.push({'group':req.body.group_id,'state':'request'});
           user.save();
-        });
+          });
 
-  
-          group.requests.push({'user':req.query.user_id});
-          group.save(function(err,doc){callback(group);});
+
+    this.findByIdAndUpdate(req.body.group_id,{$push:{'requests':{'user':req.userinfo._id}}},function(err,doc){
+        
+        callback(doc);
+       });
           
-       
-      }else{callback("already request!");}
-
-  });
 
  
 };
@@ -84,11 +60,12 @@ GroupsSchema.statics.createGroup= function(req,callback) {
 
  //add use to passenger
 
-   this.findById(req.body.group_id,function(err,doc){
-    doc.members.push({user:req.userinfo._id});
-    doc.save();
-  });
 
+    this.findByIdAndUpdate(req.body.group_id,{$push:{'members':req.userinfo._id}},function(err,doc){
+        
+        console.log("add to members");
+   });
+          
 
   User.update(
     {'_id':req.userinfo._id,'groups.group':req.body.group_id},

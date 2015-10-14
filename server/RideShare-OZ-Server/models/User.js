@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Group = require('../models/Group.js');
 
 var UserSchema = new Schema({
   username: String,
@@ -41,6 +42,13 @@ UserSchema.methods.getRides = function(callback){
 
 
 UserSchema.statics.getGroups = function(req,callback){
+  this.findById(req.userinfo._id).populate('groups.group',
+      'groupname introduction').exec({}, function(err,user){
+    callback(user.groups);  
+  });
+};
+
+UserSchema.statics.getAllGroup = function(req,callback){
   this.findById(req.userinfo._id).populate('groups.group',
       'groupname introduction').exec({}, function(err,user){
     callback(user.groups);  
