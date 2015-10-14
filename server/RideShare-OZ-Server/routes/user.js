@@ -78,13 +78,4 @@ router.post('/getGroups', function(req, res) {
   });
 });
 
-
-router.get('/getAllGroup', function(req, res) {
-  User.getAllGroup(req,function(users){
-    res.json(users);
-  });
-});
-
-
-
 module.exports = router;
