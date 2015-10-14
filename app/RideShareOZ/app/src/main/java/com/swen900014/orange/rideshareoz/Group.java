@@ -131,7 +131,7 @@ public class Group implements Serializable
     public static void loadGroups(final Activity activity)
     {
         StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
-                Resources.GET_USER_RELEVANT_GROUP_URL, new Response.Listener<String>()
+                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)

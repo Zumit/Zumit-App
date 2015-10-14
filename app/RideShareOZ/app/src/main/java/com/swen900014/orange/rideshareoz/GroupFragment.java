@@ -98,7 +98,7 @@ public class GroupFragment extends Fragment
     public void sendGetGroupsRequest()
     {
         StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
-                Resources.GET_USER_RELEVANT_GROUP_URL, new Response.Listener<String>()
+                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
