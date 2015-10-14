@@ -15,6 +15,7 @@ import android.view.MenuItem;
 public class GroupsActivity extends AppCompatActivity
 {
 
+    private  GroupFragment groupFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -22,8 +23,9 @@ public class GroupsActivity extends AppCompatActivity
         setContentView(R.layout.activity_groups);
         if (savedInstanceState == null)
         {
+            groupFragment = new GroupFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, (new GroupFragment()))
+                    .add(R.id.container, (groupFragment))
                     .commit();
         }
 
@@ -54,5 +56,11 @@ public class GroupsActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        groupFragment.sendGetGroupsRequest();
     }
 }
