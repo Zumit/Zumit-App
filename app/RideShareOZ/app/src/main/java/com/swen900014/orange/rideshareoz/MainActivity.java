@@ -56,11 +56,14 @@ public class MainActivity extends AppCompatActivity implements
     private Bundle savedInstanceState;
 
     private MyRidesFragment activityFragment;
+    private boolean signedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        signedIn = false;
 
         // Initialize request queue
         MyRequestQueue.getInstance(this.getApplicationContext()).
@@ -87,8 +90,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(signedIn){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
         return true;
     }
 
@@ -175,7 +180,9 @@ public class MainActivity extends AppCompatActivity implements
     {
         setContentView(R.layout.activity_login);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
+
+        signedIn = false;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -224,10 +231,7 @@ public class MainActivity extends AppCompatActivity implements
         {
             onSignInClicked();
         }
-        if (v.getId() == R.id.sign_out_button)
-        {
-            onSignOutClicked();
-        }
+        
     }
 
     public static void signOut()
@@ -314,6 +318,9 @@ public class MainActivity extends AppCompatActivity implements
                     .add(R.id.container, (activityFragment))
                     .commit();
         }
+
+        signedIn = true;
+        invalidateOptionsMenu();
     }
 
     public static GoogleApiClient getUserGoogleApiClient()
