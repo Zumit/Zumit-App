@@ -76,26 +76,62 @@ angular
 
 function TableCtrl($scope, $http) {
 
+  $scope.groupCurrentPage = 1;
+  $scope.memberCurrentPage = 1;
+  $scope.requestCurrentPage = 1;
+  $scope.groupPageSize = 4;
+  $scope.memberPageSize = 6;
+  $scope.requestPageSize = 6;
+  $scope.groups = [];
+  $scope.requests = [];
+  $scope.members = [];
+  $scope.selectedIndex = -1;
+
   $http.get('group/getall').success(function(data){
     $scope.groups = data;
   }).error(function(data, status){
     console.log(data, status);
   });
 
-  $scope.groups;
-  $scope.selectedIndex;
-  $scope.requests;
-  $scope.members;
-
   $scope.testMsg = [{
     msg: '============test========='
   }];
 
   $scope.setMemReq = function(index){
-    console.log("======================", index);
     $scope.selectedIndex = index;
-    $scope.requests = $scope.groups[index].requests;
-    $scope.members = $scope.groups[index].members;
-    // console.log($scope.);
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
+    console.log("======================", total_index);
+    $scope.requests = $scope.groups[total_index].requests;
+    $scope.members = $scope.groups[total_index].members;
+    // console.log($scope.requests);
+  };
+
+  $scope.pageChangeHandler = function(num) {
+    console.log('going to page ' + num);
+    $scope.groupCurrentPage = num;
+    $scope.selectedIndex = -1;
+    $scope.requests = [];
+    $scope.members = [];
+  };
+
+  $scope.acceptReq = function(username) {
+    // console.log("=============acc");
+    var request = $http({
+      method: "post",
+      url: "test",
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+      },
+      data: {
+        username: 'maxzhx@gmail.com',
+        // name: "Kim",
+        // status: "Best Friend"
+      }
+    });
+    request.success(function(data){
+      console.log(data);
+    }).error(function(data, status){
+      console.log(data, status);
+    });
   };
 }

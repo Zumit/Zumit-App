@@ -5,6 +5,7 @@ url = 'http://localhost:3000/group/create'
 #  url = 'http://144.6.226.237/group/create'
 #  name,g_lon.g_lat,introduction,admin_id,location
 values = dict(
+    username='maxzhx',
     name='Staffs of MelbUni',
     g_lon="144.960222",
     g_lat="-37.796670",

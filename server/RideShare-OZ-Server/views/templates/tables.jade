@@ -1,4 +1,4 @@
-.row(data-ng-controller='TableCtrl')
+.row(ng-controller='TableCtrl')
   .col-lg-12
     rd-widget
       rd-widget-header(icon='fa-tasks', title='Groups')
@@ -7,27 +7,13 @@
         .table-responsive
           table.table.table-hover
             tbody
-              tr(data-ng-repeat='group in groups', ng-click="setMemReq($index);", ng-class="{'info':$index==selectedIndex}")
+              tr(dir-paginate="group in groups | itemsPerPage: groupPageSize", current-page="groupCurrentPage", pagination-id="group", ng-click="setMemReq($index);", ng-class="{'info':$index==selectedIndex}")
                 td {{group.groupname}}
                 td {{group.location}}
                 td {{group.introduction}}
                 td {{group.group_location}}
       rd-widget-footer
-        ul.pagination.pagination-sm.pull-right
-          li
-            a(href='#') «
-          li
-            a(href='#') 1
-          li
-            a(href='#') 2
-          li
-            a(href='#') 3
-          li
-            a(href='#') 4
-          li
-            a(href='#') 5
-          li
-            a(href='#') »
+        dir-pagination-controls(boundary-links="true", on-page-change="pageChangeHandler(newPageNumber)", template-url="templates/dirPaginationTpl", pagination-id="group")
         .clearfix
   .col-lg-6
     rd-widget
@@ -37,21 +23,11 @@
         .table-responsive
           table.table.table-striped
             tbody
-              tr(data-ng-repeat='member in members')
+              tr(dir-paginate="member in members | itemsPerPage: memberPageSize", current-page="memberCurrentPage", pagination-id="member") 
                 td {{member.username}}
                 td {{member.phone}}
       rd-widget-footer
-        ul.pagination.pagination-sm.pull-right
-          li
-            a(href='#') «
-          li
-            a(href='#') 1
-          li
-            a(href='#') 2
-          li
-            a(href='#') 3
-          li
-            a(href='#') »
+        dir-pagination-controls(boundary-links="true", on-page-change="", template-url="templates/dirPaginationTpl", pagination-id="member")
         .clearfix
 
   .col-lg-6
@@ -62,25 +38,15 @@
         .table-responsive
           table.table.table-striped
             tbody
-              tr(data-ng-repeat='request in requests')
+              tr(dir-paginate="request in requests | itemsPerPage: requestPageSize", current-page="requestCurrentPage", pagination-id="request")
                 td {{request.user.username}}
                 td {{request.requestDate}}
-                td
+                td(ng-click="acceptReq();",)
                   span.text-success(tooltip='Accept')
                     i.fa.fa-check
                 td
                   span.text-danger(tooltip='Reject')
                     i.fa.fa-times
       rd-widget-footer
-        ul.pagination.pagination-sm.pull-right
-          li
-            a(href='#') «
-          li
-            a(href='#') 1
-          li
-            a(href='#') 2
-          li
-            a(href='#') 3
-          li
-            a(href='#') »
+        dir-pagination-controls(boundary-links="true", on-page-change="", template-url="templates/dirPaginationTpl", pagination-id="request")
         .clearfix
