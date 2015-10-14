@@ -217,6 +217,12 @@ public class OfferRide extends FragmentActivity implements
 
 
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        Group.loadGroups(this);
+        Event.loadEvents(this);
+    }
 
 
     @Override
