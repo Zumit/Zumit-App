@@ -159,8 +159,8 @@ public class Group implements Serializable
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
 
                 return params;
             }

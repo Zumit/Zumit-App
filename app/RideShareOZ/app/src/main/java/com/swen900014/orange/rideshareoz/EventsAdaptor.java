@@ -15,33 +15,39 @@ import java.util.ArrayList;
  * MyRides activity, displaying all rides
  * info retrieved from the server
  */
-public class EventsAdaptor extends ArrayAdapter<Group>
+public class EventsAdaptor extends ArrayAdapter<Event>
 {
 
-    public EventsAdaptor(Context context, ArrayList<Group> groups)
+    public EventsAdaptor(Context context, ArrayList<Event> events)
     {
-        super(context, 0, groups);
+        super(context, 0, events);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
         // Get the data item for this position
-        Group group = getItem(position);
+        Event event = getItem(position);
 
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null)
         {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_groups_linear, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_events_linear, parent, false);
         }
 
         // Lookup view for data population
-        TextView tvType = (TextView) convertView.findViewById(R.id.textViewType);
+        TextView tvStart = (TextView) convertView.findViewById(R.id.textViewStartDate);
+        TextView tvEnd = (TextView) convertView.findViewById(R.id.textViewEndDate);
         TextView tvName = (TextView) convertView.findViewById(R.id.textViewName);
+        TextView tvDesc = (TextView) convertView.findViewById(R.id.textViewDesc);
+        TextView tvLoc = (TextView) convertView.findViewById(R.id.textViewLocation);
 
         // Populate the data into the template view using the data object
-        tvType.setText(group.getGroupState().toString() + " ");
-        tvName.setText(group.getName());
+        tvStart.setText(event.getStart_time());
+        tvEnd.setText(event.getEnd_time());
+        tvName.setText(event.getName());
+        tvDesc.setText(event.getDescription());
+        tvLoc.setText(event.getEventLocation().getAddress());
         // Return the completed view to render on screen
         return convertView;
     }

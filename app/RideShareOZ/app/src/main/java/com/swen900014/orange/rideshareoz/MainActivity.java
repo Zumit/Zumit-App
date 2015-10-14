@@ -136,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(groupsIntent);
             return true;
         }
+        if (id == R.id.action_Events)
+        {
+            Intent groupsIntent = new Intent(this, EventsActivity.class);
+            startActivity(groupsIntent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
