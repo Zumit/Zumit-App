@@ -42,10 +42,6 @@ public class MyRidesFragment extends Fragment
     private Intent intent;
     private Activity thisActivity;
 
-    public MyRidesFragment()
-    {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -80,25 +76,6 @@ public class MyRidesFragment extends Fragment
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        /*int id = item.getItemId();
-
-        if (id == R.id.action_refresh)
-        {
-            FetchRidesTask ridesTask = new FetchRidesTask();
-            if (isSearchResults)
-            {
-                //TODO: start task to get serch results
-                //search parameters will be taken from the intent
-            }
-            else
-            {
-                //TODO: use /user/getRides (POST request)
-                ridesTask.execute(GETALL_RIDE_URL);
-            }
-
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -85,7 +85,7 @@ public class UserInfoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    sendAcceptRequest(pickup, ride, thisActivity);
+                    sendAcceptRequest();
                 }
             });
             rejectButton.setOnClickListener(new View.OnClickListener()
@@ -93,7 +93,7 @@ public class UserInfoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    sendRejectRequest(ride, pickup, thisActivity);
+                    sendRejectRequest();
                 }
             });
         }
@@ -148,6 +148,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
+                pickup.setRatedByDriver(true);
+
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()
@@ -178,8 +180,7 @@ public class UserInfoActivity extends AppCompatActivity
         MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rateRequest);
     }
 
-    public void sendAcceptRequest(final Pickup lift, final Ride ride,
-                                  final Activity activity)
+    public void sendAcceptRequest()
     {
         StringRequest acceptRequest = new StringRequest(Request.Method.POST,
                 ACCEPT_REQUEST_URL, new Response.Listener<String>()
@@ -187,14 +188,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
-                ride.acceptJoin(lift);
-
-                Intent intent = new Intent(thisActivity, DriverViewRideActivity.class);
-                intent.putExtra("SelectedRide", ride);
-
-                activity.startActivity(intent);
+                ride.acceptJoin(pickup);
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -210,18 +205,17 @@ public class UserInfoActivity extends AppCompatActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", lift.getUser().getUsername());
+                params.put("username", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
 
                 return params;
             }
         };
 
-        MyRequestQueue.getInstance(activity).addToRequestQueue(acceptRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(acceptRequest);
     }
 
-    public void sendRejectRequest(final Ride ride, final Pickup lift,
-                                  final Activity activity)
+    public void sendRejectRequest()
     {
         StringRequest rejectRequest = new StringRequest(Request.Method.POST,
                 REJECT_REQUEST_URL, new Response.Listener<String>()
@@ -229,13 +223,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 ride.rejectJoin(pickup);
-                Intent intent = new Intent(activity, DriverViewRideActivity.class);
-                intent.putExtra("SelectedRide", ride);
-
-                activity.startActivity(intent);
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -251,14 +240,14 @@ public class UserInfoActivity extends AppCompatActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", lift.getUser().getUsername());
+                params.put("username", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
 
                 return params;
             }
         };
 
-        MyRequestQueue.getInstance(activity).addToRequestQueue(rejectRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rejectRequest);
     }
 
     @Override

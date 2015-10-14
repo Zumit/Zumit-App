@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
 var UserSchema = new Schema({
   username: String,
   note: String,
@@ -34,17 +35,51 @@ UserSchema.methods.getRides = function(callback){
   var conditions = {$or:[{'driver':this}, {'passengers.user':this}, {'requests.user':this}]};
   /* var conditions = {}; */
   this.model('Ride').find(conditions).populate('driver ',
-      'username phone driver_license driver_rate').populate('passengers.user  requests.user','username phone passenger_rate').exec({}, function(err, rides){
+      'username phone driver_license driver_rate').populate('passengers.user  requests.user','username phone passenger_rate').
+      populate('group','groupname').
+    exec({}, function(err, rides){
     callback(rides);
   });
 };
-
 
 UserSchema.statics.getGroups = function(req,callback){
   this.findById(req.userinfo._id).populate('groups.group',
       'groupname introduction').exec({}, function(err,user){
     callback(user.groups);  
   });
+};
+
+UserSchema.methods.getAllGroups = function(callback){
+
+  var groups=[];
+
+  this.model('Group').find({members:{$in:[this]}},function(err,group){
+    group.forEach(function(g){
+      var record={'group':{'_id':g._id,'groupname':g.groupname,'introduction':g.introduction},'state':'joined'}
+      groups.push(record);
+    });
+
+  });
+
+    this.model('Group').find({'requests.user':this},function(err,group){
+    group.forEach(function(g){
+      var record={'group':{'_id':g._id,'groupname':g.groupname,'introduction':g.introduction},'state':'request'}
+      groups.push(record);
+    });
+
+  });
+
+  this.model('Group').find({$and:[{'members':{$nin:[this]}},{'requests.user':{$nin:[this]}}]},function(err,group){
+    group.forEach(function(g){
+      
+      var record={'group':{'_id':g._id,'groupname':g.groupname,'introduction':g.introduction},'state':'unjoined'}
+      groups.push(record);
+    });
+
+    callback(groups);
+  });//.exec({},function(err,groups){ callback(groups);})
+
+
 };
 
 

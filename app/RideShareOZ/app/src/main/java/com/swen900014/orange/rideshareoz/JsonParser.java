@@ -19,6 +19,8 @@ public class JsonParser
         String phone = jsonUser.getString("phone");
 
         user.setName(username);
+        // Currently username is the same as email
+        user.setEmail(username);
         user.setCredit(credit);
         user.setPhone(phone);
     }

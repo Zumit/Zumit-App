@@ -1,180 +1,52 @@
-.row
-  .col-lg-6
+.row(ng-controller='TableCtrl')
+  .col-lg-12
     rd-widget
-      rd-widget-header(icon='fa-tasks', title='Servers')
+      rd-widget-header(icon='fa-tasks', title='Groups')
         a(href='#') Manage
       rd-widget-body(classes='medium no-padding')
         .table-responsive
-          table.table
+          table.table.table-hover
             tbody
-              tr
-                td RDVMPC001
-                td 238.103.133.37
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDVMPC002
-                td 68.66.63.170
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDVMPC003
-                td 76.117.212.33
-                td
-                  span.text-danger(tooltip='Server Down!')
-                    i.fa.fa-warning
-              tr
-                td RDPHPC001
-                td 91.88.224.5
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDESX001
-                td 197.188.15.93
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDESX002
-                td 168.85.154.251
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDESX003
-                td 209.25.191.61
-                td
-                  span.text-danger(tooltip='Server Down!')
-                    i.fa.fa-warning
-              tr
-                td RDESX004
-                td 252.37.192.235
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDTerminal01
-                td 139.71.18.207
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDTerminal02
-                td 136.80.122.212
-                td
-                  span.text-warning(tooltip='Could not connect!')
-                    i.fa.fa-flash
-              tr
-                td RDDomainCont01
-                td 196.80.245.33
-                td
-                  span.text-success
-                    i.fa.fa-check
+              tr(dir-paginate="group in groups | itemsPerPage: groupPageSize", current-page="groupCurrentPage", pagination-id="group", ng-click="setMemReq($index);", ng-class="{'info':$index==selectedIndex}")
+                td {{group.groupname}}
+                td {{group.location}}
+                td {{group.introduction}}
+                td {{group.group_location}}
       rd-widget-footer
-        ul.pagination.pagination-sm.pull-right
-          li
-            a(href='#') «
-          li
-            a(href='#') 1
-          li
-            a(href='#') 2
-          li
-            a(href='#') 3
-          li
-            a(href='#') 4
-          li
-            a(href='#') 5
-          li
-            a(href='#') »
+        dir-pagination-controls(boundary-links="true", on-page-change="pageChangeHandler(newPageNumber)", template-url="templates/dirPaginationTpl", pagination-id="group")
         .clearfix
   .col-lg-6
     rd-widget
-      rd-widget-header(icon='fa-tasks', title='Striped Servers')
+      rd-widget-header(icon='fa-tasks', title='Members')
         a(href='#') Manage
       rd-widget-body(classes='medium no-padding')
         .table-responsive
           table.table.table-striped
             tbody
-              tr
-                td RDVMPC001
-                td 238.103.133.37
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDVMPC002
-                td 68.66.63.170
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDVMPC003
-                td 76.117.212.33
-                td
-                  span.text-danger(tooltip='Server Down!')
-                    i.fa.fa-warning
-              tr
-                td RDPHPC001
-                td 91.88.224.5
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDESX001
-                td 197.188.15.93
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDESX002
-                td 168.85.154.251
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDESX003
-                td 209.25.191.61
-                td
-                  span.text-danger(tooltip='Server Down!')
-                    i.fa.fa-warning
-              tr
-                td RDESX004
-                td 252.37.192.235
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDTerminal01
-                td 139.71.18.207
-                td
-                  span.text-success
-                    i.fa.fa-check
-              tr
-                td RDTerminal02
-                td 136.80.122.212
-                td
-                  span.text-warning(tooltip='Could not connect!')
-                    i.fa.fa-flash
-              tr
-                td RDDomainCont01
-                td 196.80.245.33
-                td
-                  span.text-success
-                    i.fa.fa-check
+              tr(dir-paginate="member in members | itemsPerPage: memberPageSize", current-page="memberCurrentPage", pagination-id="member") 
+                td {{member.username}}
+                td {{member.phone}}
       rd-widget-footer
-        ul.pagination.pagination-sm.pull-right
-          li
-            a(href='#') «
-          li
-            a(href='#') 1
-          li
-            a(href='#') 2
-          li
-            a(href='#') 3
-          li
-            a(href='#') »
+        dir-pagination-controls(boundary-links="true", on-page-change="", template-url="templates/dirPaginationTpl", pagination-id="member")
         .clearfix
 
+  .col-lg-6
+    rd-widget
+      rd-widget-header(icon='fa-tasks', title='Requests')
+        a(href='#') Manage
+      rd-widget-body(classes='medium no-padding')
+        .table-responsive
+          table.table.table-striped
+            tbody
+              tr(dir-paginate="request in requests | itemsPerPage: requestPageSize", current-page="requestCurrentPage", pagination-id="request")
+                td {{request.user.username}}
+                td {{request.requestDate}}
+                td(ng-click="acceptReq();",)
+                  span.text-success(tooltip='Accept')
+                    i.fa.fa-check
+                td
+                  span.text-danger(tooltip='Reject')
+                    i.fa.fa-times
+      rd-widget-footer
+        dir-pagination-controls(boundary-links="true", on-page-change="", template-url="templates/dirPaginationTpl", pagination-id="request")
+        .clearfix
