@@ -51,9 +51,32 @@ UserSchema.statics.getGroups = function(req,callback){
 
 UserSchema.methods.getAllGroup = function(callback){
 
+  var groups=[];
 
-  this.model('Group').find({'members':this},function(err,group){console.log(group);
-    callback(group);
+  this.model('Group').find({members:{$in:[this]}},function(err,group){
+    group.forEach(function(g){
+      var record={'group':g._id,'groupname':g.groupname,'state':'joined'}
+      groups.push(record);
+    });
+
+  });
+
+    this.model('Group').find({'requests.user':this},function(err,group){
+    group.forEach(function(g){
+      var record={'group':g._id,'groupname':g.groupname,'state':'request'}
+      groups.push(record);
+    });
+
+  });
+
+  this.model('Group').find({members:{$nin:[this]}},function(err,group){
+    group.forEach(function(g){
+      
+      var record={'group':g._id,'groupname':g.groupname,'state':'unjoined'}
+      groups.push(record);
+    });
+
+    callback(groups);
   });//.exec({},function(err,groups){ callback(groups);})
 
 
