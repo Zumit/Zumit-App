@@ -1,6 +1,5 @@
 package com.swen900014.orange.rideshareoz;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -99,7 +98,7 @@ public class GroupFragment extends Fragment
     public void sendGetGroupsRequest()
     {
         StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
-                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
+                Resources.GET_USER_RELEVANT_GROUP_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
@@ -128,7 +127,7 @@ public class GroupFragment extends Fragment
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
     }
 
     private void storeGroups(String response)

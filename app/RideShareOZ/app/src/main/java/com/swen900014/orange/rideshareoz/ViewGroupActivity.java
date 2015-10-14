@@ -120,7 +120,7 @@ public class ViewGroupActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(joinRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(joinRequest);
     }
 
     public void sendLeaveGroupRequest()
@@ -157,7 +157,7 @@ public class ViewGroupActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(this).addToRequestQueue(leaveRequest);
+        MyRequestQueue.getInstance(this).addToRequestQueue(leaveRequest);
     }
 
     @Override

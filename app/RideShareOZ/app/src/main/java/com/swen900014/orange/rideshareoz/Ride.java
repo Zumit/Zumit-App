@@ -22,7 +22,7 @@ public class Ride implements Serializable
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int seats;      // Max number of passengers who can join
+    private int seats;          // Max number of passengers who can join
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
@@ -111,11 +111,11 @@ public class Ride implements Serializable
         return false;
     }
 
-    public boolean hasPass(User pass)
+    public boolean hasPass(User passenger)
     {
         for (Pickup pick : joined)
         {
-            if (pass.getUsername().equals(pick.getUser().getUsername()))
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
             {
                 return true;
             }
@@ -135,6 +135,17 @@ public class Ride implements Serializable
         }
 
         return false;
+    }
+
+    public void setDriverRated(User passenger, boolean driverRated)
+    {
+        for (Pickup pick : joined)
+        {
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
+            {
+                pick.setDriverRated(driverRated);
+            }
+        }
     }
 
     public boolean isDriverRated()
@@ -197,11 +208,6 @@ public class Ride implements Serializable
         this.end = end;
     }
 
-    public String getSeats()
-    {
-        return Integer.toString(seats);
-    }
-
     public void setRideId(String id)
     {
         rideId = id;
@@ -220,6 +226,11 @@ public class Ride implements Serializable
     public void addJoin(Pickup pickup)
     {
         joined.add(pickup);
+    }
+
+    public String getSeats()
+    {
+        return Integer.toString(seats);
     }
 
     public String getArrivingTime()

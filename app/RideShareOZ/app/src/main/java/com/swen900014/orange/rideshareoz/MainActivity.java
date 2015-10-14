@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         // Initialize request queue
-        MyRequest.getInstance(this.getApplicationContext()).
+        MyRequestQueue.getInstance(this.getApplicationContext()).
                 getRequestQueue();
 
         this.savedInstanceState = savedInstanceState;

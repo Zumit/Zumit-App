@@ -56,6 +56,7 @@ public class Group implements Serializable
         if (!allOtherGroups.containsKey(id) && !myGroups.containsKey(id))
         {
             Group newGroup = new Group(id, name, description);
+
             if (state == GroupState.NEW)
             {
                 newGroup.groupState = GroupState.NEW;
@@ -117,6 +118,7 @@ public class Group implements Serializable
         allGroups.addAll(myGroups.values());
         return allGroups;
     }
+
     public static ArrayList<Group> getAllGroups()
     {
         ArrayList<Group> allGroups = new ArrayList<>();
@@ -129,7 +131,7 @@ public class Group implements Serializable
     public static void loadGroups(final Activity activity)
     {
         StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
-                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
+                Resources.GET_USER_RELEVANT_GROUP_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
@@ -164,15 +166,14 @@ public class Group implements Serializable
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(getGroupsRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getGroupsRequest);
     }
 
     public Group(JSONObject groupJson)
     {
         try
         {
-            JSONObject groupJsonObj = groupJson.getJSONObject("group");
-            JsonParser.parseGroup(groupJsonObj, this);
+            JsonParser.parseGroup(groupJson, this);
         } catch (JSONException e)
         {
             e.printStackTrace();

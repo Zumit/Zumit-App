@@ -46,10 +46,10 @@ public class PassViewRideActivity extends AppCompatActivity
 {
     private final static String TAG = "Passenger View Ride";
 
-    private int score;
+    private int score;     // Marking the driver
 
-    private String lat = "";
-    private String lon = "";
+    private String latitude = "";
+    private String longitude = "";
     private String address = "";
 
     protected GoogleApiClient mGoogleApiClient;
@@ -233,7 +233,7 @@ public class PassViewRideActivity extends AppCompatActivity
                 connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 
-    public void onClick(View view)
+    public void joinOrLeaveRide(View view)
     {
         if (ride.getRideState() == Ride.RideState.NEW)
         {
@@ -258,7 +258,6 @@ public class PassViewRideActivity extends AppCompatActivity
     public void rate(View view)
     {
         sendRateRequest();
-        System.out.println("Score hahassssssssssssss:     " + score);
     }
 
     public void sendLeaveRideRequest()
@@ -269,8 +268,6 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 // Get back to the my rides page
                 thisActivity.finish();
             }
@@ -296,7 +293,7 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(leaveRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(leaveRequest);
     }
 
     public void joinRide()
@@ -315,26 +312,22 @@ public class PassViewRideActivity extends AppCompatActivity
                         try
                         {
                             JSONObject jsonResponse = new JSONObject(response);
-                            System.out.println(jsonResponse.toString());
 
-                            lat = jsonResponse.getJSONArray("results").getJSONObject(0).
+                            latitude = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lat");
-                            lon = jsonResponse.getJSONArray("results").getJSONObject(0).
+                            longitude = jsonResponse.getJSONArray("results").getJSONObject(0).
                                     getJSONObject("geometry").getJSONObject("location").
                                     getString("lng");
 
-                            // Check response whether it's accurate, if not remind user
-
-                            System.out.println("s" + response);
+                            // Check response whether it's valid, if not remind user
                         } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
 
+                        // Join request must be sent after the coordinates are received from google
                         sendJoinRequest();
-
-                        // check response, whether it received
                     }
                 },
                 new Response.ErrorListener()
@@ -342,11 +335,11 @@ public class PassViewRideActivity extends AppCompatActivity
                     public void onErrorResponse(VolleyError volleyError)
                     {
                         volleyError.printStackTrace();
-                        System.out.println("it doesn't work");
+                        System.out.println("Retrieve coordinates failed");
                     }
                 });
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(getLocRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getLocRequest);
     }
 
     private void sendJoinRequest()
@@ -357,8 +350,6 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()
@@ -378,15 +369,15 @@ public class PassViewRideActivity extends AppCompatActivity
 
                 params.put("username", User.getCurrentUser().getUsername());
                 params.put("ride_id", ride.getRideId());
-                params.put("p_lat", lat);
-                params.put("p_lon", lon);
+                params.put("p_lat", latitude);
+                params.put("p_lon", longitude);
                 params.put("pickup_add", address);
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(joinRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(joinRequest);
     }
 
     private void sendRateRequest()
@@ -397,6 +388,7 @@ public class PassViewRideActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
+                ride.setDriverRated(User.getCurrentUser(), true);
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()
@@ -424,7 +416,7 @@ public class PassViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(rateRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rateRequest);
     }
 
     // Check whether user has typed in the pickup location

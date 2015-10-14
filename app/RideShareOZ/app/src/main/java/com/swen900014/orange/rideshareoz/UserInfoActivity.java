@@ -12,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -35,9 +34,7 @@ public class UserInfoActivity extends AppCompatActivity
     private Ride ride;
     private Pickup pickup;
     private Activity thisActivity;
-    private int score;  // Rating score
-
-    private Spinner spinnerRate;
+    private int score;   // Marking passenger
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,6 +57,7 @@ public class UserInfoActivity extends AppCompatActivity
 
         thisActivity = this;
 
+        // Display user information
         TextView nameText = (TextView) findViewById(R.id.ShowName);
         TextView phoneText = (TextView) findViewById(R.id.ShowPhone);
         TextView emailText = (TextView) findViewById(R.id.ShowEmail);
@@ -87,7 +85,7 @@ public class UserInfoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    sendAcceptRequest(pickup, ride, thisActivity);
+                    sendAcceptRequest();
                 }
             });
             rejectButton.setOnClickListener(new View.OnClickListener()
@@ -95,7 +93,7 @@ public class UserInfoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v)
                 {
-                    sendRejectRequest(ride, pickup, thisActivity);
+                    sendRejectRequest();
                 }
             });
         }
@@ -111,7 +109,7 @@ public class UserInfoActivity extends AppCompatActivity
             rateButton.setVisibility(View.VISIBLE);
 
             // Rating spinner
-            spinnerRate = (Spinner) findViewById(R.id.spinnerRatePass);
+            Spinner spinnerRate = (Spinner) findViewById(R.id.spinnerRatePass);
             spinnerRate.setVisibility(View.VISIBLE);
             spinnerRate.setSelected(false);
 
@@ -137,17 +135,9 @@ public class UserInfoActivity extends AppCompatActivity
         }
     }
 
-    public void ratePass()
+    public void ratePassenger(View view)
     {
-        if (spinnerRate.isSelected())
-        {
-            sendRateRequest();
-        }
-        else
-        {
-            Toast.makeText(getApplicationContext(), "Please select a rating option",
-                    Toast.LENGTH_SHORT).show();
-        }
+        sendRateRequest();
     }
 
     private void sendRateRequest()
@@ -158,6 +148,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
+                pickup.setRatedByDriver(true);
+
                 thisActivity.finish();
             }
         }, new Response.ErrorListener()
@@ -179,17 +171,16 @@ public class UserInfoActivity extends AppCompatActivity
                 params.put("rateeName", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
                 params.put("rate", Integer.toString(score));
-                params.put("type", "driver");
+                params.put("type", "passenger");
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(thisActivity).addToRequestQueue(rateRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rateRequest);
     }
 
-    public void sendAcceptRequest(final Pickup lift, final Ride ride,
-                                  final Activity activity)
+    public void sendAcceptRequest()
     {
         StringRequest acceptRequest = new StringRequest(Request.Method.POST,
                 ACCEPT_REQUEST_URL, new Response.Listener<String>()
@@ -197,14 +188,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
-                ride.acceptJoin(lift);
-
-                Intent intent = new Intent(thisActivity, DriverViewRideActivity.class);
-                intent.putExtra("SelectedRide", ride);
-
-                activity.startActivity(intent);
+                ride.acceptJoin(pickup);
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -220,18 +205,17 @@ public class UserInfoActivity extends AppCompatActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", lift.getUser().getUsername());
+                params.put("username", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(acceptRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(acceptRequest);
     }
 
-    public void sendRejectRequest(final Ride ride, final Pickup lift,
-                                  final Activity activity)
+    public void sendRejectRequest()
     {
         StringRequest rejectRequest = new StringRequest(Request.Method.POST,
                 REJECT_REQUEST_URL, new Response.Listener<String>()
@@ -239,13 +223,8 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
-
                 ride.rejectJoin(pickup);
-                Intent intent = new Intent(activity, DriverViewRideActivity.class);
-                intent.putExtra("SelectedRide", ride);
-
-                activity.startActivity(intent);
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -261,14 +240,14 @@ public class UserInfoActivity extends AppCompatActivity
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", lift.getUser().getUsername());
+                params.put("username", pickup.getUser().getUsername());
                 params.put("ride_id", ride.getRideId());
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(rejectRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(rejectRequest);
     }
 
     @Override
