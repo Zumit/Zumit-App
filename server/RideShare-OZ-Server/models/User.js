@@ -55,7 +55,7 @@ UserSchema.methods.getAllGroup = function(callback){
 
   this.model('Group').find({members:{$in:[this]}},function(err,group){
     group.forEach(function(g){
-      var record={'group':g._id,'groupname':g.groupname,'state':'joined'}
+      var record={'group':g._id,'groupname':g.groupname,'introduction':g.introduction,'state':'joined'}
       groups.push(record);
     });
 
@@ -63,7 +63,7 @@ UserSchema.methods.getAllGroup = function(callback){
 
     this.model('Group').find({'requests.user':this},function(err,group){
     group.forEach(function(g){
-      var record={'group':g._id,'groupname':g.groupname,'state':'request'}
+      var record={'group':g._id,'groupname':g.groupname,'introduction':g.introduction,'state':'request'}
       groups.push(record);
     });
 
@@ -72,7 +72,7 @@ UserSchema.methods.getAllGroup = function(callback){
   this.model('Group').find({members:{$nin:[this]}},function(err,group){
     group.forEach(function(g){
       
-      var record={'group':g._id,'groupname':g.groupname,'state':'unjoined'}
+      var record={'group':g._id,'groupname':g.groupname,'introduction':g.introduction,'state':'unjoined'}
       groups.push(record);
     });
 
