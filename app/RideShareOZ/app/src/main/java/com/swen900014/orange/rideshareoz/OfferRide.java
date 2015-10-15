@@ -224,8 +224,6 @@ public class OfferRide extends FragmentActivity implements
     }
 
 
-*/
-
 
     @Override
     public void onClick(View v)
