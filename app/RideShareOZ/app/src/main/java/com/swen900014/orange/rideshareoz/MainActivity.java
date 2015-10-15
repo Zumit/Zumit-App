@@ -24,7 +24,6 @@ import com.google.android.gms.plus.Plus;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -56,13 +55,18 @@ public class MainActivity extends AppCompatActivity implements
     private boolean mShouldResolve = false;
     private Bundle savedInstanceState;
 
+    private MyRidesFragment activityFragment;
+    private boolean signedIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+        signedIn = false;
+
         // Initialize request queue
-        MyRequest.getInstance(this.getApplicationContext()).
+        MyRequestQueue.getInstance(this.getApplicationContext()).
                 getRequestQueue();
 
         this.savedInstanceState = savedInstanceState;
@@ -79,14 +83,17 @@ public class MainActivity extends AppCompatActivity implements
         //Load all groups and events to be available for offer and search rides
         Group.loadGroups(this);
         Event.loadEvents(this);
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(signedIn){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+        }
         return true;
     }
 
@@ -126,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_Groups)
         {
             Intent groupsIntent = new Intent(this, GroupsActivity.class);
+            startActivity(groupsIntent);
+            return true;
+        }
+        if (id == R.id.action_Events)
+        {
+            Intent groupsIntent = new Intent(this, EventsActivity.class);
             startActivity(groupsIntent);
             return true;
         }
@@ -171,11 +184,11 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showSignedOutUI()
     {
-        //Intent authentication = new Intent(this, AuthenticationActivity.class);
-        //startActivity(authentication);
         setContentView(R.layout.activity_login);
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.sign_out_button).setOnClickListener(this);
+
+        signedIn = false;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -184,6 +197,15 @@ public class MainActivity extends AppCompatActivity implements
         super.onStart();
         //ReAuthentication is not required
         //mGoogleApiClient.connect();
+
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        //refresh rides
+        activityFragment.sendGetRidesRequest();
     }
 
     @Override
@@ -215,10 +237,7 @@ public class MainActivity extends AppCompatActivity implements
         {
             onSignInClicked();
         }
-        if (v.getId() == R.id.sign_out_button)
-        {
-            onSignOutClicked();
-        }
+        
     }
 
     public static void signOut()
@@ -289,23 +308,25 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showSignedInUI()
     {
-
-        //Person person = Plus.PeopleApi.getCurrentPerson(mGoogleApiClient);
-
         //set current user
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
-        User.setCurrentUser(User.addUserIfNotExist(account.name, account.name, "",0));
+        User.setCurrentUser(new User(account.name, account.name, "0", "0"));
 
         //Send Authentication Token to server and set current User
         new GetUserIDTask().execute();
 
         setContentView(R.layout.activity_myrides);
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
+        {
+            activityFragment = new MyRidesFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, (new MyRidesFragment()))
+                    .add(R.id.container, (activityFragment))
                     .commit();
         }
+
+        signedIn = true;
+        invalidateOptionsMenu();
     }
 
     public static GoogleApiClient getUserGoogleApiClient()
@@ -315,7 +336,6 @@ public class MainActivity extends AppCompatActivity implements
 
     public static String getAuthToken(Context context)
     {
-        //GoogleApiClient mGoogleApiClient = (GoogleApiClient)params[0];
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.

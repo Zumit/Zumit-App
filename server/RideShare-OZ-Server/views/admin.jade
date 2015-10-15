@@ -1,18 +1,102 @@
-html
+doctype html
+html(lang='en', ng-app='RDash')
   head
-    meta(charset='utf-8')
-    meta(name='viewport', content='width=device-width, maximum-scale=1, inital-scale=1')
-    link(rel='stylesheet', type='text/css', href='/stylesheet/mystyle.css')
-    title CustomerEvent
-  body
-    form(method='post', action='login.php')
-      table#login_table
-        tr
-          td
-            input.login_text(type='text', name='username', value='', placeholder='Username')
-        tr
-          td
-            input.login_text(type='password', name='password', placeholder='Password')
-        tr
-          td
-            input#login_button.my_button(type='submit', value='Log in')
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title RDash AngularJS
+    // STYLES
+    // build:css lib/css/main.min.css
+    link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', type='text/css', href='bower_components/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', type='text/css', href='bower_components/rdash-ui/dist/css/rdash.min.css')
+    // endbuild
+    // SCRIPTS
+    // build:js lib/js/main.min.js
+    script(type='text/javascript', src='bower_components/angular/angular.min.js')
+    script(type='text/javascript', src='bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js')
+    script(type='text/javascript', src='bower_components/angular-cookies/angular-cookies.min.js')
+    script(type='text/javascript', src='bower_components/angular-ui-router/release/angular-ui-router.min.js')
+    script(type='text/javascript', src='bower_components/angularUtils-pagination/dirPagination.js')
+    // endbuild
+    // Custom Scripts
+    script(type='text/javascript', src='javascripts/module.js')
+    script(type='text/javascript', src='javascripts/routes.js')
+    script(type='text/javascript', src='javascripts/controllers.js')
+    script(type='text/javascript', src='javascripts/directives/loading.js')
+    script(type='text/javascript', src='javascripts/directives/widget.js')
+    script(type='text/javascript', src='javascripts/directives/widget-body.js')
+    script(type='text/javascript', src='javascripts/directives/widget-footer.js')
+    script(type='text/javascript', src='javascripts/directives/widget-header.js')
+  body(ng-controller='MasterCtrl')
+    #page-wrapper(ng-class="{'open': toggle}", ng-cloak)
+      // Sidebar
+      #sidebar-wrapper
+        ul.sidebar
+          li.sidebar-main
+            a(ng-click='toggleSidebar()')
+              | Dashboard
+              span.menu-icon.glyphicon.glyphicon-transfer
+          li.sidebar-title
+            span NAVIGATION
+          li.sidebar-list
+            a(href='#')
+              | Dashboard 
+              span.menu-icon.fa.fa-tachometer
+          li.sidebar-list
+            a(href='#/tables')
+              | Tables 
+              span.menu-icon.fa.fa-table
+        .sidebar-footer
+          .col-xs-4
+            a(href='https://github.com/rdash/rdash-angular', target='_blank')
+              | Github
+          .col-xs-4
+            a(href='https://github.com/rdash/rdash-angular/README.md', target='_blank')
+              | About
+          .col-xs-4
+            a(href='#')
+              | Support
+      // End Sidebar
+      #content-wrapper
+        .page-content
+          // Header Bar
+          .row.header
+            .col-xs-12
+              .user.pull-right
+                .item.dropdown
+                  a.dropdown-toggle(href='#')
+                    img(src='images/avatar.jpg')
+                  ul.dropdown-menu.dropdown-menu-right
+                    li.dropdown-header
+                      | Joe Bloggs
+                    li.divider
+                    li.link
+                      a(href='#')
+                        | Profile
+                    li.link
+                      a(href='#')
+                        | Menu Item
+                    li.link
+                      a(href='#')
+                        | Menu Item
+                    li.divider
+                    li.link
+                      a(href='#')
+                        | Logout
+                .item.dropdown
+                  a.dropdown-toggle(href='#')
+                    i.fa.fa-bell-o
+                  ul.dropdown-menu.dropdown-menu-right
+                    li.dropdown-header
+                      | Notifications
+                    li.divider
+                    li
+                      a(href='#') Server Down!
+              .meta
+                .page
+                  | Dashboard
+                .breadcrumb-links
+                  | Home / Dashboard
+          // Main Content
+          div(ui-view)
+

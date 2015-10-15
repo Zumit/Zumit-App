@@ -43,6 +43,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 app.use(function(req,res,next){
   if (req.method === 'POST') {
@@ -58,15 +59,6 @@ app.use(function(req,res,next){
           console.log(users);
           if (users.length !== 0) {
           req.userinfo._id = users[0]._id;
-          }
-
-          if (req.body.rateeName){
-            User.find({'username':req.body.rateeName},function(err,ratee){
-              if(ratee.length !==0){
-                req.ratee_id=ratee[0]._id;
-                console.log(req.ratee_id);
-              }
-            });  
           }
 
           next();
@@ -94,6 +86,10 @@ app.use('/test', test);
 app.use('/event', events);
 app.use('/credit', credit);
 app.use('/admin', admin);
+
+app.get('/templates/:name', function(req, res){
+  res.render('templates/' + req.params.name);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

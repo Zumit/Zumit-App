@@ -31,14 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/sign_in_id"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Out"
-        android:id="@+id/sign_out_button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
     <!-- Temporary button to inflate My Rides Activity -->
 
 </RelativeLayout>

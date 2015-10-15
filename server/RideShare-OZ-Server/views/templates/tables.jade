@@ -1,0 +1,52 @@
+.row(ng-controller='TableCtrl')
+  .col-lg-12
+    rd-widget
+      rd-widget-header(icon='fa-tasks', title='Groups')
+        a(href='#') Manage
+      rd-widget-body(classes='medium no-padding')
+        .table-responsive
+          table.table.table-hover
+            tbody
+              tr(dir-paginate="group in groups | itemsPerPage: groupPageSize", current-page="groupCurrentPage", pagination-id="group", ng-click="setMemReq($index);", ng-class="{'info':$index==selectedIndex}")
+                td {{group.groupname}}
+                td {{group.location}}
+                td {{group.introduction}}
+                td {{group.group_location}}
+      rd-widget-footer
+        dir-pagination-controls(boundary-links="true", on-page-change="pageChangeHandler(newPageNumber)", template-url="templates/dirPaginationTpl", pagination-id="group")
+        .clearfix
+  .col-lg-6
+    rd-widget
+      rd-widget-header(icon='fa-tasks', title='Members')
+        a(href='#') Manage
+      rd-widget-body(classes='medium no-padding')
+        .table-responsive
+          table.table.table-striped
+            tbody
+              tr(dir-paginate="member in members | itemsPerPage: memberPageSize", current-page="memberCurrentPage", pagination-id="member") 
+                td {{member.username}}
+                td {{member.phone}}
+      rd-widget-footer
+        dir-pagination-controls(boundary-links="true", on-page-change="", template-url="templates/dirPaginationTpl", pagination-id="member")
+        .clearfix
+
+  .col-lg-6
+    rd-widget
+      rd-widget-header(icon='fa-tasks', title='Requests')
+        a(href='#') Manage
+      rd-widget-body(classes='medium no-padding')
+        .table-responsive
+          table.table.table-striped
+            tbody
+              tr(dir-paginate="request in requests | itemsPerPage: requestPageSize", current-page="requestCurrentPage", pagination-id="request")
+                td {{request.user.username}}
+                td {{request.requestDate}}
+                td(ng-click="acceptReq();",)
+                  span.text-success(tooltip='Accept')
+                    i.fa.fa-check
+                td
+                  span.text-danger(tooltip='Reject')
+                    i.fa.fa-times
+      rd-widget-footer
+        dir-pagination-controls(boundary-links="true", on-page-change="", template-url="templates/dirPaginationTpl", pagination-id="request")
+        .clearfix

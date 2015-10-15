@@ -29,6 +29,16 @@ public class Pickup implements Serializable
         this.driverRated = driverRated;
     }
 
+    public void setRatedByDriver(boolean ratedByDriver)
+    {
+        this.ratedByDriver = ratedByDriver;
+    }
+
+    public void setDriverRated(boolean driverRated)
+    {
+        this.driverRated = driverRated;
+    }
+
     public Location getLocation()
     {
         return location;

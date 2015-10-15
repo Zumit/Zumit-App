@@ -56,6 +56,7 @@ public class Group implements Serializable
         if (!allOtherGroups.containsKey(id) && !myGroups.containsKey(id))
         {
             Group newGroup = new Group(id, name, description);
+
             if (state == GroupState.NEW)
             {
                 newGroup.groupState = GroupState.NEW;
@@ -117,6 +118,7 @@ public class Group implements Serializable
         allGroups.addAll(myGroups.values());
         return allGroups;
     }
+
     public static ArrayList<Group> getAllGroups()
     {
         ArrayList<Group> allGroups = new ArrayList<>();
@@ -134,7 +136,6 @@ public class Group implements Serializable
             @Override
             public void onResponse(String s)
             {
-                System.out.println("response: " + s);
                 try
                 {
                     storeGroups(new JSONArray(s));
@@ -158,39 +159,45 @@ public class Group implements Serializable
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
 
                 return params;
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(getGroupsRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getGroupsRequest);
     }
 
-    public Group(JSONObject groupJson) throws JSONException
+    public Group(JSONObject groupJson)
     {
-        JSONObject tempObj = groupJson.getJSONObject("group");
-        this.groupId = tempObj.getString("_id");
-        this.name = tempObj.getString("groupname");
-        this.description = tempObj.getString("introduction");
-
-        String state = groupJson.getString("state");
-
-        switch (state)
+        try
         {
-            case "joined":
-                this.groupState = GroupState.JOINED;
-                break;
-
-            case "request":
-                this.groupState = GroupState.REQUESTING;
-                break;
-
-            default:
-                this.groupState = GroupState.NEW;
-                break;
+            JsonParser.parseGroup(groupJson, this);
+        } catch (JSONException e)
+        {
+            e.printStackTrace();
         }
+    }
+
+    public void setGroupState(GroupState groupState)
+    {
+        this.groupState = groupState;
+    }
+
+    public void setGroupId(String id)
+    {
+        groupId = id;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 
     public GroupState getGroupState()

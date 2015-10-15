@@ -24,8 +24,204 @@
   "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
   "admins":[],
   "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
   ],
-  "requests":[],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d01"},
+  "groupname":"Staffs of MelbUni01",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d02"},
+  "groupname":"Staffs of MelbUni02",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d03"},
+  "groupname":"Staffs of MelbUni03",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d04"},
+  "groupname":"Staffs of MelbUni04",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d05"},
+  "groupname":"Staffs of MelbUni05",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d06"},
+  "groupname":"Staffs of MelbUni06",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d07"},
+  "groupname":"Staffs of MelbUni07",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d08"},
+  "groupname":"Staffs of MelbUni08",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d09"},
+  "groupname":"Staffs of MelbUni09",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
+  "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
+  "__v":0
+}
+{
+  "_id":{"$oid":"5619d370192e12a9e00d6d10"},
+  "groupname":"Staffs of MelbUni10",
+  "introduction":"This is the private group for staffs in the University of Melbourne",
+  "group_location":[-37.796670, 144.960222],
+  "location":"University of Melbourne/Royal Parade, Parkville, Victoria, Australia",
+  "admins":[],
+  "members":[
+      {"$oid":"55ebd45c8a0d27bb8476be53"},
+      {"$oid":"55ebd3ced6902fb183321374"}
+  ],
+  "requests":[
+      {
+          "user":{"$oid":"55ebd465edd10def84417a43"}
+      }
+  ],
   "updated_at":{"$date":"2015-09-06T05:51:33.010Z"},
   "__v":0
 }

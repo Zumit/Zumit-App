@@ -56,6 +56,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         passengerList = (TableLayout) findViewById(R.id.passengerList);
         waitingList = (TableLayout) findViewById(R.id.waitingList);
 
+        // Display ride information
         startLabel.setText(ride.getStart().getAddress());
         endLabel.setText(ride.getEnd().getAddress());
         startTimeLabel.setText(ride.getStartTime());
@@ -63,6 +64,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         driverText.setText(ride.getDriver().getUsername());
         seatsText.setText(ride.getSeats());
 
+        // Click and go to driver user info page
         driverText.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -75,16 +77,44 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
         });
 
-        displayRequestsAndJoinedPass();
+        displayPassengers();
+        displayRequests();
     }
 
-    public void displayRequestsAndJoinedPass()
+    public void displayRequests()
+    {
+        ArrayList<Pickup> waitingListArray = ride.getWaiting();
+        waitingList.removeAllViews();
+
+        // Display requesting users
+        for (final Pickup lift : waitingListArray)
+        {
+            TextView request = new TextView(this);
+            request.setText(lift.getUser().getUsername());
+
+            if (ride.getRideState() == Ride.RideState.OFFERING)
+            {
+                request.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        Intent intent = new Intent(thisActivity, UserInfoActivity.class);
+                        intent.putExtra("Ride", ride);
+                        intent.putExtra("Pickup", lift);
+                        thisActivity.startActivity(intent);
+                    }
+                });
+            }
+
+            waitingList.addView(request);
+        }
+    }
+
+    public void displayPassengers()
     {
         ArrayList<Pickup> joinedList = ride.getJoined();
-        ArrayList<Pickup> waitingListArray = ride.getWaiting();
-
         passengerList.removeAllViews();
-        waitingList.removeAllViews();
 
         // Display joined passengers
         for (final Pickup lift : joinedList)
@@ -104,30 +134,6 @@ public class DriverViewRideActivity extends AppCompatActivity
             });
 
             passengerList.addView(pass);
-        }
-
-        // Display requesting users
-        for (final Pickup lift : waitingListArray)
-        {
-            TextView request = new TextView(this);
-            request.setText(lift.getUser().getUsername());
-
-            if (ride.getRideState() == Ride.RideState.OFFERING)
-            {
-                request.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                        intent.putExtra("Ride", ride);
-                        intent.putExtra("UserInfo", lift);
-                        thisActivity.startActivity(intent);
-                    }
-                });
-            }
-
-            waitingList.addView(request);
         }
     }
 
@@ -158,10 +164,10 @@ public class DriverViewRideActivity extends AppCompatActivity
 
     public void cancelRide(View view)
     {
-        sendCancelRequest(this);
+        sendCancelRequest();
     }
 
-    public void sendCancelRequest(final Activity activity)
+    public void sendCancelRequest()
     {
         StringRequest cancelRequest = new StringRequest(Request.Method.POST,
                 CANCEL_RIDE_URL, new Response.Listener<String>()
@@ -170,7 +176,7 @@ public class DriverViewRideActivity extends AppCompatActivity
             public void onResponse(String s)
             {
                 // Get back to the my rides page
-                activity.finish();
+                thisActivity.finish();
             }
         }, new Response.ErrorListener()
         {
@@ -194,6 +200,6 @@ public class DriverViewRideActivity extends AppCompatActivity
             }
         };
 
-        MyRequest.getInstance(this).addToRequestQueue(cancelRequest);
+        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(cancelRequest);
     }
 }

@@ -1,7 +1,5 @@
 package com.swen900014.orange.rideshareoz;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +22,7 @@ public class Ride implements Serializable
     private String arriving_time;
     private String start_time;
     private User driver;
-    private int seats;      // Max number of passengers who can join
+    private int seats;          // Max number of passengers who can join
 
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
@@ -41,116 +39,17 @@ public class Ride implements Serializable
         OFFERING, JOINED, VIEWING, NEW, PASSED
     }
 
-    public Ride(String start, String end, String arriving_time, User driver, int limit)
-    {
-        this.start = new Location(start);
-        this.end = new Location(end);
-        this.arriving_time = arriving_time;
-        this.driver = driver;
-        this.seats = limit;
-        rideId = "0";
-        joined = new ArrayList<>(limit);
-        waiting = new ArrayList<>();
-    }
-
     public Ride(JSONObject jsonRide)
     {
-        JSONObject tempObj;
-        JSONArray tempArray;
-        JSONArray tempLocationArray;
-        waiting = new ArrayList<>();
         joined = new ArrayList<>();
+        waiting = new ArrayList<>();
 
-        // Parse json data received and convert them into
-        // a Ride object
         try
         {
-            // Get start and end address
-            String startAddress = jsonRide.getString("start_add");
-            String endAddress = jsonRide.getString("destination");
-
-            // Get start lat and lon
-            tempArray = jsonRide.getJSONArray("start_point");
-            start = new Location(tempArray.getDouble(0), tempArray.getDouble(1), startAddress);
-
-            // Get end lat and lon
-            tempArray = jsonRide.getJSONArray("end_point");
-            end = new Location(tempArray.getDouble(0), tempArray.getDouble(1), endAddress);
-
-            // Get ride id
-            rideId = jsonRide.getString("_id");
-
-            // Get driver info
-            tempObj = jsonRide.getJSONObject("driver");
-            driver = User.addUserIfNotExist(tempObj.getString("username"), tempObj.getString("username"), tempObj.getString("phone"), 0);
-
-            // Get seat number, start time and arrival time
-            seats = jsonRide.getInt("seats");
-            arriving_time = DateFormatter.format(jsonRide.getString("arrival_time"));
-            start_time = DateFormatter.format(jsonRide.getString("start_time"));
-
-            /* get the list of requests */
-
-            tempArray = jsonRide.getJSONArray("requests");
-
-            for (int i = 0; i < tempArray.length(); i++)
-            {
-                tempObj = tempArray.getJSONObject(i);
-                JSONObject requestingPassObj = tempObj.getJSONObject("user");
-                String username = requestingPassObj.getString("username");
-
-                User pass = User.addUserIfNotExist(username, tempObj.getString("username"), tempObj.getString("phone"), 0);
-
-                //TODO: optimize this using object comparison
-                if (User.getCurrentUser().getUsername().equals(username))
-                {
-                    this.rideState = RideState.VIEWING;
-                }
-                tempLocationArray = tempObj.getJSONArray("pickup_point");
-                Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
-                loc.setAddress(tempObj.getString("pickup_add"));
-
-                waiting.add(new Pickup(pass, loc));
-            }
-
-            /* get the list of joins */
-            tempArray = jsonRide.getJSONArray("passengers");
-
-            if (tempArray != null)
-            {
-                for (int i = 0; i < tempArray.length(); i++)
-                {
-                    tempObj = tempArray.getJSONObject(i);
-                    JSONObject joinedPassObj = tempObj.getJSONObject("user");
-                    String username = joinedPassObj.getString("username");
-                    User pass = User.addUserIfNotExist(username, username, joinedPassObj.getString("phone"), 0);
-
-                    //TODO: optimize this using object comparison
-                    if (User.getCurrentUser() == pass)
-                    {
-                        this.rideState = RideState.JOINED;
-                    }
-
-                    tempLocationArray = tempObj.getJSONArray("pickup_point");
-                    Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
-                    loc.setAddress(tempObj.getString("pickup_add"));
-                    joined.add(new Pickup(pass, loc));
-                }
-            }
+            JsonParser.parseRide(jsonRide, this);
         } catch (JSONException e)
         {
             e.printStackTrace();
-        } finally
-        {
-            //TODO: optimize this using object comparison
-            try {
-                if (this.getDriver() == User.getCurrentUser() ) {
-                /* add to the offering list*/
-                    this.rideState = RideState.OFFERING;
-                }
-            }catch (NullPointerException e){
-                Log.e("RideParse:", this.getStart().getAddress());
-            }
         }
     }
 
@@ -159,11 +58,13 @@ public class Ride implements Serializable
     public static ArrayList<Ride> fromJson(JSONArray ridesJsonArray, boolean isSearchResults)
     {
         ArrayList<Ride> rides = new ArrayList<>();
+
         for (int i = 0; i < ridesJsonArray.length(); i++)
         {
             try
             {
                 Ride nRide = new Ride(ridesJsonArray.getJSONObject(i));
+
                 if (isSearchResults || (nRide.rideState != RideState.NEW))
                 {
                     rides.add(nRide);
@@ -173,22 +74,8 @@ public class Ride implements Serializable
                 e.printStackTrace();
             }
         }
+
         return rides;
-    }
-
-    // For Testing without receiving server data
-    public Ride(RideState s)
-    {
-        this.start = new Location("Epping");
-        this.end = new Location("UniMelb");
-
-        this.arriving_time = "13:30:00";
-        this.driver = new User("George", "george.nader@gmail.com", "000", 0);
-        this.seats = 4;
-        rideId = "0";
-        this.joined = new ArrayList<>();
-        this.waiting = new ArrayList<>();
-        this.rideState = s;
     }
 
     public boolean acceptJoin(Pickup lift)
@@ -224,11 +111,11 @@ public class Ride implements Serializable
         return false;
     }
 
-    public boolean hasPass(User pass)
+    public boolean hasPass(User passenger)
     {
         for (Pickup pick : joined)
         {
-            if (pass.getUsername() == pick.getUser().getUsername())
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
             {
                 return true;
             }
@@ -250,13 +137,24 @@ public class Ride implements Serializable
         return false;
     }
 
+    public void setDriverRated(User passenger, boolean driverRated)
+    {
+        for (Pickup pick : joined)
+        {
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
+            {
+                pick.setDriverRated(driverRated);
+            }
+        }
+    }
+
     public boolean isDriverRated()
     {
         boolean driverRated = false;
 
         for (Pickup pickup : joined)
         {
-            if (pickup.getUser().getUsername() == User.getCurrentUser().getUsername())
+            if (pickup.getUser().getUsername().equals(User.getCurrentUser().getUsername()))
             {
                 driverRated = pickup.isDriverRated();
             }
@@ -271,7 +169,7 @@ public class Ride implements Serializable
 
         for (Pickup pickup : joined)
         {
-            if (pickup.getUser().getUsername() == passName)
+            if (pickup.getUser().getUsername().equals(passName))
             {
                 isPassRated = pickup.isRatedByDriver();
             }
@@ -290,19 +188,24 @@ public class Ride implements Serializable
         this.start_time = start_time;
     }
 
+    public void setDriver(User driver)
+    {
+        this.driver = driver;
+    }
+
+    public void setSeats(int seats)
+    {
+        this.seats = seats;
+    }
+
     public void setStart(Location start)
     {
-        start = start;
+        this.start = start;
     }
 
     public void setEnd(Location end)
     {
-        start = end;
-    }
-
-    public String getSeats()
-    {
-        return Integer.toString(seats);
+        this.end = end;
     }
 
     public void setRideId(String id)
@@ -310,10 +213,24 @@ public class Ride implements Serializable
         rideId = id;
     }
 
-    // For testing
+    public void setState(RideState state)
+    {
+        this.rideState = state;
+    }
+
     public void addWaiting(Pickup lift)
     {
         waiting.add(lift);
+    }
+
+    public void addJoin(Pickup pickup)
+    {
+        joined.add(pickup);
+    }
+
+    public String getSeats()
+    {
+        return Integer.toString(seats);
     }
 
     public String getArrivingTime()

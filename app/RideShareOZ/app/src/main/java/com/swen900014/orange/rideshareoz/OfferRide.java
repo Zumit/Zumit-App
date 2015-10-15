@@ -52,7 +52,7 @@ public class OfferRide extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
-   // String[] EVENTS = {"BBQ","OCEAN ROAD","3D PRINTING"};
+    // String[] EVENTS = {"BBQ","OCEAN ROAD","3D PRINTING"};
 
 
     ArrayList<Group> selectGroups = null;
@@ -198,7 +198,8 @@ public class OfferRide extends FragmentActivity implements
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(AdapterView<?> parent)
+            {
 
             }
 
@@ -216,6 +217,12 @@ public class OfferRide extends FragmentActivity implements
         getIntent();
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        Group.loadGroups(this);
+        Event.loadEvents(this);
+    }
 
 
 
@@ -267,12 +274,13 @@ public class OfferRide extends FragmentActivity implements
         //  new TimePickerDialog(OfferRide.this, listener4, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
     }
 
-    private void selectGroup(View v) {
+    private void selectGroup(View v)
+    {
 
         //receive a list of group
         selectGroups = Group.getMyGroups();
         final String[] groupsArray = new String[selectGroups.size()];
-        for(int i=0; i<selectGroups.size(); i++)
+        for (int i = 0; i < selectGroups.size(); i++)
         {
             groupsArray[i] = selectGroups.get(i).getName();
         }
@@ -354,7 +362,6 @@ public class OfferRide extends FragmentActivity implements
                                     .getString("formatted_address");
 
 
-
                         } catch (Exception e)
                         {
                             e.printStackTrace();
@@ -372,7 +379,7 @@ public class OfferRide extends FragmentActivity implements
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getCurrentAddressRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getCurrentAddressRequest);
     }
     public void sendRequest(final Activity activity)
     {
@@ -419,7 +426,7 @@ public class OfferRide extends FragmentActivity implements
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getStartLocRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getStartLocRequest);
     }
 
     private void getEndpointLoc(final Activity activity)
@@ -554,7 +561,7 @@ public class OfferRide extends FragmentActivity implements
             }
         };
 
-        MyRequest.getInstance(activity).addToRequestQueue(OfferRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(OfferRequest);
     }
 
     @Override
@@ -564,7 +571,6 @@ public class OfferRide extends FragmentActivity implements
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
 
     DatePickerDialog.OnDateSetListener listener1 = new DatePickerDialog.OnDateSetListener()
@@ -695,8 +701,6 @@ public class OfferRide extends FragmentActivity implements
         new TimePickerDialog(OfferRide.this, listener4, calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE), true).show();
     }
-
-
 
 
     //Check whether all information needed for offering a ride
