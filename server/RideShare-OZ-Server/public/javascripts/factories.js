@@ -6,14 +6,14 @@
 angular.module('RDash').factory('groupDataFactory', ['$http', '$q', '$timeout', function($http, $q, $timeout) {
   return {
     getGroupData: function() {
-      var MAX_REQUESTS = 100,
+      var MAX_REQUESTS = 5,
           counter = 1,
           results = $q.defer();
 
       var request = function() {
         $http({method: 'GET', url: 'group/getall'})
           .success(function(response) {
-            results.resolve(response);
+            results.resolve(response.reverse());
           })
         .error(function() {
           if (counter < MAX_REQUESTS) {

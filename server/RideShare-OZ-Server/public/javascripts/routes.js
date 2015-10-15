@@ -15,9 +15,17 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/',
                 templateUrl: 'templates/dashboard'
             })
-            .state('tables', {
-                url: '/tables',
-                templateUrl: 'templates/tables'
+            .state('group', {
+                url: '/group',
+                templateUrl: 'templates/group'
             });
+            // .state('event', {
+                // url: '/event',
+                // templateUrl: 'templates/event'
+            // });
+            // .state('user', {
+                // url: '/user',
+                // templateUrl: 'templates/user'
+            // });
     }
 ]);
