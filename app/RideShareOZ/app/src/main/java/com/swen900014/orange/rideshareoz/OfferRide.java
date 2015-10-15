@@ -52,7 +52,7 @@ public class OfferRide extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
-    // String[] EVENTS = {"BBQ","OCEAN ROAD","3D PRINTING"};
+
 
 
     ArrayList<Group> selectGroups = null;
@@ -95,7 +95,11 @@ public class OfferRide extends FragmentActivity implements
     private String endAddress = "";
 
     private boolean isFind = false;
+    private boolean isGroup = false;
     private boolean isEvent = false;
+    private boolean isToEvent = false;
+    private boolean isFromEvent = false;
+    private String eventLocation;
     protected GoogleApiClient mGoogleApiClient;
 
     private static final LatLngBounds BOUNDS_GREATER_Melbourne = new LatLngBounds(
@@ -129,11 +133,10 @@ public class OfferRide extends FragmentActivity implements
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
 
-        textSN = (TextView) findViewById(R.id.txtSeatNo);
-        textStartTime = (TextView) findViewById(R.id.startTimeText);
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
        //gps
+        /*
          GPSTracker gps = new GPSTracker(this);
 
         // check if GPS enabled
@@ -148,7 +151,7 @@ public class OfferRide extends FragmentActivity implements
             gps.showSettingsAlert();
         }
 
-
+*/
        /* check if it offer or find  */
         Intent intent = this.getIntent();
         if (intent != null && intent.hasExtra("type"))
@@ -218,8 +221,8 @@ public class OfferRide extends FragmentActivity implements
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
+    public void onRestart(){
+        super.onRestart();
         Group.loadGroups(this);
         Event.loadEvents(this);
     }
@@ -241,13 +244,13 @@ public class OfferRide extends FragmentActivity implements
             groupId = "";
             btnSelectEvent.setEnabled(true);
             btnSelectGroup.setEnabled(true);
+            EditStart.setHint("");
+            EditEnd.setHint("");
         }
 
         if (v.getId() == R.id.buttonEvent)
         {
             selectEvent(v);
-            EditEnd.setEnabled(false);
-
         }
         if (v.getId() == R.id.buttonGroup)
         {
@@ -261,17 +264,14 @@ public class OfferRide extends FragmentActivity implements
         {
             setDate(v);
         }
-        //   new DatePickerDialog(OfferRide.this, listener1, calendar.get(calendar.YEAR), calendar.get(calendar.MONTH), calendar.get(calendar.DAY_OF_MONTH)).show();
         if (v.getId() == R.id.setStartTimeButton)
         {
             setStartTime(v);
         }
-        //  new TimePickerDialog(OfferRide.this, listener2, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
         if (v.getId() == R.id.setEndTimeButton)
         {
             setArrivalTime(v);
         }
-        //  new TimePickerDialog(OfferRide.this, listener4, calendar.get(calendar.HOUR_OF_DAY), calendar.get(calendar.MINUTE), true).show();
     }
 
     private void selectGroup(View v)
@@ -291,20 +291,22 @@ public class OfferRide extends FragmentActivity implements
         builder1.setItems(groupsArray, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
-
-                Toast.makeText(getApplicationContext(), "You have selected" +groupsArray[position], Toast.LENGTH_SHORT).show();
+                btnSelectEvent.setEnabled(false);
+                isGroup = true;
+                //Toast.makeText(getApplicationContext(), "You have selected" + groupsArray[position], Toast.LENGTH_SHORT).show();
                 groupId = selectGroups.get(position).getGroupId();
+                Toast.makeText(getApplicationContext(), "You have selected" + groupId, Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alertDialog = builder1.create();
         alertDialog.show();
-        btnSelectEvent.setEnabled(false);
+
     }
 
-    private void selectEvent(View v) {
-        isEvent = true;
 
-        //receive a list of event
+     private void selectEvent(View v) {
+
+        /* receive a list of event */
 
         selectEvents = Event.getAllEvents();
         final String[] eventsArray = new String[selectEvents.size()];
@@ -318,18 +320,41 @@ public class OfferRide extends FragmentActivity implements
         builder1.setItems(eventsArray, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
-
-                Toast.makeText(getApplicationContext(), "You have selected" +eventsArray[position], Toast.LENGTH_SHORT).show();
+                isEvent = true;
+                btnSelectGroup.setEnabled(false);
+                Toast.makeText(getApplicationContext(), "You have selected" + eventsArray[position], Toast.LENGTH_SHORT).show();
                 eventId = selectEvents.get(position).getEventId();
-                EditEnd.setHint(selectEvents.get(position).getEventLocation().getAddress());
+                eventLocation = selectEvents.get(position).getEventLocation().getAddress().toString();
                 endAddress = selectEvents.get(position).getEventLocation().getAddress();
-                latE =  Double.toString(selectEvents.get(position).getEventLocation().getLat());
-                lonE =  Double.toString(selectEvents.get(position).getEventLocation().getLon());
+                latE = Double.toString(selectEvents.get(position).getEventLocation().getLat());
+                lonE = Double.toString(selectEvents.get(position).getEventLocation().getLon());
+                AlertDialog.Builder builder3 = new AlertDialog.Builder(OfferRide.this);
+                builder3.setTitle("Select type");
+                builder3.setPositiveButton("To this event!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        isToEvent = true;
+                        EditEnd.setHint(eventLocation.toString());
+                        // EditEnd.setKeyListener(null);
+                        Check2.setEnabled(false);
+                    }
+                });
+                builder3.setNegativeButton("From this event!", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        isFromEvent = true;
+                        EditStart.setHint(eventLocation.toString());
+                        // EditStart.setKeyListener(null);
+                        Check1.setEnabled(false);
+                    }
+                });
+                AlertDialog alertDialog = builder3.create();
+                alertDialog.show();
+
             }
         });
+
         AlertDialog alertDialog = builder1.create();
         alertDialog.show();
-        btnSelectGroup.setEnabled(false);
+
     }
 
 
@@ -491,7 +516,7 @@ public class OfferRide extends FragmentActivity implements
                     }
                 });
 
-        MyRequest.getInstance(activity).addToRequestQueue(getEndLocRequest);
+        MyRequestQueue.getInstance(activity).addToRequestQueue(getEndLocRequest);
     }
 
     private void sendRideInfo(final Activity activity)
@@ -551,12 +576,12 @@ public class OfferRide extends FragmentActivity implements
                 }
 
                 params.put("group_id", groupId);
-                params.put("event_id", eventId);
+               // params.put("event_id", eventId);
                 params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
                 params.put("username", User.getCurrentUser().getUsername());
-
+                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
                 return params;
             }
         };
@@ -707,40 +732,60 @@ public class OfferRide extends FragmentActivity implements
     // has been typed in by user
     public boolean inputValid()
     {
-        /*return !(SpinSN.getText().toString().isEmpty() ||
-                EditEndTime.toString().isEmpty() ||
-                EditStartTime.toString().isEmpty() ||
-                startCityEdit.getText().toString().isEmpty() ||
-                startSuburbEdit.getText().toString().isEmpty() ||
-                startStreetEdit.getText().toString().isEmpty() ||
-                endCityEdit.getText().toString().isEmpty() ||
-                endSuburbEdit.getText().toString().isEmpty() ||
-                endStreetEdit.getText().toString().isEmpty());
-        //EditStart.getText().toString().isEmpty() ||u
-        //EditEnd.getText().toString().isEmpty());*/
+        boolean check = false;
+        if (isGroup||isEvent)
+            check = true;
         return true;
+
+                /*!((!check)||displayDate.getText().toString().isEmpty()||
+                displayStartTime .getText().toString().isEmpty()||
+                displayArrivalTime .getText().toString().isEmpty()||
+                EditStart.getText().toString().isEmpty()||
+                EditEnd.getText().toString().isEmpty()*/
+
+
     }
 
     public void offerRide(View view)
     {
-        startAddress = EditStart.getText().toString();
-        if(!isEvent)
+        if(!(isEvent||isGroup))
         {
-            endAddress = EditEnd.getText().toString();
+            System.out.println("Have not choose any group or event!!");
+            Toast.makeText(getApplicationContext(),"Must select a group or an event!",Toast.LENGTH_SHORT).show();
         }
+        else
+        {
+        if(isEvent)
+        {
+            if(isToEvent){
+                startAddress = EditStart.getText().toString();
+                endAddress = eventLocation;
+            }
+            else
+            if(isFromEvent){
+                startAddress = eventLocation ;
+                endAddress = EditEnd.getText().toString();
+            }
+        }
+        if(isGroup)
+        {
+            startAddress = EditStart.getText().toString();
+            endAddress = EditEnd.getText().toString();
+            Toast.makeText(getApplicationContext(),"Group info"+startAddress,Toast.LENGTH_SHORT).show();
+        }
+
         if (Check1.isChecked()||Check2.isChecked())
         {
             reverseAddress(this);
         }
         else
-        if (inputValid())
         {
-            sendRequest(this);
+            if (inputValid()) {
+                sendRequest(this);
+            }
+            else  System.out.println("Invalid Input!!!");
         }
-        else
-        {
-            System.out.println("Invalid input in offerRide");
-        }
+    }
     }
 
 
