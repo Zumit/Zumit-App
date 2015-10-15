@@ -164,7 +164,7 @@ public class OfferRide extends FragmentActivity implements
                 textSN.setVisibility(View.GONE);
                 btnStartTime.setVisibility(View.GONE);
                 spinner.setVisibility(View.GONE);
-                textTitle.setText("                     Search A Ride");
+                textTitle.setText("                   Search For Ride");
                 isFind = true;
             }
         }
@@ -757,7 +757,7 @@ public class OfferRide extends FragmentActivity implements
         }
 
         return !((!checkBelong)||displayDate.getText().toString().isEmpty()||
-         displayStartTime .getText().toString().isEmpty()||
+                (displayStartTime .getText().toString().isEmpty() && !isFind)||
          displayArrivalTime .getText().toString().isEmpty()||
          (!checkStart)||(!checkEnd));
 

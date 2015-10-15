@@ -175,7 +175,7 @@ public class MyRidesFragment extends Fragment
 
         MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getRidesRequest);
     }
-    
+
 
     private void storeRides(String response)
     {
