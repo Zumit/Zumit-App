@@ -204,8 +204,13 @@ public class MainActivity extends AppCompatActivity implements
     protected void onRestart()
     {
         super.onRestart();
+        //Load all groups and events to be available for offer and search rides
+        Group.loadGroups(this);
+        Event.loadEvents(this);
+
         //refresh rides
         activityFragment.sendGetRidesRequest();
+
     }
 
     @Override

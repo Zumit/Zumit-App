@@ -174,7 +174,12 @@ public class MyRidesFragment extends Fragment
         url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
         url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
         url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
-        url += "group_id=" + intent.getStringExtra("group_id");
+        if(intent.getBooleanExtra("isGroup", true) ){
+            url += "group_id=" + intent.getStringExtra("group_id");
+        }else {
+            url += "event_id=" + intent.getStringExtra("event_id");
+        }
+
 
         StringRequest searchRequest = new StringRequest(Request.Method.GET,
                 url, new Response.Listener<String>()

@@ -67,6 +67,9 @@ public class OfferRide extends FragmentActivity implements
     private String houra="";
     private String mina="";
 
+    private TextView textSN;
+    private TextView textTitle;
+    private TextView textStartTime;
 
     private CheckBox Check1, Check2;
 
@@ -130,6 +133,9 @@ public class OfferRide extends FragmentActivity implements
 
         Check1 = (CheckBox) findViewById(R.id.current1);
         Check2 = (CheckBox) findViewById(R.id.current2);
+        textSN = (TextView)findViewById(R.id.txtSeatNo);
+        textTitle = (TextView)findViewById(R.id.textView4);
+
        //gps
 
          GPSTracker gps = new GPSTracker(this);
@@ -155,8 +161,10 @@ public class OfferRide extends FragmentActivity implements
             if (type.equals("find"))
             {
                // SpinSN.setVisibility(View.INVISIBLE);
-               // textSN.setVisibility(View.INVISIBLE);
-                btnStartTime.setVisibility(View.INVISIBLE);
+                textSN.setVisibility(View.GONE);
+                btnStartTime.setVisibility(View.GONE);
+                spinner.setVisibility(View.GONE);
+                textTitle.setText("                     Search A Ride");
                 isFind = true;
             }
         }
@@ -214,16 +222,9 @@ public class OfferRide extends FragmentActivity implements
 
         getIntent();
     }
-/*
-    @Override
-    public void onRestart(){
-        super.onRestart();
-        Group.loadGroups(this);
-        Event.loadEvents(this);
-    }
+
 
 */
-
 
 
     @Override
@@ -491,11 +492,13 @@ public class OfferRide extends FragmentActivity implements
                         {
                             Intent searchResultsIntent = new Intent(OfferRide.this, MyRidesActivity.class);
                             searchResultsIntent.putExtra("type", "find");
-                            searchResultsIntent.putExtra("s_lon", lonS);
-                            searchResultsIntent.putExtra("s_lat", latS);
-                            searchResultsIntent.putExtra("group_id", "55cab5dde81ab31606e4814c");
-                            searchResultsIntent.putExtra("e_lon", lonE);
-                            searchResultsIntent.putExtra("e_lat", latE);
+                            searchResultsIntent.putExtra("s_lon", ((Check1.isChecked())?lonC:lonS));
+                            searchResultsIntent.putExtra("s_lat", ((Check1.isChecked())?latC:latS));
+                            searchResultsIntent.putExtra("group_id",groupId);
+                            searchResultsIntent.putExtra("event_id",eventId);
+                            searchResultsIntent.putExtra("isGroup",isGroup);
+                            searchResultsIntent.putExtra("e_lon", ((Check2.isChecked())?lonC:lonE));
+                            searchResultsIntent.putExtra("e_lat", ((Check2.isChecked())?latC:latE));
                             searchResultsIntent.putExtra("arrival_time", EditEndTime);
                             startActivity(searchResultsIntent);
                         }
