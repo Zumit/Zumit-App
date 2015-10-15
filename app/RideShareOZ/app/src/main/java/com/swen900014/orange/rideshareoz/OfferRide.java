@@ -52,17 +52,13 @@ public class OfferRide extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener
 {
-
-
-
     ArrayList<Group> selectGroups = null;
     ArrayList<Event> selectEvents = null;
-
 
     private final String TAG = "OfferRide";
     private String eventId = "";
     private String groupId = "";
-    private String temp1 = "",SeatNo="1";
+    private String tempDate = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
 
@@ -74,6 +70,7 @@ public class OfferRide extends FragmentActivity implements
     private TextView textSN;
     private TextView textTitle;
     private TextView textStartTime;
+
     private CheckBox Check1, Check2;
 
     private AutoCompleteTextView EditStart;
@@ -225,7 +222,6 @@ public class OfferRide extends FragmentActivity implements
 
         getIntent();
     }
-
 
 
 
@@ -585,8 +581,8 @@ public class OfferRide extends FragmentActivity implements
                 params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
                 return params;
             }
         };
@@ -630,7 +626,7 @@ public class OfferRide extends FragmentActivity implements
             }
 
             displayDate.setText(dayOfMonth + "-" + month + "-" + year);
-            temp1 = String.valueOf(year) + "-" + month + "-" + day + "T";
+            tempDate = String.valueOf(year) + "-" + month + "-" + day + "T";
         }
     };
 
@@ -660,7 +656,7 @@ public class OfferRide extends FragmentActivity implements
             }
 
             displayStartTime.setText(hourOfDay + ":" + minute);
-            EditStartTime = temp1 + hours+ ":" + mins + ":00.000Z";
+            EditStartTime = tempDate + hours+ ":" + mins + ":00.000Z";
         }
     };
 
@@ -691,7 +687,7 @@ public class OfferRide extends FragmentActivity implements
             }
 
             displayArrivalTime.setText(hourOfDay + ":" + minute);
-            EditEndTime = temp1 + houra + ":" + mina + ":00.000Z";
+            EditEndTime = tempDate + houra + ":" + mina + ":00.000Z";
             checkTime(hours, mins,houra, mina);
         }
     };
@@ -737,29 +733,41 @@ public class OfferRide extends FragmentActivity implements
     // has been typed in by user
     public boolean inputValid()
     {
-        boolean check = false;
-        if (isGroup||isEvent)
-            check = true;
-        return true;
+        boolean checkBelong = false,checkStart = false, checkEnd = false;
 
-                /*!((!check)||displayDate.getText().toString().isEmpty()||
-                displayStartTime .getText().toString().isEmpty()||
-                displayArrivalTime .getText().toString().isEmpty()||
-                EditStart.getText().toString().isEmpty()||
-                EditEnd.getText().toString().isEmpty()*/
+
+        if (isGroup||isEvent)
+            checkBelong = true;
+        else
+        {
+            System.out.println("Have not choose any group or event!!");
+            Toast.makeText(getApplicationContext(),"Must select a group or an event!",Toast.LENGTH_SHORT).show();
+        }
+        if (!EditStart.getText().toString().isEmpty()||isFromEvent||Check1.isChecked())
+            checkStart = true;
+        else {
+            System.out.println("Have not input start point!!");
+            Toast.makeText(getApplicationContext(),"Must set start point!",Toast.LENGTH_SHORT).show();
+        }
+        if (!EditEnd.getText().toString().isEmpty()||isToEvent||Check2.isChecked())
+            checkEnd = true;
+        else {
+            System.out.println("Have not input end point!!");
+            Toast.makeText(getApplicationContext(),"Must set end point!",Toast.LENGTH_SHORT).show();
+        }
+
+        return !((!checkBelong)||displayDate.getText().toString().isEmpty()||
+         displayStartTime .getText().toString().isEmpty()||
+         displayArrivalTime .getText().toString().isEmpty()||
+         (!checkStart)||(!checkEnd));
 
 
     }
 
     public void offerRide(View view)
     {
-        if(!(isEvent||isGroup))
-        {
-            System.out.println("Have not choose any group or event!!");
-            Toast.makeText(getApplicationContext(),"Must select a group or an event!",Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        if (inputValid()) {
+
         if(isEvent)
         {
             if(isToEvent){
@@ -776,7 +784,7 @@ public class OfferRide extends FragmentActivity implements
         {
             startAddress = EditStart.getText().toString();
             endAddress = EditEnd.getText().toString();
-            Toast.makeText(getApplicationContext(),"Group info"+startAddress,Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(getApplicationContext(),"Group info"+startAddress,Toast.LENGTH_SHORT).show();
         }
 
         if (Check1.isChecked()||Check2.isChecked())
@@ -784,13 +792,15 @@ public class OfferRide extends FragmentActivity implements
             reverseAddress(this);
         }
         else
-        {
-            if (inputValid()) {
-                sendRequest(this);
-            }
-            else  System.out.println("Invalid Input!!!");
+         sendRequest(this);
+
         }
-    }
+
+        else {
+            System.out.println("Invalid Input!!!");
+            Toast.makeText(getApplicationContext(),"input invalid!!",Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
