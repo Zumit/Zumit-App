@@ -575,8 +575,9 @@ public class OfferRide extends FragmentActivity implements
                     params.put("destination", endAddress);
                 }
 
-                params.put("group_id", groupId);
-               // params.put("event_id", eventId);
+                if(isGroup) params.put("group_id", groupId);
+                if(isEvent) params.put("event_id", eventId);
+
                 params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
