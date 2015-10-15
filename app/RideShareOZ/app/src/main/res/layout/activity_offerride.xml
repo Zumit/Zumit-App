@@ -25,7 +25,8 @@
             android:background="#76adff"
             android:textColor="#ffffff"
             android:layout_columnSpan="4"
-            android:textSize="22dp" />
+            android:textSize="22dp"
+            android:textAlignment="center" />
 
         <TextView
             android:layout_width="wrap_content"
