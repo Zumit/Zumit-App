@@ -25,7 +25,7 @@
     <string name="_offerRide">Offer</string>
     <string name="_findRide">Search</string>
     <string name="_Start">Start Point</string>
-    <string name="_Current">Current</string>
+    <string name="_Current">Current Location</string>
     <string name="_End">To: </string>
     <string name="_Submit"><a href="#">Submit</a></string>
     <string name="_Reset"><a href="#">Reset</a></string>

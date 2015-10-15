@@ -69,6 +69,9 @@ public class OfferRide extends FragmentActivity implements
 
     private TextView textSN;
     private TextView textTitle;
+    private TextView textSearchEvent;
+    private TextView textSearchGroup;
+
     private TextView textStartTime;
 
     private CheckBox Check1, Check2;
@@ -135,6 +138,8 @@ public class OfferRide extends FragmentActivity implements
         Check2 = (CheckBox) findViewById(R.id.current2);
         textSN = (TextView)findViewById(R.id.txtSeatNo);
         textTitle = (TextView)findViewById(R.id.textView4);
+        textSearchEvent = (TextView)findViewById(R.id.textView5);
+        textSearchGroup = (TextView)findViewById(R.id.textView6);
 
        //gps
 
@@ -153,7 +158,7 @@ public class OfferRide extends FragmentActivity implements
         }
 
 
-       /* check if it offer or find  */
+       /* check if it is offer or find  */
         Intent intent = this.getIntent();
         if (intent != null && intent.hasExtra("type"))
         {
@@ -165,14 +170,13 @@ public class OfferRide extends FragmentActivity implements
                 btnStartTime.setVisibility(View.GONE);
                 spinner.setVisibility(View.GONE);
                 textTitle.setText("                   Search For Ride");
+                textSearchEvent.setText("Search To An Event!");
+                textSearchGroup.setText("Search To A Group!");
                 isFind = true;
             }
         }
-
-
         EditStart = (AutoCompleteTextView)
                 findViewById(R.id.Start);
-
 
         EditEnd = (AutoCompleteTextView)
                 findViewById(R.id.End);
@@ -192,7 +196,6 @@ public class OfferRide extends FragmentActivity implements
         spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -380,7 +383,7 @@ public class OfferRide extends FragmentActivity implements
 
                             currentAddress = jsonResponse.getJSONArray("results").getJSONObject(0)
                                     .getString("formatted_address");
-
+                            
 
                         } catch (Exception e)
                         {
@@ -734,8 +737,6 @@ public class OfferRide extends FragmentActivity implements
     public boolean inputValid()
     {
         boolean checkBelong = false,checkStart = false, checkEnd = false;
-
-
         if (isGroup||isEvent)
             checkBelong = true;
         else
@@ -793,15 +794,11 @@ public class OfferRide extends FragmentActivity implements
         }
         else
          sendRequest(this);
-
         }
-
         else {
             System.out.println("Invalid Input!!!");
             Toast.makeText(getApplicationContext(),"input invalid!!",Toast.LENGTH_SHORT).show();
         }
 
     }
-
-
 }
