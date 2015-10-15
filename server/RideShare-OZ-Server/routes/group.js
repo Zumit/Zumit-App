@@ -65,6 +65,23 @@ router.post('/leave', function(req, res) {
  });
 });
 
-
+router.post('/update', function(req, res, next){
+  Group.findOne({'_id': req.body.group_id}, function(err, group){
+    if (group) {
+      group.groupname = (req.body.name)? req.body.name : group.groupname;
+      group.location = (req.body.location)? req.body.location : group.location;
+      group.introduction = (req.body.introduction)? req.body.introduction : group.introduction;
+      group.group_location = (req.body.g_lon !== null && req.body.g_lat !== null)? [req.body.g_lon, req.body.g_lat] : group.group_location;
+      console.log(group.group_location);
+      group.save(function(err){
+        res.json(group);
+      });
+    } else {
+      Group.createGroup(req,function(group){
+        res.json(group);
+      });
+    }
+  });
+});
 
 module.exports = router;

@@ -7,7 +7,6 @@ var GroupsSchema = new Schema({
   introduction: String,
   group_location: [Number],
   location :String,
-  adminID: {type: Schema.Types.ObjectId, ref: 'User' },
   members: [{type: Schema.Types.ObjectId, ref: 'User' }],
   requests: [{
     user:{type: Schema.Types.ObjectId, ref: 'User' },
@@ -20,21 +19,16 @@ GroupsSchema.statics.createGroup= function(req,callback) {
   var Group = mongoose.model('Group');
   var groups = new Group();
   groups.groupname = req.body.name;
-  var lon=req.body.g_lon;
-  var lat=req.body.g_lat;
-  groups.gruop_location=[lon,lat];
-  groups.location=rq.body.location;
+  groups.group_location = [req.body.g_lon,req.body.g_lat];
+  groups.location=req.body.location;
   groups.introduction=req.body.introduction;
-  User.findById(req.userinfo._id, function(err, user){
-    groups.adminID=user;
-    groups.save(function(err, doc){
-      if (err) {
-        console.log(err);
-      }
-      callback(doc);
-      });
-    });
-  };
+  groups.save(function(err, doc){
+    if (err) {
+      console.log(err);
+    }
+    callback(doc);
+  });
+};
 
 
   GroupsSchema.statics.addRequest= function(req,callback){

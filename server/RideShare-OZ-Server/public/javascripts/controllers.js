@@ -72,9 +72,9 @@ function AlertsCtrl($scope) {
 
 angular
 .module('RDash')
-.controller('TableCtrl', ['$scope', '$http', TableCtrl]);
+.controller('GroupCtrl', ['$scope', '$http', 'groupDataFactory', GroupCtrl]);
 
-function TableCtrl($scope, $http) {
+function GroupCtrl($scope, $http, groupDataFactory) {
 
   $scope.groupCurrentPage = 1;
   $scope.memberCurrentPage = 1;
@@ -87,11 +87,15 @@ function TableCtrl($scope, $http) {
   $scope.members = [];
   $scope.selectedIndex = -1;
 
-  $http.get('group/getall').success(function(data){
-    $scope.groups = data;
-  }).error(function(data, status){
-    console.log(data, status);
+  groupDataFactory.getGroupData().then(function(res){
+    console.log(res);
+    $scope.groups = res;
   });
+  // $http.get('group/getall').success(function(data){
+    // $scope.groups = data;
+  // }).error(function(data, status){
+    // console.log(data, status);
+  // });
 
   $scope.testMsg = [{
     msg: '============test========='
@@ -100,7 +104,7 @@ function TableCtrl($scope, $http) {
   $scope.setMemReq = function(index){
     $scope.selectedIndex = index;
     var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
-    console.log("======================", total_index);
+    // console.log("======================", total_index);
     $scope.requests = $scope.groups[total_index].requests;
     $scope.members = $scope.groups[total_index].members;
     // console.log($scope.requests);
@@ -114,22 +118,101 @@ function TableCtrl($scope, $http) {
     $scope.members = [];
   };
 
-  $scope.acceptReq = function(username) {
-    // console.log("=============acc");
-    var request = $http({
-      method: "post",
-      url: "test",
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-      },
-      data: {
-        username: 'maxzhx@gmail.com',
-        // name: "Kim",
-        // status: "Best Friend"
+  $scope.testAlert = function(msg) {
+    // $("#example").popover();
+    alert(msg);
+  };
+  
+  $scope.checkData = function(field, data){
+
+    if (field === 1) {
+      if(data.length > 100){
+        return "group name is too long";
       }
-    });
-    request.success(function(data){
+    } else if(field === 2) {
+      var num = Number(data);
+      if (!num || num > 180 || num < -180) {
+        // console.log(num);
+        return "Invalid Input";
+      }
+      
+    } else if(field === 3) {
+      var num = Number(data);
+      if (!num || num > 90 || num < -90) {
+        // console.log(num);
+        return "Invalid Input";
+      }
+      
+    } else if(field === 4) {
+      
+    }
+
+  };
+
+  $scope.update = function(index) {
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + $scope.selectedIndex;
+    var data = {
+      'username': 'maxzhx@gmail.com',
+      'group_id': $scope.groups[total_index]._id,
+      'name': $scope.groups[total_index].groupname,
+      'g_lon': $scope.groups[total_index].group_location[0],
+      'g_lat': $scope.groups[total_index].group_location[1],
+      'location': $scope.groups[total_index].location,
+      'introduction': $scope.groups[total_index].introduction
+    };
+    $http.post('group/update', data).success(function(data){
       console.log(data);
+      groupDataFactory.getGroupData().then(function(res){
+        console.log(res);
+        $scope.groups = res;
+        $scope.requests = $scope.groups[total_index].requests;
+        $scope.members = $scope.groups[total_index].members;
+      });
+    }).error(function(data, status){
+      console.log(data, status);
+    });
+  };
+  
+  $scope.newGroup = function() {
+    var newGroup={
+      'groupname':'Click to edit',
+      'group_location': [0,0],
+      'location':'Click to edit',
+      'introduction':'Click to edit'
+    };
+    $scope.groups.unshift(newGroup);
+  };
+
+  $scope.acptRejReq = function(action, username) {
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + $scope.selectedIndex;
+    var url = '';
+    switch (action)
+    {
+      case 1:
+        url = '/group/accept';
+        break;
+      case 2:
+        url = '/group/reject';
+        break;
+      case 3: 
+        url = '/group/leave';
+        break;
+
+      default: 
+        alert('Error!');
+    }
+    // console.log(url);
+    $http.post(url, {
+      'username': username,
+      'group_id': $scope.groups[total_index]._id
+    }).success(function(data){
+      console.log(data);
+      groupDataFactory.getGroupData().then(function(res){
+        console.log(res);
+        $scope.groups = res;
+        $scope.requests = $scope.groups[total_index].requests;
+        $scope.members = $scope.groups[total_index].members;
+      });
     }).error(function(data, status){
       console.log(data, status);
     });
