@@ -72,9 +72,9 @@ function AlertsCtrl($scope) {
 
 angular
 .module('RDash')
-.controller('TableCtrl', ['$scope', '$http', TableCtrl]);
+.controller('TableCtrl', ['$scope', '$http', 'groupDataFactory', TableCtrl]);
 
-function TableCtrl($scope, $http) {
+function TableCtrl($scope, $http, groupDataFactory) {
 
   $scope.groupCurrentPage = 1;
   $scope.memberCurrentPage = 1;
@@ -87,11 +87,15 @@ function TableCtrl($scope, $http) {
   $scope.members = [];
   $scope.selectedIndex = -1;
 
-  $http.get('group/getall').success(function(data){
-    $scope.groups = data;
-  }).error(function(data, status){
-    console.log(data, status);
+  groupDataFactory.getGroupData().then(function(res){
+    console.log(res);
+    $scope.groups = res;
   });
+  // $http.get('group/getall').success(function(data){
+    // $scope.groups = data;
+  // }).error(function(data, status){
+    // console.log(data, status);
+  // });
 
   $scope.testMsg = [{
     msg: '============test========='
@@ -100,7 +104,7 @@ function TableCtrl($scope, $http) {
   $scope.setMemReq = function(index){
     $scope.selectedIndex = index;
     var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
-    console.log("======================", total_index);
+    // console.log("======================", total_index);
     $scope.requests = $scope.groups[total_index].requests;
     $scope.members = $scope.groups[total_index].members;
     // console.log($scope.requests);
@@ -114,22 +118,20 @@ function TableCtrl($scope, $http) {
     $scope.members = [];
   };
 
-  $scope.acceptReq = function(username) {
-    // console.log("=============acc");
-    var request = $http({
-      method: "post",
-      url: "test",
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-      },
-      data: {
-        username: 'maxzhx@gmail.com',
-        // name: "Kim",
-        // status: "Best Friend"
-      }
-    });
-    request.success(function(data){
+  $scope.acptRejReq = function(action, username) {
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + $scope.selectedIndex;
+    var url = (action === 1) ? '/group/accept' : '/group/reject';
+    $http.post(url, {
+      'username': username,
+      'group_id': $scope.groups[total_index]._id
+    }).success(function(data){
       console.log(data);
+      groupDataFactory.getGroupData().then(function(res){
+        console.log(res);
+        $scope.groups = res;
+        $scope.requests = $scope.groups[total_index].requests;
+        $scope.members = $scope.groups[total_index].members;
+      });
     }).error(function(data, status){
       console.log(data, status);
     });

@@ -1,10 +1,10 @@
 import urllib
 import urllib2
 
-url = 'http://localhost:3000/user/getAllGroups'
-#  url = 'http://144.6.226.237/user/getAllGroups'
+#  url = 'http://localhost:3000/user/getAllGroups'
+url = 'http://144.6.226.237/user/getGroups'
 values = dict(
-    username='maxzhx@gmail.com',
+    username='george.nader@gmail.com',
 )
 #  values = dict(
 #      username='george.nader@gmail.com',

@@ -41,10 +41,10 @@
               tr(dir-paginate="request in requests | itemsPerPage: requestPageSize", current-page="requestCurrentPage", pagination-id="request")
                 td {{request.user.username}}
                 td {{request.requestDate}}
-                td(ng-click="acceptReq();",)
+                td(ng-click="acptRejReq(1, request.user.username);",)
                   span.text-success(tooltip='Accept')
                     i.fa.fa-check
-                td
+                td(ng-click="acptRejReq(2, request.user.username);",)
                   span.text-danger(tooltip='Reject')
                     i.fa.fa-times
       rd-widget-footer
