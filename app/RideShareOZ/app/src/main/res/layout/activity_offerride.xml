@@ -5,10 +5,6 @@
     tools:context="com.swen900014.orange.rideshareoz.OfferRide"
     android:fillViewport="true">
 
-
-
-
-
     <GridLayout
         android:layout_width="fill_parent"
         android:layout_height="800dp"
@@ -92,6 +88,7 @@
             android:layout_gravity="fill_horizontal"
             android:inputType="textMultiLine|textAutoComplete|textPostalAddress"
             android:layout_marginLeft="-55dp"
+            android:hint=""
             android:layout_rowSpan="2" />
 
         <CheckBox
@@ -240,7 +237,8 @@
             android:id="@+id/spinner"
             android:layout_column="3"
             android:layout_row="13"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-20dp" />
 
         <GridLayout
             android:layout_column="0"

@@ -154,8 +154,8 @@ public class MyRidesFragment extends Fragment
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
 
                 return params;
             }

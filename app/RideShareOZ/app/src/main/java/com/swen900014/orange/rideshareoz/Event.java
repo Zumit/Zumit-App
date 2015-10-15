@@ -121,15 +121,31 @@ public class Event implements Serializable
         this.eventId = eventJson.getString("_id");
         this.name = eventJson.getString("eventName");
         this.description = eventJson.getString("eventInfo");
-        tempLocationArray = eventJson.getJSONArray("eventlocation");
+        tempLocationArray = eventJson.getJSONArray("eventLocation");
         Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
         loc.setAddress(eventJson.getString("location"));
         this.eventLocation = loc;
-        this.start_time = eventJson.getString("startTime");
-        this.end_time = eventJson.getString("endTime");
+        this.start_time = DateFormatter.format(eventJson.getString("startTime"));
+        this.end_time = DateFormatter.format(eventJson.getString("endTime"));
     }
     public String getEventId()
     {
         return eventId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Location getEventLocation() {
+        return eventLocation;
+    }
+
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
     }
 }

@@ -30,8 +30,8 @@ public class Resources
     public final static String JOIN_GROUP_URL = "http://144.6.226.237/group/request";
     public final static String LEAVE_GROUP_URL = "http://144.6.226.237/group/leave";
 
-    public final static String GET_USER_RELEVANT_GROUP_URL = "http://144.6.226.237/user/getGroups";
-    public final static String GETALL_GROUP_URL = "http://144.6.226.237/group/getall";
+    //public final static String GET_USER_RELEVANT_GROUP_URL = "http://144.6.226.237/user/getGroups";
+    public final static String GETALL_GROUP_URL = "http://144.6.226.237/user/getAllGroups";
     public final static String GETALL_EVENT_URL = "http://144.6.226.237/event/getall";
 
     public final static String RATE_USER_URL = "http://144.6.226.237/credit/rate";

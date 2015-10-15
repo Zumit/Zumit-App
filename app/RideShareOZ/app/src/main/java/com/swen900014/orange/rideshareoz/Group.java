@@ -131,7 +131,7 @@ public class Group implements Serializable
     public static void loadGroups(final Activity activity)
     {
         StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
-                Resources.GET_USER_RELEVANT_GROUP_URL, new Response.Listener<String>()
+                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
@@ -159,8 +159,8 @@ public class Group implements Serializable
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
 
                 return params;
             }
