@@ -209,13 +209,16 @@ public class MainActivity extends AppCompatActivity implements
         Event.loadEvents(this);
 
         //refresh rides
-        activityFragment.sendGetRidesRequest();
+        activityFragment.sendGetRidesRequest(GETUSER_RELAVENT_RIDE_URL);
+
+        if(!mGoogleApiClient.isConnected()){
+            mGoogleApiClient.connect();
+        }
 
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
         //ReAuthentication is not required
         //mGoogleApiClient.disconnect();
@@ -341,6 +344,9 @@ public class MainActivity extends AppCompatActivity implements
 
     public static String getAuthToken(Context context)
     {
+        if(!mGoogleApiClient.isConnected()){
+            mGoogleApiClient.connect();
+        }
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
         Account account = new Account(accountName, GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
         String scopes = "audience:server:client_id:" + SERVER_CLIENT_ID; // Not the app's client ID.

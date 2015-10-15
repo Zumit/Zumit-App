@@ -93,11 +93,12 @@ public class MyRidesFragment extends Fragment
         /* ignore the test data and load the actual data from server */
         if (isSearchResults)
         {
-            sendSearchRequest();
+            //sendSearchRequest();
+            sendGetRidesRequest(SEARCH_RIDE_URL);
         }
         else
         {
-            sendGetRidesRequest();
+            sendGetRidesRequest(GETUSER_RELAVENT_RIDE_URL);
         }
 
         View rootView = inflater.inflate(R.layout.fragment_myrides, container, false);
@@ -130,10 +131,10 @@ public class MyRidesFragment extends Fragment
         return rootView;
     }
 
-    public void sendGetRidesRequest()
+    public void sendGetRidesRequest(String url)
     {
         StringRequest getRidesRequest = new StringRequest(Request.Method.POST,
-                GETUSER_RELAVENT_RIDE_URL, new Response.Listener<String>()
+                url, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
@@ -156,6 +157,17 @@ public class MyRidesFragment extends Fragment
 
                 //params.put("username", User.getCurrentUser().getUsername());
                 params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
+                if(isSearchResults){
+                    params.put("origins", intent.getStringExtra("origin"));
+                    params.put("e_lat",intent.getStringExtra("e_lat"));
+                    params.put("e_lon", intent.getStringExtra("e_lon"));
+                    params.put("arrival_time", intent.getStringExtra("arrival_time"));
+                    if(intent.getBooleanExtra("isGroup", true) ){
+                        params.put("group_id", intent.getStringExtra("group_id"));
+                    }else {
+                        params.put("event_id" ,intent.getStringExtra("event_id"));
+                    }
+                }
 
                 return params;
             }
@@ -163,45 +175,7 @@ public class MyRidesFragment extends Fragment
 
         MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getRidesRequest);
     }
-
-    public void sendSearchRequest()
-    {
-        //search parameters will be taken from the intent
-        String url = SEARCH_RIDE_URL;
-
-        url += "s_lat=" + intent.getStringExtra("s_lat") + "&";
-        url += "s_lon=" + intent.getStringExtra("s_lon") + "&";
-        url += "e_lat=" + intent.getStringExtra("e_lat") + "&";
-        url += "e_lon=" + intent.getStringExtra("e_lon") + "&";
-        url += "arrival_time=" + intent.getStringExtra("arrival_time") + "&";
-        if(intent.getBooleanExtra("isGroup", true) ){
-            url += "group_id=" + intent.getStringExtra("group_id");
-        }else {
-            url += "event_id=" + intent.getStringExtra("event_id");
-        }
-
-
-        StringRequest searchRequest = new StringRequest(Request.Method.GET,
-                url, new Response.Listener<String>()
-        {
-            @Override
-            public void onResponse(String s)
-            {
-                storeRides(s);
-            }
-        }, new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError volleyError)
-            {
-                volleyError.printStackTrace();
-
-                System.out.println("Sending post failed!");
-            }
-        });
-
-        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(searchRequest);
-    }
+    
 
     private void storeRides(String response)
     {

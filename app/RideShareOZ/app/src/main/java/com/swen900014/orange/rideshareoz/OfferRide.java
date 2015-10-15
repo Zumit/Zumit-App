@@ -455,7 +455,7 @@ public class OfferRide extends FragmentActivity implements
 
     private void getEndpointLoc(final Activity activity)
     {
-        String endAddressToGoogle = endAddress.replaceAll(" ", "+");
+        final String endAddressToGoogle = endAddress.replaceAll(" ", "+");
 
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
                 "address=" + endAddressToGoogle + ",+Australia&" +
@@ -494,14 +494,17 @@ public class OfferRide extends FragmentActivity implements
                         {
                             Intent searchResultsIntent = new Intent(OfferRide.this, MyRidesActivity.class);
                             searchResultsIntent.putExtra("type", "find");
-                            searchResultsIntent.putExtra("s_lon", ((Check1.isChecked())?lonC:lonS));
-                            searchResultsIntent.putExtra("s_lat", ((Check1.isChecked())?latC:latS));
+                            searchResultsIntent.putExtra("s_lon", ((Check1.isChecked())?Double.toString(lonC):lonS));
+                            searchResultsIntent.putExtra("s_lat", ((Check1.isChecked())?Double.toString(latC):latS));
                             searchResultsIntent.putExtra("group_id",groupId);
                             searchResultsIntent.putExtra("event_id",eventId);
                             searchResultsIntent.putExtra("isGroup",isGroup);
-                            searchResultsIntent.putExtra("e_lon", ((Check2.isChecked())?lonC:lonE));
-                            searchResultsIntent.putExtra("e_lat", ((Check2.isChecked())?latC:latE));
+                            searchResultsIntent.putExtra("e_lon", ((Check2.isChecked())?Double.toString(lonC):lonE));
+                            searchResultsIntent.putExtra("e_lat", ((Check2.isChecked())?Double.toString(latC):latE));
                             searchResultsIntent.putExtra("arrival_time", EditEndTime);
+                            searchResultsIntent.putExtra("origin",((Check1.isChecked())?currentAddress:startAddress));
+                            searchResultsIntent.putExtra("destination",((Check2.isChecked())?currentAddress:endAddress));
+                            //searchResultsIntent.putExtra("username",MainActivity.getAuthToken(activity.getApplicationContext()));
                             startActivity(searchResultsIntent);
                         }
 
