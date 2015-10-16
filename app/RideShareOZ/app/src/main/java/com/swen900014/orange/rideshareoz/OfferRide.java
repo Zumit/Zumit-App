@@ -408,60 +408,63 @@ public class OfferRide extends FragmentActivity implements
     }
     public void sendRequest(final Activity activity)
     {
-        String startAddressToGoogle = startAddress.replaceAll(" ", "+");
+        if (isFromEvent) getEndpointLoc(activity);
+        else {
+            String startAddressToGoogle = startAddress.replaceAll(" ", "+");
 
-        final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
-                "address=" + startAddressToGoogle + ",+Australia&" +
-                "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
+            final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
+                    "address=" + startAddressToGoogle + ",+Australia&" +
+                    "key=AIzaSyBhEI1X-PMslBS2Ggq35bOncxT05mWO9bs";
 
-        final StringRequest getStartLocRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>()
-                {
-                    public void onResponse(String response)
-                    {
-                        try
-                        {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            System.out.println(jsonResponse.toString());
+            final StringRequest getStartLocRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonResponse = new JSONObject(response);
+                                System.out.println(jsonResponse.toString());
 
-                            latS = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                    getJSONObject("geometry").getJSONObject("location").
-                                    getString("lat");
-                            lonS = jsonResponse.getJSONArray("results").getJSONObject(0).
-                                    getJSONObject("geometry").getJSONObject("location").
-                                    getString("lng");
+                                latS = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                        getJSONObject("geometry").getJSONObject("location").
+                                        getString("lat");
+                                lonS = jsonResponse.getJSONArray("results").getJSONObject(0).
+                                        getJSONObject("geometry").getJSONObject("location").
+                                        getString("lng");
 
-                            // Check response whether it's accurate, if not remind user
+                                // Check response whether it's accurate, if not remind user
 
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            getEndpointLoc(activity);
+
                         }
+                    },
+                    new Response.ErrorListener() {
+                        public void onErrorResponse(VolleyError volleyError) {
+                            volleyError.printStackTrace();
+                            System.out.println("it doesn't work");
+                        }
+                    });
 
-                       if(!isEvent){ getEndpointLoc(activity);}
-                        else {
-                           if(!isFind) {
-                               sendRideInfo(activity);
-                           }else{
-                               sendSearchRideRequest();
-                           }
-                       };
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    public void onErrorResponse(VolleyError volleyError)
-                    {
-                        volleyError.printStackTrace();
-                        System.out.println("it doesn't work");
-                    }
-                });
-
-        MyRequestQueue.getInstance(activity).addToRequestQueue(getStartLocRequest);
+            MyRequestQueue.getInstance(activity).addToRequestQueue(getStartLocRequest);
+        }
     }
 
     private void getEndpointLoc(final Activity activity)
     {
+        if (isToEvent) {
+            if (!isFind)
+            {
+                sendRideInfo(activity);
+            }
+            else
+            {
+                sendSearchRideRequest();
+            }
+        }
+        else
+        {
         final String endAddressToGoogle = endAddress.replaceAll(" ", "+");
 
         final String url = "https://maps.googleapis.com/maps/api/geocode/json?" +
@@ -491,7 +494,7 @@ public class OfferRide extends FragmentActivity implements
                         {
                             e.printStackTrace();
                         }
-
+                        sendRideInfo(activity);
                         /* check if it offer or find  */
                         if (!isFind)
                         {
@@ -515,6 +518,7 @@ public class OfferRide extends FragmentActivity implements
                 });
 
         MyRequestQueue.getInstance(activity).addToRequestQueue(getEndLocRequest);
+        }
     }
 
     private void sendSearchRideRequest(){
@@ -799,7 +803,6 @@ public class OfferRide extends FragmentActivity implements
             endAddress = EditEnd.getText().toString();
           //  Toast.makeText(getApplicationContext(),"Group info"+startAddress,Toast.LENGTH_SHORT).show();
         }
-
          sendRequest(this);
         }
         else {
