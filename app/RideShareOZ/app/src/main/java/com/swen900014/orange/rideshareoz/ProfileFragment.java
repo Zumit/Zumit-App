@@ -9,6 +9,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -32,8 +34,12 @@ import java.util.Map;
 
 public class ProfileFragment extends Fragment
 {
-    private EventsAdaptor mEventAdaptor;
+
     private Activity thisActivity;
+    private Button btnUpdate;
+    private EditText phone;
+    private EditText about;
+    private EditText licence;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -44,6 +50,7 @@ public class ProfileFragment extends Fragment
         setHasOptionsMenu(true);
 
         thisActivity = this.getActivity();
+
     }
 
     @Override
@@ -62,84 +69,15 @@ public class ProfileFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        List<Event> currentEvents = new ArrayList<>();
-
-        // Now that we have some dummy data, create an ArrayAdapter.
-        // The ArrayAdapter will take data from a source (like our dummy data) and
-        // use it to populate the ListView it's attached to.
-        mEventAdaptor = new EventsAdaptor(getActivity(), (ArrayList<Event>) currentEvents);
-
-        /* load the actual data from server */
-        sendGetEventsRequest();
 
 
-        View rootView = inflater.inflate(R.layout.fragment_events, container, false);
+        View rootView = inflater.inflate(R.layout.activity_profile, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_events);
-        listView.setAdapter(mEventAdaptor);
+
+
 
         return rootView;
     }
 
-    public void sendGetEventsRequest()
-    {
-        StringRequest getGroupsRequest = new StringRequest(Request.Method.GET,
-                Resources.GETALL_EVENT_URL, new Response.Listener<String>()
-        {
-            @Override
-            public void onResponse(String s)
-            {
-                storeEvents(s);
-            }
-        }, new Response.ErrorListener()
-        {
-            @Override
-            public void onErrorResponse(VolleyError volleyError)
-            {
-                volleyError.printStackTrace();
-
-                System.out.println("Sending post failed!");
-            }
-        })
-        {
-            protected Map<String, String> getParams()
-            {
-                Map<String, String> params = new HashMap<>();
-
-                return params;
-            }
-        };
-
-        MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
-    }
-
-    private void storeEvents(String response)
-    {
-        if (response != null)
-        {
-            ArrayList<Event> serverEvents = null;
-
-            try
-            {
-                Event.storeEvents(new JSONArray(response));
-                serverEvents = Event.getAllEvents();
-            } catch (JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-            mEventAdaptor.clear();
-
-            if (serverEvents != null)
-            {
-                for (Event listItem : serverEvents)
-                {
-                    mEventAdaptor.add(listItem);
-                }
-            }
-
-            // Group data is back from the server.  Hooray!
-        }
-    }
 }

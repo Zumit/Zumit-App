@@ -10,10 +10,25 @@ package com.swen900014.orange.rideshareoz;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
-public class ProfileActivity extends AppCompatActivity
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener
 {
 
+    private Button btnUpdate;
+    private EditText phone;
+    private EditText about;
+    private EditText licence;
     private  ProfileFragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,7 +42,15 @@ public class ProfileActivity extends AppCompatActivity
                     .add(R.id.container, (fragment))
                     .commit();
         }
-        //findViewById(R.id.btnUpdate).setOnClickListener(this);
+
+        btnUpdate = (Button)findViewById(R.id.btnUpdate);
+        phone = (EditText)findViewById(R.id.editPhone);
+        about = (EditText)findViewById(R.id.editInto);
+        licence = (EditText)findViewById(R.id.editLicence);
+
+
+        btnUpdate.setOnClickListener(this);
+
     }
 
     /*@Override
@@ -59,5 +82,43 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void onRestart(){
         super.onRestart();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
+                Resources.UPDATE_USER, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String s)
+            {
+                //nothing to do
+            }
+        }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                volleyError.printStackTrace();
+
+                System.out.println("Sending post failed!");
+            }
+        })
+        {
+            protected Map<String, String> getParams()
+            {
+                Map<String, String> params = new HashMap<>();
+                params.put("token", MainActivity.getAuthToken(getApplicationContext()));
+                params.put("phone", phone.getText().toString());
+                params.put("note", about.getText().toString());
+                params.put("driver_license", licence.getText().toString());
+
+                return params;
+            }
+        };
+
+        MyRequestQueue.getInstance(this).addToRequestQueue(getGroupsRequest);
+
     }
 }

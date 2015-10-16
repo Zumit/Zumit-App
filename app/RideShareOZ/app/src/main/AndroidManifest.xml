@@ -75,6 +75,11 @@
             android:name=".EventsActivity"
             android:label="@string/title_activity_events" >
         </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_Profile"
+            android:parentActivityName=".MainActivity" >
+        </activity>
         <service
             android:name=".GPSTracker"
             android:value=".com.swen900014.orange.rideshareoz.GPSTracker"

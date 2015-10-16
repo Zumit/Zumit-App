@@ -58,6 +58,7 @@
     <string name="title_activity_view_group">ViewGroupActivity</string>
     <string name="title_activity_groups">Groups</string>
     <string name="title_activity_events">Events</string>
+    <string name="title_activity_Profile">Update Profile</string>
     <string name="rateRideString">RATE</string>
     <string name="AboutTheGroup">About the group:</string>
     <string name="rateLabelString">How do you think about this trip?</string>
