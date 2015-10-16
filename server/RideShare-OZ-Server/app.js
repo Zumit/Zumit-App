@@ -1,10 +1,15 @@
-var express = require('express'); var path = require('path');
+var express = require('express');
+var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var schedule = require('node-schedule');
 var Ride = require('./models/Ride.js');
+
+var http = require('http');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 // database
 /* var mongo = require('mongodb'); */
@@ -51,6 +56,8 @@ var User = require('./models/User.js');
 
 var app = express();
 
+app.set('port', process.env.PORT || 1337);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -60,9 +67,15 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('your secret here'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
+
+// app.use(express.methodOverride());
+// app.use(express.cookieParser('your secret here'));
+// app.use(express.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(function(req,res,next){
   if (req.method === 'POST') {
@@ -110,6 +123,57 @@ app.get('/templates/:name', function(req, res){
   res.render('templates/' + req.params.name);
 });
 
+// passport config
+var Account = require('./models/Account');
+
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(Account.authenticate()));
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+app.get('/register', function(req, res) {
+  res.render('register', { });
+});
+
+app.post('/register', function(req, res) {
+  Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+    if (err) {
+      return res.render('register', { account : account });
+    }
+
+    passport.authenticate('local')(req, res, function () {
+      res.redirect('/admin');
+    });
+  });
+});
+
+app.get('/', function (req, res) {
+  console.log("1=============");
+  console.log(req.user);
+  res.render('index', { user : req.user });
+});
+
+app.get('/login', function(req, res) {
+  res.render('login', { user : req.user });
+});
+
+app.post('/login', passport.authenticate('local'), function(req, res) {
+  console.log("=============");
+  console.log(req.user);
+  res.redirect('/');
+});
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
+app.get('/ping', function(req, res){
+  res.send("pong!", 200);
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -140,6 +204,9 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+
 
 
 module.exports = app;

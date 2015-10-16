@@ -22,9 +22,15 @@ public class Location implements Serializable
 
     private String extractDisplayName(String address)
     {
+        //fix the address retained from current location
+        if ((!address.contains(", VIC")) && (address.contains(" VIC"))){
+            address = address.replace(" VIC", ", VIC");
+        }
+
         String name = "";
         StringTokenizer st = new StringTokenizer(address, ",");
         int count = st.countTokens();
+
 
         //get the suburb name
         for (int i = 0; i < count - 2; i++)

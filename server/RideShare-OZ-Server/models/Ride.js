@@ -91,6 +91,7 @@ RideSchema.statics.searchRide = function(req,callback){
   var end=[];
   end[0]=e_lon;
   end[1]=e_lat;
+
   //need have arrival time
   var maxDistance = 0.01;
   var limit = 10;
@@ -107,19 +108,42 @@ RideSchema.statics.searchRide = function(req,callback){
   var rides = [];
   var count = 0;
 
+
   this.find({
-    $and:[{$and:[{'group':groupID},{'events':req.body.event_id}]},
-    {'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)}},
-    {'end_point': {
+    'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
+    'end_point': {
       $nearSphere: end,
       $maxDistance: maxDistance
-    }}]
-  }).populate('driver passengers.user requests.user',
-      'username phone driver_license').exec({},function(err,ride){
-
+    }}
+  ).populate('driver ',
+      'username phone driver_license driver_rate').
+      populate('passengers.user  requests.user','username phone passenger_rate').
+      populate('events','eventName').
+      populate('group','groupname').
+      exec({},function(err,ride){
+        
      if(ride) { 
-    if (ride.length!=0) {
+     var ride1=[];
+     if (ride.length!=0) {
+ 
+      if(groupID){
+        for (var i = 0; ride.length>i ; i++) {
+          if (String(ride[i].group._id)==groupID){
+            ride1.push(ride[i]);
+           // console.log(ride1);
+          }
+        }
+      } else if(req.body.event_id){
+        for (var i = 0; ride.length>i ; i++) {
+          if (String(ride[i].events._id)==req.body.event_id){
+            ride1.push(ride[i]);
+            //console.log(ride1);
+          }
+        } 
+      }
       
+      var ride=[];
+        ride=ride1;
      var length=ride.length;
      ride.forEach(function(ride){
         

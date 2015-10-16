@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 var Group = require('../models/Group.js');
 
-router.get('/', function(req, res, next) {
+router.get('/', passport.authenticate('local'), function(req, res, next) {
 
   Group.find().populate('members',
       'username phone driver_license').exec({}, function(err, groups){
