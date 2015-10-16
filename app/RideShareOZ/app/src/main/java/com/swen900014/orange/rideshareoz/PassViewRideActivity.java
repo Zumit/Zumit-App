@@ -51,13 +51,11 @@ public class PassViewRideActivity extends AppCompatActivity
     private String latitude = "";
     private String longitude = "";
     private String address = "";
-
     protected GoogleApiClient mGoogleApiClient;
     private AutoCompleteTextView pickUpLocText;
 
     private TableLayout passengerList;
     private Ride ride;
-
     private Activity thisActivity;
 
     @Override
