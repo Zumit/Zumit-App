@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings)
+        if (id == R.id.action_profile)
         {
             Intent groupsIntent = new Intent(this, ProfileActivity.class);
             startActivity(groupsIntent);
@@ -483,7 +483,9 @@ public class MainActivity extends AppCompatActivity implements
             Log.d(TAG, "ID token: " + result);
             if (result != null)
             {
-                // Successfully retrieved ID Token
+                // Successfully retrieved ID Token. save user info
+                User.getCurrentUser().storeProfile(result);
+
             }
             else
             {

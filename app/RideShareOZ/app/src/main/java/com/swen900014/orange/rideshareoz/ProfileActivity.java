@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         phone = (EditText)findViewById(R.id.editPhone);
         about = (EditText)findViewById(R.id.editInto);
         licence = (EditText)findViewById(R.id.editLicence);
+
+        phone.setText(User.getCurrentUser().getPhone());
+        about.setText(User.getCurrentUser().getAbout());
+        licence.setText(User.getCurrentUser().getLicence());
 
 
         btnUpdate.setOnClickListener(this);
@@ -126,6 +131,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         };
 
         MyRequestQueue.getInstance(this).addToRequestQueue(getGroupsRequest);
+
+        User.getCurrentUser().setPhone(phone.getText().toString());
+        User.getCurrentUser().setLicence(licence.getText().toString());
+        User.getCurrentUser().setAbout(about.getText().toString());
 
     }
 }
