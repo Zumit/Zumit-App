@@ -11,11 +11,23 @@ import org.json.JSONObject;
  */
 public class JsonParser
 {
-    public static void parseUser(JSONObject jsonUser, User user) throws JSONException
+    public static void parsePassenger(JSONObject jsonUser, User user) throws JSONException
     {
         String username = jsonUser.getString("username");
-        //String credit = jsonUser.getString("credit");
-        String credit = "0";
+        String credit = jsonUser.getString("passenger_rate");
+        String phone = jsonUser.getString("phone");
+
+        user.setName(username);
+        // Currently username is the same as email
+        user.setEmail(username);
+        user.setCredit(credit);
+        user.setPhone(phone);
+    }
+
+    public static void parseDriver(JSONObject jsonUser, User user) throws JSONException
+    {
+        String username = jsonUser.getString("username");
+        String credit = jsonUser.getString("driver_rate");
         String phone = jsonUser.getString("phone");
 
         user.setName(username);
@@ -54,7 +66,7 @@ public class JsonParser
             // Get driver info
             tempObj = jsonRide.getJSONObject("driver");
             User driver = new User();
-            JsonParser.parseUser(tempObj, driver);
+            JsonParser.parseDriver(tempObj, driver);
             ride.setDriver(driver);
 
             // Get seat number, start time and arrival time
@@ -78,7 +90,7 @@ public class JsonParser
                 JSONObject requestingPassObj = tempObj.getJSONObject("user");
 
                 User passWaiting = new User();
-                JsonParser.parseUser(requestingPassObj, passWaiting);
+                JsonParser.parsePassenger(requestingPassObj, passWaiting);
 
                 if (User.getCurrentUser().getUsername().equals(passWaiting.getUsername()))
                 {
@@ -105,7 +117,7 @@ public class JsonParser
                     boolean hasRatedDriver = tempObj.getBoolean("rated");
 
                     User passJoined = new User();
-                    JsonParser.parseUser(joinedPassObj, passJoined);
+                    JsonParser.parsePassenger(joinedPassObj, passJoined);
 
                     if (User.getCurrentUser().getUsername().equals(passJoined.getUsername()))
                     {

@@ -48,7 +48,7 @@
     <string name="endPoint">To:</string>
     <string name="creator">Creator:</string>
     <string name="seats">Seats:</string>
-    <string name="departureText">Address:</string>
+    <string name="departureText">Pick up address:</string>
     <string name="state">State:</string>
     <string name="suburb">suburb:</string>
     <string name="street">street</string>

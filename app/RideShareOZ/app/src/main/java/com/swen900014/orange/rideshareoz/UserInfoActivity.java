@@ -46,13 +46,22 @@ public class UserInfoActivity extends AppCompatActivity
         ride = (Ride) intent.getSerializableExtra("Ride");
         Ride.RideState rideState = ride.getRideState();
 
+        // Display the pick up location of a passenger
+        TextView startAddressText = (TextView) findViewById(R.id.startAddressText);
+        TextView startAddressLabel =  (TextView) findViewById(R.id.startAddressLabel);
+
         if (intent.hasExtra("Pickup"))
         {
             pickup = (Pickup) intent.getSerializableExtra("Pickup");
+
+            startAddressText.setText(pickup.getLocation().getAddress());
         }
         else
         {
             pickup = new Pickup(ride.getDriver(), ride.getEnd(), true, true);
+
+            startAddressText.setVisibility(View.GONE);
+            startAddressLabel.setVisibility(View.GONE);
         }
 
         thisActivity = this;
@@ -62,13 +71,11 @@ public class UserInfoActivity extends AppCompatActivity
         TextView phoneText = (TextView) findViewById(R.id.ShowPhone);
         TextView emailText = (TextView) findViewById(R.id.ShowEmail);
         TextView creditText = (TextView) findViewById(R.id.ShowCredit);
-        TextView departureText = (TextView) findViewById(R.id.ShowDeparture);
 
         nameText.setText(pickup.getUser().getUsername());
         phoneText.setText(pickup.getUser().getPhone());
         emailText.setText(pickup.getUser().getEmail());
         creditText.setText(pickup.getUser().getCredit());
-        departureText.setText(pickup.getLocation().getAddress());
 
         // Hide accept and reject options if current user is
         // not driver offering the ride
@@ -111,13 +118,15 @@ public class UserInfoActivity extends AppCompatActivity
             // Rating spinner
             Spinner spinnerRate = (Spinner) findViewById(R.id.spinnerRatePass);
             spinnerRate.setVisibility(View.VISIBLE);
-            spinnerRate.setSelected(false);
 
             // Create an ArrayAdapter using the string array and a default spinner layout
             ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                     R.array.rate_array, android.R.layout.simple_spinner_item);
-
             spinnerRate.setAdapter(spinnerAdapter);
+
+            // Set the default option to be 'I enjoy it!'
+            spinnerRate.setSelection(4);
+
             spinnerRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
             {
                 @Override
