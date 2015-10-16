@@ -36,6 +36,7 @@ UserSchema.methods.getRides = function(callback){
   /* var conditions = {}; */
   this.model('Ride').find(conditions).populate('driver ',
       'username phone driver_license driver_rate').populate('passengers.user  requests.user','username phone passenger_rate').
+      populate('events','eventName').
       populate('group','groupname').
     exec({}, function(err, rides){
     callback(rides);
