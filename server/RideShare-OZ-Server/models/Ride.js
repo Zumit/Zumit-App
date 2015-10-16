@@ -138,10 +138,6 @@ RideSchema.statics.searchRide = function(req,callback){
         } 
       }
       
-    
-      
-      
-      
       var ride=[];
         ride=ride1;
      var length=ride.length;
