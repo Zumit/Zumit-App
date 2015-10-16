@@ -67,7 +67,7 @@ function AlertsCtrl($scope) {
 }
 
 /**
- * Table Controller
+ * Group Controller
  */
 
 angular
@@ -181,6 +181,8 @@ function GroupCtrl($scope, $http, groupDataFactory) {
       'introduction':'Click to edit'
     };
     $scope.groups.unshift(newGroup);
+    // $scope.groupCurrentPage = 1;
+    pagination.setCurrent(1);
   };
 
   $scope.acptRejReq = function(action, username) {
@@ -216,5 +218,39 @@ function GroupCtrl($scope, $http, groupDataFactory) {
     }).error(function(data, status){
       console.log(data, status);
     });
+  };
+}
+
+/**
+ * Event Controller
+ */
+
+angular
+.module('RDash')
+.controller('EventCtrl', ['$scope', '$http', 'eventDataFactory', EventCtrl]);
+
+function EventCtrl($scope, $http, eventDataFactory) {
+
+  $scope.eventCurrentPage = 1;
+  $scope.eventPageSize = 4;
+  $scope.events = [];
+  $scope.selectedIndex = -1;
+
+  eventDataFactory.getEventData().then(function(res){
+    console.log(res);
+    $scope.events = res;
+  });
+
+  $scope.pageChangeHandler = function(num) {
+    console.log('going to page ' + num);
+    $scope.groupCurrentPage = num;
+    $scope.selectedIndex = -1;
+    $scope.requests = [];
+    $scope.members = [];
+  };
+
+  $scope.testAlert = function(msg) {
+    // $("#example").popover();
+    alert(msg);
   };
 }
