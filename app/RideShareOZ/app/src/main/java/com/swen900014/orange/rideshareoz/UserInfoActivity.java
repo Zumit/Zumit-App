@@ -71,11 +71,13 @@ public class UserInfoActivity extends AppCompatActivity
         TextView phoneText = (TextView) findViewById(R.id.ShowPhone);
         TextView emailText = (TextView) findViewById(R.id.ShowEmail);
         TextView creditText = (TextView) findViewById(R.id.ShowCredit);
+        TextView aboutMeText = (TextView) findViewById(R.id.aboutMeText);
 
         nameText.setText(pickup.getUser().getUsername());
         phoneText.setText(pickup.getUser().getPhone());
         emailText.setText(pickup.getUser().getEmail());
         creditText.setText(pickup.getUser().getCredit());
+        aboutMeText.setText(pickup.getUser().getAbout());
 
         // Hide accept and reject options if current user is
         // not driver offering the ride
