@@ -3,6 +3,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var schedule = require('node-schedule');
+var Ride = require('./models/Ride.js');
 
 // database
 /* var mongo = require('mongodb'); */
@@ -15,6 +17,23 @@ mongoose.connect('mongodb://localhost/RideShare', function(err) {
     console.log('database connection successful');
   }
 });
+
+var rule = new schedule.RecurrenceRule();  
+rule.minute = [0, 20, 40];
+var date=Date.now(); 
+var j = schedule.scheduleJob(rule, function(){  
+    Ride.find({},function(err,rides){
+      rides.forEach(function(ride){
+        if(new Date(ride.arrival_time) < new Date(date)){
+          Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
+            //console.log("update");
+          });
+        }
+      });
+
+    });
+});
+
 
 var auth = require('./authentication.js');
 var index = require('./routes/index');

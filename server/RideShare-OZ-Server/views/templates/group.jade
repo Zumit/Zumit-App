@@ -6,11 +6,10 @@
         
       rd-widget-body(classes='medium no-padding')
         .table-responsive
-          table.table.table-hover
+          table.table.table-hove
             tbody
               tr(dir-paginate="group in groups | itemsPerPage: groupPageSize", current-page="groupCurrentPage", pagination-id="group", ng-click="setMemReq($index);", ng-class="{'info':$index==selectedIndex}")
                 td 
-                  //- a {{group.groupname}}
                   span(editable-text='group.groupname', onbeforesave="checkData(1, $data)", onaftersave="update($index)") {{group.groupname}}
                 td 
                   span(editable-text='group.group_location[0]', onbeforesave="checkData(2, $data)", onaftersave="update($index)") {{group.group_location[0]}}

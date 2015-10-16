@@ -9,30 +9,27 @@ var EventSchema = new Schema({
   location: String,
   startTime:Date,
   endTime:Date,
-  organizer: {type: Schema.Types.ObjectId, ref: 'User' },
+  updated_at: { type: Date, default: Date.now },
 });
 
-
 EventSchema.statics.createEvent= function(req,callback) {
-var Event = mongoose.model('Event');
-var events = new Event();
-events.eventName = req.query.event_name;
-var lon=req.query.e_lon;
-var lat=req.query.e_lat;
-events.eventLocation=[lon,lat];
-events.eventInfo=req.query.eventInfo;
-events.startTime=req.query.start_time;
-events.endTime=req.query.end_time;
-events.location=req.query.location;
-User.findById(req.userinfo._id, function(err, user){
-  console.log(user);
-  events.organizer=user;
+  var Event = mongoose.model('Event');
+  var events = new Event();
+  events.eventName = req.body.event_name;
+  var lon=req.body.e_lon;
+  var lat=req.body.e_lat;
+
+  events.eventLocation=[lon,lat];
+  events.eventInfo=req.body.eventInfo;
+  events.startTime=req.body.start_time;
+  events.endTime=req.body.end_time;
+  events.location=req.body.location;
+
   events.save(function(err, doc){
     if (err) {
       console.log(err);
     }
     callback(doc);
-    });
   });
 };
 

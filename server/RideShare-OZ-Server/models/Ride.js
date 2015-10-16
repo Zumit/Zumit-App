@@ -41,6 +41,7 @@ RideSchema.statics.getAllRides = function(callback){
   this.find().populate('driver ',
       'username phone driver_license driver_rate').
       populate('passengers.user  requests.user','username phone passenger_rate').
+      populate('events','eventName').
       populate('group','groupname').
       exec({}, function(err, rides){
     callback(rides);

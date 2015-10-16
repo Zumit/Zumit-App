@@ -145,6 +145,10 @@ public class PassViewRideActivity extends AppCompatActivity
                         R.array.rate_array, android.R.layout.simple_spinner_item);
 
                 spinnerRate.setAdapter(spinnerAdapter);
+
+                // Set the default option to be 'I enjoy it!'
+                spinnerRate.setSelection(4);
+
                 spinnerRate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
                 {
                     @Override
