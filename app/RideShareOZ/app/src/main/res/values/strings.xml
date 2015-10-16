@@ -55,6 +55,7 @@
     <string name="EditDate">Set DATE</string>
     <string name="ArrivalTime">SET ARRIVAL TIME</string>
     <string name="rideStartTime">SET START TIME</string>
+    <string name="comment">Please leave your comment:</string>
     <string name="title_activity_view_group">ViewGroupActivity</string>
     <string name="title_activity_groups">Groups</string>
     <string name="title_activity_events">Events</string>
