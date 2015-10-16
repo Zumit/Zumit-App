@@ -118,8 +118,9 @@ RideSchema.statics.searchRide = function(req,callback){
   ).populate('driver ',
       'username phone driver_license driver_rate').
       populate('passengers.user  requests.user','username phone passenger_rate').
-      populate('events','eventName').
-      populate('group','groupname').exec({},function(err,ride){
+      // populate('events','eventName').
+      // populate('group','groupname').
+      exec({},function(err,ride){
         
      if(ride) { 
      var ride1=[];
