@@ -91,6 +91,7 @@ RideSchema.statics.searchRide = function(req,callback){
   var end=[];
   end[0]=e_lon;
   end[1]=e_lat;
+
   //need have arrival time
   var maxDistance = 0.01;
   var limit = 10;
