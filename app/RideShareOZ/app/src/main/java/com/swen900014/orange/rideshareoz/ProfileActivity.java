@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,14 +35,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        /*setContentView(R.layout.activity_groups);
         if (savedInstanceState == null)
         {
             fragment = new ProfileFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, (fragment))
                     .commit();
-        }
+        }*/
+
+        setContentView(R.layout.activity_profile);
+
+
 
         btnUpdate = (Button)findViewById(R.id.btnUpdate);
         phone = (EditText)findViewById(R.id.editPhone);
@@ -93,7 +98,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onResponse(String s)
             {
-                //nothing to do
+                //End the activity
+                Toast.makeText(getApplicationContext(), "Information Updated", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }, new Response.ErrorListener()
         {

@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements
         if (id == R.id.action_settings)
         {
             Intent groupsIntent = new Intent(this, ProfileActivity.class);
-            //startActivity(groupsIntent);
+            startActivity(groupsIntent);
             return true;
         }
 
