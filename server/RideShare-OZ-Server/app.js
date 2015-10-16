@@ -26,7 +26,7 @@ var j = schedule.scheduleJob(rule, function(){
       rides.forEach(function(ride){
         if(new Date(ride.arrival_time) < new Date(date)){
           Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
-            console.log("update");
+            //console.log("update");
           });
         }
       });

@@ -84,4 +84,13 @@ router.post('/update', function(req, res, next){
   });
 });
 
+router.post('/remove', function(req, res, next){  
+    Group.findById(req.body.group_id,function(err,group){
+      group.remove(function(err){
+        res.json("remove");
+      })
+    })
+ 
+});
+
 module.exports = router;
