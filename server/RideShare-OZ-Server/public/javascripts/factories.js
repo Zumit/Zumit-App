@@ -31,3 +31,32 @@ angular.module('RDash').factory('groupDataFactory', ['$http', '$q', '$timeout', 
     }
   };
 }]);
+
+angular.module('RDash').factory('eventDataFactory', ['$http', '$q', '$timeout', function($http, $q, $timeout) {
+  return {
+    getEventData: function() {
+      var MAX_REQUESTS = 5,
+          counter = 1,
+          results = $q.defer();
+
+      var request = function() {
+        $http({method: 'GET', url: 'event/getall'})
+          .success(function(response) {
+            results.resolve(response.reverse());
+          })
+        .error(function() {
+          if (counter < MAX_REQUESTS) {
+            // request();
+            $timeout(request, 800);
+            counter++;
+          } else {
+            results.reject("Could not load after multiple tries");
+          }
+        });
+      };
+      request();
+      return results.promise;
+      // return "Hello, World!"
+    }
+  };
+}]);

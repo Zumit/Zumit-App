@@ -1,0 +1,24 @@
+.row(ng-controller='EventCtrl')
+  .col-lg-12
+    rd-widget
+      rd-widget-header(icon='fa-tasks', title='Groups')
+        a(href="javascript:void(0)", ng-click="newGroup();") Create
+        
+      rd-widget-body(classes='medium no-padding')
+        .table-responsive
+          table.table.table-hover
+            tbody
+              tr(dir-paginate="event in events | itemsPerPage: eventPageSize", current-page="eventCurrentPage", pagination-id="event", ng-click="", ng-class="{'info':$index==selectedIndex}")
+                td 
+                  span(editable-text='event.eventName', onbeforesave="checkData(1, $data)", onaftersave="update($index)") {{event.eventName}}
+                td 
+                  span(editable-text='event.eventLocation[0]', onbeforesave="checkData(2, $data)", onaftersave="update($index)") {{event.eventLocation[0]}}
+                td 
+                  span(editable-text='event.eventLocation[1]', onbeforesave="checkData(3, $data)", onaftersave="update($index)") {{event.eventLocation[1]}}
+                td
+                  span() {{event.location}}
+                td
+                  span(editable-text='event.eventInfo', onbeforesave="checkData(4, $data)", onaftersave="update($index)") {{event.eventInfo}}
+      rd-widget-footer
+        dir-pagination-controls(boundary-links="true", on-page-change="pageChangeHandler(newPageNumber)", template-url="templates/dirPaginationTpl", pagination-id="event")
+        .clearfix

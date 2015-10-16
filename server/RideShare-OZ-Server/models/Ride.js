@@ -105,16 +105,18 @@ RideSchema.statics.searchRide = function(req,callback){
 
   var rides = [];
   var count = 0;
+
   this.find({
-    'group':groupID,
-    'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
-    'end_point': {
+    $and:[{$and:[{'group':groupID},{'events':req.body.event_id}]},
+    {'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)}},
+    {'end_point': {
       $nearSphere: end,
       $maxDistance: maxDistance
-    }
+    }}]
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
 
+     if(ride) { 
     if (ride.length!=0) {
       
      var length=ride.length;
@@ -163,6 +165,8 @@ RideSchema.statics.searchRide = function(req,callback){
     }else {
       callback ("no result");
     }
+  }else
+  { callback("group is wrong!");}
   });
 };
 

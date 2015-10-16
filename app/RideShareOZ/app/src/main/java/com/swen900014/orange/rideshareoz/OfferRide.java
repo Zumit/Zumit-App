@@ -30,8 +30,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import org.json.JSONObject;
 
@@ -58,6 +56,7 @@ public class OfferRide extends FragmentActivity implements
     private final String TAG = "OfferRide";
     private String eventId = "";
     private String groupId = "";
+    private String groupName = "";
     private String tempDate = "",SeatNo="1";
     private String EditStartTime = "";
     private String EditEndTime = "";
@@ -67,11 +66,6 @@ public class OfferRide extends FragmentActivity implements
     private String houra="";
     private String mina="";
 
-    private TextView textSN;
-    private TextView textTitle;
-    private TextView textSearchEvent;
-    private TextView textSearchGroup;
-
     private TextView textStartTime;
 
     private CheckBox FromCurrentLocation, ToCurrentLocation;
@@ -79,10 +73,9 @@ public class OfferRide extends FragmentActivity implements
     private AutoCompleteTextView EditStart;
     private AutoCompleteTextView EditEnd;
 
-    private Spinner spinner;
-
-    private ArrayAdapter<CharSequence> spinnerAdapter;
-    private Button btnSubmit,btnReset ,btnDate, btnStartTime, btnArrivalTime,btnSelectEvent, btnSelectGroup;
+    private Button btnSubmit;
+    private Button btnSelectEvent;
+    private Button btnSelectGroup;
 
     private String latS = "";
     private String lonS = "";
@@ -103,8 +96,7 @@ public class OfferRide extends FragmentActivity implements
     private String eventLocation;
     protected GoogleApiClient mGoogleApiClient;
 
-    private static final LatLngBounds BOUNDS_GREATER_Melbourne = new LatLngBounds(
-            new LatLng(-38.260720, 144.394492), new LatLng(-37.459846, 145.764740));
+
 
     Calendar calendar = Calendar.getInstance();
     private TextView displayDate, displayStartTime, displayArrivalTime;
@@ -122,24 +114,24 @@ public class OfferRide extends FragmentActivity implements
                 .addApi(Places.GEO_DATA_API)
                 .build();
         btnSubmit = (Button) findViewById(R.id.button1);
-        btnReset= (Button) findViewById(R.id.button2);
-        btnDate = (Button) findViewById(R.id.setDateButton);
-        btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
-        btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
+        Button btnReset = (Button) findViewById(R.id.button2);
+        Button btnDate = (Button) findViewById(R.id.setDateButton);
+        Button btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
+        Button btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
         btnSelectEvent = (Button) findViewById(R.id.buttonEvent);
         btnSelectGroup= (Button) findViewById(R.id.buttonGroup);
 
-        spinner = (Spinner)findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
         displayDate = (TextView) findViewById(R.id.displayDate);
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
 
         FromCurrentLocation = (CheckBox) findViewById(R.id.current1);
         ToCurrentLocation = (CheckBox) findViewById(R.id.current2);
-        textSN = (TextView)findViewById(R.id.txtSeatNo);
-        textTitle = (TextView)findViewById(R.id.textView4);
-        textSearchEvent = (TextView)findViewById(R.id.textView5);
-        textSearchGroup = (TextView)findViewById(R.id.textView6);
+        TextView textSN = (TextView) findViewById(R.id.txtSeatNo);
+        TextView textTitle = (TextView) findViewById(R.id.textView4);
+        TextView textSearchEvent = (TextView) findViewById(R.id.textView5);
+        TextView textSearchGroup = (TextView) findViewById(R.id.textView6);
 
        //gps
 
@@ -193,7 +185,7 @@ public class OfferRide extends FragmentActivity implements
         EditEnd.setAdapter(adapterE);
 
         //spinner adapter
-        spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.seats, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -251,11 +243,11 @@ public class OfferRide extends FragmentActivity implements
 
         if (v.getId() == R.id.buttonEvent)
         {
-            selectEvent(v);
+            selectEvent();
         }
         if (v.getId() == R.id.buttonGroup)
         {
-            selectGroup(v);
+            selectGroup();
         }
         if (v.getId() == R.id.current1||v.getId() == R.id.current2)
             reverseAddress(OfferRide.this);
@@ -278,7 +270,7 @@ public class OfferRide extends FragmentActivity implements
         }
     }
 
-    private void selectGroup(View v)
+    private void selectGroup()
     {
 
         //receive a list of group
@@ -299,7 +291,8 @@ public class OfferRide extends FragmentActivity implements
                 isGroup = true;
                 //Toast.makeText(getApplicationContext(), "You have selected" + groupsArray[position], Toast.LENGTH_SHORT).show();
                 groupId = selectGroups.get(position).getGroupId();
-                Toast.makeText(getApplicationContext(), "You have selected" + groupId, Toast.LENGTH_SHORT).show();
+                groupName = selectGroups.get(position).getName();
+                Toast.makeText(getApplicationContext(), "You have selected " + groupName, Toast.LENGTH_SHORT).show();
             }
         });
         AlertDialog alertDialog = builder1.create();
@@ -308,7 +301,7 @@ public class OfferRide extends FragmentActivity implements
     }
 
 
-     private void selectEvent(View v) {
+     private void selectEvent() {
 
         /* receive a list of event */
 
@@ -328,7 +321,7 @@ public class OfferRide extends FragmentActivity implements
                 btnSelectGroup.setEnabled(false);
                 Toast.makeText(getApplicationContext(), "You have selected" + eventsArray[position], Toast.LENGTH_SHORT).show();
                 eventId = selectEvents.get(position).getEventId();
-                eventLocation = selectEvents.get(position).getEventLocation().getAddress().toString();
+                eventLocation = selectEvents.get(position).getEventLocation().getAddress();
                 endAddress = selectEvents.get(position).getEventLocation().getAddress();
                 latE = Double.toString(selectEvents.get(position).getEventLocation().getLat());
                 lonE = Double.toString(selectEvents.get(position).getEventLocation().getLon());
@@ -337,7 +330,7 @@ public class OfferRide extends FragmentActivity implements
                 builder3.setPositiveButton("To this event!", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         isToEvent = true;
-                        EditEnd.setHint(eventLocation.toString());
+                        EditEnd.setHint(eventLocation);
                         // EditEnd.setKeyListener(null);
                         ToCurrentLocation.setEnabled(false);
                     }
@@ -345,7 +338,7 @@ public class OfferRide extends FragmentActivity implements
                 builder3.setNegativeButton("From this event!", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         isFromEvent = true;
-                        EditStart.setHint(eventLocation.toString());
+                        EditStart.setHint(eventLocation);
                         // EditStart.setKeyListener(null);
                         FromCurrentLocation.setEnabled(false);
                     }
@@ -390,9 +383,9 @@ public class OfferRide extends FragmentActivity implements
                             currentAddress = jsonResponse.getJSONArray("results").getJSONObject(0)
                                     .getString("formatted_address");
                             if(FromCurrentLocation.isChecked())
-                                EditStart.setHint(currentAddress.toString());
+                                EditStart.setHint(currentAddress);
                             if(ToCurrentLocation.isChecked())
-                                EditEnd.setHint(currentAddress.toString());
+                                EditEnd.setHint(currentAddress);
 
                         } catch (Exception e)
                         {
@@ -590,11 +583,11 @@ public class OfferRide extends FragmentActivity implements
                 if(isGroup) params.put("group_id", groupId);
                 if(isEvent) params.put("event_id", eventId);
 
-                params.put("seat", SeatNo.toString());
+                params.put("seat", SeatNo);
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
-                params.put("username", User.getCurrentUser().getUsername());
-               // params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                //params.put("username", User.getCurrentUser().getUsername());
+                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
                 return params;
             }
         };
