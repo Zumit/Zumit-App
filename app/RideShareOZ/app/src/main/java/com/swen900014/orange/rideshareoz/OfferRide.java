@@ -800,6 +800,7 @@ public class OfferRide extends FragmentActivity implements
           //  Toast.makeText(getApplicationContext(),"Group info"+startAddress,Toast.LENGTH_SHORT).show();
         }
 
+            //send requests sequence to get (2 google requests for coordinates and 1 final request to our server)
          sendRequest(this);
         }
         else {
