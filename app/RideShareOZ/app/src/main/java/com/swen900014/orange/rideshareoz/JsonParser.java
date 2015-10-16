@@ -16,12 +16,14 @@ public class JsonParser
         String username = jsonUser.getString("username");
         String credit = jsonUser.getString("passenger_rate");
         String phone = jsonUser.getString("phone");
+        //String about = jsonUser.getString("note");
 
         user.setName(username);
         // Currently username is the same as email
         user.setEmail(username);
         user.setCredit(credit);
         user.setPhone(phone);
+        //user.setAbout(about);
     }
 
     public static void parseDriver(JSONObject jsonUser, User user) throws JSONException
@@ -29,12 +31,14 @@ public class JsonParser
         String username = jsonUser.getString("username");
         String credit = jsonUser.getString("driver_rate");
         String phone = jsonUser.getString("phone");
+        //String about = jsonUser.getString("note");
 
         user.setName(username);
         // Currently username is the same as email
         user.setEmail(username);
         user.setCredit(credit);
         user.setPhone(phone);
+        //user.setAbout(about);
     }
 
     public static void parseRide(JSONObject jsonRide, Ride ride) throws JSONException

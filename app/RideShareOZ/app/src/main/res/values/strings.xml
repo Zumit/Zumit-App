@@ -63,6 +63,7 @@
     <string name="rateRideString">RATE</string>
     <string name="AboutTheGroup">About the group:</string>
     <string name="rateLabelString">How do you think about this trip?</string>
+    <string name="aboutMe">About me:</string>
 
     <string-array name="seats">
         <item>1</item>
