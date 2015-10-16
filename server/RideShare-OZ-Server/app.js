@@ -149,11 +149,19 @@ app.post('/register', function(req, res) {
   });
 });
 
+app.get('/', function (req, res) {
+  console.log("1=============");
+  console.log(req.user);
+  res.render('index', { user : req.user });
+});
+
 app.get('/login', function(req, res) {
   res.render('login', { user : req.user });
 });
 
 app.post('/login', passport.authenticate('local'), function(req, res) {
+  console.log("=============");
+  console.log(req.user);
   res.redirect('/');
 });
 

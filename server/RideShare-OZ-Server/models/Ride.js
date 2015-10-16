@@ -115,8 +115,11 @@ RideSchema.statics.searchRide = function(req,callback){
       $nearSphere: end,
       $maxDistance: maxDistance
     }}
-  ).populate('driver passengers.user requests.user',
-      'username phone driver_license').exec({},function(err,ride){
+  ).populate('driver ',
+      'username phone driver_license driver_rate').
+      populate('passengers.user  requests.user','username phone passenger_rate').
+      populate('events','eventName').
+      populate('group','groupname').exec({},function(err,ride){
         
      if(ride) { 
      var ride1=[];
