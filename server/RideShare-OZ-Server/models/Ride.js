@@ -118,8 +118,8 @@ RideSchema.statics.searchRide = function(req,callback){
   ).populate('driver ',
       'username phone driver_license driver_rate').
       populate('passengers.user  requests.user','username phone passenger_rate').
-      // populate('events','eventName').
-      // populate('group','groupname').
+      populate('events','eventName').
+      populate('group','groupname').
       exec({},function(err,ride){
         
      if(ride) { 
@@ -128,14 +128,14 @@ RideSchema.statics.searchRide = function(req,callback){
  
       if(groupID){
         for (var i = 0; ride.length>i ; i++) {
-          if (String(ride[i].group)==groupID){
+          if (String(ride[i].group._id)==groupID){
             ride1.push(ride[i]);
            // console.log(ride1);
           }
         }
       } else if(req.body.event_id){
         for (var i = 0; ride.length>i ; i++) {
-          if (String(ride[i].events)==req.body.event_id){
+          if (String(ride[i].events._id)==req.body.event_id){
             ride1.push(ride[i]);
             //console.log(ride1);
           }
