@@ -19,6 +19,9 @@
     "request": "~2.61.0",
     "serve-favicon": "~2.3.0",
     "google-distance-matrix": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "passport-local-mongoose": "*",
     "node-schedule": "*"
   }
 }
