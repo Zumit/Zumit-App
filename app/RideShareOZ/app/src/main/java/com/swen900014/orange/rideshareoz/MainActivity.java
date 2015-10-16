@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
         mGoogleApiClient.connect();
 
-        //Load all groups and events to be available for offer and search rides
-        Group.loadGroups(this);
-        Event.loadEvents(this);
+
 
     }
 
@@ -108,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            Intent groupsIntent = new Intent(this, ProfileActivity.class);
+            //startActivity(groupsIntent);
             return true;
         }
 
@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(groupsIntent);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -308,6 +309,10 @@ public class MainActivity extends AppCompatActivity implements
         // establish a service connection to Google Play services.
         Log.d(TAG, "onConnected:" + bundle);
         mShouldResolve = false;
+
+        //Load all groups and events to be available for offer and search rides
+        Group.loadGroups(this);
+        Event.loadEvents(this);
 
         // Show the signed-in UI
         showSignedInUI();
