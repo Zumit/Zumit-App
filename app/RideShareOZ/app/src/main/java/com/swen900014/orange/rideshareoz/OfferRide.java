@@ -69,9 +69,12 @@ public class OfferRide extends FragmentActivity implements
 
     private TextView textSN;
     private TextView textTitle;
+    private TextView textSearchEvent;
+    private TextView textSearchGroup;
+
     private TextView textStartTime;
 
-    private CheckBox Check1, Check2;
+    private CheckBox FromCurrentLocation, ToCurrentLocation;
 
     private AutoCompleteTextView EditStart;
     private AutoCompleteTextView EditEnd;
@@ -131,10 +134,12 @@ public class OfferRide extends FragmentActivity implements
         displayStartTime = (TextView) findViewById(R.id.displayStartTime);
         displayArrivalTime = (TextView) findViewById(R.id.displayArrivalTime);
 
-        Check1 = (CheckBox) findViewById(R.id.current1);
-        Check2 = (CheckBox) findViewById(R.id.current2);
+        FromCurrentLocation = (CheckBox) findViewById(R.id.current1);
+        ToCurrentLocation = (CheckBox) findViewById(R.id.current2);
         textSN = (TextView)findViewById(R.id.txtSeatNo);
         textTitle = (TextView)findViewById(R.id.textView4);
+        textSearchEvent = (TextView)findViewById(R.id.textView5);
+        textSearchGroup = (TextView)findViewById(R.id.textView6);
 
        //gps
 
@@ -153,7 +158,7 @@ public class OfferRide extends FragmentActivity implements
         }
 
 
-       /* check if it offer or find  */
+       /* check if it is offer or find  */
         Intent intent = this.getIntent();
         if (intent != null && intent.hasExtra("type"))
         {
@@ -165,14 +170,13 @@ public class OfferRide extends FragmentActivity implements
                 btnStartTime.setVisibility(View.GONE);
                 spinner.setVisibility(View.GONE);
                 textTitle.setText("                   Search For Ride");
+                textSearchEvent.setText("Search To An Event!");
+                textSearchGroup.setText("Search To A Group!");
                 isFind = true;
             }
         }
-
-
         EditStart = (AutoCompleteTextView)
                 findViewById(R.id.Start);
-
 
         EditEnd = (AutoCompleteTextView)
                 findViewById(R.id.End);
@@ -192,7 +196,6 @@ public class OfferRide extends FragmentActivity implements
         spinnerAdapter = ArrayAdapter.createFromResource(this,R.array.seats,android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(spinnerAdapter);
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -204,8 +207,7 @@ public class OfferRide extends FragmentActivity implements
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
 
@@ -219,6 +221,8 @@ public class OfferRide extends FragmentActivity implements
         btnDate.setOnClickListener(this);
         btnStartTime.setOnClickListener(this);
         btnArrivalTime.setOnClickListener(this);
+        FromCurrentLocation.setOnClickListener(this);
+        ToCurrentLocation.setOnClickListener(this);
 
         getIntent();
     }
@@ -241,6 +245,8 @@ public class OfferRide extends FragmentActivity implements
             btnSelectGroup.setEnabled(true);
             EditStart.setHint("");
             EditEnd.setHint("");
+            FromCurrentLocation.setChecked(false);
+            ToCurrentLocation.setChecked(false);
         }
 
         if (v.getId() == R.id.buttonEvent)
@@ -251,6 +257,9 @@ public class OfferRide extends FragmentActivity implements
         {
             selectGroup(v);
         }
+        if (v.getId() == R.id.current1||v.getId() == R.id.current2)
+            reverseAddress(OfferRide.this);
+
         if (v.getId() == R.id.button1)
         {
             offerRide(v);
@@ -330,7 +339,7 @@ public class OfferRide extends FragmentActivity implements
                         isToEvent = true;
                         EditEnd.setHint(eventLocation.toString());
                         // EditEnd.setKeyListener(null);
-                        Check2.setEnabled(false);
+                        ToCurrentLocation.setEnabled(false);
                     }
                 });
                 builder3.setNegativeButton("From this event!", new DialogInterface.OnClickListener() {
@@ -338,7 +347,7 @@ public class OfferRide extends FragmentActivity implements
                         isFromEvent = true;
                         EditStart.setHint(eventLocation.toString());
                         // EditStart.setKeyListener(null);
-                        Check1.setEnabled(false);
+                        FromCurrentLocation.setEnabled(false);
                     }
                 });
                 AlertDialog alertDialog = builder3.create();
@@ -380,13 +389,16 @@ public class OfferRide extends FragmentActivity implements
 
                             currentAddress = jsonResponse.getJSONArray("results").getJSONObject(0)
                                     .getString("formatted_address");
-
+                            if(FromCurrentLocation.isChecked())
+                                EditStart.setHint(currentAddress.toString());
+                            if(ToCurrentLocation.isChecked())
+                                EditEnd.setHint(currentAddress.toString());
 
                         } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
-                        sendRequest(activity);
+
 
                     }
                 },
@@ -490,16 +502,16 @@ public class OfferRide extends FragmentActivity implements
                         {
                             Intent searchResultsIntent = new Intent(OfferRide.this, MyRidesActivity.class);
                             searchResultsIntent.putExtra("type", "find");
-                            searchResultsIntent.putExtra("s_lon", ((Check1.isChecked())?Double.toString(lonC):lonS));
-                            searchResultsIntent.putExtra("s_lat", ((Check1.isChecked())?Double.toString(latC):latS));
+                            searchResultsIntent.putExtra("s_lon", ((FromCurrentLocation.isChecked())?Double.toString(lonC):lonS));
+                            searchResultsIntent.putExtra("s_lat", ((FromCurrentLocation.isChecked())?Double.toString(latC):latS));
                             searchResultsIntent.putExtra("group_id",groupId);
                             searchResultsIntent.putExtra("event_id",eventId);
                             searchResultsIntent.putExtra("isGroup",isGroup);
-                            searchResultsIntent.putExtra("e_lon", ((Check2.isChecked())?Double.toString(lonC):lonE));
-                            searchResultsIntent.putExtra("e_lat", ((Check2.isChecked())?Double.toString(latC):latE));
+                            searchResultsIntent.putExtra("e_lon", ((ToCurrentLocation.isChecked())?Double.toString(lonC):lonE));
+                            searchResultsIntent.putExtra("e_lat", ((ToCurrentLocation.isChecked())?Double.toString(latC):latE));
                             searchResultsIntent.putExtra("arrival_time", EditEndTime);
-                            searchResultsIntent.putExtra("origin",((Check1.isChecked())?currentAddress:startAddress));
-                            searchResultsIntent.putExtra("destination",((Check2.isChecked())?currentAddress:endAddress));
+                            searchResultsIntent.putExtra("origin",((FromCurrentLocation.isChecked())?currentAddress:startAddress));
+                            searchResultsIntent.putExtra("destination",((ToCurrentLocation.isChecked())?currentAddress:endAddress));
                             //searchResultsIntent.putExtra("username",MainActivity.getAuthToken(activity.getApplicationContext()));
                             startActivity(searchResultsIntent);
                         }
@@ -549,7 +561,7 @@ public class OfferRide extends FragmentActivity implements
 
 
 
-                if (Check1.isChecked())
+                if (FromCurrentLocation.isChecked())
                 {
                    params.put("s_lat", Double.toString(latC));
                    params.put("s_lon",Double.toString(lonC) );
@@ -562,7 +574,7 @@ public class OfferRide extends FragmentActivity implements
                     params.put("start_add", startAddress);
                 }
 
-                if (Check2.isChecked())
+                if (ToCurrentLocation.isChecked())
                 {
                     params.put("e_lat", Double.toString(latC));
                     params.put("e_lon", Double.toString(lonC) );
@@ -581,8 +593,8 @@ public class OfferRide extends FragmentActivity implements
                 params.put("seat", SeatNo.toString());
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
-                //params.put("username", User.getCurrentUser().getUsername());
-                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                params.put("username", User.getCurrentUser().getUsername());
+               // params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
                 return params;
             }
         };
@@ -734,8 +746,6 @@ public class OfferRide extends FragmentActivity implements
     public boolean inputValid()
     {
         boolean checkBelong = false,checkStart = false, checkEnd = false;
-
-
         if (isGroup||isEvent)
             checkBelong = true;
         else
@@ -743,13 +753,13 @@ public class OfferRide extends FragmentActivity implements
             System.out.println("Have not choose any group or event!!");
             Toast.makeText(getApplicationContext(),"Must select a group or an event!",Toast.LENGTH_SHORT).show();
         }
-        if (!EditStart.getText().toString().isEmpty()||isFromEvent||Check1.isChecked())
+        if (!EditStart.getText().toString().isEmpty()||isFromEvent||FromCurrentLocation.isChecked())
             checkStart = true;
         else {
             System.out.println("Have not input start point!!");
             Toast.makeText(getApplicationContext(),"Must set start point!",Toast.LENGTH_SHORT).show();
         }
-        if (!EditEnd.getText().toString().isEmpty()||isToEvent||Check2.isChecked())
+        if (!EditEnd.getText().toString().isEmpty()||isToEvent||ToCurrentLocation.isChecked())
             checkEnd = true;
         else {
             System.out.println("Have not input end point!!");
@@ -787,21 +797,12 @@ public class OfferRide extends FragmentActivity implements
           //  Toast.makeText(getApplicationContext(),"Group info"+startAddress,Toast.LENGTH_SHORT).show();
         }
 
-        if (Check1.isChecked()||Check2.isChecked())
-        {
-            reverseAddress(this);
-        }
-        else
          sendRequest(this);
-
         }
-
         else {
             System.out.println("Invalid Input!!!");
             Toast.makeText(getApplicationContext(),"input invalid!!",Toast.LENGTH_SHORT).show();
         }
 
     }
-
-
 }
