@@ -42,6 +42,18 @@ angular.module('RDash').factory('eventDataFactory', ['$http', '$q', '$timeout', 
       var request = function() {
         $http({method: 'GET', url: 'event/getall'})
           .success(function(response) {
+
+            for (var idx in response) {
+              // console.log(response[idx].startTime);
+              if(response[idx].startTime){
+                response[idx].startTime = response[idx].startTime.slice(0,10);
+              }
+              if(response[idx].endTime){
+                response[idx].endTime = response[idx].endTime.slice(0,10);
+              }
+            }
+            
+            
             results.resolve(response.reverse());
           })
         .error(function() {

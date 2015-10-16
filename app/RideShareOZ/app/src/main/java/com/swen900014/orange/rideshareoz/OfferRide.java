@@ -439,7 +439,13 @@ public class OfferRide extends FragmentActivity implements
                         }
 
                        if(!isEvent){ getEndpointLoc(activity);}
-                        else sendRideInfo(activity);
+                        else {
+                           if(!isFind) {
+                               sendRideInfo(activity);
+                           }else{
+                               sendSearchRideRequest();
+                           }
+                       };
                     }
                 },
                 new Response.ErrorListener()
@@ -493,20 +499,7 @@ public class OfferRide extends FragmentActivity implements
                         }
                         else
                         {
-                            Intent searchResultsIntent = new Intent(OfferRide.this, MyRidesActivity.class);
-                            searchResultsIntent.putExtra("type", "find");
-                            searchResultsIntent.putExtra("s_lon", ((FromCurrentLocation.isChecked())?Double.toString(lonC):lonS));
-                            searchResultsIntent.putExtra("s_lat", ((FromCurrentLocation.isChecked())?Double.toString(latC):latS));
-                            searchResultsIntent.putExtra("group_id",groupId);
-                            searchResultsIntent.putExtra("event_id",eventId);
-                            searchResultsIntent.putExtra("isGroup",isGroup);
-                            searchResultsIntent.putExtra("e_lon", ((ToCurrentLocation.isChecked())?Double.toString(lonC):lonE));
-                            searchResultsIntent.putExtra("e_lat", ((ToCurrentLocation.isChecked())?Double.toString(latC):latE));
-                            searchResultsIntent.putExtra("arrival_time", EditEndTime);
-                            searchResultsIntent.putExtra("origin",((FromCurrentLocation.isChecked())?currentAddress:startAddress));
-                            searchResultsIntent.putExtra("destination",((ToCurrentLocation.isChecked())?currentAddress:endAddress));
-                            //searchResultsIntent.putExtra("username",MainActivity.getAuthToken(activity.getApplicationContext()));
-                            startActivity(searchResultsIntent);
+                            sendSearchRideRequest();
                         }
 
                         // check response, whether it received
@@ -522,6 +515,23 @@ public class OfferRide extends FragmentActivity implements
                 });
 
         MyRequestQueue.getInstance(activity).addToRequestQueue(getEndLocRequest);
+    }
+
+    private void sendSearchRideRequest(){
+        Intent searchResultsIntent = new Intent(OfferRide.this, MyRidesActivity.class);
+        searchResultsIntent.putExtra("type", "find");
+        searchResultsIntent.putExtra("s_lon", ((FromCurrentLocation.isChecked())?Double.toString(lonC):lonS));
+        searchResultsIntent.putExtra("s_lat", ((FromCurrentLocation.isChecked())?Double.toString(latC):latS));
+        searchResultsIntent.putExtra("group_id",groupId);
+        searchResultsIntent.putExtra("event_id",eventId);
+        searchResultsIntent.putExtra("isGroup",isGroup);
+        searchResultsIntent.putExtra("e_lon", ((ToCurrentLocation.isChecked())?Double.toString(lonC):lonE));
+        searchResultsIntent.putExtra("e_lat", ((ToCurrentLocation.isChecked())?Double.toString(latC):latE));
+        searchResultsIntent.putExtra("arrival_time", EditEndTime);
+        searchResultsIntent.putExtra("origin",((FromCurrentLocation.isChecked())?currentAddress:startAddress));
+        searchResultsIntent.putExtra("destination",((ToCurrentLocation.isChecked())?currentAddress:endAddress));
+        //searchResultsIntent.putExtra("username",MainActivity.getAuthToken(activity.getApplicationContext()));
+        startActivity(searchResultsIntent);
     }
 
     private void sendRideInfo(final Activity activity)

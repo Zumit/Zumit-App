@@ -12,6 +12,7 @@ var GroupsSchema = new Schema({
     user:{type: Schema.Types.ObjectId, ref: 'User' },
     requestDate:{ type: Date, default: Date.now }
   }],
+  updated_at: { type: Date, default: Date.now },
 });
 
 

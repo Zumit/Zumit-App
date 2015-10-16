@@ -150,7 +150,7 @@ function GroupCtrl($scope, $http, groupDataFactory) {
   };
 
   $scope.update = function(index) {
-    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + $scope.selectedIndex;
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
     var data = {
       'username': 'maxzhx@gmail.com',
       'group_id': $scope.groups[total_index]._id,
@@ -175,14 +175,13 @@ function GroupCtrl($scope, $http, groupDataFactory) {
   
   $scope.newGroup = function() {
     var newGroup={
-      'groupname':'Click to edit',
+      'groupname':'Click to edit name',
       'group_location': [0,0],
-      'location':'Click to edit',
-      'introduction':'Click to edit'
+      'location':'Click to edit location',
+      'introduction':'Click to edit info'
     };
     $scope.groups.unshift(newGroup);
     // $scope.groupCurrentPage = 1;
-    pagination.setCurrent(1);
   };
 
   $scope.acptRejReq = function(action, username) {
@@ -234,23 +233,83 @@ function EventCtrl($scope, $http, eventDataFactory) {
   $scope.eventCurrentPage = 1;
   $scope.eventPageSize = 4;
   $scope.events = [];
-  $scope.selectedIndex = -1;
 
   eventDataFactory.getEventData().then(function(res){
-    console.log(res);
     $scope.events = res;
   });
 
   $scope.pageChangeHandler = function(num) {
     console.log('going to page ' + num);
-    $scope.groupCurrentPage = num;
-    $scope.selectedIndex = -1;
-    $scope.requests = [];
-    $scope.members = [];
+    $scope.eventCurrentPage = num;
+  };
+
+  $scope.newEvent = function() {
+    var newEvent={
+      'eventName':'Click to edit name',
+      'eventLocation': [0,0],
+      'location':'Click to edit Location',
+      'startTime':new Date().toISOString().slice(0,10),
+      'endTime':new Date().toISOString().slice(0,10),
+      'eventInfo':'Click to edit info'
+    };
+    // console.log(newEvent.startTime);
+    $scope.events.unshift(newEvent);
+    // $scope.groupCurrentPage = 1;
   };
 
   $scope.testAlert = function(msg) {
     // $("#example").popover();
     alert(msg);
   };
+
+  $scope.checkData = function(field, data){
+
+    if (field === 1) {
+      if(data.length > 100){
+        return "event name is too long";
+      }
+    } else if(field === 2) {
+      var num = Number(data);
+      if (!num || num > 180 || num < -180) {
+        // console.log(num);
+        return "Invalid Input";
+      }
+      
+    } else if(field === 3) {
+      var num = Number(data);
+      if (!num || num > 90 || num < -90) {
+        // console.log(num);
+        return "Invalid Input";
+      }
+      
+    } else if(field === 4) {
+      
+    }
+  };
+
+  $scope.update = function(index) {
+    var total_index = ($scope.eventCurrentPage - 1) * $scope.eventPageSize + index;
+    var data = {
+      // for testing
+      'username': 'maxzhx@gmail.com',
+      'event_id': $scope.events[total_index]._id,
+      'event_name': $scope.events[total_index].eventName,
+      'e_lon': $scope.events[total_index].eventLocation[0],
+      'e_lat': $scope.events[total_index].eventLocation[1],
+      'start_time': $scope.events[total_index].startTime,
+      'end_time': $scope.events[total_index].endTime,
+      'location': $scope.events[total_index].location,
+      'eventInfo': $scope.events[total_index].eventInfo
+    };
+    $http.post('event/update', data).success(function(data){
+      // console.log(data);
+      eventDataFactory.getEventData().then(function(res){
+        // console.log(res);
+        $scope.events = res;
+      });
+    }).error(function(data, status){
+      console.log(data, status);
+    });
+  };
+
 }

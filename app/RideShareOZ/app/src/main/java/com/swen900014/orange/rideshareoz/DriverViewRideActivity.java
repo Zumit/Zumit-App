@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -63,6 +64,13 @@ public class DriverViewRideActivity extends AppCompatActivity
         arrivalTimeLabel.setText(ride.getArrivingTime());
         driverText.setText(ride.getDriver().getUsername());
         seatsText.setText(ride.getSeats());
+
+        // Driver is not allowed to cancel a ride already finished
+        if (ride.getRideState() == Ride.RideState.PASSED)
+        {
+            Button cancelButton = (Button) findViewById(R.id.cancelButton);
+            cancelButton.setVisibility(View.GONE);
+        }
 
         // Click and go to driver user info page
         driverText.setOnClickListener(new View.OnClickListener()
