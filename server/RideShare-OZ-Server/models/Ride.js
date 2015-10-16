@@ -115,6 +115,7 @@ RideSchema.statics.searchRide = function(req,callback){
   }).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
 
+     if(ride) { 
     if (ride.length!=0) {
       
      var length=ride.length;
@@ -163,6 +164,8 @@ RideSchema.statics.searchRide = function(req,callback){
     }else {
       callback ("no result");
     }
+  }else
+  { callback("group is wrong!");}
   });
 };
 
