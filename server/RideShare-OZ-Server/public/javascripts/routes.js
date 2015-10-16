@@ -15,6 +15,10 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/',
                 templateUrl: 'templates/dashboard'
             })
+            .state('event', {
+                url: '/event',
+                templateUrl: 'templates/event'
+            })
             .state('group', {
                 url: '/group',
                 templateUrl: 'templates/group'

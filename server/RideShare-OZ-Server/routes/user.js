@@ -12,9 +12,9 @@ router.post('/login', function(req, res, next) {
         });
       });
     } else {
-      user.getRides(function(rides){
-        res.json(rides);
-      });
+     
+        res.json(user);
+      
     }
   });
   /* res.status(500).send('Something broke!'); */
