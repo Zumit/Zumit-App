@@ -14,7 +14,10 @@ public class DateFormatter
     public static String format(String date)
     {
         //clean date
-        date = date.substring(0, 10) + " " + date.substring(11, 19);
+        if (date.length() > 0){
+            date = date.substring(0, 10) + " " + date.substring(11, 19);
+        }
+
         try
         {
             return outputDateFormat.format(inputDateFormat.parse(date));

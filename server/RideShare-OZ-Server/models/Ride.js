@@ -107,25 +107,38 @@ RideSchema.statics.searchRide = function(req,callback){
   var rides = [];
   var count = 0;
 
+
   this.find({
     'arrival_time':{"$gte":new Date(s_time),"$lt":new Date(e_time)},
     'end_point': {
       $nearSphere: end,
       $maxDistance: maxDistance
-    }
-  }).populate('driver passengers.user requests.user',
+    }}
+  ).populate('driver passengers.user requests.user',
       'username phone driver_license').exec({},function(err,ride){
-        if (err) {
-          console.log("========err=====");
-          console.log(err);
-        } else {
-          console.log("========no err=====");
-          console.log(ride);
-        }
-
+        
      if(ride) { 
-    if (ride.length!=0) {
+     var ride1=[];
+     if (ride.length!=0) {
+ 
+      if(groupID){
+        for (var i = 0; ride.length>i ; i++) {
+          if (String(ride[i].group)==groupID){
+            ride1.push(ride[i]);
+           // console.log(ride1);
+          }
+        }
+      } else if(req.body.event_id){
+        for (var i = 0; ride.length>i ; i++) {
+          if (String(ride[i].events)==req.body.event_id){
+            ride1.push(ride[i]);
+            //console.log(ride1);
+          }
+        } 
+      }
       
+      var ride=[];
+        ride=ride1;
      var length=ride.length;
      ride.forEach(function(ride){
         
