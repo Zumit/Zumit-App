@@ -50,7 +50,7 @@
         <activity
             android:name=".MyRidesActivity"
             android:label="@string/title_ride_searchresults"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".OfferRide" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.swen900014.orange.rideshareoz.MainActivity" />
