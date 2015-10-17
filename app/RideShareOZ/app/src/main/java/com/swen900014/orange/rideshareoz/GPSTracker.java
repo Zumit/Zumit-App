@@ -34,7 +34,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     // flag for GPS status
     boolean canGetLocation = false;
 
-    public static boolean isCancelled = false;
+    public static boolean isCancelled;
     Location location; // location
     double latitude = 0; // latitude
     double longitude = 0; // longitude
@@ -271,7 +271,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-
+                GPSTracker.isCancelled = false;
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
 

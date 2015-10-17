@@ -279,7 +279,11 @@ public class OfferRide extends FragmentActivity implements
         {
                 getGps();
                 checkGps();
+                if(!gpsState){
+                    System.out.println("gpsState is on ");
+                }
                 if (gpsState) {
+                    System.out.println("gpsState is cancelled");
                     FromCurrentLocation.setChecked(false);
                     ToCurrentLocation.setChecked(false);
                     ToCurrentLocation.setEnabled(false);
@@ -288,8 +292,7 @@ public class OfferRide extends FragmentActivity implements
                 else reverseAddress(OfferRide.this);
         }
 
-        if (v.getId() == R.id.button1)
-        {
+        if (v.getId() == R.id.button1) {
             offerRide(v);
         }
         if (v.getId() == R.id.setDateButton)
