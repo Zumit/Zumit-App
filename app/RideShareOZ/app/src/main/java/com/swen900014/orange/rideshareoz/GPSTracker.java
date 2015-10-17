@@ -274,6 +274,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
             {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
+                
             }
         });
 
