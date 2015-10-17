@@ -128,6 +128,8 @@ RideSchema.statics.searchRide = function(req,callback){
       var ride1=[];
       if(groupID){
         for (var i = 0; ride.length>i ; i++) {
+          console.log(i + "+++++++++++++++++++++++++");
+          console.log(ride[i].group);
           if (ride[i].group && String(ride[i].group._id)==groupID){
             ride1.push(ride[i]);
             // console.log(ride1);
@@ -135,7 +137,10 @@ RideSchema.statics.searchRide = function(req,callback){
         }
       } else if(req.body.event_id){
         for (var j = 0; ride.length>j ; j++) {
+          console.log(j + "===================");
+          console.log(ride[j].events);
           if (ride[j].events && String(ride[j].events._id)==req.body.event_id){
+            console.log(i + "+++++++++++++++++++++++++");
             ride1.push(ride[j]);
             //console.log(ride1);
           }
@@ -185,6 +190,7 @@ RideSchema.statics.searchRide = function(req,callback){
         });
       });
     }else{
+      console.log("==nothing============");
       callback([]);
     }
   });
