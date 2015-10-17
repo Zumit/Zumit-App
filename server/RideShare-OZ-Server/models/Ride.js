@@ -128,14 +128,14 @@ RideSchema.statics.searchRide = function(req,callback){
       var ride1=[];
       if(groupID){
         for (var i = 0; ride.length>i ; i++) {
-          if (String(ride[i].group._id)==groupID){
+          if (ride[i].group && String(ride[i].group._id)==groupID){
             ride1.push(ride[i]);
             // console.log(ride1);
           }
         }
       } else if(req.body.event_id){
         for (var j = 0; ride.length>j ; j++) {
-          if (String(ride[j].events._id)==req.body.event_id){
+          if (ride[j].events && String(ride[j].events._id)==req.body.event_id){
             ride1.push(ride[j]);
             //console.log(ride1);
           }
