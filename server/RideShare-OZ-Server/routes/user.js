@@ -7,9 +7,9 @@ router.post('/login', function(req, res, next) {
   User.findOne({'username': req.userinfo.email}, function(err, user){
     if (!user) {
       User.createUser(req.userinfo.email, function(new_user){
-        new_user.getRides(function(rides){
-          res.json(rides);
-        });
+        
+          res.json(new_user);
+        
       });
     } else {
      
