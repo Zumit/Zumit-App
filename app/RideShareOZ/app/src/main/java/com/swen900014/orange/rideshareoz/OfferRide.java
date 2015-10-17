@@ -92,6 +92,7 @@ public class OfferRide extends FragmentActivity implements
     private boolean isEvent = false;
     private boolean isToEvent = false;
     private boolean isFromEvent = false;
+    private boolean gpsState;
     private String eventLocation;
     protected GoogleApiClient mGoogleApiClient;
 
@@ -143,7 +144,8 @@ public class OfferRide extends FragmentActivity implements
         TextView textSearchEvent = (TextView) findViewById(R.id.textView5);
         TextView textSearchGroup = (TextView) findViewById(R.id.textView6);
 
-
+        FromCurrentLocation.setEnabled(true);
+        ToCurrentLocation.setEnabled(true);
 
 
 
@@ -223,12 +225,14 @@ public class OfferRide extends FragmentActivity implements
         //gps
 
          gps = new GPSTracker(this);
+        gpsState = gps.getState();
 
     }
 
     public void checkGps()
     {
         // check if GPS enabled
+
         if (gps.canGetLocation())
         {
             latC = gps.getLatitude();
@@ -275,18 +279,20 @@ public class OfferRide extends FragmentActivity implements
         {
                 getGps();
                 checkGps();
-                if (gps.getState()) {
+                if(!gpsState){
+                    System.out.println("gpsState is on ");
+                }
+                if (gpsState) {
+                    System.out.println("gpsState is cancelled");
                     FromCurrentLocation.setChecked(false);
                     ToCurrentLocation.setChecked(false);
                     ToCurrentLocation.setEnabled(false);
                     FromCurrentLocation.setEnabled(false);
                 }
                 else reverseAddress(OfferRide.this);
-
         }
 
-        if (v.getId() == R.id.button1)
-        {
+        if (v.getId() == R.id.button1) {
             offerRide(v);
         }
         if (v.getId() == R.id.setDateButton)

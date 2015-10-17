@@ -34,7 +34,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     // flag for GPS status
     boolean canGetLocation = false;
 
-    boolean isCancelled = true;
+    public static boolean isCancelled;
     Location location; // location
     double latitude = 0; // latitude
     double longitude = 0; // longitude
@@ -269,11 +269,9 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
 
         // On pressing Settings button
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                isCancelled = false;
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                GPSTracker.isCancelled = false;
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
 
@@ -281,11 +279,12 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         });
 
         // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
+
+            public void onClick(DialogInterface dialog, int which) {
+
+                GPSTracker.isCancelled = true;
 
                 dialog.cancel();
 
@@ -295,7 +294,6 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         // Showing Alert Message
         alertDialog.show();
     }
-
 
     @Override
     public IBinder onBind(Intent arg0)
@@ -335,5 +333,5 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     {
 
     }
-    public boolean getState(){return isCancelled;}
+    public boolean getState(){return this.isCancelled;}
 }
