@@ -10,6 +10,7 @@ function MasterCtrl($scope, $cookieStore) {
    * Sidebar Toggle & Cookie Control
    */
   var mobileView = 992;
+  // $scope.user = user;
 
   $scope.getWidth = function() {
     return window.innerWidth;

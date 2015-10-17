@@ -3,7 +3,7 @@ html(lang='en', ng-app='RDash')
   head
     meta(charset='UTF-8')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    title RDash AngularJS
+    title #{title}
     // STYLES
     // build:css lib/css/main.min.css
     link(rel='stylesheet', type='text/css', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
@@ -79,20 +79,14 @@ html(lang='en', ng-app='RDash')
                     img(src='images/avatar.jpg')
                   ul.dropdown-menu.dropdown-menu-right
                     li.dropdown-header
-                      | Joe Bloggs
+                      | #{user}
                     li.divider
                     li.link
                       a(href='#')
                         | Profile
-                    li.link
-                      a(href='#')
-                        | Menu Item
-                    li.link
-                      a(href='#')
-                        | Menu Item
                     li.divider
                     li.link
-                      a(href='#')
+                      a(href='/logout')
                         | Logout
                 .item.dropdown
                   a.dropdown-toggle(href='#')

@@ -1,4 +1,5 @@
 var express = require('express');
+var session = require('express-session');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -23,6 +24,7 @@ mongoose.connect('mongodb://localhost/RideShare', function(err) {
   }
 });
 
+// routine job
 var rule = new schedule.RecurrenceRule();  
 rule.minute = [0, 20, 40];
 var date=Date.now(); 
@@ -35,10 +37,8 @@ var j = schedule.scheduleJob(rule, function(){
           });
         }
       });
-
     });
 });
-
 
 var auth = require('./authentication.js');
 var index = require('./routes/index');
@@ -67,18 +67,26 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser('your secret here'));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
-// app.use(express.methodOverride());
-// app.use(express.cookieParser('your secret here'));
-// app.use(express.session());
+app.use(session({
+    secret: 'thisisasecretkey',
+    maxAge: new Date(Date.now() + 3600000),
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// authentication validation
 app.use(function(req,res,next){
   if (req.method === 'POST') {
+    if (req.body.token) {
+      console.log("===============token==========");
+      console.log(req.body.token);
+    }
     auth.auth_token(req.body.token, function(doc){
       if (req.body.username) {
         doc = {'email': req.body.username};
@@ -92,7 +100,6 @@ app.use(function(req,res,next){
           if (users.length !== 0) {
           req.userinfo._id = users[0]._id;
           }
-
           next();
         });
       }
@@ -128,51 +135,9 @@ var Account = require('./models/Account');
 
 // use static authenticate method of model in LocalStrategy
 passport.use(new LocalStrategy(Account.authenticate()));
-
 // use static serialize and deserialize of model for passport session support
 passport.serializeUser(Account.serializeUser());
 passport.deserializeUser(Account.deserializeUser());
-
-app.get('/register', function(req, res) {
-  res.render('register', { });
-});
-
-app.post('/register', function(req, res) {
-  Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-    if (err) {
-      return res.render('register', { account : account });
-    }
-
-    passport.authenticate('local')(req, res, function () {
-      res.redirect('/admin');
-    });
-  });
-});
-
-app.get('/', function (req, res) {
-  console.log("1=============");
-  console.log(req.user);
-  res.render('index', { user : req.user });
-});
-
-app.get('/login', function(req, res) {
-  res.render('login', { user : req.user });
-});
-
-app.post('/login', passport.authenticate('local'), function(req, res) {
-  console.log("=============");
-  console.log(req.user);
-  res.redirect('/');
-});
-
-app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
-});
-
-app.get('/ping', function(req, res){
-  res.send("pong!", 200);
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -204,9 +169,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
-
-
 
 module.exports = app;
