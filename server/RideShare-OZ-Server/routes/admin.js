@@ -3,16 +3,16 @@ var router = express.Router();
 var passport = require('passport');
 var Group = require('../models/Group.js');
 
-router.get('/', passport.authenticate('local'), function(req, res, next) {
+router.get('/', function(req, res, next) {
 
-  Group.find().populate('members',
-      'username phone driver_license').exec({}, function(err, groups){
-    // res.json(groups);
+  if (req.user) {
     res.render('admin', {
       title: 'Administrator',
-      groups: groups
+      user: req.user.username
     });
-  });
+  } else {
+    res.redirect('/login');
+  }
 
 });
 
