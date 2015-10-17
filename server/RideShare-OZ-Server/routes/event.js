@@ -3,25 +3,19 @@ var router = express.Router();
 var Event = require('../models/Event.js');
 
 router.get('/getall', function(req, res, next) {
-
   Event.find({}, function(err, events){
     res.json(events);
   });
-
 });
 
 router.post('/create', function(req, res, next) {
-
-Event.createEvent(req, function(event){
-		 res.json(event);
-	});
-
+  Event.createEvent(req, function(event){
+    res.json(event);
+  });
 });
 
 router.post('/update', function(req, res, next) {
-
   Event.findOne({'_id': req.body.event_id}, function(err, event){
-    console.log("============");
     if (event) {
       event.eventName = (req.body.event_name)? req.body.event_name : event.eventName;
       event.location = (req.body.location)? req.body.location : event.location;
@@ -40,7 +34,17 @@ router.post('/update', function(req, res, next) {
       });
     }
   });
+});
 
+/*
+ * Remove a event
+ */
+router.post('/remove', function(req, res, next){  
+  Event.findById(req.body.event_id,function(err, event){
+    event.remove(function(err){
+      res.json("removed");
+    });
+  });
 });
 
 module.exports = router;

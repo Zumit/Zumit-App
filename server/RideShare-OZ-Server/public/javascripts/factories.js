@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Route configuration for the RDash module.
+ * get group data
  */
 angular.module('RDash').factory('groupDataFactory', ['$http', '$q', '$timeout', function($http, $q, $timeout) {
   return {
@@ -16,6 +16,7 @@ angular.module('RDash').factory('groupDataFactory', ['$http', '$q', '$timeout', 
             results.resolve(response.reverse());
           })
         .error(function() {
+          // retry getting data
           if (counter < MAX_REQUESTS) {
             // request();
             $timeout(request, 800);
@@ -32,7 +33,11 @@ angular.module('RDash').factory('groupDataFactory', ['$http', '$q', '$timeout', 
   };
 }]);
 
-angular.module('RDash').factory('eventDataFactory', ['$http', '$q', '$timeout', function($http, $q, $timeout) {
+/**
+ * get event data
+ */
+angular.module('RDash').factory('eventDataFactory', ['$http', '$q', '$timeout',
+    function($http, $q, $timeout) {
   return {
     getEventData: function() {
       var MAX_REQUESTS = 5,
@@ -42,7 +47,6 @@ angular.module('RDash').factory('eventDataFactory', ['$http', '$q', '$timeout', 
       var request = function() {
         $http({method: 'GET', url: 'event/getall'})
           .success(function(response) {
-
             for (var idx in response) {
               // console.log(response[idx].startTime);
               if(response[idx].startTime){
@@ -52,8 +56,6 @@ angular.module('RDash').factory('eventDataFactory', ['$http', '$q', '$timeout', 
                 response[idx].endTime = response[idx].endTime.slice(0,10);
               }
             }
-            
-            
             results.resolve(response.reverse());
           })
         .error(function() {

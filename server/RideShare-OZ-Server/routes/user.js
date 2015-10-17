@@ -2,24 +2,22 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/User.js');
 
-/* Login. */
+/*
+ * User Login
+ * @description: verify user, if the user is new, create a new user
+ * @return: User's info
+ */
 router.post('/login', function(req, res, next) {
-  console.log("===============username==========");
-  console.log(req.userinfo.email);
   User.findOne({'username': req.userinfo.email}, function(err, user){
     if (!user) {
+      // if the user is new, then create a new user
       User.createUser(req.userinfo.email, function(new_user){
-        
-          res.json(new_user);
-        
+        res.json(new_user);
       });
     } else {
-     
-        res.json(user);
-      
+      res.json(user);
     }
   });
-  /* res.status(500).send('Something broke!'); */
 });
 
 router.post('/info', function(req, res, next) {
@@ -28,6 +26,10 @@ router.post('/info', function(req, res, next) {
   });
 });
 
+/*
+ * User's ride
+ * @return: all the rides which the user is the driver, passenger or has made a request
+ */
 router.post('/getRides', function(req, res, next) {
   User.findOne({'username': req.userinfo.email}, function(err, user){
     /* res.json(user); */
@@ -48,6 +50,9 @@ router.get('/getRides', function(req, res, next) {
   });
 });
 
+/*
+ * Update a User's info
+ */
 router.post('/update', function(req, res, next){
   User.findOne({'username': req.userinfo.email}, function(err, user){
     user.address = (req.body.address)? req.body.address : user.address;
@@ -61,6 +66,9 @@ router.post('/update', function(req, res, next){
   });
 });
 
+/*
+ * get all user's list
+ */
 router.post('/getall', function(req, res, next) {
   User.getAllUsers(function(users){
     res.json(users);
@@ -74,15 +82,23 @@ router.get('/getall', function(req, res, next) {
 });
 
 
+/*
+ * User's group
+ * @return: all the gruops which the user is a member or has made a request
+ */
 router.post('/getGroups', function(req, res) {
   User.getGroups(req,function(users){
     res.json(users);
   });
 });
 
+/*
+ * All group 
+ * @return: all the gruops with user's relationship with each group
+ *          joined, request or unjoined
+ */
 router.post('/getAllGroups', function(req, res) {
   User.findById(req.userinfo._id,function(err,user){
-
     user.getAllGroups(function(group){
       res.json(group);
     });

@@ -70,7 +70,6 @@ function AlertsCtrl($scope) {
 /**
  * Group Controller
  */
-
 angular
 .module('RDash')
 .controller('GroupCtrl', ['$scope', '$http', 'groupDataFactory', GroupCtrl]);
@@ -89,26 +88,14 @@ function GroupCtrl($scope, $http, groupDataFactory) {
   $scope.selectedIndex = -1;
 
   groupDataFactory.getGroupData().then(function(res){
-    console.log(res);
+    // console.log(res);
     $scope.groups = res;
   });
-  // $http.get('group/getall').success(function(data){
-    // $scope.groups = data;
-  // }).error(function(data, status){
-    // console.log(data, status);
-  // });
-
-  $scope.testMsg = [{
-    msg: '============test========='
-  }];
 
   $scope.setMemReq = function(index){
     $scope.selectedIndex = index;
-    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
-    // console.log("======================", total_index);
     $scope.requests = $scope.groups[total_index].requests;
     $scope.members = $scope.groups[total_index].members;
-    // console.log($scope.requests);
   };
 
   $scope.pageChangeHandler = function(num) {
@@ -120,7 +107,6 @@ function GroupCtrl($scope, $http, groupDataFactory) {
   };
 
   $scope.testAlert = function(msg) {
-    // $("#example").popover();
     alert(msg);
   };
   
@@ -136,16 +122,13 @@ function GroupCtrl($scope, $http, groupDataFactory) {
         // console.log(num);
         return "Invalid Input";
       }
-      
     } else if(field === 3) {
       var num = Number(data);
       if (!num || num > 90 || num < -90) {
         // console.log(num);
         return "Invalid Input";
       }
-      
     } else if(field === 4) {
-      
     }
 
   };
@@ -224,7 +207,6 @@ function GroupCtrl($scope, $http, groupDataFactory) {
 /**
  * Event Controller
  */
-
 angular
 .module('RDash')
 .controller('EventCtrl', ['$scope', '$http', 'eventDataFactory', EventCtrl]);
@@ -284,7 +266,6 @@ function EventCtrl($scope, $http, eventDataFactory) {
       }
       
     } else if(field === 4) {
-      
     }
   };
 
@@ -303,9 +284,7 @@ function EventCtrl($scope, $http, eventDataFactory) {
       'eventInfo': $scope.events[total_index].eventInfo
     };
     $http.post('event/update', data).success(function(data){
-      // console.log(data);
       eventDataFactory.getEventData().then(function(res){
-        // console.log(res);
         $scope.events = res;
       });
     }).error(function(data, status){
