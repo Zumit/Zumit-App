@@ -100,8 +100,23 @@ public class OfferRide extends FragmentActivity implements
 
     Calendar calendar = Calendar.getInstance();
     private TextView displayDate, displayStartTime, displayArrivalTime;
+    private DialougeState dialougeState;
+
+    private enum DialougeState{NONE, GPS};
 
 
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        switch (dialougeState)
+        {
+            case GPS:
+                dialougeState = DialougeState.NONE;
+                finish();
+                break;
+        }
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -146,8 +161,9 @@ public class OfferRide extends FragmentActivity implements
         // can't get location
         // GPS or Network is not enabled
         // Ask user to enable GPS/network in settings
+             dialougeState = DialougeState.GPS;
             gps.showSettingsAlert();
-            finish();
+
 
 
         }
