@@ -147,7 +147,11 @@ public class OfferRide extends FragmentActivity implements
         // GPS or Network is not enabled
         // Ask user to enable GPS/network in settings
             gps.showSettingsAlert();
+            finish();
+
+
         }
+
 
 
 
@@ -220,7 +224,10 @@ public class OfferRide extends FragmentActivity implements
         getIntent();
     }
 
-
+    public void finish(Activity activity)
+    {
+        activity.finish();
+    }
 
     @Override
     public void onClick(View v)
