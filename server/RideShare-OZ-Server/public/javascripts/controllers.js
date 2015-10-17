@@ -93,6 +93,7 @@ function GroupCtrl($scope, $http, groupDataFactory) {
   });
 
   $scope.setMemReq = function(index){
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
     $scope.selectedIndex = index;
     $scope.requests = $scope.groups[total_index].requests;
     $scope.members = $scope.groups[total_index].members;
