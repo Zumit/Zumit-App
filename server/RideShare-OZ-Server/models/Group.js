@@ -90,7 +90,7 @@ GroupsSchema.statics.leaveGroup = function(req,callback){
   User.findByIdAndUpdate(req.userinfo._id, 
                          {$pull:{'groups':{'group':req.body.group_id}}},
                          function(err, user){
-        console.log(uers);
+        console.log(users);
   });
   //delete the user from gruop
   this.findByIdAndUpdate(req.body.group_id,
