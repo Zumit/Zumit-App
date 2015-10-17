@@ -150,6 +150,7 @@ public class OfferRide extends FragmentActivity implements
         }
 
 
+
        /* check if it is offer or find  */
         Intent intent = this.getIntent();
         if (intent != null && intent.hasExtra("type"))
@@ -240,7 +241,6 @@ public class OfferRide extends FragmentActivity implements
             FromCurrentLocation.setChecked(false);
             ToCurrentLocation.setChecked(false);
         }
-
         if (v.getId() == R.id.buttonEvent)
         {
             selectEvent();
@@ -494,7 +494,7 @@ public class OfferRide extends FragmentActivity implements
                         {
                             e.printStackTrace();
                         }
-                        sendRideInfo(activity);
+
                         /* check if it offer or find  */
                         if (!isFind)
                         {
@@ -600,8 +600,8 @@ public class OfferRide extends FragmentActivity implements
                 params.put("seat", SeatNo);
                 params.put("start_time", EditStartTime);
                 params.put("arrival_time", EditEndTime);
-                //params.put("username", User.getCurrentUser().getUsername());
-                params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
+                params.put("username", User.getCurrentUser().getUsername());
+                //params.put("token", MainActivity.getAuthToken(activity.getApplicationContext()));
                 return params;
             }
         };
