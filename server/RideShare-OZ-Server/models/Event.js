@@ -7,9 +7,9 @@ var User = require('../models/User.js');
 
 var EventSchema = new Schema({
   eventName: String,
-  eventInfo: String,
+  eventInfo: { type: String, default: "" },
   eventLocation: [Number],
-  location: String,
+  location: { type: String, default: "" },
   startTime:Date,
   endTime:Date,
   updated_at: { type: Date, default: Date.now },
