@@ -122,7 +122,8 @@ public class Event implements Serializable
         this.name = eventJson.getString("eventName");
         this.description = eventJson.getString("eventInfo");
         tempLocationArray = eventJson.getJSONArray("eventLocation");
-        Location loc = new Location(tempLocationArray.getDouble(0), tempLocationArray.getDouble(1));
+        //in json object the coordinates are saved as (lon, lat)
+        Location loc = new Location(tempLocationArray.getDouble(1), tempLocationArray.getDouble(0));
         loc.setAddress(eventJson.getString("location"));
         this.eventLocation = loc;
         this.start_time = DateFormatter.format(eventJson.getString("startTime"));
