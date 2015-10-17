@@ -8,13 +8,13 @@ var UserSchema = new Schema({
   username: String,
   note: String,
   address: String,
-  phone: String,
+  phone: { type: String, default: "" },
   DoB: Date,
-  driver_license: String,
+  driver_license: { type: String, default: "" },
   groups: [{group:{type: Schema.Types.ObjectId, ref: 'Group' }, state:String}],
   updated_at: { type: Date, default: Date.now },
   driver_rate:{ type: Number, default:0},
-  passenger_rate:{ type: Number,default:0},
+  passenger_rate:{ type: Number, default:0},
 });
 
 UserSchema.statics.createUser = function(username, callback){

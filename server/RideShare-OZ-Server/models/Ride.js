@@ -124,25 +124,25 @@ RideSchema.statics.searchRide = function(req,callback){
     .populate('group','groupname')
     .exec({},function(err,ride){
 
-    if(ride && ride.length!=0) { 
+    if(ride && ride.length!==0) { 
       var ride1=[];
       if(groupID){
         for (var i = 0; ride.length>i ; i++) {
-          if (String(ride[i].group._id)==groupID){
+          if (ride[i].group && String(ride[i].group._id)==groupID){
             ride1.push(ride[i]);
             // console.log(ride1);
           }
         }
       } else if(req.body.event_id){
-        for (var i = 0; ride.length>i ; i++) {
-          if (String(ride[i].events._id)==req.body.event_id){
-            ride1.push(ride[i]);
+        for (var j = 0; ride.length>j ; j++) {
+          if (ride[j].events && String(ride[j].events._id)==req.body.event_id){
+            ride1.push(ride[j]);
             //console.log(ride1);
           }
         } 
       }
 
-      var ride=[];
+      // ride=[];
       ride=ride1;
       var length=ride.length;
 
@@ -185,7 +185,8 @@ RideSchema.statics.searchRide = function(req,callback){
         });
       });
     }else{
-      callback("group is wrong!");}
+      callback([]);
+    }
   });
 };
 
