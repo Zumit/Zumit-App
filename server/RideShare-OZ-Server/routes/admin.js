@@ -3,8 +3,11 @@ var router = express.Router();
 var passport = require('passport');
 var Group = require('../models/Group.js');
 
+/*
+ * Admin page,
+ * if the user hasn't login, redrect to the login page
+ */
 router.get('/', function(req, res, next) {
-
   if (req.user) {
     res.render('admin', {
       title: 'Administrator',
@@ -13,13 +16,6 @@ router.get('/', function(req, res, next) {
   } else {
     res.redirect('/login');
   }
-
-});
-
-router.get('/test', function(req, res, next) {
-  res.render('test', {
-      title: 'Administrator',
-  });
 });
 
 module.exports = router;

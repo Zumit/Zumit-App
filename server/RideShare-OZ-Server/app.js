@@ -29,15 +29,15 @@ var rule = new schedule.RecurrenceRule();
 rule.minute = [0, 20, 40];
 var date=Date.now(); 
 var j = schedule.scheduleJob(rule, function(){  
-    Ride.find({},function(err,rides){
-      rides.forEach(function(ride){
-        if(new Date(ride.arrival_time) < new Date(date)){
-          Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
-            //console.log("update");
-          });
-        }
-      });
+  Ride.find({},function(err,rides){
+    rides.forEach(function(ride){
+      if(new Date(ride.arrival_time) < new Date(date)){
+        Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
+          //console.log("update");
+        });
+      }
     });
+  });
 });
 
 var auth = require('./authentication.js');
@@ -45,7 +45,6 @@ var index = require('./routes/index');
 var user = require('./routes/user');
 var ride = require('./routes/ride');
 var group = require('./routes/group');
-var msg = require('./routes/msg');
 var test = require('./routes/test');
 var events = require('./routes/event');
 var credit= require('./routes/credit');
@@ -72,10 +71,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
 
 app.use(session({
-    secret: 'thisisasecretkey',
-    maxAge: new Date(Date.now() + 3600000),
-    resave: false,
-    saveUninitialized: false
+  secret: 'thisisasecretkey',
+  maxAge: new Date(Date.now() + 3600000),
+  resave: false,
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -83,10 +82,6 @@ app.use(passport.session());
 // authentication validation
 app.use(function(req,res,next){
   if (req.method === 'POST') {
-    if (req.body.token) {
-      console.log("===============token==========");
-      console.log(req.body.token);
-    }
     auth.auth_token(req.body.token, function(doc){
       if (req.body.username) {
         doc = {'email': req.body.username};
@@ -120,19 +115,16 @@ app.use('/', index);
 app.use('/user', user);
 app.use('/ride', ride);
 app.use('/group', group);
-app.use('/msg', msg);
 app.use('/test', test);
 app.use('/event', events);
 app.use('/credit', credit);
 app.use('/admin', admin);
-
 app.get('/templates/:name', function(req, res){
   res.render('templates/' + req.params.name);
 });
 
 // passport config
 var Account = require('./models/Account');
-
 // use static authenticate method of model in LocalStrategy
 passport.use(new LocalStrategy(Account.authenticate()));
 // use static serialize and deserialize of model for passport session support

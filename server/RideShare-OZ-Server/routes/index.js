@@ -3,25 +3,8 @@ var router = express.Router();
 var passport = require('passport');
 var Account = require('../models/Account');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.redirect('/admin');
-});
-
-router.get('/register', function(req, res) {
-  res.render('register', { });
-});
-
-router.post('/register', function(req, res) {
-  Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-    if (err) {
-      return res.render('register', { account : account });
-    }
-
-    passport.authenticate('local')(req, res, function () {
-      res.redirect('/login');
-    });
-  });
 });
 
 router.get('/login', function(req, res) {
@@ -36,5 +19,27 @@ router.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/login');
 });
+
+/*
+ * Admin Register
+ * uncomment the following code if you want to open the register of Administrator 
+ * and visit "http://xxxxxxx/register"
+ */
+
+/*
+ * router.get('/register', function(req, res) {
+ *   res.render('register', { });
+ * });
+ * router.post('/register', function(req, res) {
+ *   Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+ *     if (err) {
+ *       return res.render('register', { account : account });
+ *     }
+ *     passport.authenticate('local')(req, res, function () {
+ *       res.redirect('/login');
+ *     });
+ *   });
+ * });
+ */
 
 module.exports = router;

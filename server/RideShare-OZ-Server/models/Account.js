@@ -1,11 +1,12 @@
+/*
+ * Administrator's account model
+ */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     passportLocalMongoose = require('passport-local-mongoose');
 
-
 var AccountSchema = new Schema({
   username: String,
-  password: String,
   updated_at: { type: Date, default: Date.now },
 });
 

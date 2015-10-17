@@ -1,3 +1,6 @@
+/*
+ * Event Model
+ */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User = require('../models/User.js');
