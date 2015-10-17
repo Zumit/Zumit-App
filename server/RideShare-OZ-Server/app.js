@@ -83,6 +83,10 @@ app.use(passport.session());
 // authentication validation
 app.use(function(req,res,next){
   if (req.method === 'POST') {
+    if (req.body.token) {
+      console.log("===============token==========");
+      console.log(req.body.token);
+    }
     auth.auth_token(req.body.token, function(doc){
       if (req.body.username) {
         doc = {'email': req.body.username};
