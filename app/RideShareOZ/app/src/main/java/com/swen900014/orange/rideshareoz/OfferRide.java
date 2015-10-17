@@ -48,8 +48,7 @@ import static com.swen900014.orange.rideshareoz.Resources.OFFER_RIDE_URL;
  */
 public class OfferRide extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener
-{
+        View.OnClickListener {
     ArrayList<Group> selectGroups = null;
     ArrayList<Event> selectEvents = null;
 
@@ -57,14 +56,14 @@ public class OfferRide extends FragmentActivity implements
     private String eventId = "";
     private String groupId = "";
     private String groupName = "";
-    private String tempDate = "",SeatNo="1";
+    private String tempDate = "", SeatNo = "1";
     private String EditStartTime = "";
     private String EditEndTime = "";
 
-    private String hours="";
-    private String mins="";
-    private String houra="";
-    private String mina="";
+    private String hours = "";
+    private String mins = "";
+    private String houra = "";
+    private String mina = "";
 
     private TextView textStartTime;
 
@@ -81,9 +80,9 @@ public class OfferRide extends FragmentActivity implements
     private String lonS = "";
     private String latE = "";
     private String lonE = "";
-//current GPS location
-    private double  latC = 0;
-    private double  lonC = 0;
+    //current GPS location
+    private double latC = 0;
+    private double lonC = 0;
     private String currentAddress = "";
     private String startAddress = "";
     private String endAddress = "";
@@ -97,29 +96,25 @@ public class OfferRide extends FragmentActivity implements
     protected GoogleApiClient mGoogleApiClient;
 
 
-
     Calendar calendar = Calendar.getInstance();
     private TextView displayDate, displayStartTime, displayArrivalTime;
-    private DialougeState dialougeState;
+    private DialougState dialougState;
 
-    private enum DialougeState{NONE, GPS};
-
+    private enum DialougState {NONE, GPS};
 
     @Override
-    public void onRestart(){
+    public void onRestart() {
         super.onRestart();
-        switch (dialougeState)
-        {
+        switch (dialougState) {
             case GPS:
-                dialougeState = DialougeState.NONE;
+                dialougState = DialougState.NONE;
                 finish();
                 break;
         }
-
     }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offerride);
 
@@ -134,7 +129,7 @@ public class OfferRide extends FragmentActivity implements
         Button btnStartTime = (Button) findViewById(R.id.setStartTimeButton);
         Button btnArrivalTime = (Button) findViewById(R.id.setEndTimeButton);
         btnSelectEvent = (Button) findViewById(R.id.buttonEvent);
-        btnSelectGroup= (Button) findViewById(R.id.buttonGroup);
+        btnSelectGroup = (Button) findViewById(R.id.buttonGroup);
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         displayDate = (TextView) findViewById(R.id.displayDate);
@@ -148,37 +143,16 @@ public class OfferRide extends FragmentActivity implements
         TextView textSearchEvent = (TextView) findViewById(R.id.textView5);
         TextView textSearchGroup = (TextView) findViewById(R.id.textView6);
 
-       //gps
-
-         GPSTracker gps = new GPSTracker(this);
-
-        // check if GPS enabled
-         if(gps.canGetLocation()){
-            latC = gps.getLatitude();
-            lonC = gps.getLongitude();
-
-        }else{
-        // can't get location
-        // GPS or Network is not enabled
-        // Ask user to enable GPS/network in settings
-             dialougeState = DialougeState.GPS;
-            gps.showSettingsAlert();
-
-
-
-        }
 
 
 
 
        /* check if it is offer or find  */
         Intent intent = this.getIntent();
-        if (intent != null && intent.hasExtra("type"))
-        {
+        if (intent != null && intent.hasExtra("type")) {
             String type = intent.getStringExtra("type");
-            if (type.equals("find"))
-            {
-               // SpinSN.setVisibility(View.INVISIBLE);
+            if (type.equals("find")) {
+                // SpinSN.setVisibility(View.INVISIBLE);
                 textSN.setVisibility(View.GONE);
                 btnStartTime.setVisibility(View.GONE);
                 spinner.setVisibility(View.GONE);
@@ -240,11 +214,34 @@ public class OfferRide extends FragmentActivity implements
         getIntent();
     }
 
-    public void finish(Activity activity)
-    {
+    public void finish(Activity activity) {
         activity.finish();
     }
+    private GPSTracker gps;
 
+    public void getGps() {
+        //gps
+
+         gps = new GPSTracker(this);
+
+    }
+
+    public void checkGps()
+    {
+        // check if GPS enabled
+        if (gps.canGetLocation())
+        {
+            latC = gps.getLatitude();
+            lonC = gps.getLongitude();
+
+        } else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            dialougState = DialougState.GPS;
+            gps.showSettingsAlert();
+        }
+    }
     @Override
     public void onClick(View v)
     {
@@ -263,6 +260,8 @@ public class OfferRide extends FragmentActivity implements
             EditEnd.setHint("");
             FromCurrentLocation.setChecked(false);
             ToCurrentLocation.setChecked(false);
+            FromCurrentLocation.setEnabled(true);
+            ToCurrentLocation.setEnabled(true);
         }
         if (v.getId() == R.id.buttonEvent)
         {
@@ -273,7 +272,18 @@ public class OfferRide extends FragmentActivity implements
             selectGroup();
         }
         if (v.getId() == R.id.current1||v.getId() == R.id.current2)
-            reverseAddress(OfferRide.this);
+        {
+                getGps();
+                checkGps();
+                if (gps.getState()) {
+                    FromCurrentLocation.setChecked(false);
+                    ToCurrentLocation.setChecked(false);
+                    ToCurrentLocation.setEnabled(false);
+                    FromCurrentLocation.setEnabled(false);
+                }
+                else reverseAddress(OfferRide.this);
+
+        }
 
         if (v.getId() == R.id.button1)
         {

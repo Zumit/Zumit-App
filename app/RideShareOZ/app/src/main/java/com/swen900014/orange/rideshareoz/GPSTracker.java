@@ -34,6 +34,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     // flag for GPS status
     boolean canGetLocation = false;
 
+    boolean isCancelled = true;
     Location location; // location
     double latitude = 0; // latitude
     double longitude = 0; // longitude
@@ -262,7 +263,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         // Setting Dialog Title
-        alertDialog.setTitle("GPS is settings");
+        alertDialog.setTitle("GPS setting");
 
         // Setting Dialog Message
         alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
@@ -272,9 +273,10 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         {
             public void onClick(DialogInterface dialog, int which)
             {
+                isCancelled = false;
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
-                
+
             }
         });
 
@@ -283,7 +285,10 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         {
             public void onClick(DialogInterface dialog, int which)
             {
+
+
                 dialog.cancel();
+
             }
         });
 
@@ -330,4 +335,5 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     {
 
     }
+    public boolean getState(){return isCancelled;}
 }
