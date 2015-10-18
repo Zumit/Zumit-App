@@ -25,7 +25,9 @@ mongoose.connect('mongodb://localhost/RideShare', function(err) {
 });
 
 // routine job
+// update rides as finished if the arrival time has passed
 var rule = new schedule.RecurrenceRule();  
+// uncomment the following line if you want to customize the data updating schedule
 // rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 var j = schedule.scheduleJob(rule, function(){
   Ride.find({},function(err,rides){
@@ -37,7 +39,7 @@ var j = schedule.scheduleJob(rule, function(){
       arr_d.setHours(arr_d.getHours() - 11);
       if(arr_d < new Date()){
         Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
-          console.log("update: " + ride._id);
+          // console.log("update: " + ride._id);
         });
       }
     });
@@ -66,7 +68,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

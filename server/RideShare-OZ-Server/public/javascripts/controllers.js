@@ -299,8 +299,8 @@ function EventCtrl($scope, $http, eventDataFactory) {
       'admin': angular.element(document.querySelector('#loggedUser'))[0].innerHTML,
       'event_id': $scope.events[total_index]._id
     };
-    console.log("==========");
-    $http.post('test', data).success(function(data){
+    // console.log("==========");
+    $http.post('event/remove', data).success(function(data){
       console.log(data);
       eventDataFactory.getEventData().then(function(res){
         $scope.events = res;
