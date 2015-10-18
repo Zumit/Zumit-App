@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.views;
+package com.swen900014.orange.rideshareoz.Views;
 
 /**
  * Created by Geroge on 6/09/2015.
@@ -19,10 +19,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.Model.User;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.models.User;
-import com.swen900014.orange.rideshareoz.utils.Resources;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.Utils.Resources;
 
 import java.util.HashMap;
 import java.util.Map;

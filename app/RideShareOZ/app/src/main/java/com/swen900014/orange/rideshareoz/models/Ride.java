@@ -31,6 +31,8 @@ public class Ride implements Serializable
     private RideState rideState = RideState.NEW;
     private RideRegularity rideRegularity = RideRegularity.ONCE;
 
+    public static ArrayList<Ride> allRides;
+
     public enum RideRegularity implements Serializable
     {
         ONCE, DAILY, WEEKLY
