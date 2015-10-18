@@ -55,4 +55,14 @@
         android:layout_toStartOf="@+id/textViewJoins"
         android:textColor="#1b17ff" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Group/Event Name"
+        android:id="@+id/textViewGroup"
+        android:layout_below="@+id/textViewDate"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffa405" />
+
 </RelativeLayout>

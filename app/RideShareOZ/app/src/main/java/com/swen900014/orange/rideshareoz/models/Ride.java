@@ -21,6 +21,7 @@ public class Ride implements Serializable
     private Location start;
     private Location end;
     private Group group;
+    private String gourpOrEventName;
     private String arriving_time;
     private String start_time;
     private User driver;
@@ -285,5 +286,13 @@ public class Ride implements Serializable
     public ArrayList<Pickup> getWaiting()
     {
         return waiting;
+    }
+
+    public String getGourpOrEventName() {
+        return gourpOrEventName;
+    }
+
+    public void setGourpOrEventName(String gourpOrEventName) {
+        this.gourpOrEventName = gourpOrEventName;
     }
 }
