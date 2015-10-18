@@ -94,7 +94,7 @@ RideSchema.statics.searchRide = function(req,callback){
   end[1]=e_lat;
 
   //need have arrival time
-  var maxDistance = 0.005;
+  var maxDistance = 0.0001;
   var limit = 10;
   var groupID = req.body.group_id;
   var arrival_time = req.body.arrival_time;
@@ -123,7 +123,6 @@ RideSchema.statics.searchRide = function(req,callback){
     .populate('events','eventName')
     .populate('group','groupname')
     .exec({},function(err,ride){
-
     if(ride && ride.length!==0) { 
       var ride1=[];
       if(groupID){
