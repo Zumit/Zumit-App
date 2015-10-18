@@ -1,4 +1,10 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.utils;
+
+import com.swen900014.orange.rideshareoz.models.Group;
+import com.swen900014.orange.rideshareoz.models.Location;
+import com.swen900014.orange.rideshareoz.models.Pickup;
+import com.swen900014.orange.rideshareoz.models.Ride;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -138,7 +144,7 @@ public class JsonParser
             if (finished)
             {
                 /* add to the offering list*/
-                ride.setState(Ride.RideState.PASSED);
+                ride.setState(Ride.RideState.PAST);
             }
             else if (ride.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
             {

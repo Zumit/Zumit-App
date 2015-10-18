@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.content.Context;
 import android.util.Log;
@@ -20,6 +20,7 @@ import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.swen900014.orange.rideshareoz.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;

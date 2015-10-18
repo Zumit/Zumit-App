@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,12 +15,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.models.Pickup;
+import com.swen900014.orange.rideshareoz.models.Ride;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.*;
+import static com.swen900014.orange.rideshareoz.utils.Resources.*;
 
 
 /**
@@ -66,7 +71,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         seatsText.setText(ride.getSeats());
 
         // Driver is not allowed to cancel a ride already finished
-        if (ride.getRideState() == Ride.RideState.PASSED)
+        if (ride.getRideState() == Ride.RideState.PAST)
         {
             Button cancelButton = (Button) findViewById(R.id.cancelButton);
             cancelButton.setVisibility(View.GONE);

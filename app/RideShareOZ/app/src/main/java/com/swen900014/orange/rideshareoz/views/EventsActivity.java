@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 /**
  * Created by Geroge on 6/09/2015.
@@ -9,34 +9,37 @@ package com.swen900014.orange.rideshareoz;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 
-public class MyRidesActivity extends AppCompatActivity
+import com.swen900014.orange.rideshareoz.R;
+
+public class EventsActivity extends AppCompatActivity
 {
 
+    private  EventFragment eventFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myrides);
+        setContentView(R.layout.activity_groups);
         if (savedInstanceState == null)
         {
+            eventFragment = new EventFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, (new MyRidesFragment()))
+                    .add(R.id.container, (eventFragment))
                     .commit();
         }
 
         getIntent();
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        // Menu is not required for search
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -54,5 +57,11 @@ public class MyRidesActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        eventFragment.sendGetEventsRequest();
     }
 }

@@ -1,4 +1,6 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.models;
+
+import com.swen900014.orange.rideshareoz.utils.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +38,7 @@ public class Ride implements Serializable
 
     public enum RideState implements Serializable
     {
-        OFFERING, JOINED, VIEWING, NEW, PASSED
+        OFFERING, JOINED, VIEWING, NEW, PAST
     }
 
     public Ride(JSONObject jsonRide)

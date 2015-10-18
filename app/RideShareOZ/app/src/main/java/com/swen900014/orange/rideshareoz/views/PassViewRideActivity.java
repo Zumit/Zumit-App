@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,6 +24,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.models.Pickup;
+import com.swen900014.orange.rideshareoz.models.Ride;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import org.json.JSONObject;
 
@@ -31,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.*;
+import static com.swen900014.orange.rideshareoz.utils.Resources.*;
 
 
 /**
@@ -125,7 +130,7 @@ public class PassViewRideActivity extends AppCompatActivity
             pickUpLocText.setVisibility(View.VISIBLE);
             joinLeaveButton.setVisibility(View.VISIBLE);
         }
-        else if (ride.getRideState() == Ride.RideState.PASSED)
+        else if (ride.getRideState() == Ride.RideState.PAST)
         {
             // Passenger is allowed to rate the driver if they
             // haven't done that
