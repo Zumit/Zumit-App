@@ -37,6 +37,7 @@ import static com.swen900014.orange.rideshareoz.utils.Resources.*;
 public class UserInfoActivity extends AppCompatActivity
 {
     private Ride ride;
+    private int rideIndex;
     private Pickup pickup;
     private Activity thisActivity;
     private int score;   // Marking passenger
@@ -48,7 +49,10 @@ public class UserInfoActivity extends AppCompatActivity
         setContentView(R.layout.activity_user_info);
 
         Intent intent = getIntent();
-        ride = (Ride) intent.getSerializableExtra("Ride");
+
+        // Get ride index from view Ride activity
+        rideIndex = (int) intent.getSerializableExtra("SelectedRide");
+        ride = Ride.allRides.get(rideIndex);
         Ride.RideState rideState = ride.getRideState();
 
         // Display the pick up location of a passenger
