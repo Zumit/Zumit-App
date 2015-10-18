@@ -32,7 +32,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     boolean isNetworkEnabled = false;
 
     // flag for GPS status
-    boolean canGetLocation = false;
+    boolean canGetLocation;
 
     public static boolean isCancelled;
     Location location; // location
@@ -73,6 +73,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
             if (!isGPSEnabled )
             {
                 // no network provider is enabled
+                this.canGetLocation = false;
             }
             else
             {
@@ -88,7 +89,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
                                 MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         Log.d("GPS Enabled", "GPS Enabled");
-                        int i = 3;
+                        int i = 100;
                         while (i > 0)
                         {
                             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -137,7 +138,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
                         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES,
                                 MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         Log.d("Location is NULL", "omgNULL AGAIN!!!!");
-                        int i = 3;
+                        int i = 100;
                         while (i > 0)
                         {
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -270,8 +271,10 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+           @Override
             public void onClick(DialogInterface dialog, int which) {
                 GPSTracker.isCancelled = false;
+
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
 
@@ -281,12 +284,10 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         // on pressing cancel button
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-
+            @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 GPSTracker.isCancelled = true;
-
-                dialog.cancel();
 
             }
         });
@@ -333,5 +334,6 @@ public class GPSTracker extends Service implements LocationListener, android.loc
     {
 
     }
-    public boolean getState(){return this.isCancelled;}
+
+    public boolean getState(){return GPSTracker.isCancelled;}
 }

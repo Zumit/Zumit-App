@@ -65,7 +65,8 @@ public class OfferRide extends FragmentActivity implements
     private String tempDate = "", SeatNo = "1";
     private String EditStartTime = "";
     private String EditEndTime = "";
-
+    private String month;
+    private String day;
     private String hours = "";
     private String mins = "";
     private String houra = "";
@@ -81,7 +82,7 @@ public class OfferRide extends FragmentActivity implements
     private Button btnSubmit;
     private Button btnSelectEvent;
     private Button btnSelectGroup;
-
+    private String tempLat = "", tempLon = "";
     private String latS = "";
     private String lonS = "";
     private String latE = "";
@@ -92,13 +93,13 @@ public class OfferRide extends FragmentActivity implements
     private String currentAddress = "";
     private String startAddress = "";
     private String endAddress = "";
-
+    private GPSTracker gps;
     private boolean isFind = false;
     private boolean isGroup = false;
     private boolean isEvent = false;
     private boolean isToEvent = false;
     private boolean isFromEvent = false;
-    private boolean gpsState;
+    private boolean isCancelled;
     private String eventLocation;
     protected GoogleApiClient mGoogleApiClient;
 
@@ -152,8 +153,8 @@ public class OfferRide extends FragmentActivity implements
 
         FromCurrentLocation.setEnabled(true);
         ToCurrentLocation.setEnabled(true);
-
-
+        //GPS
+        
 
        /* check if it is offer or find  */
         Intent intent = this.getIntent();
@@ -225,13 +226,13 @@ public class OfferRide extends FragmentActivity implements
     public void finish(Activity activity) {
         activity.finish();
     }
-    private GPSTracker gps;
+    
 
     public void getGps() {
         //gps
 
          gps = new GPSTracker(this);
-        gpsState = gps.getState();
+
 
     }
 
@@ -246,10 +247,12 @@ public class OfferRide extends FragmentActivity implements
 
         } else {
             // can't get location
-            // GPS or Network is not enabled
+            // GPS is not enabled
             // Ask user to enable GPS/network in settings
             dialougState = DialougState.GPS;
-            gps.showSettingsAlert();
+             gps.showSettingsAlert();
+            isCancelled = gps.getState();
+            System.out.print("get the gps state" + isCancelled);
         }
     }
     @Override
@@ -285,17 +288,18 @@ public class OfferRide extends FragmentActivity implements
         {
                 getGps();
                 checkGps();
-                if(!gpsState){
-                    System.out.println("gpsState is on ");
+                if (isCancelled) {
+                System.out.println("isCancelled is cancelled");
+                FromCurrentLocation.setChecked(false);
+                ToCurrentLocation.setChecked(false);
+                ToCurrentLocation.setEnabled(false);
+                FromCurrentLocation.setEnabled(false);
                 }
-                if (gpsState) {
-                    System.out.println("gpsState is cancelled");
-                    FromCurrentLocation.setChecked(false);
-                    ToCurrentLocation.setChecked(false);
-                    ToCurrentLocation.setEnabled(false);
-                    FromCurrentLocation.setEnabled(false);
+                if(!isCancelled){
+                    System.out.println("isCancelled is on ");
+                    reverseAddress(OfferRide.this);
                 }
-                else reverseAddress(OfferRide.this);
+
         }
 
         if (v.getId() == R.id.button1) {
@@ -368,13 +372,15 @@ public class OfferRide extends FragmentActivity implements
                 eventId = selectEvents.get(position).getEventId();
                 eventLocation = selectEvents.get(position).getEventLocation().getAddress();
                 endAddress = selectEvents.get(position).getEventLocation().getAddress();
-                latE = Double.toString(selectEvents.get(position).getEventLocation().getLat());
-                lonE = Double.toString(selectEvents.get(position).getEventLocation().getLon());
+                tempLat = Double.toString(selectEvents.get(position).getEventLocation().getLat());
+                tempLon = Double.toString(selectEvents.get(position).getEventLocation().getLon());
                 AlertDialog.Builder builder3 = new AlertDialog.Builder(OfferRide.this);
                 builder3.setTitle("Select type");
                 builder3.setPositiveButton("To this event!", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         isToEvent = true;
+                        latE = tempLat;
+                        lonE = tempLon;
                         EditEnd.setHint(eventLocation);
                         // EditEnd.setKeyListener(null);
                         ToCurrentLocation.setEnabled(false);
@@ -383,9 +389,12 @@ public class OfferRide extends FragmentActivity implements
                 builder3.setNegativeButton("From this event!", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         isFromEvent = true;
+                        latS = tempLat;
+                        lonS = tempLon;
                         EditStart.setHint(eventLocation);
                         // EditStart.setKeyListener(null);
                         FromCurrentLocation.setEnabled(false);
+                       // Toast.makeText(getApplicationContext(), "You have choose to from  " + isFromEvent, Toast.LENGTH_SHORT).show();
                     }
                 });
                 AlertDialog alertDialog = builder3.create();
@@ -396,7 +405,7 @@ public class OfferRide extends FragmentActivity implements
 
         AlertDialog alertDialog = builder1.create();
         alertDialog.show();
-
+         System.out.println("fallie testing" + latS + lonS);
     }
 
 
@@ -612,7 +621,7 @@ public class OfferRide extends FragmentActivity implements
             {
                 Map<String, String> params = new HashMap<>();
 
-
+                System.out.println("fallie testing" + latS +lonS);
 
                 if (FromCurrentLocation.isChecked())
                 {
@@ -669,8 +678,7 @@ public class OfferRide extends FragmentActivity implements
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
         {
-            String month;
-            String day;
+
 
             if (monthOfYear < 9)
             {
@@ -756,8 +764,10 @@ public class OfferRide extends FragmentActivity implements
             checkTime(hours, mins,houra, mina);
         }
     };
+//    public void checkCurrent(String hours,String mins,String month, String )
 
     public void checkTime(String hours,String mins,String houra,String mina){
+
         if(hours.compareTo(houra)==0)
         {
             if(mins.compareTo(mina)>=0)
