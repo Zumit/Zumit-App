@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -193,8 +195,11 @@ public class PassViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
+
+            SpannableString content = new SpannableString(lift.getUser().getUsername());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            pass.setText(content);
             pass.setTextColor(Color.parseColor("#000080"));
-            pass.setText(lift.getUser().getUsername());
 
             // Only people who joined the ride is able to view
             // other users' information

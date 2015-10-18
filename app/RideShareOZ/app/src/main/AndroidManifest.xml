@@ -86,7 +86,7 @@
             android:parentActivityName=".views.MainActivity" >
         </activity>
         <service
-            android:name=".GPSTracker"
+            android:name=".utils.GPSTracker"
             android:value=".com.swen900014.orange.rideshareoz.GPSTracker"
             android:enabled="true" >
         </service>

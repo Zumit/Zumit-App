@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -112,8 +114,10 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : waitingListArray)
         {
             TextView request = new TextView(this);
+            SpannableString content = new SpannableString(lift.getUser().getUsername());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            request.setText(content);
             request.setTextColor(Color.parseColor("#000080"));
-            request.setText(lift.getUser().getUsername());
 
             if (ride.getRideState() == Ride.RideState.OFFERING)
             {
@@ -143,8 +147,11 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
+            SpannableString content = new SpannableString(lift.getUser().getUsername());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            pass.setText(content);
             pass.setTextColor(Color.parseColor("#000080"));
-            pass.setText(lift.getUser().getUsername());
+
             pass.setOnClickListener(new View.OnClickListener()
             {
                 @Override
