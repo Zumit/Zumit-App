@@ -149,7 +149,7 @@
             android:layout_gravity="fill_horizontal|bottom|center_horizontal"
             android:layout_marginTop="10dp"
             android:layout_columnSpan="6"
-            android:textColor="#000"/>
+            android:textColor="#000080"/>
 
         <TextView
             android:ems="10"
