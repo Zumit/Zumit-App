@@ -87,11 +87,17 @@ app.use(passport.session());
 app.use(function(req,res,next){
   if (req.method === 'POST') {
     auth.auth_token(req.body.token, function(doc){
+      // Not Secure !!! Just for development process
       if (req.body.username) {
         doc = {'email': req.body.username};
       }
       if (!doc.email) {
-        res.end('Invalid Token');
+        // Not Secure !!! Just for development process
+        if (req.body.admin) {
+          next();
+        } else {
+          res.end('Invalid Token');
+        }
       } else {
         req.userinfo = doc;
         User.find({'username':doc.email},function(err, users){
@@ -106,13 +112,10 @@ app.use(function(req,res,next){
     });
   } else {
     if (req.query.username) {
-      console.log("ssss======");
       req.userinfo = {'email': req.query.username};
     }
     next();
   }
-  // console.log("=========");
-  // next();
 });
 
 app.use('/', index);

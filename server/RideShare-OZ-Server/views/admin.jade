@@ -59,10 +59,10 @@ html(lang='en', ng-app='RDash')
               span.menu-icon.fa.fa-user
         .sidebar-footer
           .col-xs-4
-            a(href='https://github.com/rdash/rdash-angular', target='_blank')
+            a(href='https://github.com/RideShare-OZ-orange/RideShare-OZ-Orange-publish', target='_blank')
               | Github
           .col-xs-4
-            a(href='https://github.com/rdash/rdash-angular/README.md', target='_blank')
+            a(href='https://github.com/RideShare-OZ-orange/RideShare-OZ-Orange-publish/blob/master/README.md', target='_blank')
               | About
           .col-xs-4
             a(href='#')
@@ -79,7 +79,8 @@ html(lang='en', ng-app='RDash')
                     img(src='images/avatar.jpg')
                   ul.dropdown-menu.dropdown-menu-right
                     li.dropdown-header
-                      | #{user}
+                      //- | #{user}
+                      span(id='loggedUser') #{user}
                     li.divider
                     li.link
                       a(href='#')

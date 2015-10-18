@@ -22,24 +22,23 @@ router.get('/logout', function(req, res) {
 
 /*
  * Admin Register
- * uncomment the following code if you want to open the register of Administrator 
- * and visit "http://xxxxxxx/register"
+ * comment the following block of code if you want to close the register of Administrator
  */
 
-/*
- * router.get('/register', function(req, res) {
- *   res.render('register', { });
- * });
- * router.post('/register', function(req, res) {
- *   Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
- *     if (err) {
- *       return res.render('register', { account : account });
- *     }
- *     passport.authenticate('local')(req, res, function () {
- *       res.redirect('/login');
- *     });
- *   });
- * });
- */
+//////////////////////////////////////////////////////////////////////////////////////
+router.get('/register', function(req, res) {
+  res.render('register', { });
+});
+router.post('/register', function(req, res) {
+  Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
+    if (err) {
+      return res.render('register', { account : account });
+    }
+    passport.authenticate('local')(req, res, function () {
+      res.redirect('/login');
+    });
+  });
+});
+////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = router;

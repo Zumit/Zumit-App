@@ -23,6 +23,9 @@
                   span(editable-date='event.endTime', onaftersave="update($index)") {{event.endTime}}
                 td(colspan="3", style="white-space: nowrap;text-overflow: ellipsis;")
                   textarea(editable-textarea='event.eventInfo', onbeforesave="checkData(4, $data)", onaftersave="update($index)") {{event.eventInfo}}
+                td(ng-click="deleteEvent($index);",)
+                  span.text-danger(tooltip='Delete')
+                    i.fa.fa-times
       rd-widget-footer
         dir-pagination-controls(boundary-links="true", on-page-change="pageChangeHandler(newPageNumber)", template-url="templates/dirPaginationTpl", pagination-id="event")
         .clearfix
