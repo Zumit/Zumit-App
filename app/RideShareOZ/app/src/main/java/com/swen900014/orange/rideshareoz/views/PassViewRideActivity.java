@@ -66,6 +66,14 @@ public class PassViewRideActivity extends AppCompatActivity
     private Activity thisActivity;
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        displayPassengers();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -173,8 +181,6 @@ public class PassViewRideActivity extends AppCompatActivity
                 });
             }
         }
-
-        displayPassengers();
     }
 
     public void displayPassengers()
@@ -187,7 +193,7 @@ public class PassViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
-            pass.setTextColor(Color.YELLOW);
+            pass.setTextColor(Color.parseColor("#000080"));
             pass.setText(lift.getUser().getUsername());
 
             // Only people who joined the ride is able to view

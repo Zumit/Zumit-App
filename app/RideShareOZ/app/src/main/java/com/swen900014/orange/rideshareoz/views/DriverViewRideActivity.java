@@ -45,6 +45,15 @@ public class DriverViewRideActivity extends AppCompatActivity
     private Activity thisActivity;
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        displayPassengers();
+        displayRequests();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -92,9 +101,6 @@ public class DriverViewRideActivity extends AppCompatActivity
                 thisActivity.startActivity(intent);
             }
         });
-
-        displayPassengers();
-        displayRequests();
     }
 
     public void displayRequests()
@@ -106,7 +112,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : waitingListArray)
         {
             TextView request = new TextView(this);
-            request.setTextColor(Color.YELLOW);
+            request.setTextColor(Color.parseColor("#000080"));
             request.setText(lift.getUser().getUsername());
 
             if (ride.getRideState() == Ride.RideState.OFFERING)
@@ -137,7 +143,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
-            pass.setTextColor(Color.YELLOW);
+            pass.setTextColor(Color.parseColor("#000080"));
             pass.setText(lift.getUser().getUsername());
             pass.setOnClickListener(new View.OnClickListener()
             {
