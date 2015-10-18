@@ -26,14 +26,15 @@ mongoose.connect('mongodb://localhost/RideShare', function(err) {
 
 // routine job
 var rule = new schedule.RecurrenceRule();  
-rule.minute = [0, 20, 40];
+// rule.minute = [0, 20, 40];
 var date=Date.now(); 
 var j = schedule.scheduleJob(rule, function(){  
+  console.log("=======================");
   Ride.find({},function(err,rides){
     rides.forEach(function(ride){
       if(new Date(ride.arrival_time) < new Date(date)){
         Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
-          //console.log("update");
+          console.log("update");
         });
       }
     });
