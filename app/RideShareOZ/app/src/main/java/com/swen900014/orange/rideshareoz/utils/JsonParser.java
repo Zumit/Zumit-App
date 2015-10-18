@@ -1,4 +1,10 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.utils;
+
+import com.swen900014.orange.rideshareoz.models.Group;
+import com.swen900014.orange.rideshareoz.models.Location;
+import com.swen900014.orange.rideshareoz.models.Pickup;
+import com.swen900014.orange.rideshareoz.models.Ride;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -49,6 +55,17 @@ public class JsonParser
 
         try
         {
+           // get group event name
+            if(jsonRide.has("group")){
+                tempObj = jsonRide.getJSONObject("group");
+                ride.setGourpOrEventName(tempObj.getString("groupname"));
+            }else if(jsonRide.has("events")){
+                tempObj = jsonRide.getJSONObject("events");
+                ride.setGourpOrEventName(tempObj.getString("eventName"));
+            }else{
+                ride.setGourpOrEventName("");
+            }
+
             // Get start and end address
             String startAddress = jsonRide.getString("start_add");
             String endAddress = jsonRide.getString("destination");
@@ -138,7 +155,7 @@ public class JsonParser
             if (finished)
             {
                 /* add to the offering list*/
-                ride.setState(Ride.RideState.PASSED);
+                ride.setState(Ride.RideState.PAST);
             }
             else if (ride.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
             {

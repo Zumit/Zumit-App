@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,6 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.models;
+
+import com.swen900014.orange.rideshareoz.utils.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +21,7 @@ public class Ride implements Serializable
     private Location start;
     private Location end;
     private Group group;
+    private String gourpOrEventName;
     private String arriving_time;
     private String start_time;
     private User driver;
@@ -29,6 +32,8 @@ public class Ride implements Serializable
     private RideState rideState = RideState.NEW;
     private RideRegularity rideRegularity = RideRegularity.ONCE;
 
+    public static ArrayList<Ride> allRides;
+
     public enum RideRegularity implements Serializable
     {
         ONCE, DAILY, WEEKLY
@@ -36,7 +41,7 @@ public class Ride implements Serializable
 
     public enum RideState implements Serializable
     {
-        OFFERING, JOINED, VIEWING, NEW, PASSED
+        OFFERING, JOINED, VIEWING, NEW, PAST
     }
 
     public Ride(JSONObject jsonRide)
@@ -281,5 +286,13 @@ public class Ride implements Serializable
     public ArrayList<Pickup> getWaiting()
     {
         return waiting;
+    }
+
+    public String getGourpOrEventName() {
+        return gourpOrEventName;
+    }
+
+    public void setGourpOrEventName(String gourpOrEventName) {
+        this.gourpOrEventName = gourpOrEventName;
     }
 }

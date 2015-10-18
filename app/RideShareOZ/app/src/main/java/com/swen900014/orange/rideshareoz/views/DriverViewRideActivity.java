@@ -1,9 +1,12 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +18,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.models.Pickup;
+import com.swen900014.orange.rideshareoz.models.Ride;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.*;
+import static com.swen900014.orange.rideshareoz.utils.Resources.*;
 
 
 /**
@@ -35,7 +43,17 @@ public class DriverViewRideActivity extends AppCompatActivity
     private TableLayout passengerList;
     private TableLayout waitingList;
     private Ride ride;
+    private int rideIndex;
     private Activity thisActivity;
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        displayPassengers();
+        displayRequests();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -44,8 +62,9 @@ public class DriverViewRideActivity extends AppCompatActivity
         setContentView(R.layout.activity_driver_view_ride);
         thisActivity = this;
 
-        Intent received = getIntent();
-        ride = (Ride) received.getSerializableExtra("SelectedRide");
+        // Get ride index from my Rides fragment
+        rideIndex = (int) getIntent().getIntExtra("SelectedRide", 0);
+        ride = Ride.allRides.get(rideIndex);
 
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
         TextView endLabel = (TextView) findViewById(R.id.endPointText);
@@ -62,11 +81,14 @@ public class DriverViewRideActivity extends AppCompatActivity
         endLabel.setText(ride.getEnd().getAddress());
         startTimeLabel.setText(ride.getStartTime());
         arrivalTimeLabel.setText(ride.getArrivingTime());
-        driverText.setText(ride.getDriver().getUsername());
         seatsText.setText(ride.getSeats());
+        
+        SpannableString content = new SpannableString(ride.getDriver().getUsername());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        driverText.setText(content);
 
         // Driver is not allowed to cancel a ride already finished
-        if (ride.getRideState() == Ride.RideState.PASSED)
+        if (ride.getRideState() == Ride.RideState.PAST)
         {
             Button cancelButton = (Button) findViewById(R.id.cancelButton);
             cancelButton.setVisibility(View.GONE);
@@ -79,14 +101,11 @@ public class DriverViewRideActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                intent.putExtra("Ride", ride);
+                intent.putExtra("SelectedRide", rideIndex);
 
                 thisActivity.startActivity(intent);
             }
         });
-
-        displayPassengers();
-        displayRequests();
     }
 
     public void displayRequests()
@@ -98,7 +117,10 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : waitingListArray)
         {
             TextView request = new TextView(this);
-            request.setText(lift.getUser().getUsername());
+            SpannableString content = new SpannableString(lift.getUser().getUsername());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            request.setText(content);
+            request.setTextColor(Color.parseColor("#000080"));
 
             if (ride.getRideState() == Ride.RideState.OFFERING)
             {
@@ -108,7 +130,7 @@ public class DriverViewRideActivity extends AppCompatActivity
                     public void onClick(View v)
                     {
                         Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                        intent.putExtra("Ride", ride);
+                        intent.putExtra("SelectedRide", rideIndex);
                         intent.putExtra("Pickup", lift);
                         thisActivity.startActivity(intent);
                     }
@@ -128,14 +150,18 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
-            pass.setText(lift.getUser().getUsername());
+            SpannableString content = new SpannableString(lift.getUser().getUsername());
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            pass.setText(content);
+            pass.setTextColor(Color.parseColor("#000080"));
+
             pass.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
                 {
                     Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                    intent.putExtra("Ride", ride);
+                    intent.putExtra("SelectedRide", rideIndex);
                     intent.putExtra("Pickup", lift);
                     thisActivity.startActivity(intent);
                 }
