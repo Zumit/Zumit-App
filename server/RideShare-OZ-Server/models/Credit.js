@@ -52,7 +52,7 @@ CreditSchema.statics.addRate = function(req,callback){
         ],function(err,result){
           // update user's average rate
           User.findById(ratee_id,function(err,user){
-            user.passenger_rate=(Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1);
+            user.passenger_rate=((Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1)).toFixed(2);
             user.save();
           });
           // mark the user as rated
@@ -77,7 +77,7 @@ CreditSchema.statics.addRate = function(req,callback){
         ],function(err,result){
           // update user's average rate
           User.findById(ratee_id,function(err,user){
-            user.driver_rate=(Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1);
+            user.driver_rate=((Number(result[0].avgRate)+Number(req.body.rate))/(Number(result[0].count)+1)).toFixed(2);
             user.save();
           });
           // mark the user as rated

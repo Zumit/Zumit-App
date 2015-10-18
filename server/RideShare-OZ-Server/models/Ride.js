@@ -121,7 +121,6 @@ RideSchema.statics.searchRide = function(req,callback){
     .populate('events','eventName')
     .populate('group','groupname')
     .exec({},function(err,ride){
-
     if(ride && ride.length!==0) { 
       var ride1=[];
       if(groupID){

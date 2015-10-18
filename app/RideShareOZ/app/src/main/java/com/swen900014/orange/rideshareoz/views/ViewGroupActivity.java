@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,12 +14,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.models.Group;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.JOIN_GROUP_URL;
-import static com.swen900014.orange.rideshareoz.Resources.LEAVE_GROUP_URL;
+import static com.swen900014.orange.rideshareoz.utils.Resources.JOIN_GROUP_URL;
+import static com.swen900014.orange.rideshareoz.utils.Resources.LEAVE_GROUP_URL;
 
 
 /**

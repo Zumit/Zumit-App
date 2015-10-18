@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.models;
 
 import android.app.Activity;
 
@@ -6,6 +6,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.utils.*;
+import com.swen900014.orange.rideshareoz.views.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,7 +124,6 @@ public class Event implements Serializable
         this.name = eventJson.getString("eventName");
         this.description = eventJson.getString("eventInfo");
         tempLocationArray = eventJson.getJSONArray("eventLocation");
-        //in json object the coordinates are saved as (lon, lat)
         Location loc = new Location(tempLocationArray.getDouble(1), tempLocationArray.getDouble(0));
         loc.setAddress(eventJson.getString("location"));
         this.eventLocation = loc;
