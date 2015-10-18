@@ -575,6 +575,7 @@ public class OfferRide extends FragmentActivity implements
         searchResultsIntent.putExtra("destination",((ToCurrentLocation.isChecked())?currentAddress:endAddress));
         //searchResultsIntent.putExtra("username",MainActivity.getAuthToken(activity.getApplicationContext()));
         startActivity(searchResultsIntent);
+        finish();
     }
 
     private void sendRideInfo(final Activity activity)

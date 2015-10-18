@@ -135,6 +135,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         User.getCurrentUser().setPhone(phone.getText().toString());
         User.getCurrentUser().setLicence(licence.getText().toString());
         User.getCurrentUser().setAbout(about.getText().toString());
+        finish();
 
     }
 }
