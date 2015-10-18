@@ -153,6 +153,17 @@ public class Ride implements Serializable
         }
     }
 
+    public void setPassengerRated(User passenger, boolean ratedByDriver)
+    {
+        for (Pickup pick : joined)
+        {
+            if (passenger.getUsername().equals(pick.getUser().getUsername()))
+            {
+                pick.setRatedByDriver(ratedByDriver);
+            }
+        }
+    }
+
     public boolean isDriverRated()
     {
         boolean driverRated = false;

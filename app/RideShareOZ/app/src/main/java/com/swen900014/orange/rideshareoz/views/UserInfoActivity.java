@@ -169,7 +169,7 @@ public class UserInfoActivity extends AppCompatActivity
             @Override
             public void onResponse(String s)
             {
-                pickup.setRatedByDriver(true);
+                ride.setPassengerRated(pickup.getUser(), true);
 
                 thisActivity.finish();
             }
