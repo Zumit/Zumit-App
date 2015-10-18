@@ -63,7 +63,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         thisActivity = this;
 
         // Get ride index from my Rides fragment
-        rideIndex = (int) getIntent().getSerializableExtra("SelectedRide");
+        rideIndex = (int) getIntent().getIntExtra("SelectedRide", 0);
         ride = Ride.allRides.get(rideIndex);
 
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
@@ -101,7 +101,7 @@ public class DriverViewRideActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                intent.putExtra("Ride", ride);
+                intent.putExtra("SelectedRide", rideIndex);
 
                 thisActivity.startActivity(intent);
             }

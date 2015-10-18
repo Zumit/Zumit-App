@@ -36,7 +36,7 @@
             android:layout_column="1"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="10dp"
-            android:inputType="textMultiLine"/>
+            android:inputType="textMultiLine" />
     </TableRow>
 
     <TableRow
@@ -144,15 +144,6 @@
             android:layout_marginBottom="10dp"
             />
 
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -182,15 +173,6 @@
             android:layout_column="0"
             android:layout_gravity="center_vertical"
             android:layout_marginBottom="10dp"/>
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"

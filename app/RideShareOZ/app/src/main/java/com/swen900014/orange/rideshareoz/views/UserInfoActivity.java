@@ -52,6 +52,7 @@ public class UserInfoActivity extends AppCompatActivity
 
         // Get ride index from view Ride activity
         rideIndex = (int) intent.getSerializableExtra("SelectedRide");
+
         ride = Ride.allRides.get(rideIndex);
         Ride.RideState rideState = ride.getRideState();
 
