@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 /**
  * Created by Geroge on 6/09/2015.
@@ -9,8 +9,9 @@ package com.swen900014.orange.rideshareoz;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
+
+import com.swen900014.orange.rideshareoz.R;
 
 public class GroupsActivity extends AppCompatActivity
 {

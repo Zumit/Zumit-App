@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.accounts.Account;
 import android.content.Context;
@@ -20,6 +20,11 @@ import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.models.Event;
+import com.swen900014.orange.rideshareoz.models.Group;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,7 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.swen900014.orange.rideshareoz.Resources.*;
+import static com.swen900014.orange.rideshareoz.utils.Resources.*;
 
 
 public class MainActivity extends AppCompatActivity implements
