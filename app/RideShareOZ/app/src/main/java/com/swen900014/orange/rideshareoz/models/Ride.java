@@ -20,6 +20,7 @@ public class Ride implements Serializable
     private String rideId;
     private Location start;
     private Location end;
+    // Currently group information doesn't appear on view ride activity
     private Group group;
     private String gourpOrEventName;
     private String arriving_time;
@@ -30,10 +31,13 @@ public class Ride implements Serializable
     private ArrayList<Pickup> joined;   //joined passengers
     private ArrayList<Pickup> waiting;  //passengers who is waiting
     private RideState rideState = RideState.NEW;
+    // Currently regular ride is not implemented
     private RideRegularity rideRegularity = RideRegularity.ONCE;
 
     public static ArrayList<Ride> allRides;
 
+    // Currently regular ride is not implemented
+    // This is for future use
     public enum RideRegularity implements Serializable
     {
         ONCE, DAILY, WEEKLY
@@ -194,7 +198,8 @@ public class Ride implements Serializable
         return isPassRated;
     }
 
-    public void clearRequests(){
+    public void clearRequests()
+    {
         waiting.clear();
     }
 
@@ -303,11 +308,13 @@ public class Ride implements Serializable
         return waiting;
     }
 
-    public String getGourpOrEventName() {
+    public String getGourpOrEventName()
+    {
         return gourpOrEventName;
     }
 
-    public void setGourpOrEventName(String gourpOrEventName) {
+    public void setGourpOrEventName(String gourpOrEventName)
+    {
         this.gourpOrEventName = gourpOrEventName;
     }
 }

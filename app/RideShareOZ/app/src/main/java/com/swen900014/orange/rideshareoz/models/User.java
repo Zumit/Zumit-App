@@ -20,7 +20,6 @@ public class User implements Serializable
     private String credit;
     private String about;
     private String licence;
-    private String id;
 
     private static User currentUser;
 
@@ -95,36 +94,36 @@ public class User implements Serializable
         this.phone = phone;
     }
 
-    public String getAbout() {
+    public String getAbout()
+    {
         return about;
     }
 
-    public String getLicence() {
+    public String getLicence()
+    {
         return licence;
     }
 
-    public void setAbout(String about) {
+    public void setAbout(String about)
+    {
         this.about = about;
     }
 
-    public void setLicence(String licence) {
+    public void setLicence(String licence)
+    {
         this.licence = licence;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void storeProfile(String profile) {
-        try {
+    public void storeProfile(String profile)
+    {
+        try
+        {
             JSONObject profileJson = new JSONObject(profile);
             about = profileJson.getString("note");
             phone = profileJson.getString("phone");
             licence = profileJson.getString("driver_license");
-            id = profileJson.getString("_id");
-
-
-        } catch (JSONException e) {
+        } catch (JSONException e)
+        {
             e.printStackTrace();
         }
 

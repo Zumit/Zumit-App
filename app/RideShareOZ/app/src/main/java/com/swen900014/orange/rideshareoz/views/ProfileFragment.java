@@ -51,13 +51,12 @@ public class ProfileFragment extends Fragment
         setHasOptionsMenu(true);
 
         thisActivity = this.getActivity();
-
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        //inflater.inflate(R.menu.myridesfragment, menu);
+
     }
 
     @Override
@@ -70,15 +69,9 @@ public class ProfileFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-
-
         View rootView = inflater.inflate(R.layout.activity_profile, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-
-
-
         return rootView;
     }
-
 }
