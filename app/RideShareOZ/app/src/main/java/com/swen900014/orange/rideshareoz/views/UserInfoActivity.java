@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Views;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,16 +17,16 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.swen900014.orange.rideshareoz.Model.Pickup;
-import com.swen900014.orange.rideshareoz.Model.Ride;
-import com.swen900014.orange.rideshareoz.Model.User;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.models.Pickup;
+import com.swen900014.orange.rideshareoz.models.Ride;
+import com.swen900014.orange.rideshareoz.models.User;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Utils.Resources.*;
+import static com.swen900014.orange.rideshareoz.utils.Resources.*;
 
 
 /**
@@ -112,7 +112,7 @@ public class UserInfoActivity extends AppCompatActivity
             });
         }
         // Show rating options for driver to rate passengers
-        else if (rideState == Ride.RideState.PASSED &&
+        else if (rideState == Ride.RideState.PAST &&
                 !User.getCurrentUser().getUsername()
                         .equals(pickup.getUser().getUsername()) &&
                 User.getCurrentUser().getUsername()

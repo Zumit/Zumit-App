@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Views;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.swen900014.orange.rideshareoz.Model.Event;
 import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.models.Event;
 
 import java.util.ArrayList;
 

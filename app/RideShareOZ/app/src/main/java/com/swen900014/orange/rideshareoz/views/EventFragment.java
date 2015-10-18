@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Views;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,10 +15,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.swen900014.orange.rideshareoz.Model.Event;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
-import com.swen900014.orange.rideshareoz.Utils.Resources;
+import com.swen900014.orange.rideshareoz.models.Event;
+import com.swen900014.orange.rideshareoz.utils.Resources;
 
 import org.json.JSONArray;
 import org.json.JSONException;
