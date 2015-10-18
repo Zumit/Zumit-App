@@ -182,7 +182,7 @@
             android:layout_column="0"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:layout_columnSpan="7"
+            android:layout_columnSpan="3"
             android:visibility="gone"/>
         <Button
             android:layout_width="wrap_content"
@@ -193,7 +193,7 @@
             android:layout_column="2"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:layout_columnSpan="7"
+            android:layout_columnSpan="3"
             android:visibility="gone"/>
 
 
@@ -208,7 +208,7 @@
             android:layout_column="0"
             android:layout_gravity="fill_horizontal"
             android:layout_marginTop="20dp"
-            android:layout_columnSpan="7"
+            android:layout_columnSpan="3"
             android:visibility="gone"
             android:textColor="#000"/>
 
@@ -218,8 +218,8 @@
             android:layout_width="161dp"
             android:layout_height="46dp"
             android:id="@+id/spinnerRatePass"
-            android:layout_row="16"
-            android:layout_column="4"
+            android:layout_row="15"
+            android:layout_column="2"
             android:spinnerMode="dropdown"
             android:layout_gravity="center"
             android:visibility="gone"/>
