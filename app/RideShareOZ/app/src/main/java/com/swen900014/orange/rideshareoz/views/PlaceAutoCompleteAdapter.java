@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.content.Context;
 import android.util.Log;
@@ -20,6 +20,7 @@ import com.google.android.gms.location.places.AutocompletePrediction;
 import com.google.android.gms.location.places.AutocompletePredictionBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.swen900014.orange.rideshareoz.R;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -77,7 +78,13 @@ public class PlaceAutoCompleteAdapter extends
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.auto_place_list, parent,
                 false);
-        PlaceAutoComplete place = mResultList.get(position);
+        PlaceAutoComplete place =  new PlaceAutoComplete("0","");
+        if(position < mResultList.size()){
+            place = mResultList.get(position);
+        }else{
+            //do nothing
+        }
+
 
         final TextView placeView = (TextView) rowView.findViewById(R.id.description);
         placeView.setText(place.toString());

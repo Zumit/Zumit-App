@@ -1,4 +1,10 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Utils;
+
+import com.swen900014.orange.rideshareoz.Model.Group;
+import com.swen900014.orange.rideshareoz.Model.Location;
+import com.swen900014.orange.rideshareoz.Model.Pickup;
+import com.swen900014.orange.rideshareoz.Model.Ride;
+import com.swen900014.orange.rideshareoz.Model.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;

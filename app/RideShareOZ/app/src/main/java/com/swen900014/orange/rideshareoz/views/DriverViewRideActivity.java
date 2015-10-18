@@ -1,7 +1,8 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,12 +16,17 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.Model.Pickup;
+import com.swen900014.orange.rideshareoz.Model.Ride;
+import com.swen900014.orange.rideshareoz.Model.User;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.*;
+import static com.swen900014.orange.rideshareoz.Utils.Resources.*;
 
 
 /**
@@ -98,6 +104,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : waitingListArray)
         {
             TextView request = new TextView(this);
+            request.setBackgroundColor(Color.YELLOW);
             request.setText(lift.getUser().getUsername());
 
             if (ride.getRideState() == Ride.RideState.OFFERING)
@@ -128,6 +135,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
+            pass.setBackgroundColor(Color.YELLOW);
             pass.setText(lift.getUser().getUsername());
             pass.setOnClickListener(new View.OnClickListener()
             {

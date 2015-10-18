@@ -66,16 +66,14 @@ RideSchema.statics.createRide = function(req,callback){
   var end_lat=req.body.e_lat;
   ride.end_point=[Number(end_lon),Number(end_lat)];
   ride.events=req.body.event_id;
+  ride.group = req.body.group_id;
   User.findById(req.userinfo._id, function(err, user){
     ride.driver = user;
-    Group.findById(req.body.group_id,function(err,group){
-      ride.group = group;
-      ride.save(function(err, doc){
-        if (err) {
-          console.log(err);
-        }
-        callback(doc);
-      });
+    ride.save(function(err, doc){
+      if (err) {
+        console.log(err);
+      }
+      callback(doc);
     });
   });
 };
@@ -94,7 +92,7 @@ RideSchema.statics.searchRide = function(req,callback){
   end[1]=e_lat;
 
   //need have arrival time
-  var maxDistance = 0.01;
+  var maxDistance = 0.005;
   var limit = 10;
   var groupID = req.body.group_id;
   var arrival_time = req.body.arrival_time;
@@ -130,14 +128,12 @@ RideSchema.statics.searchRide = function(req,callback){
         for (var i = 0; ride.length>i ; i++) {
           if (ride[i].group && String(ride[i].group._id)==groupID){
             ride1.push(ride[i]);
-            // console.log(ride1);
           }
         }
       } else if(req.body.event_id){
         for (var j = 0; ride.length>j ; j++) {
           if (ride[j].events && String(ride[j].events._id)==req.body.event_id){
             ride1.push(ride[j]);
-            //console.log(ride1);
           }
         } 
       }
@@ -185,6 +181,7 @@ RideSchema.statics.searchRide = function(req,callback){
         });
       });
     }else{
+      console.log("==nothing============");
       callback([]);
     }
   });

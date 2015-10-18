@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,6 +30,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.swen900014.orange.rideshareoz.Model.Event;
+import com.swen900014.orange.rideshareoz.Model.Group;
+import com.swen900014.orange.rideshareoz.Model.User;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.Utils.GPSTracker;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
 
 import org.json.JSONObject;
 
@@ -38,8 +44,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Resources.BOUNDS_GREATER_MELBOURNE;
-import static com.swen900014.orange.rideshareoz.Resources.OFFER_RIDE_URL;
+import static com.swen900014.orange.rideshareoz.Utils.Resources.BOUNDS_GREATER_MELBOURNE;
+import static com.swen900014.orange.rideshareoz.Utils.Resources.OFFER_RIDE_URL;
 
 /**
  * Created by Qianwen Zhang on 9/12/15.
@@ -584,6 +590,7 @@ public class OfferRide extends FragmentActivity implements
         searchResultsIntent.putExtra("destination",((ToCurrentLocation.isChecked())?currentAddress:endAddress));
         //searchResultsIntent.putExtra("username",MainActivity.getAuthToken(activity.getApplicationContext()));
         startActivity(searchResultsIntent);
+        finish();
     }
 
     private void sendRideInfo(final Activity activity)

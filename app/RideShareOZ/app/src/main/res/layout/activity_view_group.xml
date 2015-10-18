@@ -2,7 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.swen900014.orange.rideshareoz.ViewGroupActivity">
+                tools:context="com.swen900014.orange.rideshareoz.views.ViewGroupActivity">
 
     <GridLayout
         android:layout_width="match_parent"

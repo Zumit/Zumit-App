@@ -1,7 +1,6 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,13 +9,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.Model.Event;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.Utils.Resources;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,9 +34,9 @@ import java.util.Map;
  * Display a single ride info in the Myrides activity
  */
 
-public class GroupFragment extends Fragment
+public class EventFragment extends Fragment
 {
-    private GroupsAdaptor mGroupAdaptor;
+    private EventsAdaptor mEventAdaptor;
     private Activity thisActivity;
 
     @Override
@@ -64,46 +66,35 @@ public class GroupFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        List<Group> currentGroups = new ArrayList<>();
+        List<Event> currentEvents = new ArrayList<>();
 
         // Now that we have some dummy data, create an ArrayAdapter.
         // The ArrayAdapter will take data from a source (like our dummy data) and
         // use it to populate the ListView it's attached to.
-        mGroupAdaptor = new GroupsAdaptor(getActivity(), (ArrayList<Group>) currentGroups);
+        mEventAdaptor = new EventsAdaptor(getActivity(), (ArrayList<Event>) currentEvents);
 
         /* load the actual data from server */
-        sendGetGroupsRequest();
+        sendGetEventsRequest();
 
 
-        View rootView = inflater.inflate(R.layout.fragment_groups, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_events, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_groups);
-        listView.setAdapter(mGroupAdaptor);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-            {
-                Group selectedGroup = mGroupAdaptor.getItem(position);
-                Intent intent = new Intent(getActivity(), ViewGroupActivity.class);
-                intent.putExtra("SelectedGroup", selectedGroup);
-                startActivity(intent);
-            }
-        });
+        ListView listView = (ListView) rootView.findViewById(R.id.listview_events);
+        listView.setAdapter(mEventAdaptor);
 
         return rootView;
     }
 
-    public void sendGetGroupsRequest()
+    public void sendGetEventsRequest()
     {
-        StringRequest getGroupsRequest = new StringRequest(Request.Method.POST,
-                Resources.GETALL_GROUP_URL, new Response.Listener<String>()
+        StringRequest getGroupsRequest = new StringRequest(Request.Method.GET,
+                Resources.GETALL_EVENT_URL, new Response.Listener<String>()
         {
             @Override
             public void onResponse(String s)
             {
-                storeGroups(s);
+                storeEvents(s);
             }
         }, new Response.ErrorListener()
         {
@@ -120,9 +111,6 @@ public class GroupFragment extends Fragment
             {
                 Map<String, String> params = new HashMap<>();
 
-                params.put("username", User.getCurrentUser().getUsername());
-                //params.put("token", MainActivity.getAuthToken(getActivity().getApplicationContext()));
-
                 return params;
             }
         };
@@ -130,28 +118,28 @@ public class GroupFragment extends Fragment
         MyRequestQueue.getInstance(thisActivity).addToRequestQueue(getGroupsRequest);
     }
 
-    private void storeGroups(String response)
+    private void storeEvents(String response)
     {
         if (response != null)
         {
-            ArrayList<Group> serverGroups = null;
+            ArrayList<Event> serverEvents = null;
 
             try
             {
-                Group.storeGroups(new JSONArray(response));
-                serverGroups = Group.getAllGroups();
+                Event.storeEvents(new JSONArray(response));
+                serverEvents = Event.getAllEvents();
             } catch (JSONException e)
             {
                 e.printStackTrace();
             }
 
-            mGroupAdaptor.clear();
+            mEventAdaptor.clear();
 
-            if (serverGroups != null)
+            if (serverEvents != null)
             {
-                for (Group listItemGroup : serverGroups)
+                for (Event listItem : serverEvents)
                 {
-                    mGroupAdaptor.add(listItemGroup);
+                    mEventAdaptor.add(listItem);
                 }
             }
 

@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Views;
 
 /**
  * Created by Geroge on 6/09/2015.
@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-public class EventsActivity extends AppCompatActivity
+import com.swen900014.orange.rideshareoz.R;
+
+public class GroupsActivity extends AppCompatActivity
 {
 
-    private  EventFragment eventFragment;
+    private  GroupFragment groupFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -22,9 +24,9 @@ public class EventsActivity extends AppCompatActivity
         setContentView(R.layout.activity_groups);
         if (savedInstanceState == null)
         {
-            eventFragment = new EventFragment();
+            groupFragment = new GroupFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, (eventFragment))
+                    .add(R.id.container, (groupFragment))
                     .commit();
         }
 
@@ -60,6 +62,6 @@ public class EventsActivity extends AppCompatActivity
     @Override
     public void onRestart(){
         super.onRestart();
-        eventFragment.sendGetEventsRequest();
+        groupFragment.sendGetGroupsRequest();
     }
 }

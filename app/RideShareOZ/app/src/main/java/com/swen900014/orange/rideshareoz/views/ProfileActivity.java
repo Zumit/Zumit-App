@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz;
+package com.swen900014.orange.rideshareoz.Views;
 
 /**
  * Created by Geroge on 6/09/2015.
@@ -19,8 +19,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.swen900014.orange.rideshareoz.Model.User;
+import com.swen900014.orange.rideshareoz.R;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.Utils.Resources;
 
-import java.util.Currency;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,6 +138,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         User.getCurrentUser().setPhone(phone.getText().toString());
         User.getCurrentUser().setLicence(licence.getText().toString());
         User.getCurrentUser().setAbout(about.getText().toString());
+        finish();
 
     }
 }

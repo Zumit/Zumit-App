@@ -33,20 +33,25 @@ router.post('/info', function(req, res, next) {
 router.post('/getRides', function(req, res, next) {
   User.findOne({'username': req.userinfo.email}, function(err, user){
     /* res.json(user); */
-    user.getRides(function(rides){
-      res.json(rides);
-    });
+    if (user) {
+      user.getRides(function(rides){
+        res.json(rides);
+      });
+    } else {
+      res.end('Invalid username');
+    }
   });
 });
 
 router.get('/getRides', function(req, res, next) {
   User.findOne({'username': req.userinfo.email}, function(err, user){
-    /* res.json(user); */
-    console.log(req.userinfo.email);
-    console.log(user);
-    user.getRides(function(rides){
-      res.json(rides);
-    });
+    if (user) {
+      user.getRides(function(rides){
+        res.json(rides);
+      });
+    } else {
+      res.end('Invalid username');
+    }
   });
 });
 
@@ -80,7 +85,6 @@ router.get('/getall', function(req, res, next) {
     res.json(users);
   });
 });
-
 
 /*
  * User's group
