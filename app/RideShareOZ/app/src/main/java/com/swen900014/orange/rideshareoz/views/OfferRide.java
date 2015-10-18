@@ -32,7 +32,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.models.Event;
+import com.swen900014.orange.rideshareoz.models.*;
 import com.swen900014.orange.rideshareoz.models.Group;
 import com.swen900014.orange.rideshareoz.models.User;
 import com.swen900014.orange.rideshareoz.utils.GPSTracker;
