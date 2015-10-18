@@ -16,7 +16,7 @@
                 td 
                   span(editable-text='event.eventLocation[1]', onbeforesave="checkData(3, $data)", onaftersave="update($index)") {{event.eventLocation[1]}}
                 td
-                  span() {{event.location}}
+                  span(editable-text='event.location', onaftersave="update($index)") {{event.location}}
                 td
                   span(editable-date='event.startTime', onaftersave="update($index)") {{event.startTime}}
                 td
