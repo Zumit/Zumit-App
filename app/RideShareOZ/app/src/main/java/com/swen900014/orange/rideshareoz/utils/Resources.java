@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Utils;
+package com.swen900014.orange.rideshareoz.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;

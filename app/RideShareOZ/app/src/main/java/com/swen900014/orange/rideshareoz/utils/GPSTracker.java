@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Utils;
+package com.swen900014.orange.rideshareoz.utils;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;

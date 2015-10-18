@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Views;
+package com.swen900014.orange.rideshareoz.views;
 
 /**
  * Created by Geroge on 6/09/2015.

@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.Views;
+package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,12 +30,12 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
-import com.swen900014.orange.rideshareoz.Model.Event;
-import com.swen900014.orange.rideshareoz.Model.Group;
-import com.swen900014.orange.rideshareoz.Model.User;
+import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.Utils.GPSTracker;
-import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.models.Event;
+import com.swen900014.orange.rideshareoz.models.Group;
+import com.swen900014.orange.rideshareoz.models.User;
+import com.swen900014.orange.rideshareoz.utils.GPSTracker;
 
 import org.json.JSONObject;
 
@@ -44,8 +44,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.Utils.Resources.BOUNDS_GREATER_MELBOURNE;
-import static com.swen900014.orange.rideshareoz.Utils.Resources.OFFER_RIDE_URL;
+import static com.swen900014.orange.rideshareoz.utils.Resources.BOUNDS_GREATER_MELBOURNE;
+import static com.swen900014.orange.rideshareoz.utils.Resources.OFFER_RIDE_URL;
 
 /**
  * Created by Qianwen Zhang on 9/12/15.
