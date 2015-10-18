@@ -55,6 +55,17 @@ public class JsonParser
 
         try
         {
+           // get group event name
+            if(jsonRide.has("group")){
+                tempObj = jsonRide.getJSONObject("group");
+                ride.setGourpOrEventName(tempObj.getString("groupname"));
+            }else if(jsonRide.has("events")){
+                tempObj = jsonRide.getJSONObject("events");
+                ride.setGourpOrEventName(tempObj.getString("eventName"));
+            }else{
+                ride.setGourpOrEventName("");
+            }
+
             // Get start and end address
             String startAddress = jsonRide.getString("start_add");
             String endAddress = jsonRide.getString("destination");
