@@ -194,6 +194,10 @@ public class Ride implements Serializable
         return isPassRated;
     }
 
+    public void clearRequests(){
+        waiting.clear();
+    }
+
     public void setArrivingTime(String arriving_time)
     {
         this.arriving_time = arriving_time;

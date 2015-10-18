@@ -156,6 +156,7 @@ public class JsonParser
             {
                 /* add to the offering list*/
                 ride.setState(Ride.RideState.PAST);
+                ride.clearRequests();
             }
             else if (ride.getDriver().getUsername().equals(User.getCurrentUser().getUsername()))
             {
