@@ -87,7 +87,7 @@
         </activity>
         <service
             android:name=".utils.GPSTracker"
-            android:value=".com.swen900014.orange.rideshareoz.GPSTracker"
+            android:value=".com.swen900014.orange.rideshareoz.utils.GPSTracker"
             android:enabled="true" >
         </service>
     </application>

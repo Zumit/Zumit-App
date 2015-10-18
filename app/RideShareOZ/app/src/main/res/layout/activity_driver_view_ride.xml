@@ -106,7 +106,6 @@
         android:layout_row="4"
         android:layout_column="1"
         android:layout_gravity="fill_horizontal|bottom|center_horizontal"
-        android:style="text-decoration: underline;"
         android:textColor="#000080"
         android:focusable="false"
         android:layout_columnSpan="5" />

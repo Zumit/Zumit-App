@@ -81,8 +81,11 @@ public class DriverViewRideActivity extends AppCompatActivity
         endLabel.setText(ride.getEnd().getAddress());
         startTimeLabel.setText(ride.getStartTime());
         arrivalTimeLabel.setText(ride.getArrivingTime());
-        driverText.setText(ride.getDriver().getUsername());
         seatsText.setText(ride.getSeats());
+        
+        SpannableString content = new SpannableString(ride.getDriver().getUsername());
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        driverText.setText(content);
 
         // Driver is not allowed to cancel a ride already finished
         if (ride.getRideState() == Ride.RideState.PAST)
