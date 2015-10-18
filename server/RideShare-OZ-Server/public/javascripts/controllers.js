@@ -53,8 +53,8 @@ angular
 
 function AlertsCtrl($scope) {
   $scope.alerts = [{
-    type: 'danger',
-    msg: 'This page is not finished yet. Please select items from the sidebar.'
+    type: 'success',
+    msg: 'Thanks for visiting RideShare-OZ admin management page!'
   }];
 
   $scope.addAlert = function() {
