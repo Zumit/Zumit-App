@@ -1,7 +1,8 @@
-package com.swen900014.orange.rideshareoz.views;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,11 +25,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
-import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.Model.Pickup;
+import com.swen900014.orange.rideshareoz.Model.Ride;
+import com.swen900014.orange.rideshareoz.Model.User;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.models.Pickup;
-import com.swen900014.orange.rideshareoz.models.Ride;
-import com.swen900014.orange.rideshareoz.models.User;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
 
 import org.json.JSONObject;
 
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.utils.Resources.*;
+import static com.swen900014.orange.rideshareoz.Utils.Resources.*;
 
 
 /**
@@ -130,7 +131,7 @@ public class PassViewRideActivity extends AppCompatActivity
             pickUpLocText.setVisibility(View.VISIBLE);
             joinLeaveButton.setVisibility(View.VISIBLE);
         }
-        else if (ride.getRideState() == Ride.RideState.PAST)
+        else if (ride.getRideState() == Ride.RideState.PASSED)
         {
             // Passenger is allowed to rate the driver if they
             // haven't done that
@@ -182,6 +183,7 @@ public class PassViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
+            pass.setBackgroundColor(Color.YELLOW);
             pass.setText(lift.getUser().getUsername());
 
             // Only people who joined the ride is able to view

@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.views;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.app.Activity;
 import android.os.Bundle;

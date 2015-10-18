@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.views;
+package com.swen900014.orange.rideshareoz.Views;
 
 
 import android.app.Activity;
@@ -18,10 +18,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.swen900014.orange.rideshareoz.utils.MyRequestQueue;
+import com.swen900014.orange.rideshareoz.Model.Ride;
+import com.swen900014.orange.rideshareoz.Model.User;
 import com.swen900014.orange.rideshareoz.R;
-import com.swen900014.orange.rideshareoz.models.Ride;
-import com.swen900014.orange.rideshareoz.models.User;
+import com.swen900014.orange.rideshareoz.Utils.MyRequestQueue;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.swen900014.orange.rideshareoz.utils.Resources.*;
+import static com.swen900014.orange.rideshareoz.Utils.Resources.*;
 
 
 /**
@@ -127,7 +127,7 @@ public class MyRidesFragment extends Fragment
                     intent = new Intent(getActivity(), PassViewRideActivity.class);
                 }
 
-                intent.putExtra("SelectedRide", position);
+                intent.putExtra("SelectedRide", selectedRide);
                 startActivity(intent);
             }
         });
@@ -187,10 +187,10 @@ public class MyRidesFragment extends Fragment
         {
             try
             {
-                Ride.allRides = Ride.fromJson(new JSONArray(response), isSearchResults);
+                ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(response), isSearchResults);
                 mRidesAdapter.clear();
 
-                for (Ride listItemRide : Ride.allRides)
+                for (Ride listItemRide : serverRides)
                 {
                     mRidesAdapter.add(listItemRide);
                 }

@@ -1,4 +1,4 @@
-package com.swen900014.orange.rideshareoz.views;
+package com.swen900014.orange.rideshareoz.Views;
 
 import android.content.Context;
 import android.util.Log;
