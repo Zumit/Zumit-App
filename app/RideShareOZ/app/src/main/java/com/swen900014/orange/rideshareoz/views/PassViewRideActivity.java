@@ -2,6 +2,7 @@ package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -61,6 +62,7 @@ public class PassViewRideActivity extends AppCompatActivity
 
     private TableLayout passengerList;
     private Ride ride;
+    private int rideIndex;
     private Activity thisActivity;
 
     @Override
@@ -74,7 +76,10 @@ public class PassViewRideActivity extends AppCompatActivity
                 .addApi(Places.GEO_DATA_API)
                 .build();
         thisActivity = this;
-        ride = (Ride) getIntent().getSerializableExtra("SelectedRide");
+
+        // Get ride index from my Rides fragment
+        rideIndex = (int) getIntent().getSerializableExtra("SelectedRide");
+        ride = Ride.allRides.get(rideIndex);
 
         TextView startLabel = (TextView) findViewById(R.id.startEditPass);
         TextView endLabel = (TextView) findViewById(R.id.endEditPass);
@@ -182,6 +187,7 @@ public class PassViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
+            pass.setTextColor(Color.YELLOW);
             pass.setText(lift.getUser().getUsername());
 
             // Only people who joined the ride is able to view
@@ -194,7 +200,7 @@ public class PassViewRideActivity extends AppCompatActivity
                     public void onClick(View v)
                     {
                         Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                        intent.putExtra("Ride", ride);
+                        intent.putExtra("SelectedRide", rideIndex);
                         intent.putExtra("Pickup", lift);
                         thisActivity.startActivity(intent);
                     }

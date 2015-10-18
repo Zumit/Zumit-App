@@ -2,6 +2,7 @@ package com.swen900014.orange.rideshareoz.views;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -40,6 +41,7 @@ public class DriverViewRideActivity extends AppCompatActivity
     private TableLayout passengerList;
     private TableLayout waitingList;
     private Ride ride;
+    private int rideIndex;
     private Activity thisActivity;
 
     @Override
@@ -49,8 +51,9 @@ public class DriverViewRideActivity extends AppCompatActivity
         setContentView(R.layout.activity_driver_view_ride);
         thisActivity = this;
 
-        Intent received = getIntent();
-        ride = (Ride) received.getSerializableExtra("SelectedRide");
+        // Get ride index from my Rides fragment
+        rideIndex = (int) getIntent().getSerializableExtra("SelectedRide");
+        ride = Ride.allRides.get(rideIndex);
 
         TextView startLabel = (TextView) findViewById(R.id.startPointText);
         TextView endLabel = (TextView) findViewById(R.id.endPointText);
@@ -103,6 +106,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : waitingListArray)
         {
             TextView request = new TextView(this);
+            request.setTextColor(Color.YELLOW);
             request.setText(lift.getUser().getUsername());
 
             if (ride.getRideState() == Ride.RideState.OFFERING)
@@ -113,7 +117,7 @@ public class DriverViewRideActivity extends AppCompatActivity
                     public void onClick(View v)
                     {
                         Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                        intent.putExtra("Ride", ride);
+                        intent.putExtra("SelectedRide", rideIndex);
                         intent.putExtra("Pickup", lift);
                         thisActivity.startActivity(intent);
                     }
@@ -133,6 +137,7 @@ public class DriverViewRideActivity extends AppCompatActivity
         for (final Pickup lift : joinedList)
         {
             TextView pass = new TextView(this);
+            pass.setTextColor(Color.YELLOW);
             pass.setText(lift.getUser().getUsername());
             pass.setOnClickListener(new View.OnClickListener()
             {
@@ -140,7 +145,7 @@ public class DriverViewRideActivity extends AppCompatActivity
                 public void onClick(View v)
                 {
                     Intent intent = new Intent(thisActivity, UserInfoActivity.class);
-                    intent.putExtra("Ride", ride);
+                    intent.putExtra("SelectedRide", rideIndex);
                     intent.putExtra("Pickup", lift);
                     thisActivity.startActivity(intent);
                 }
