@@ -89,7 +89,7 @@ GroupsSchema.statics.leaveGroup = function(req,callback){
   // remove group from user's list
   User.findByIdAndUpdate(req.userinfo._id, 
                          {$pull:{'groups':{'group':req.body.group_id}}},
-                         function(err, user){
+                         function(err, users){
         console.log(users);
   });
   //delete the user from gruop

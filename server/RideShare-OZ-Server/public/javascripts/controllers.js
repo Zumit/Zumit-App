@@ -10,7 +10,11 @@ function MasterCtrl($scope, $cookieStore) {
    * Sidebar Toggle & Cookie Control
    */
   var mobileView = 992;
-  // $scope.user = user;
+  $scope.loggedUser = "";
+
+  $scope.alertUser = function() {
+    alert(angular.element(document.querySelector('#loggedUser'))[0].innerHTML);
+  }
 
   $scope.getWidth = function() {
     return window.innerWidth;
@@ -49,11 +53,8 @@ angular
 
 function AlertsCtrl($scope) {
   $scope.alerts = [{
-    type: 'success',
-    msg: 'Thanks for visiting! Feel free to create pull requests to improve the dashboard!'
-  }, {
     type: 'danger',
-    msg: 'Found a bug? Create an issue with as many details as you can.'
+    msg: 'This page is not finished yet. Please select items from the sidebar.'
   }];
 
   $scope.addAlert = function() {
@@ -134,10 +135,31 @@ function GroupCtrl($scope, $http, groupDataFactory) {
 
   };
 
+  $scope.deleteGroup = function(index) {
+    var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
+    var data = {
+      'admin': angular.element(document.querySelector('#loggedUser'))[0].innerHTML,
+      'group_id': $scope.groups[total_index]._id,
+    };
+
+    $http.post('group/remove', data).success(function(data){
+      console.log(data);
+      groupDataFactory.getGroupData().then(function(res){
+        // console.log(res);
+        $scope.groups = res;
+        $scope.selectedIndex = -1;
+        $scope.requests = [];
+        $scope.members = [];
+      });
+    }).error(function(data, status){
+      console.log(data, status);
+    });
+  };
+
   $scope.update = function(index) {
     var total_index = ($scope.groupCurrentPage - 1) * $scope.groupPageSize + index;
     var data = {
-      'username': 'maxzhx@gmail.com',
+      'admin': angular.element(document.querySelector('#loggedUser'))[0].innerHTML,
       'group_id': $scope.groups[total_index]._id,
       'name': $scope.groups[total_index].groupname,
       'g_lon': $scope.groups[total_index].group_location[0],
@@ -157,7 +179,7 @@ function GroupCtrl($scope, $http, groupDataFactory) {
       console.log(data, status);
     });
   };
-  
+
   $scope.newGroup = function() {
     var newGroup={
       'groupname':'Click to edit name',
@@ -189,6 +211,7 @@ function GroupCtrl($scope, $http, groupDataFactory) {
     }
     // console.log(url);
     $http.post(url, {
+      'admin': angular.element(document.querySelector('#loggedUser'))[0].innerHTML,
       'username': username,
       'group_id': $scope.groups[total_index]._id
     }).success(function(data){
@@ -270,11 +293,28 @@ function EventCtrl($scope, $http, eventDataFactory) {
     }
   };
 
+  $scope.deleteEvent = function(index) {
+    var total_index = ($scope.eventCurrentPage - 1) * $scope.eventPageSize + index;
+    var data = {
+      'admin': angular.element(document.querySelector('#loggedUser'))[0].innerHTML,
+      'event_id': $scope.events[total_index]._id
+    };
+    console.log("==========");
+    $http.post('test', data).success(function(data){
+      console.log(data);
+      eventDataFactory.getEventData().then(function(res){
+        $scope.events = res;
+      });
+    }).error(function(data, status){
+      console.log(data, status);
+    });
+  };
+
   $scope.update = function(index) {
     var total_index = ($scope.eventCurrentPage - 1) * $scope.eventPageSize + index;
     var data = {
       // for testing
-      'username': 'maxzhx@gmail.com',
+      'admin': angular.element(document.querySelector('#loggedUser'))[0].innerHTML,
       'event_id': $scope.events[total_index]._id,
       'event_name': $scope.events[total_index].eventName,
       'e_lon': $scope.events[total_index].eventLocation[0],
