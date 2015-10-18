@@ -16,7 +16,8 @@ import com.swen900014.orange.rideshareoz.R;
 public class EventsActivity extends AppCompatActivity
 {
 
-    private  EventFragment eventFragment;
+    private EventFragment eventFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -33,14 +34,6 @@ public class EventsActivity extends AppCompatActivity
         getIntent();
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }*/
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -52,7 +45,6 @@ public class EventsActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
-            //startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
@@ -60,7 +52,8 @@ public class EventsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRestart(){
+    public void onRestart()
+    {
         super.onRestart();
         eventFragment.sendGetEventsRequest();
     }

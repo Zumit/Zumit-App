@@ -86,14 +86,14 @@ public class MainActivity extends AppCompatActivity implements
         mGoogleApiClient.connect();
 
 
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        if(signedIn){
+        if (signedIn)
+        {
             // Inflate the menu; this adds items to the action bar if it is present.
             getMenuInflater().inflate(R.menu.menu_main, menu);
         }
@@ -217,14 +217,16 @@ public class MainActivity extends AppCompatActivity implements
         //refresh rides
         activityFragment.sendGetRidesRequest(GETUSER_RELAVENT_RIDE_URL);
 
-        if(!mGoogleApiClient.isConnected()){
+        if (!mGoogleApiClient.isConnected())
+        {
             mGoogleApiClient.connect();
         }
 
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
         //ReAuthentication is not required
         //mGoogleApiClient.disconnect();
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements
         {
             onSignInClicked();
         }
-        
+
     }
 
     public static void signOut()
@@ -354,7 +356,8 @@ public class MainActivity extends AppCompatActivity implements
 
     public static String getAuthToken(Context context)
     {
-        if(!mGoogleApiClient.isConnected()){
+        if (!mGoogleApiClient.isConnected())
+        {
             mGoogleApiClient.connect();
         }
         String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
