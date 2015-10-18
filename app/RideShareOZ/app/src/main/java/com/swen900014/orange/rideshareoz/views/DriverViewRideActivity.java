@@ -114,30 +114,26 @@ public class DriverViewRideActivity extends AppCompatActivity
         waitingList.removeAllViews();
 
         // Display requesting users
-        for (final Pickup lift : waitingListArray)
-        {
-            TextView request = new TextView(this);
-            SpannableString content = new SpannableString(lift.getUser().getUsername());
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            request.setText(content);
-            request.setTextColor(Color.parseColor("#000080"));
+        if (ride.getRideState() == Ride.RideState.OFFERING) {
+            for (final Pickup lift : waitingListArray) {
+                TextView request = new TextView(this);
+                SpannableString content = new SpannableString(lift.getUser().getUsername());
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                request.setText(content);
+                request.setTextColor(Color.parseColor("#000080"));
 
-            if (ride.getRideState() == Ride.RideState.OFFERING)
-            {
-                request.setOnClickListener(new View.OnClickListener()
-                {
+                request.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         Intent intent = new Intent(thisActivity, UserInfoActivity.class);
                         intent.putExtra("SelectedRide", rideIndex);
                         intent.putExtra("Pickup", lift);
                         thisActivity.startActivity(intent);
                     }
                 });
-            }
 
-            waitingList.addView(request);
+                waitingList.addView(request);
+            }
         }
     }
 
