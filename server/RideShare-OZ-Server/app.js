@@ -26,15 +26,18 @@ mongoose.connect('mongodb://localhost/RideShare', function(err) {
 
 // routine job
 var rule = new schedule.RecurrenceRule();  
-// rule.minute = [0, 20, 40];
-var date=Date.now(); 
-var j = schedule.scheduleJob(rule, function(){  
-  console.log("=======================");
+// rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+var j = schedule.scheduleJob(rule, function(){
   Ride.find({},function(err,rides){
     rides.forEach(function(ride){
-      if(new Date(ride.arrival_time) < new Date(date)){
+      var arr_d = new Date(ride.arrival_time);
+      // fix time difference problem
+      // The time zone of Melbounre is +11 now
+      // change the value if the timezone has changed
+      arr_d.setHours(arr_d.getHours() - 11);
+      if(arr_d < new Date()){
         Ride.findByIdAndUpdate(ride._id,{$set:{'finished':true}},function(err,update){
-          console.log("update");
+          console.log("update: " + ride._id);
         });
       }
     });
