@@ -66,16 +66,14 @@ RideSchema.statics.createRide = function(req,callback){
   var end_lat=req.body.e_lat;
   ride.end_point=[Number(end_lon),Number(end_lat)];
   ride.events=req.body.event_id;
+  ride.group = req.body.group_id;
   User.findById(req.userinfo._id, function(err, user){
     ride.driver = user;
-    Group.findById(req.body.group_id,function(err,group){
-      ride.group = group;
-      ride.save(function(err, doc){
-        if (err) {
-          console.log(err);
-        }
-        callback(doc);
-      });
+    ride.save(function(err, doc){
+      if (err) {
+        console.log(err);
+      }
+      callback(doc);
     });
   });
 };
