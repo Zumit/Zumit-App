@@ -127,7 +127,7 @@ public class MyRidesFragment extends Fragment
                     intent = new Intent(getActivity(), PassViewRideActivity.class);
                 }
 
-                intent.putExtra("SelectedRide", selectedRide);
+                intent.putExtra("SelectedRide", position);
                 startActivity(intent);
             }
         });
@@ -187,10 +187,10 @@ public class MyRidesFragment extends Fragment
         {
             try
             {
-                ArrayList<Ride> serverRides = Ride.fromJson(new JSONArray(response), isSearchResults);
+                Ride.allRides = Ride.fromJson(new JSONArray(response), isSearchResults);
                 mRidesAdapter.clear();
 
-                for (Ride listItemRide : serverRides)
+                for (Ride listItemRide : Ride.allRides)
                 {
                     mRidesAdapter.add(listItemRide);
                 }
