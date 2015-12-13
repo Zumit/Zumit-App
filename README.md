@@ -3,4 +3,5 @@ This is the masters project (half year long), which is named RideShare-OZ. Users
 
 note: This is not the delivery build.
 
-[screenshots.pdf](screenshots.pdf)
+![1](/1.png?raw=true "Sign in")
+
