@@ -3,6 +3,7 @@ This is the masters project (half year long), which is named RideShare-OZ. Users
 
 note: This is not the delivery build.
 
+![](./screenshots/1.png =50x10)
 <img src="/screenshots/1.png" alt="Drawing" style="width: 100px;" style="height: 120px;"/>
 ![](/screenshots/1.png =50x70?raw=true "Sign in")
 ![](/screenshots/3.png?raw=true "My rides")
